@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>現場型サービスの探し方（新規事業の探索手順）</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1b1f; --muted:#5c5f66; --line:#dfe1e6;
+  --panel:#f6f7f9; --accent:#1d4ed8; --accent-soft:#e8eefc;
+  --warn:#8a4b00; --warn-bg:#fff4e5; --ok:#0f6a3f; --ok-bg:#e8f5ee;
+  --ng:#9b1c1c; --ng-bg:#fdeaea;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161a; --fg:#e6e8ec; --muted:#a0a5ae; --line:#2c3037;
+    --panel:#1c1f25; --accent:#7ba2ff; --accent-soft:#1e2a44;
+    --warn:#ffc477; --warn-bg:#33280f; --ok:#7fd3a5; --ok-bg:#12291d;
+    --ng:#ff9d9d; --ng-bg:#331717;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+  font-size:16px; line-height:1.85;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1240px; margin:0 auto; gap:32px; padding:0 20px}
+nav{
+  position:sticky; top:0; flex:0 0 260px; max-height:100vh; overflow-y:auto;
+  padding:28px 0 40px; font-size:13.5px; line-height:1.6;
+}
+nav .navttl{font-weight:700; font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:5px 10px; border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft); border-left-color:var(--accent)}
+nav a.sub{padding-left:22px; color:var(--muted); font-size:12.5px}
+main{flex:1 1 auto; min-width:0; padding:28px 0 100px; max-width:820px}
+header.doc{border-bottom:2px solid var(--line); padding-bottom:18px; margin-bottom:32px}
+h1{font-size:26px; line-height:1.45; margin:0 0 10px}
+.meta{color:var(--muted); font-size:13px; line-height:1.9}
+h2{font-size:20px; margin:52px 0 14px; padding:8px 0 8px 12px; border-left:5px solid var(--accent); background:var(--panel)}
+h3{font-size:16.5px; margin:30px 0 10px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+h4{font-size:15px; margin:22px 0 8px; color:var(--accent)}
+p{margin:12px 0}
+ul,ol{margin:12px 0; padding-left:24px}
+li{margin:6px 0}
+code{background:var(--panel); padding:2px 6px; border-radius:4px; font-size:14px}
+.tblwrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:560px}
+th,td{border-bottom:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+th{background:var(--panel); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:18px 0; background:var(--panel)}
+.box.warn{background:var(--warn-bg); border-color:var(--warn); color:var(--fg)}
+.box.ok{background:var(--ok-bg); border-color:var(--ok)}
+.box.ng{background:var(--ng-bg); border-color:var(--ng)}
+.box .lbl{font-weight:700; font-size:13px; display:block; margin-bottom:6px; letter-spacing:.03em}
+.box.warn .lbl{color:var(--warn)}
+.box.ok .lbl{color:var(--ok)}
+.box.ng .lbl{color:var(--ng)}
+.lead{font-size:17px; line-height:1.9}
+.flow{list-style:none; padding:0; margin:20px 0; counter-reset:st}
+.flow li{
+  counter-increment:st; position:relative; padding:14px 16px 14px 62px;
+  border:1px solid var(--line); border-radius:8px; margin:10px 0; background:var(--panel);
+}
+.flow li::before{
+  content:"STEP " counter(st); position:absolute; left:12px; top:14px;
+  font-size:10.5px; font-weight:700; letter-spacing:.04em; color:#fff; background:var(--accent);
+  padding:3px 6px; border-radius:4px; writing-mode:horizontal-tb;
+}
+.flow li b{display:block; font-size:15.5px; margin-bottom:3px}
+.flow li span{color:var(--muted); font-size:13.5px}
+.tag{display:inline-block; font-size:11.5px; padding:1px 7px; border-radius:99px; border:1px solid var(--line); background:var(--bg); color:var(--muted); margin-right:4px}
+.tag.me{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
+.tag.you{border-color:var(--warn); color:var(--warn); background:var(--warn-bg)}
+.q{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:14px 0}
+.q b{color:var(--accent)}
+footer.doc{margin-top:70px; padding-top:18px; border-top:2px solid var(--line); color:var(--muted); font-size:13px}
+@media (max-width:900px){
+  .wrap{display:block; padding:0 16px}
+  nav{position:static; max-height:none; flex:none; padding:20px 0 0; border-bottom:1px solid var(--line); margin-bottom:10px}
+  main{max-width:none}
+}
+@media print{
+  nav{display:none}
+  body{font-size:11pt; background:#fff; color:#000}
+  .wrap{display:block; max-width:none}
+  h2{page-break-after:avoid}
+  .tblwrap,table{page-break-inside:auto}
+  tr{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <p class="navttl">目次</p>
+  <a href="#s0">0. 結論（この手順の骨子）</a>
+  <a href="#s1">1. 今回置いた前提</a>
+  <a href="#s2">2. なぜ「現場」なのか</a>
+  <a href="#s2b" class="sub">2-2. 先に潰す3つの誤解</a>
+  <a href="#s3">3. 全体の流れ（6ステップ）</a>
+  <a href="#s4">4. STEP1：判断軸を先に固める</a>
+  <a href="#s4b" class="sub">4-2. 除外軸（先に落とす）</a>
+  <a href="#s5">5. STEP2：母集団の作り方</a>
+  <a href="#s6">6. STEP3：机上で落とす（関門A・B）</a>
+  <a href="#s7">7. STEP4：足で取る（関門C）</a>
+  <a href="#s8">8. STEP5：ゲート0（関門D）</a>
+  <a href="#s9">9. STEP6：1件だけ人力でやる</a>
+  <a href="#s10">10. 現場型の5つの型</a>
+  <a href="#s11">11. 工数と期間の目安</a>
+  <a href="#s12">12. この手順で防げないこと</a>
+  <a href="#s13">13. 決めていただきたいこと</a>
+  <a href="#s14">14. 出典・確認状況</a>
+</nav>
+
+<main>
+
+<header class="doc">
+  <h1>現場型サービスの探し方<br>― ブルーカラーを絡めた新規事業の探索手順（案）</h1>
+  <p class="meta">
+    作成日：2026-08-26 ／ 作成：Claude（Cowork）／ 宛先：合同会社R.Y.S 坂野様<br>
+    位置づけ：<b>探索の「手順」の提案書</b>です。事業案そのものはまだ1つも出していません。<br>
+    状態：<b>未承認（案）</b>。この手順を承認いただいてから、実際の探索に入ります。
+  </p>
+</header>
+
+<section id="s0">
+<h2>0. 結論（この手順の骨子）</h2>
+
+<p class="lead">
+探し方の要点は3つだけです。<br>
+<b>① 判断軸を、探す前に固める。 ② 母集団を「業種の全リスト」から作る。 ③ 最後はネットではなく足で確かめる。</b>
+</p>
+
+<div class="box">
+<span class="lbl">なぜこの3つか</span>
+<b>①</b> 先に案を思いついてから調べると、調査が「その案が正しいことの裏付け探し」になります。軸を先に紙に書いて固定してしまえば、後から都合よく動かせません。<br>
+<b>②</b> 「思いついた業種」から探すと、思いつかなかった業種は永久に候補に入りません。国が定めている業種の全リストを起点にすれば、漏れが構造的に起きません。<br>
+<b>③</b> ここが今回いちばん大事です。<b>現場系の商売は、ネットに答えが書いてありません。</b>単価も、職人の確保しやすさも、客の困りごとも、公開情報にはほぼ出てきません。ネットで完結する調査だけで結論を出すと、必ず間違えます。
+</div>
+
+<div class="box warn">
+<span class="lbl">先に申し上げておくこと</span>
+STEP4（足で取る工程）は、<b>Claudeが代行できません。</b>相見積もりを取る、職人に電話する、展示会に行く——ここは坂野様ご本人が動く必要があります。<br>
+逆に言うと、<b>STEP1・2・3・5はほぼ全部Claudeが回せます。</b>この分担を最初にはっきりさせておくのが、この手順書の目的の半分です。
+</div>
+</section>
+
+<section id="s1">
+<h2>1. 今回置いた前提</h2>
+
+<p>これまでのやり取りから、以下を前提として置いています。<b>違っていればご指摘ください。前提が違うと手順の形が変わります。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>置いた前提</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td>資金</td><td>1,000万円まで（最大2,000万円だが1,000万円を想定）</td><td>過去のご発言</td></tr>
+<tr><td>収益目標</td><td>月利100万円</td><td>過去のご発言</td></tr>
+<tr><td>スケール</td><td>必須ではない。長期間持続できることを優先</td><td>過去のご発言</td></tr>
+<tr><td>大手との関係</td><td>資金力勝負にならない／大手が来ない領域を狙う</td><td>過去のご発言</td></tr>
+<tr><td>働き方</td><td>時間を切り売りする事業はやりたくない</td><td>過去のご発言</td></tr>
+<tr><td>倫理</td><td>客に実質的な価値が残らない商売はやらない</td><td>過去のご発言</td></tr>
+<tr><td>既存事業</td><td>寝かせ転売は継続。既存事業との相乗効果は不要</td><td>過去のご発言</td></tr>
+<tr><td>許認可</td><td>必要な規制業種も許容</td><td>過去のご発言</td></tr>
+<tr><td>拠点</td><td>大阪市北区（生活拠点）／豊橋市（本店）</td><td>登記・過去のご発言</td></tr>
+<tr><td>開発力</td><td>プログラミングは初心者だが、Coworkでシステムを作れる（既に3本稼働）</td><td>C:\dev の構成</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">この前提のなかで、1つだけ正面から衝突するものがあります</span>
+<b>「時間を切り売りしたくない」×「現場（ブルーカラー）」</b> です。<br>
+現場は、誰かが体を動かさないと売上が立ちません。それが坂野様ご自身でなくても、<b>職人の採用・教育・シフト・事故対応・保険</b>という別の重さが必ず来ます。ソフトのように「作ったら勝手に売れる」形にはなりません。<br>
+<b>この衝突は、手順のなかで「軸5（稼働の非線形性）」として数字で管理します。</b>逃げずに正面から測る、という設計にしています。
+</div>
+</section>
+
+<section id="s2">
+<h2>2. なぜ「現場」なのか（この方向性が構造的に正しい理由）</h2>
+
+<p>坂野様の着眼点は、私の見るかぎり構造的に筋が通っています。理由を3つに整理します。</p>
+
+<h3>理由1：現場はAIでコピーできない</h3>
+<p>ソフトウェアは、作った瞬間から<b>限界費用がほぼゼロ</b>です。これは自社にとって有利ですが、<b>競合にとっても有利</b>です。AIで誰でも作れるようになった以上、ソフト単体の事業は「作れること」が武器になりません。行き着く先は価格競争です。<br>
+現場は逆で、<b>1件やるのに必ず人と時間と移動が要ります。</b>供給が有限なので、価格が崩れにくい。ここがソフトとの決定的な違いです。</p>
+
+<h3>理由2：「大手が来ない理由」を構造的に作りやすい</h3>
+<p>大手が来ない理由には、弱い理由と強い理由があります。</p>
+<div class="tblwrap">
+<table>
+<thead><tr><th>理由</th><th>強さ</th><th>説明</th></tr></thead>
+<tbody>
+<tr><td>今はまだ誰もやっていない</td><td class="num" style="color:var(--ng)">弱い</td><td>明日やられたら終わり。理由になっていない</td></tr>
+<tr><td>機能が優れている</td><td class="num" style="color:var(--ng)">弱い</td><td>追いつかれる。しかも向こうにはパッケージが付いてくる</td></tr>
+<tr><td>1件が小さすぎて、大手の売上規模に対して社内で予算が付かない</td><td class="num" style="color:var(--ok)">強い</td><td>組織の構造上、やりたくてもできない</td></tr>
+<tr><td>地場の信用・顔が要る（紹介でしか回らない）</td><td class="num" style="color:var(--ok)">強い</td><td>資金では買えない</td></tr>
+<tr><td>人身事故・廃棄物・資格など、大手が負いたくない責任が付く</td><td class="num" style="color:var(--ok)">強い</td><td>大手ほどリスクを取れない</td></tr>
+<tr><td>大手の既存の商売と食い合う</td><td class="num" style="color:var(--ok)">強い</td><td>自社の客を奪う形になるのでやらない</td></tr>
+</tbody>
+</table>
+</div>
+<p><b>現場型は、下の4つ（強い理由）が自然に発生しやすい領域です。</b>ソフト単体ではこれが作りにくい。ここが「サービス＋現場」の本質的な優位性だと考えます。</p>
+
+<h3>理由3：現場業界のデジタル化は、まだ「入口」しか埋まっていない</h3>
+<p>現場業界で起きている非効率は、だいたい次の4か所に集中します。</p>
+<div class="tblwrap">
+<table>
+<thead><tr><th>#</th><th>場所</th><th>典型的な今のやり方</th><th>坂野様の武器が効くか</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>集客・見積</td><td>紹介／電話／現地調査してから手書き見積</td><td>◎ Web＋自動見積</td></tr>
+<tr><td class="num">2</td><td>配車・工程・シフト</td><td>ホワイトボード／LINE／頭のなか</td><td>◎ ルート最適化（Snokerの資産）</td></tr>
+<tr><td class="num">3</td><td>作業記録・報告書・写真</td><td>紙＋デジカメ＋事務所で清書</td><td>◎ スマホ入力→PDF自動生成（Rakuviの資産）</td></tr>
+<tr><td class="num">4</td><td>請求・入金・督促</td><td>手書き請求書／振込確認は通帳目視</td><td>◎ 帳票自動生成（Rakuviの資産）</td></tr>
+</tbody>
+</table>
+</div>
+<p><b>坂野様が既に作った3本（Snoker＝ルート最適化／Rabelu＝住所訂正・伝票／Rakuvi＝帳票PDF）は、そのまま2・3・4に刺さります。</b>つまり「現場を新しく始める」のではなく、<b>「自分が既に持っている道具が効く現場を探す」</b>という探し方ができます。これは他の人には真似できない探し方です。</p>
+</section>
+
+<section id="s2b">
+<h3>2-2. 探す前に潰しておく3つの誤解</h3>
+
+<div class="box ng">
+<span class="lbl">誤解1：「現場のDXが遅れている＝チャンス」</span>
+遅れているのには<b>理由がある</b>ことが多いです。①客単価が低くてソフト代を払えない ②現場の人がスマホ入力を嫌う ③紙が業界の商習慣（元請けが紙で要求する）。<br>
+<b>「なぜ遅れているのか」を書けないうちは、遅れていること自体を根拠にしない。</b>
+</div>
+
+<div class="box ng">
+<span class="lbl">誤解2：「マッチングアプリを作れば職人と客がつながる」</span>
+現場系のマッチングは、<b>両側を同時に集めないと成立しません（鶏と卵）。</b>しかも成立した瞬間に、客と職人は次回から直接つながって手数料を飛ばします（中抜き離脱）。<br>
+現場型で成功しやすいのは<b>マッチングではなく「元請け」</b>——自社が客と契約し、責任を持ち、職人には外注費を払う形です。責任を持つから中抜きされません。
+</div>
+
+<div class="box ng">
+<span class="lbl">誤解3：「まず客を取れば、やる人は後から集まる」</span>
+<b>逆です。</b>現場型が死ぬ最大の原因は「客がいない」ではなく「<b>やる人がいない</b>」です。受注してから職人が見つからず、納期を落として信用を失う——これが典型的な倒れ方です。<br>
+だから本手順では、<b>職人の確保可能性（軸4）を、客の需要より先に確認します。</b>
+</div>
+</section>
+
+<section id="s3">
+<h2>3. 全体の流れ（6ステップ）</h2>
+
+<ol class="flow">
+<li>
+  <b>判断軸を先に固める</b>
+  <span>「何を当たりとするか」を10軸で定義し、合格ラインを数字で書く。候補を1つも見ないうちに書き切るのが肝心。</span>
+  <div style="margin-top:8px"><span class="tag me">Claudeが作成</span><span class="tag you">坂野様が承認</span></div>
+</li>
+<li>
+  <b>母集団を作る（漏れなく広げる）</b>
+  <span>業種の全リスト＋許認可リストから「現場が絡む業種」を機械的に全部抜き出す。ここで数百件のロングリストを作る。</span>
+  <div style="margin-top:8px"><span class="tag me">Claudeが実行</span></div>
+</li>
+<li>
+  <b>机上で落とす（関門A・B）</b>
+  <span>軸に照らして数百件 → 30件 → 10件へ。公開統計・法改正・求人相場・M&A案件の数字で落とす。</span>
+  <div style="margin-top:8px"><span class="tag me">Claudeが実行</span></div>
+</li>
+<li>
+  <b>足で確かめる（関門C）★ここが要</b>
+  <span>10件 → 3件へ。相見積もり・職人への打診・展示会。ネットに書いていない単価と実情をここで取る。</span>
+  <div style="margin-top:8px"><span class="tag you">坂野様が実行</span><span class="tag me">Claudeが台本と質問表を用意</span></div>
+</li>
+<li>
+  <b>ゲート0（関門D）</b>
+  <span>残った3件を、事業性の6問（競合／母数／5年後／死ぬ条件／大手と並べたとき）にかけて1件に絞る。</span>
+  <div style="margin-top:8px"><span class="tag me">Claudeが実行</span><span class="tag you">坂野様が判定</span></div>
+</li>
+<li>
+  <b>1件だけ人力でやってみる</b>
+  <span>システムを作る前に、実際の仕事を1件だけ手作業で受けて完遂する。ここで初めて「客が金を払うか」が分かる。</span>
+  <div style="margin-top:8px"><span class="tag you">坂野様が実行</span></div>
+</li>
+</ol>
+
+<div class="box">
+<span class="lbl">この順番を変えてはいけない理由</span>
+よくある失敗は「STEP4（足で取る）を最後に回す」ことです。そうすると、机上で作り込んだ案に愛着が湧いてから現場を見に行くことになり、<b>都合の悪い事実を無視するようになります。</b><br>
+だから、<b>まだ愛着が湧いていない10件の段階で、まとめて現場を見に行きます。</b>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. STEP1：判断軸を先に固める（10軸）</h2>
+
+<p>これが探索の心臓部です。<b>候補を見る前にこの表を確定させ、以後は動かしません。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>軸</th><th>問い</th><th>合格ライン（案）</th><th>なぜ要るか</th></tr></thead>
+<tbody>
+<tr>
+  <td class="num">1</td><td><b>現場の障壁</b></td>
+  <td>その現場作業は何で守られているか。①資格・許認可 ②道具・設備 ③人手の確保 ④近接性（現地に居ること）</td>
+  <td>4つのうち<b>2つ以上</b>で守られている</td>
+  <td>誰でもすぐ真似できる現場は、現場である意味がない。価格競争に落ちる</td>
+</tr>
+<tr>
+  <td class="num">2</td><td><b>デジタルの取りしろ</b></td>
+  <td>集客・見積／配車・工程／記録・報告／請求・入金 のどこに手作業が残っているか</td>
+  <td>4か所のうち<b>2か所以上</b>に紙・電話・FAX・Excelが残っている</td>
+  <td>ここが坂野様の武器（Cowork開発＋既存3本）が効く場所。残っていないなら入る意味が薄い</td>
+</tr>
+<tr>
+  <td class="num">3</td><td><b>大手が来ない構造的理由</b></td>
+  <td>大手が同じことをやらない理由を、構造で書けるか</td>
+  <td>「今やっていないから」<b>以外</b>の理由を1つ以上書ける</td>
+  <td>当たった瞬間に真似される前提で考える。真似されても残る理由が要る</td>
+</tr>
+<tr>
+  <td class="num">4</td><td><b>やる人の確保</b>★</td>
+  <td>その作業をやる人を、いくらで、何人、どこから集められるか</td>
+  <td>実在の求人・外注単価を<b>3件以上</b>確認できる</td>
+  <td>現場型が死ぬ最大の原因。客より先に確認する</td>
+</tr>
+<tr>
+  <td class="num">5</td><td><b>稼働の非線形性</b></td>
+  <td>件数が2倍になったとき、坂野様ご自身の稼働は何倍になるか</td>
+  <td><b>1.3倍以下</b>（＝現場は自分以外がやる形が組める）</td>
+  <td>「時間を切り売りしない」という方針を、感覚ではなく数字で守る</td>
+</tr>
+<tr>
+  <td class="num">6</td><td><b>収益の到達性</b></td>
+  <td>1件あたりの粗利 × 現実的な月間件数 が月100万円に届くか</td>
+  <td>粗利率<b>30%以上</b>／必要件数が商圏の需要の範囲に収まる</td>
+  <td>目標から逆算する。単価が低すぎる現場は件数で死ぬ</td>
+</tr>
+<tr>
+  <td class="num">7</td><td><b>リピート性</b></td>
+  <td>単発（工事・引越）か、定期（点検・保守・回収・清掃）か</td>
+  <td>売上の<b>40%以上</b>を定期で作れる形がある</td>
+  <td>長期持続が目的。単発だけだと毎月ゼロから集客し続ける</td>
+</tr>
+<tr>
+  <td class="num">8</td><td><b>許認可の高さ</b></td>
+  <td>参入に要る許認可・資格は何か。自分で取れるか、有資格者を雇えるか</td>
+  <td><b>取るのに3か月〜1年かかるが、取れば障壁になる</b>帯が最良</td>
+  <td>低すぎる＝誰でも入る／高すぎる＝入れない。中間が一番おいしい</td>
+</tr>
+<tr>
+  <td class="num">9</td><td><b>5年後の増減</b></td>
+  <td>この現場は5年後に増えるか減るか</td>
+  <td>増える根拠を<b>公的統計または法改正</b>で1つ以上示せる</td>
+  <td>減る現場に入らない。今の瞬間だけを見ない</td>
+</tr>
+<tr>
+  <td class="num">10</td><td><b>納得感</b></td>
+  <td>客に何が残るか、人に説明できるか</td>
+  <td>「何をしていくらもらったか」を胸を張って言える</td>
+  <td>坂野様ご自身が明示された判断基準</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">合格ラインの数字について</span>
+上の合格ラインは<b>私（Claude）の案</b>であって、確定ではありません。特に <b>軸5の「1.3倍以下」、軸6の「粗利率30%」、軸7の「定期40%」</b> は、坂野様のご意向で上下します。<b>探索を始める前に、この3つの数字だけは決めていただきたい</b>と考えています（第13章に再掲）。
+</div>
+</section>
+
+<section id="s4b">
+<h3>4-2. 除外軸（軸を満たしていても、これに当たったら落とす）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>除外条件</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td>坂野様が現場に常時立たないと回らない</td><td>方針（時間の切り売りをしない）と正面衝突する</td></tr>
+<tr><td>人身事故のリスクが、保険で吸収しきれない</td><td>1回の事故で会社が飛ぶ。高所・重量物・火気・車両は要注意</td></tr>
+<tr><td>元請けが1社に固定される下請け構造</td><td>単価を握られる。値下げ要求を断れない</td></tr>
+<tr><td>売上の入金が90日以上先</td><td>資金1,000万円では回らなくなる（黒字倒産の形）</td></tr>
+<tr><td>現金商売で、単価の相場が客に見えない</td><td>「情弱を騙している」と感じる商売になりやすい（軸10に抵触）</td></tr>
+<tr><td>古物商許可が前提になる（中古品の売買を伴う）</td><td>現在R.Y.S.は古物商許可を保有していない。取得すること自体は可能だが、取得前提の案は別枠で扱う</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s5">
+<h2>5. STEP2：母集団の作り方（どこから候補を引くか）</h2>
+
+<p><b>ここが「思いつきで探す」との最大の違いです。</b>探し先を9つに固定し、<b>9つ全部が埋まるまで終わりにしません。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>探し先</th><th>そこから取れるもの</th><th>役割</th><th>担当</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>日本標準産業分類（総務省）の小分類</b>を全部舐める</td><td>国が定めた業種の全リスト。ここに載っていない業種は存在しない</td><td><b>母集団の骨格（漏れゼロ）</b></td><td>Claude</td></tr>
+<tr><td class="num">2</td><td><b>許認可・登録・免許の一覧</b>から逆引き</td><td>「参入に壁がある現場」だけを抽出できる</td><td>軸8・軸1に直結</td><td>Claude</td></tr>
+<tr><td class="num">3</td><td><b>M&Aマッチングサイトの売り案件</b>（現場系）</td><td>実際の売上・利益・従業員数・譲渡理由。<b>「儲かっている型」の実データ</b></td><td>軸6の裏取り</td><td>Claude</td></tr>
+<tr><td class="num">4</td><td><b>求人媒体の職種別データ</b>（日当・時給・募集件数）</td><td>職人の供給プールの厚み、伸びている現場</td><td><b>軸4に直結</b></td><td>Claude</td></tr>
+<tr><td class="num">5</td><td><b>法改正・制度カレンダー</b></td><td>これから強制的に発生する現場需要（法律で発生する需要は最も確実）</td><td><b>軸9に直結</b></td><td>Claude</td></tr>
+<tr><td class="num">6</td><td><b>自治体の入札公告・落札結果</b></td><td>地場の実需と、実際の落札単価</td><td>軸6の裏取り</td><td>Claude</td></tr>
+<tr><td class="num">7</td><td><b>現場系フランチャイズの募集資料</b></td><td>1店舗あたりの収支モデル（粗利率・件数・人員・初期費用）</td><td>数字の相場観</td><td>Claude</td></tr>
+<tr><td class="num">8</td><td><b>業界団体・組合のサイトと会報</b></td><td>業界内部の困りごと、会員数の推移（＝業界の増減）</td><td>軸2・軸9</td><td>Claude</td></tr>
+<tr><td class="num">9</td><td><b>既存事業の周辺</b>（物流・倉庫・EC返品・在庫保管）</td><td>坂野様の既存資産（Snoker／Rabelu／Rakuvi、寝かせ在庫の保管ノウハウ）が効く現場</td><td>他社が真似できない切り口</td><td>Claude</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">順番を守る（これを逆にすると失敗します）</span>
+<b>1と2で「漏れのない母集団」を作ってから、3〜9で「そのなかのどれが儲かっているか」を当てます。</b><br>
+3（M&A案件）から入ると、<b>たまたま売りに出ている業種しか見ない</b>ことになります。売りに出ているということは、誰かが手放したいということでもあります。母集団の代表性がありません。<br>
+5（法改正）から入ると、<b>今バズっている話題（省エネ、空き家など）に全員が殺到している領域</b>ばかり見ることになります。
+</div>
+
+<h3>5-2. 「AIが増やす現場」という切り口を、母集団に1本足す</h3>
+<p>坂野様が以前おっしゃっていた「物を買うAIが出てきたら…」という視点は、ここで使えます。<b>AIが普及すると、減る現場と増える現場が分かれます。</b></p>
+<div class="tblwrap">
+<table>
+<thead><tr><th>AIで減る現場</th><th>AIで増える現場</th></tr></thead>
+<tbody>
+<tr><td>電話受付・スケジュール調整・見積書作成といった<b>事務作業そのものを売っている</b>現場</td><td>AIが判断した結果を<b>誰かが物理的に実行しなければならない</b>現場（点検・交換・回収・設置・搬送）</td></tr>
+<tr><td>写真から状態を判定するだけの調査</td><td>判定のための<b>データを現地で取る</b>作業（測る・撮る・つなぐ）</td></tr>
+<tr><td>定型の書類作成の代行</td><td><b>資格者の署名・立会いが法律で要る</b>作業</td></tr>
+</tbody>
+</table>
+</div>
+<p><b>右列に該当する業種には、母集団の段階で印を付けます。</b>「AIが普及するほど需要が増える現場」は、長期持続（坂野様の第一条件）と極めて相性が良いためです。</p>
+</section>
+
+<section id="s6">
+<h2>6. STEP3：机上で落とす（関門A・関門B）</h2>
+
+<h3>関門A：機械的に落とす（数百件 → 30件程度）</h3>
+<p>1件ずつ丁寧に見ません。<b>次の3つのどれかに当たったら、その場で落とします。</b></p>
+<ul>
+<li>軸1（現場の障壁）が<b>1つ以下</b> ── 誰でも参入できる現場</li>
+<li>軸5（非線形性）で、<b>坂野様が現場に立たないと成立しない</b>形しか組めない</li>
+<li>軸9（5年後）で、<b>減る方向の根拠しか出てこない</b></li>
+</ul>
+
+<h3>関門B：数字で落とす（30件 → 10件程度）</h3>
+<p>残った30件について、次の表を1件ずつ埋めます。<b>埋まらない欄がある＝まだ調べ終わっていない</b>という扱いにします（空欄で通さない）。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>埋める欄</th><th>取り方</th><th>落とす条件</th></tr></thead>
+<tbody>
+<tr><td>客単価の相場</td><td>公開されている料金表・入札の落札額・FCの収支モデル</td><td>相場が取れない場合は「未確認」として保留（落とさない）</td></tr>
+<tr><td>1件あたりの原価（外注費・材料・移動）</td><td>求人の日当、資材の公開価格</td><td>粗利率が合格ラインを下回る</td></tr>
+<tr><td>月間必要件数</td><td>月100万円 ÷ 1件あたり粗利</td><td>商圏の需要に対して非現実的な件数になる</td></tr>
+<tr><td>職人の供給（軸4）</td><td>求人媒体で該当職種の募集件数と単価を実数で確認</td><td>実在の外注先候補を3件挙げられない</td></tr>
+<tr><td>必要な許認可と取得期間</td><td>所管省庁・自治体の公式ページ</td><td>取得が実質不可能（実務経験年数が長すぎる等）</td></tr>
+<tr><td>必要な保険と保険料</td><td>請負業者賠償責任保険・労災上乗せの見積</td><td>保険料が粗利を食い潰す</td></tr>
+<tr><td>入金サイト（何日後に金が入るか）</td><td>業界慣行・入札条件</td><td>90日超</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">「未確認」は落とす理由にしない</span>
+調べて分からなかったものは、<b>「未確認」として保留</b>します。<b>分からないことを理由に落とすと、情報が少ないだけの良い案が消えます。</b>落としてよいのは、確認できた事実だけです。
+</div>
+</section>
+
+<section id="s7">
+<h2>7. STEP4：足で確かめる（関門C）── ここが他の調査と決定的に違う</h2>
+
+<p class="lead">現場系は、ネットに答えが書いてありません。<b>ここだけは坂野様が動く必要があります。</b>10件を3件に絞る工程です。</p>
+
+<h3>やること（費用のかからない順）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>やり方</th><th>分かること</th><th>費用</th><th>目安</th></tr></thead>
+<tbody>
+<tr>
+  <td class="num">1</td>
+  <td><b>客として相見積もりを3社取る</b></td>
+  <td>実際の単価／現地調査の有無／見積の出し方／営業のうまさ／レスポンスの速さ／断り文句。<b>この1つで軸2・軸6がほぼ埋まります</b></td>
+  <td>無料</td>
+  <td>1業種あたり3社</td>
+</tr>
+<tr>
+  <td class="num">2</td>
+  <td><b>一人親方・小規模業者に外注の相談をする</b></td>
+  <td>「こういう仕事を月◯件出せたら受けられますか」と聞く。<b>軸4（やる人がいるか）の実在確認</b>。同時に「今どこから仕事が来ているか」も聞ける</td>
+  <td>無料</td>
+  <td>1業種あたり3社</td>
+</tr>
+<tr>
+  <td class="num">3</td>
+  <td><b>求人に応募する側から見る</b></td>
+  <td>日当・拘束時間・募集の切実さ。<b>「急募」が並んでいる＝人手が足りない＝参入しても人が取れない</b>という重要な警告が読める</td>
+  <td>無料</td>
+  <td>媒体を見るだけ</td>
+</tr>
+<tr>
+  <td class="num">4</td>
+  <td><b>業界の展示会に行く</b></td>
+  <td>1日で数十社。出展社の営業トークから「業界の今の困りごと」が丸ごと取れる。大阪ならインテックス大阪が近い</td>
+  <td>交通費のみ</td>
+  <td>候補が固まってから1〜2回</td>
+</tr>
+<tr>
+  <td class="num">5</td>
+  <td><b>M&A案件のノンネームシートを読む</b></td>
+  <td>業種別の売上・利益率・従業員数・譲渡理由。<b>買う気がなくても数字が読める</b></td>
+  <td>無料（登録要）</td>
+  <td>随時</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">Claudeがここで担当すること</span>
+坂野様が動く工程ですが、<b>丸投げにはしません。</b>Claudeが以下を用意します。<br>
+・<b>相見積もりの依頼文</b>（業種ごとに、自然に見積が取れる文面）<br>
+・<b>電話の台本と質問表</b>（何を聞けば軸4が埋まるかを設計した質問順）<br>
+・<b>回答の記録シート</b>（聞いた内容をそのまま埋めれば、関門Cの判定が自動で出る形）<br>
+坂野様は<b>「送る・電話する・埋める」だけ</b>で済むようにします。
+</div>
+
+<div class="box warn">
+<span class="lbl">相見積もりの取り方について（正当な範囲で行う）</span>
+相見積もりは<b>実際に検討している前提</b>で取るのが筋です。買う気が一切ないのに何社も呼びつけて現地調査までさせるのは、相手の時間を無償で奪うことになります。<br>
+実務的には、<b>①自宅・事務所・実家など実際に依頼しうる案件で取る ②電話・メールでの概算見積にとどめる（現地調査を伴わない範囲）</b> のどちらかで進めるのが健全です。この線引きは最初に決めておきます。
+</div>
+</section>
+
+<section id="s8">
+<h2>8. STEP5：ゲート0（関門D）── 3件を1件に絞る</h2>
+
+<p>残った3件を、事業性の6問にかけます。<b>1つでも「止める条件」に当たったら、その案は落とします。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">問</th><th>問い</th><th>止める条件</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>この客は、いま同じ目的を何で達成しているか（同業／大きいシステム／単機能ツール／Excel等の汎用品／人手、の5方向すべて）</td><td>5方向のどれかが埋まっていない＝まだ調べ終わっていない</td></tr>
+<tr><td class="num">2</td><td>競合が<b>既に持っている</b>ものを、先に全部書き出したか</td><td>「〜は存在しない」と、調べた社名の一覧なしに書いている</td></tr>
+<tr><td class="num">3</td><td>母数を条件で引き算したか（全国◯万社 → 商圏 → 規模 → 該当する状況）</td><td>引き算後の母数 × 単価 × シェア1% が月100万円に届かない</td></tr>
+<tr><td class="num">4</td><td>この客は5年後、増えるか減るか</td><td>減る層が主客になっている</td></tr>
+<tr><td class="num">5</td><td>この案が死ぬ条件を3つ書き、その3つが<b>もう起きていないか</b>確認したか</td><td>3つのうち1つでも既に起きている</td></tr>
+<tr><td class="num">6</td><td>当たったあと、客がうちと大手を並べたとき、うちを選ぶ理由は何か</td><td>理由が「機能の差」しかない／「今その大手はやっていないから」しか書けない</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">この判定表は「調べる前」に確定させます</span>
+調べた後に基準を決めると、<b>出てきた結果に合わせて基準が動きます。</b>先に紙に書いて固定します。
+</div>
+</section>
+
+<section id="s9">
+<h2>9. STEP6：1件だけ、人力でやってみる</h2>
+
+<p class="lead">
+<b>ここまでの5ステップで分かるのは「調べれば分かること」だけです。</b><br>
+分からないのは、次の3つ。これは<b>実際にやってみるしか確かめる方法がありません。</b>
+</p>
+
+<ul>
+<li>その客が、<b>本当にお金を払うか</b></li>
+<li><b>その値段で</b>払うか</li>
+<li>職人が、<b>実際に約束どおり現場に来るか</b></li>
+</ul>
+
+<div class="box ok">
+<span class="lbl">やり方：システムを1行も作らずに、1件だけ受ける</span>
+<b>受注 → 職人手配 → 施工 → 請求 → 入金</b>までを、Excelと電話とLINEだけで1件完遂します。<br>
+このとき記録するのは3つだけ：<b>①実際に何時間かかったか ②実際にいくら残ったか ③どこで詰まったか。</b><br>
+③が、そのまま<b>最初に作るシステムの仕様</b>になります。<b>逆に言えば、1件もやらないうちにシステムを作り始めてはいけません。</b>詰まる場所が分からないまま作ることになるからです。
+</div>
+
+<p>この1件が通ったら、そこから初めて要件定義（何を作るか）に入ります。</p>
+</section>
+
+<section id="s10">
+<h2>10. 参考：現場型の5つの型（候補を分類する枠）</h2>
+
+<p>候補が出てきたとき、<b>どの型で組むか</b>で儲け方も risk も変わります。母集団を作る段階で、この5つのどれに当たるか印を付けます。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>型</th><th>中身</th><th>強み</th><th>弱み</th><th>軸5（自分の稼働）</th></tr></thead>
+<tbody>
+<tr>
+  <td><b>A. 元請け型</b></td>
+  <td>自社が客と契約し責任を持つ。施工は外注の職人</td>
+  <td>在庫も設備も要らない。中抜きされにくい（責任を持っているから）</td>
+  <td>職人の確保が生命線。事故の責任は自社</td>
+  <td class="num" style="color:var(--ok)">低い</td>
+</tr>
+<tr>
+  <td><b>B. 自社施工型</b></td>
+  <td>従業員を雇って自社で現場を回す</td>
+  <td>粗利が最も厚い。品質を握れる</td>
+  <td>採用・労務・社保。人が辞めると止まる</td>
+  <td class="num" style="color:var(--ng)">高い</td>
+</tr>
+<tr>
+  <td><b>C. 設備・道具の貸出型</b></td>
+  <td>現場に置くモノ（機材・什器・センサー）を貸して月額を取る</td>
+  <td><b>人の稼働に売上が連動しない</b>。定期収入になる</td>
+  <td>初期投資が要る（資金1,000万円の使いどころ）。故障対応が要る</td>
+  <td class="num" style="color:var(--ok)">最も低い</td>
+</tr>
+<tr>
+  <td><b>D. 現場業者向けの道具売り</b></td>
+  <td>現場をやるのではなく、現場をやっている業者にシステムを売る</td>
+  <td>坂野様の既存3本がそのまま活きる</td>
+  <td><b>これは「現場型」ではない。</b>結局ソフト単体なので、価格競争に戻る</td>
+  <td class="num" style="color:var(--ok)">低い</td>
+</tr>
+<tr>
+  <td><b>E. 出口を握る型</b></td>
+  <td>回収・廃棄・買取・再販など、モノが出ていく側を押さえる</td>
+  <td>許認可の壁が厚く、大手が責任を嫌う。寝かせ転売の目利きが活きる可能性</td>
+  <td>許認可が必須（廃棄物なら産廃、中古品なら古物商）。取得に時間がかかる</td>
+  <td class="num">中</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">D型についての注意</span>
+D（現場業者向けにシステムを売る）は、坂野様が既にやっていることの延長で最も着手しやすい型です。<b>しかし今回のご依頼の狙い（＝ネットで完結しない、現場を絡めた事業）からは外れます。</b><br>
+実務的には、<b>A型＋D型の組み合わせ</b>——自社で元請けとして現場を回し、そこで作った道具を後から同業に売る——が、坂野様の資産と最も噛み合う形だと考えます。ただし<b>これは私の見立てであり、確定ではありません。</b>候補が出てから判断すべきことです。
+</div>
+</section>
+
+<section id="s11">
+<h2>11. 工数と期間の目安</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>STEP</th><th>担当</th><th>坂野様の稼働</th><th>期間の目安</th><th>費用</th></tr></thead>
+<tbody>
+<tr><td>1. 判断軸を固める</td><td>Claude作成＋承認</td><td>読んで承認：30分</td><td>1日</td><td>—</td></tr>
+<tr><td>2. 母集団を作る</td><td>Claude</td><td>ほぼゼロ</td><td>2〜3セッション</td><td>トークンのみ</td></tr>
+<tr><td>3. 机上で落とす</td><td>Claude</td><td>中間確認：1時間</td><td>3〜5セッション</td><td>トークンのみ</td></tr>
+<tr><td><b>4. 足で確かめる</b></td><td><b>坂野様</b></td><td><b>10業種 × 3社 ＝ 30件の接触</b></td><td><b>2〜4週間</b></td><td>交通費程度</td></tr>
+<tr><td>5. ゲート0</td><td>Claude＋判定</td><td>判定：2時間</td><td>1〜2セッション</td><td>トークンのみ</td></tr>
+<tr><td>6. 1件やってみる</td><td>坂野様</td><td>1件分の実務</td><td>2〜6週間</td><td>実費のみ</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><b>合計で、判断がつくまでおよそ2〜3か月。</b>資金の投入は STEP6 まで実質ゼロです。<b>1,000万円は、案が決まってから使います。</b></p>
+
+<div class="box">
+<span class="lbl">トークン節約のための進め方</span>
+STEP2・3は情報量が多いため、<b>1セッションで全部やろうとすると途中で文脈が溢れます。</b>業種グループごとにセッションを分け、結果は毎回 <code>C:\dev</code> 配下のファイルに書き出して引き継ぐ形にします（会話を引き継がず、ファイルを引き継ぐ）。
+</div>
+</section>
+
+<section id="s12">
+<h2>12. この手順で防げないこと（正直に書きます）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>防げないこと</th><th>どこで初めて分かるか</th></tr></thead>
+<tbody>
+<tr><td>客が実際にお金を払うか</td><td>STEP6（1件やってみる）</td></tr>
+<tr><td>その価格で払うか</td><td>STEP6</td></tr>
+<tr><td>職人が約束どおり来るか、続くか</td><td>STEP6以降、半年かけて分かる</td></tr>
+<tr><td>職人との人間関係（現場型の最大の運用コスト）</td><td>実際に始めてから。<b>ここが読めないのが現場型の本質的なリスク</b></td></tr>
+<tr><td>事故が起きたときの実際の損害</td><td>起きるまで分からない。保険で上限を作るしかない</td></tr>
+<tr><td>坂野様ご自身がその業種を好きになれるか</td><td>STEP4（足で確かめる）で肌感が出る</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ng">
+<span class="lbl">最大の弱点</span>
+この手順は<b>「調べれば分かることを、漏れなく調べる」</b>ための仕組みです。<b>「調べても分からないこと」は1つも防げません。</b><br>
+だから STEP6（1件だけ人力でやる）を必須にしています。<b>ここを飛ばしてシステム開発に入るのが、最も損失の大きい失敗パターンです。</b>
+</div>
+</section>
+
+<section id="s13">
+<h2>13. 決めていただきたいこと</h2>
+
+<p>この手順を実行に移すために、<b>6点だけ</b>ご判断をお願いします。他は私が進めます。</p>
+
+<div class="q">
+<b>① 現場（体を動かす部分）は誰がやる前提で探しますか</b><br>
+　A. 外注・提携職人に任せる（自社は受注・見積・管理システムのみ）<br>
+　B. 従業員を雇って自社で施工する<br>
+　C. 立ち上げ期だけ坂野様が現場に立ち、型が決まったら人に渡す<br>
+　D. 決めずに両方探す（候補は増えるが、絞り込みが遅くなります）<br>
+　<span style="color:var(--muted)">※「時間を切り売りしない」というご方針からは A が整合します。ただし C は、現場の実情が最速で溜まるという別の利点があります。</span>
+</div>
+
+<div class="q">
+<b>② 商圏はどう置きますか</b><br>
+　A. 大阪（北区拠点）中心<br>
+　B. 大阪＋豊橋（愛知）の2拠点<br>
+　C. 1都市で成立し、他都市へ複製できる型に限る<br>
+　D. 問わない（候補を出してから決める）
+</div>
+
+<div class="q">
+<b>③ 許認可の取得に、どこまで時間を許容しますか</b><br>
+　A. 3か月以内で取れるもの　B. 1年以内なら可　C. 実務経験年数が要るものも視野に入れる（有資格者の雇用を含む）<br>
+　<span style="color:var(--muted)">※許認可は「壁」であり「守り」でもあります。長くかかるものほど、後から入ってくる人が少なくなります。</span>
+</div>
+
+<div class="q">
+<b>④ 判断軸の合格ライン3つを確定させてください（第4章の表）</b><br>
+　・軸5：件数が2倍のとき、坂野様の稼働は何倍まで許容するか（案：1.3倍以下）<br>
+　・軸6：粗利率の下限（案：30%）<br>
+　・軸7：定期収入の比率の下限（案：売上の40%）
+</div>
+
+<div class="q">
+<b>⑤ 相見積もりの取り方の線引き（第7章の注記）</b><br>
+　A. 実際に依頼しうる案件だけで取る（自宅・事務所・実家など）<br>
+　B. 電話・メールでの概算見積にとどめる（現地調査は依頼しない）<br>
+　C. 両方
+</div>
+
+<div class="q">
+<b>⑥ 今回のセッションのゴール</b><br>
+　A. この手順の承認まで（今回はここで終わる）<br>
+　B. 承認後、そのまま STEP2（母集団づくり）まで走る<br>
+　C. 承認後、STEP3（10件への絞り込み）まで一気に走る<br>
+　<span style="color:var(--muted)">※B・C はトークンを多く使います。C まで行くと、坂野様が足で確かめる10業種のリストが今回中に出ます。</span>
+</div>
+</section>
+
+<section id="s14">
+<h2>14. 出典・確認状況</h2>
+
+<div class="box warn">
+<span class="lbl">この文書に「事実」は1件も含まれていません</span>
+本書は<b>探索の手順（方法論）の提案</b>であり、市場データ・法令・統計を事実として記載していません。<br>
+第5章に挙げた情報源（日本標準産業分類、許認可一覧、法改正カレンダー等）は<b>「これから当たる先」</b>として挙げたものであり、<b>その中身はまだ1件も確認していません。</b><br>
+実際の探索（STEP2以降）では、一次情報（省庁の公式ページ・法令原文・公的統計）を優先し、確認できた事実と推測を分けて出します。確認できなかったものは「未確認」と明記します。
+</div>
+
+<div class="box">
+<span class="lbl">この文書の位置づけ</span>
+状態：<b>案（未承認）</b>。Claudeが単独で確定させた事項はありません。<br>
+第13章の6点にご回答いただいた時点で、この手順を確定版として <code>DECISIONS.md</code> に記帳します。<br>
+なお、この結論は事業判断としては重要度が高い部類に入ります。<b>確定前に、外部AI（Gemini）による批判的レビューを挟むこともできます。</b>ご希望があれば、そのまま貼り付けられる依頼文を作成します。
+</div>
+</section>
+
+<footer class="doc">
+現場型サービスの探し方（新規事業の探索手順・案）／ 合同会社R.Y.S 坂野勇次様 宛 ／ 2026-08-26 作成<br>
+ファイル名：<code>_新規事業探索_現場型サービスの探し方_2026-08-26.html</code>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

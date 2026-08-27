@@ -1,0 +1,24 @@
+﻿
+# --- Cowork 追記 2026-08-25 00:50 ---
+.env
+.env.*
+!.env.example
+!.env.local.example
+_backups/
+_deploy/
+_tmp_stage/
+_to_delete/
+_secret_tmp/
+*.zip
+*.tgz
+*.tar.gz
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.next/
+.gradle/
+build/

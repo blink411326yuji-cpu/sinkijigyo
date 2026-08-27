@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>探索手順 v3（Geminiレビュー反映・最終提案）</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1b1f; --muted:#5c5f66; --line:#dfe1e6;
+  --panel:#f6f7f9; --accent:#1d4ed8; --accent-soft:#e8eefc;
+  --warn:#8a4b00; --warn-bg:#fff4e5; --ok:#0f6a3f; --ok-bg:#e8f5ee;
+  --ng:#9b1c1c; --ng-bg:#fdeaea; --chg:#5b21b6; --chg-bg:#f1ebfd;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161a; --fg:#e6e8ec; --muted:#a0a5ae; --line:#2c3037;
+    --panel:#1c1f25; --accent:#7ba2ff; --accent-soft:#1e2a44;
+    --warn:#ffc477; --warn-bg:#33280f; --ok:#7fd3a5; --ok-bg:#12291d;
+    --ng:#ff9d9d; --ng-bg:#331717; --chg:#c9b3ff; --chg-bg:#241a3d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+  font-size:16px; line-height:1.85; font-variant-numeric:tabular-nums}
+.wrap{display:flex; align-items:flex-start; max-width:1300px; margin:0 auto; gap:32px; padding:0 20px}
+nav{position:sticky; top:0; flex:0 0 268px; max-height:100vh; overflow-y:auto; padding:28px 0 40px; font-size:13.5px; line-height:1.6}
+nav .navttl{font-weight:700; font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px}
+nav .navttl.sec{margin-top:16px; padding-top:12px; border-top:1px solid var(--line)}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:5px 10px; border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft); border-left-color:var(--accent)}
+main{flex:1 1 auto; min-width:0; padding:28px 0 100px; max-width:860px}
+header.doc{border-bottom:2px solid var(--line); padding-bottom:18px; margin-bottom:28px}
+h1{font-size:25px; line-height:1.45; margin:0 0 10px}
+.meta{color:var(--muted); font-size:13px; line-height:1.9}
+h2{font-size:20px; margin:52px 0 14px; padding:8px 0 8px 12px; border-left:5px solid var(--accent); background:var(--panel)}
+h2.part{border-left-color:var(--chg); font-size:22px; margin-top:64px}
+h3{font-size:16.5px; margin:30px 0 10px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+p{margin:12px 0} ul,ol{margin:12px 0; padding-left:24px} li{margin:6px 0}
+code{background:var(--panel); padding:2px 6px; border-radius:4px; font-size:14px}
+.tblwrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:620px}
+th,td{border-bottom:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+th{background:var(--panel); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:18px 0; background:var(--panel)}
+.box.warn{background:var(--warn-bg); border-color:var(--warn)}
+.box.ok{background:var(--ok-bg); border-color:var(--ok)}
+.box.ng{background:var(--ng-bg); border-color:var(--ng)}
+.box.chg{background:var(--chg-bg); border-color:var(--chg)}
+.box .lbl{font-weight:700; font-size:13px; display:block; margin-bottom:6px; letter-spacing:.03em}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)}
+.box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px; line-height:1.9}
+.v{font-weight:700; white-space:nowrap}
+.v.o{color:var(--ok)} .v.t{color:var(--warn)} .v.x{color:var(--ng)} .v.u{color:var(--muted)}
+.formula{background:var(--accent-soft); border:1px solid var(--accent); border-radius:8px; padding:14px 18px; margin:16px 0; font-size:16px; line-height:2}
+.del{text-decoration:line-through; color:var(--muted)}
+.q{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:14px 0}
+.q b{color:var(--accent)}
+footer.doc{margin-top:70px; padding-top:18px; border-top:2px solid var(--line); color:var(--muted); font-size:13px}
+@media (max-width:900px){
+  .wrap{display:block; padding:0 16px}
+  nav{position:static; max-height:none; flex:none; padding:20px 0 0; border-bottom:1px solid var(--line); margin-bottom:10px}
+  main{max-width:none}
+}
+@media print{nav{display:none} body{font-size:11pt; background:#fff; color:#000} .wrap{display:block; max-width:none} h2{page-break-after:avoid} tr{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <p class="navttl">第1部：レビュー結果</p>
+  <a href="#r0">結論と採否のまとめ</a>
+  <a href="#r1">指摘対応表（11件）</a>
+  <a href="#r2">最重要の指摘と、ご判断のお願い</a>
+  <a href="#r3">私がGeminiに同意しなかった点</a>
+  <p class="navttl sec">第2部：手順 v3</p>
+  <a href="#s0">v2からの変更点</a>
+  <a href="#s1">優先順位の付け方（新設）</a>
+  <a href="#s2">収益性の式（修正）</a>
+  <a href="#s3">除外条件（修正）</a>
+  <a href="#s4">実働者をどう確保するか（新設）</a>
+  <a href="#s5">案の湧き出し口（12ソース）</a>
+  <a href="#s6">カタログの表示項目（16項目）</a>
+  <a href="#s7">深掘りフェーズ（修正）</a>
+  <a href="#s8">未確認事項</a>
+  <a href="#s9">決めていただきたいこと</a>
+</nav>
+
+<main>
+
+<header class="doc">
+  <h1>探索手順 v3 ― Geminiレビュー反映・最終提案</h1>
+  <p class="meta">
+    作成日：2026-08-26 ／ 状態：<b>最終提案（Geminiレビュー反映済み・未承認）</b><br>
+    反映したもの：①Geminiの指摘11件（全件を私が事実確認）　②坂野様の追加ご指示2件（優先順位を付ける／資金枠を3,000万円まで拡大）<br>
+    前の版：v1・v2 とも削除せず <code>C:\dev\_新規事業探索\</code> に残しています。
+  </p>
+</header>
+
+<h2 class="part" id="r0">第1部　Geminiレビューの結果</h2>
+
+<section>
+<h3>結論と採否のまとめ</h3>
+
+<p class="lead">
+<b>11件すべてに事実確認を行い、✕（誤り）と判定したものは1件もありませんでした。</b><br>
+採用7件／条件付き採用3件／保留（坂野様のご判断が必要）1件です。<b>握りつぶした指摘はありません。</b>
+</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">件数</th><th>判定</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td class="num">7</td><td><b class="v o">採用</b></td><td>運転資金の見方／実働者の確保手順／顧客の生の声のソース／物損リスク／技術的パラダイムシフトの分類／偽装請負／ボトルネックの置き直し</td></tr>
+<tr><td class="num">3</td><td><b class="v t">条件付き採用</b></td><td>稼働率（2件）／顧客の与信</td></tr>
+<tr><td class="num">1</td><td><b class="v u">保留</b></td><td>顧客獲得コスト（CAC）── <b>過去の決定と抵触するため、坂野様のご判断が必要です</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">Geminiレビューをかけて、明確に得をした点</span>
+<b>私がv2で「自分でも気づいている穴」として申告した3つのうち、②が埋まりました。</b><br>
+v2で私はこう書いていました ──「客側の困りごとから入るソースがない。すべて業種・事業者から入っている」。<br>
+Geminiはここに、<b>くらしのマーケット・ミツモアのようなマッチングサイトの依頼内容と価格相場、Q&Aサイト</b>という具体的な当たり先を出してきました。これは私が出せていなかった答えです。<b>第2部のソース12として採用しました。</b>
+</div>
+</section>
+
+<section id="r1">
+<h3>指摘対応表（11件）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">No</th><th>Geminiの指摘（要約）</th><th>重要度<br>（Gemini）</th><th>私の事実確認</th><th>根拠</th><th>判定と理由</th></tr></thead>
+<tbody>
+
+<tr>
+<td class="num">1</td>
+<td><b>稼働率（移動時間・待機時間）が抜けている。</b>「1日100件」のような理論値は物理的に不可能</td>
+<td>高／中</td>
+<td><b class="v t">△ 部分的に正しい</b></td>
+<td>論理的な指摘であり出典不要</td>
+<td><b class="v t">条件付き採用。</b>移動を伴う型（配送・設置・点検）ではそのとおり。<b>ただし倉庫内・工場内の定置作業では移動時間はほぼ発生せず、私が出した「1日100件」の例はそちらを想定したものです。</b>Geminiの一般化は行きすぎと判断し、<b>移動型と定置型で式を分けたうえで採用</b>しました（第2部§2）</td>
+</tr>
+
+<tr>
+<td class="num">2</td>
+<td><b>顧客獲得コスト（CAC）が完全に欠落。</b>粗利が高くても獲得費用が上回れば赤字</td>
+<td>高／中</td>
+<td><b class="v o">○ 裏付けあり</b>（論理として正しい）</td>
+<td>会計上の自明の関係</td>
+<td><b class="v u">保留（要ご判断）。</b>指摘自体は正しいのですが、<b>坂野様は過去に「集客の見込みを候補の選定条件に入れない。集客は候補を出したあとに調整する話」と決めておられます。</b>私の判断でこれを覆せないため、<b>「表示はするが、順位付けや除外には使わない」</b>形で暫定的に入れました。→ <b>第1部§2でご判断ください</b></td>
+</tr>
+
+<tr>
+<td class="num">3</td>
+<td><b>運転資金の枯渇リスク。</b>入金90日を許容しているが、外注費・人件費の支払いは先行する</td>
+<td>中／中</td>
+<td><b class="v o">○ 裏付けあり</b></td>
+<td>会計上の自明の関係</td>
+<td><b class="v o">採用。</b>私のv2の除外条件E6は「入金サイト90日超」でしたが、<b>これは片手落ちでした。</b>本当に効くのは「入金までの日数 − 支払いまでの日数＝立替期間」です。<b>E6を立替期間ベースに書き換え、必要運転資金の試算欄を追加しました</b>（第2部§3）</td>
+</tr>
+
+<tr>
+<td class="num">4</td>
+<td><b>実働者の獲得コストと採用難易度。</b>「いくらで・どの経路で集められるか」の一次情報取得手順が定義されていない</td>
+<td>中／高</td>
+<td><b class="v o">○ 手順としては正しい</b><br><span class="v u">根拠の数値は【未確認】</span></td>
+<td>全体の有効求人倍率1.17倍（令和8年5月・厚労省）は確認。<b>ただしGeminiが挙げた「現業職の有効求人倍率の高止まり」という職業別の内訳は、一次情報に届かず未確認</b></td>
+<td><b class="v o">採用。</b>数値の裏は取れていませんが、手順の穴であることは確かです。<b>深掘りフェーズに「求人広告のテスト出稿」を必須項目として追加</b>しました。実際に出して応募が来るかを見るのが、最も安く確実な検証です（第2部§7）</td>
+</tr>
+
+<tr>
+<td class="num">5</td>
+<td><b>顧客の生の声が集まる場所が抜けている。</b>マッチングサイトの依頼内容・価格相場、Q&Aサイトを追加すべき</td>
+<td>中／中</td>
+<td><b class="v o">○ 裏付けあり</b></td>
+<td>くらしのマーケット（curama.jp）・ミツモア（meetsmore）とも、出店・手数料の仕組みを持つ稼働中のサービスであることを確認</td>
+<td><b class="v o">採用。</b><b>私がv2で自己申告していた穴②そのものです。</b>ソース12として追加しました（第2部§5）</td>
+</tr>
+
+<tr>
+<td class="num">6</td>
+<td><b>E5に物損を加えるべき。</b>人身事故だけでなく顧客の高額な設備・商品の破損も致命傷</td>
+<td>中／高</td>
+<td><b class="v o">○ 裏付けあり</b></td>
+<td>民法709条（不法行為による損害賠償）。実務上も請負業者賠償責任保険は対人・対物の両方を扱う</td>
+<td><b class="v o">採用。</b>特に<b>倉庫・フルフィルメント型では、預かった在庫の毀損・紛失が最大のリスク</b>になります。坂野様が有力候補に挙げておられる領域なので、この修正の実効性は高いと考えます</td>
+</tr>
+
+<tr>
+<td class="num">7</td>
+<td><b>1人法人の与信で、顧客の基幹フローをこちらに合わせさせるのは稀</b></td>
+<td>中／中</td>
+<td><b class="v t">△ 部分的に正しい</b></td>
+<td>—（一般論であり出典なし）</td>
+<td><b class="v t">条件付き採用。</b>相手が中〜大企業ならそのとおりです。<b>一方、従業員数名の事業者であれば「うちのやり方に合わせる」は普通に起こります。</b>坂野様が狙うのは後者なので、<b>「狙う顧客の規模」を各案に明記する</b>形で採用しました</td>
+</tr>
+
+<tr>
+<td class="num">8</td>
+<td><b>「誰もやっていない理由」に⑥を追加すべき</b>──過去は技術的・コスト的に不可能だったが、今は可能になった</td>
+<td>低／中</td>
+<td><b class="v o">○ 裏付けあり</b></td>
+<td>—</td>
+<td><b class="v o">採用。ただし重要度を「低」→「中」に格上げして扱います。</b>理由：<b>坂野様は生成AIで業務システムを自作できる体制をお持ちです。</b>「昔は人手でやるしかなく採算が合わなかったが、今なら自動化できる」という穴は、坂野様にとって最も入りやすい種類の空白です。<b>Geminiは依頼者の開発能力を軽く見積もっていると判断しました</b></td>
+</tr>
+
+<tr>
+<td class="num">9</td>
+<td><b>偽装請負。</b>外注（業務委託）に対して発注者が具体的な指揮命令（こちらのやり方での訓練・手順の強制）を行うと違法になる</td>
+<td>高／高</td>
+<td><b class="v o">○ 裏付けあり</b><br><span class="v u">（告示番号・年月日は【未確認】）</span></td>
+<td>厚生労働省「労働者派遣事業と請負により行われる事業との区分に関する基準（37号告示）」および同省の疑義応答集の存在を公式サイトで確認。<b>ただし告示の番号・公布年月日の記載までは今回確認できていません</b></td>
+<td><b class="v o">採用。これがレビュー全体で最も価値のある指摘でした。</b>v2の設計は<b>「現場は外注」と「現場スタッフをこちらのやり方で訓練する」を同時に置いており、この2つは法的に両立しません。</b>気づいていませんでした。<b>組み方を「外注型」と「雇用型」に分け、法的整合をカタログの必須欄にしました</b>（第2部§4）</td>
+</tr>
+
+<tr>
+<td class="num">10</td>
+<td><b>ボトルネックを「顧客の需要」に置きすぎ。</b>現場型の最大のボトルネックは実働者の調達である</td>
+<td>高／中</td>
+<td><b class="v o">○ 妥当</b></td>
+<td>—（構造的な指摘）</td>
+<td><b class="v o">採用。</b><b>優先順位の配点で、実働者の確保しやすさを最大（25点）に置きました</b>（第2部§1）。<b>ただし坂野様のご方針と正面から衝突する部分があるため、第1部§2で別途ご説明します</b></td>
+</tr>
+
+<tr>
+<td class="num">11</td>
+<td>【検算】A/Bの計算式に齟齬なし。<br>【観点6】40〜80件を人が選ぶ設計は問題なし</td>
+<td>—</td>
+<td><b class="v o">○ 一致</b></td>
+<td>—</td>
+<td>指摘なし。<b>ただし「優先順位を付けてほしい」という坂野様の新しいご指示により、この部分は設計を変更しています</b>（第2部§1）</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="r2">
+<h3>最重要の指摘と、ご判断のお願い</h3>
+
+<div class="box ng">
+<span class="lbl">Geminiが「最も致命的」と結論した点は、坂野様のご方針と正面から衝突します</span>
+Geminiの結論：<b>「実働者の安定的・低コストな調達と定着」が単一障害点である。</b><br>
+現場系中小の経営者役はこう述べています ──「腕が良く訓練された外注は、元請けを<b>中抜きしているだけの邪魔な存在</b>とみなし、顧客と直接つながって独立するか、条件の良い他社へ流出する」。<br><br>
+一方、坂野様は今回こうおっしゃっています ──<b>「量が増えたら、増えた分だけ雇うアルバイト・パート・正社員が増えるだけの話」。</b><br><br>
+<b>この2つは、同じ現象について正反対の見方をしています。</b>「人はお金を出せば集まる」と見るか、「お金を出しても集まらず、集まっても定着しない」と見るかです。<br>
+<b>私はこれを、私の判断で片方に寄せることはしません。</b>ただし<b>「どちらが正しいかは、案を選ぶ前に安く確かめられます」</b>── 求人広告を実際に1本出して、応募が何件来るかを見るだけです（数千円〜数万円）。<b>第2部§7で、これを深掘りフェーズの必須項目にしました。</b>
+</div>
+
+<div class="box ok">
+<span class="lbl">私からの提案：職人側にも「乗り換えコスト」を作る</span>
+Geminiは問題を指摘しただけで、解決策を出していません。<b>私からの提案を1つ加えます。</b><br>
+v2では「顧客が乗り換えたくなくなる作り込み」を設計しました。<b>同じことを、職人側にも設計できます。</b><br><br>
+<b>坂野様は、既に3本の業務システムをお持ちです。</b>これを<b>外注する職人に無償で使わせる</b>という手があります。<br>
+・請求書を職人が手書きしなくてよくなる（自社ツールC＝Rakuvi）<br>
+・回る順番を自動で組んでくれる（自社ツールA＝Snoker）<br>
+・住所不備で戻ってくる荷物が減る（自社ツールB＝Rabelu）<br><br>
+<b>他社の仕事を受けると、この道具が使えなくなる。</b>これは「単価を上げる」より安く、しかも真似されにくい定着策です。<b>一人親方が最も嫌う「事務作業」を肩代わりする、という形になっています。</b><br>
+<b>ただしこれは私の案であって、実際に効くかは確かめていません。</b>深掘りフェーズで職人に直接聞く質問項目に入れます。
+</div>
+
+<div class="box warn">
+<span class="lbl">ご判断をお願いしたい点：顧客獲得コスト（CAC）の扱い</span>
+Geminiは「CACの欠落」を高い重要度で指摘し、投資家役も同じ理由で見送りと述べています。<b>指摘としては正しいと私も判断しました。</b><br>
+<b>しかし坂野様は過去に「集客の見込みは候補の選定条件に入れない。キーワードで単価が変わるし、集客は候補を出したあとに調整する話だ」と決めておられます。</b><br>
+私の判断でこの決定を覆すことはできません。<b>暫定的に「表示はするが、順位付けにも除外にも使わない」形にしています。</b>第2部§9①でご判断ください。
+</div>
+</section>
+
+<section id="r3">
+<h3>私がGeminiに同意しなかった点（迎合しないための記録）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>Geminiの主張</th><th>私の見解</th></tr></thead>
+<tbody>
+<tr>
+<td>「1日100件のように理論上の最大件数をこなすことは<b>物理的に不可能</b>」</td>
+<td><b>行きすぎです。</b>倉庫内・工場内の定置作業（検品・ピッキング・梱包・詰替）では移動がほぼ発生せず、1日100件は現実的な水準になり得ます。<b>Geminiは現場＝移動を伴うものと暗黙に想定しています。</b>移動型と定置型を分けて式を作りました</td>
+</tr>
+<tr>
+<td>技術的パラダイムシフトの追加は重要度「<b>低</b>」</td>
+<td><b>「中」に格上げしました。</b>依頼者が生成AIで業務システムを自作できることを、Geminiは評価に織り込んでいません。この体制では「昔は人手で採算が合わなかった領域」が最も入りやすい空白になります</td>
+</tr>
+<tr>
+<td>顧客の基幹フローを合わせさせるのは「<b>極めて稀</b>」</td>
+<td><b>相手の規模によります。</b>従業員数名の事業者では普通に起こります。狙う顧客規模を明記する形で条件付き採用としました</td>
+</tr>
+<tr>
+<td>根拠：現業職の有効求人倍率の高止まり（確信度「高」）</td>
+<td><b>職業別の内訳は一次情報で確認できませんでした。</b>全体の1.17倍（令和8年5月・厚労省）までしか裏が取れていません。<b>手順は採用しますが、この数値は事実として扱いません</b></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">2往復目は不要と判断します</span>
+今回の変更は<b>本質的（設計の一部が変わる）</b>ですが、重要度「高」で未解決のまま残った指摘はありません。<b>唯一の未解決はCACの扱いで、これはGeminiに再度聞くことではなく坂野様がお決めになることです。</b>したがって<b>2往復目は行わないことを推奨します。</b>
+</div>
+</section>
+
+<h2 class="part" id="s0">第2部　探索手順 v3</h2>
+
+<section>
+<h3>v2からの変更点</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>変更点</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>カタログを優先順位順に並べる（100点満点の配点を新設）</b></td><td><b>坂野様</b></td></tr>
+<tr><td class="num">2</td><td><b>初期投資の枠を1,000万円 → 3,000万円に拡大</b></td><td><b>坂野様</b></td></tr>
+<tr><td class="num">3</td><td>収益性の式に「移動・段取り時間」と「月間の稼働率」を織り込み（移動型／定置型で分岐）</td><td>Gemini 1・3</td></tr>
+<tr><td class="num">4</td><td>E6を「入金サイト」→「立替期間（入金 − 支払）」に変更。必要運転資金の試算欄を追加</td><td>Gemini 3</td></tr>
+<tr><td class="num">5</td><td>E5に「重大な物損」を追加</td><td>Gemini 6</td></tr>
+<tr><td class="num">6</td><td><b>「組み方」を外注型／雇用型に分け、偽装請負の判定を必須欄に</b></td><td>Gemini 9</td></tr>
+<tr><td class="num">7</td><td>ソース12（顧客の生の声）を追加</td><td>Gemini 5</td></tr>
+<tr><td class="num">8</td><td>「誰もやっていない理由」に⑥（過去は技術的に不可能）を追加</td><td>Gemini 8</td></tr>
+<tr><td class="num">9</td><td>深掘りフェーズに「求人広告のテスト出稿」を必須追加</td><td>Gemini 4・10</td></tr>
+<tr><td class="num">10</td><td><b>職人側の乗り換えコスト（既存ツールの無償提供）を表示項目に追加</b></td><td>Claudeの提案</td></tr>
+<tr><td class="num">11</td><td>「狙う顧客の規模」を表示項目に追加</td><td>Gemini 7</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s1">
+<h2>§1　優先順位の付け方（新設）</h2>
+
+<div class="box chg">
+<span class="lbl">設計の考え方</span>
+<b>案は1件も削りません。</b>削らずに、<b>上から見て良い順に並べ替えるだけ</b>です。<br>
+配点は<b>すべて公開し、各案に内訳も表示します。</b>「なぜこの順位なのか」が見えないと、坂野様がご自分で判断できなくなり、案出し型にした意味が消えるためです。
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">配点</th><th>軸</th><th>高得点になる条件</th><th>この配点にした理由</th></tr></thead>
+<tbody>
+<tr><td class="num"><b>25</b></td><td><b>P1 実働者の確保しやすさ</b></td><td>求人媒体に該当職種の募集が多い／未経験可・短時間可／外注先候補が実在する</td><td><b>Geminiが「単一障害点」と結論した点。</b>現場型はここで死ぬ</td></tr>
+<tr><td class="num"><b>20</b></td><td><b>P2 収益の到達しやすさ</b></td><td>月100万円に必要な人数が少ない（§2の式で算出）</td><td>目標に届かなければ意味がない</td></tr>
+<tr><td class="num"><b>15</b></td><td><b>P3 リピート性</b></td><td>定期（点検・保守・回収・保管）の比率が高い</td><td>坂野様が「大事」と明示された項目</td></tr>
+<tr><td class="num"><b>15</b></td><td><b>P4 乗り換えさせない作り込み</b></td><td>データ蓄積・業務の作り込み・物理設置・接点の掌握が使える</td><td>坂野様の防御方針の中核</td></tr>
+<tr><td class="num"><b>10</b></td><td><b>P5 既存資産が効くか</b></td><td>Snoker／Rabelu／Rakuvi／寝かせ在庫の保管ノウハウが乗る</td><td>他社に真似できない坂野様固有の優位</td></tr>
+<tr><td class="num"><b>10</b></td><td><b>P6 先行事例の確からしさ</b></td><td>国内に先行あり＝満点／海外のみ＝中／なし＝低</td><td>坂野様の「ブルーオーシャンは危険」というご見解</td></tr>
+<tr><td class="num"><b>5</b></td><td><b>P7 参入の速さ</b></td><td>許認可不要・初期投資が軽い</td><td>早く試せるほど失敗の損失が小さい</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−10</b></td><td>補正：10年後の減少懸念</td><td>推測レベルで減りそうな場合に減点（確定なら除外条件E3で落ちる）</td><td>「たぶん減る」を落とさず、順位で表現する</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−5</b></td><td>補正：偽装請負リスク</td><td>外注で回したいのに指揮命令が不可欠な構造の場合</td><td>Gemini 9</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">順位を付けることの副作用と、その対策</span>
+<b>順位を付けると、上位だけ読まれて下位が見られなくなります。</b>これは「絞り込まないでほしい」とおっしゃった理由と同じ問題が、別の形で出たものです。<br>
+対策として、<b>一覧表はどの列でも並べ替えられるようにします。</b>「総合点順」は初期表示にすぎず、<b>「1人日粗利が高い順」「定期収入の比率が高い順」「既存ツールが効く順」「すぐ始められる順」でも並べ替えられます。</b>ご自身の関心で並べ替えて見ていただく想定です。
+</div>
+
+<div class="box">
+<span class="lbl">配点はご自由に変えられます</span>
+上の配点は<b>私の案</b>です。たとえば「リピート性をもっと重く」「既存資産が効くかを最優先に」といったご希望があれば、<b>配点を変えて並べ直すだけ</b>で済みます（案の中身を作り直す必要はありません）。§9②でご指定ください。
+</div>
+</section>
+
+<section id="s2">
+<h2>§2　収益性の式（修正）</h2>
+
+<p>v2の式には、Geminiの指摘どおり<b>移動時間と待機時間が入っていませんでした。</b>次のように修正します。</p>
+
+<div class="formula">
+<b>① 1人が1日にこなせる実件数</b><br>
+　＝ 1日の実働時間 ÷（1件あたりの作業時間 ＋ 1件あたりの移動・段取り時間）<br><br>
+<b>② 1人1日あたりの粗利</b>　＝ ①の実件数 × 1件あたりの粗利額<br><br>
+<b>③ 月の粗利</b>　＝ ② × 月の稼働日数 × <b>稼働率</b>（仕事が実際に入っている日の割合）<br><br>
+<b>④ 月100万円に必要な人数</b>　＝ 1,000,000 ÷ ③
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>型</th><th>移動・段取り時間の扱い</th><th>該当する現場</th></tr></thead>
+<tbody>
+<tr><td><b>移動型</b></td><td><b>移動時間を必ず入れる。</b>訪問1件ごとに片道◯分が乗る</td><td>配送、設置、点検、清掃、回収、現地代行</td></tr>
+<tr><td><b>定置型</b></td><td>移動時間は入れない。代わりに<b>段取り替え・待機の時間</b>を入れる</td><td>倉庫内作業（検品・ピッキング・梱包）、加工、組立</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">この修正が坂野様に有利に働く点</span>
+<b>移動時間が入ることで、定置型（倉庫・フルフィルメント）が相対的に強く見えるようになります。</b><br>
+同じ1件あたりの粗利でも、移動が乗る型は実件数が落ちるためです。<b>坂野様が有力視されている倉庫・発送代行の領域は、この式の下では有利に評価されます。</b>これは私が結論を寄せたのではなく、式を正しくした結果そうなるという意味です。
+</div>
+</section>
+
+<section id="s3">
+<h2>§3　除外条件（修正版・全7件）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>除外条件</th><th>v2からの変更</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td>坂野様ご自身が現場に立ち続けないと成立しない形しか組めない</td><td>変更なし</td></tr>
+<tr><td class="num">E2</td><td>参入に必要な許認可の取得に3か月超かかる</td><td>変更なし</td></tr>
+<tr><td class="num">E3</td><td>10年後に需要が減ることが<b>確定情報</b>で言える（推測では落とさない）</td><td>変更なし</td></tr>
+<tr><td class="num">E4</td><td>違法・脱法、または規制上グレー</td><td>変更なし</td></tr>
+<tr><td class="num">E5</td><td>人身事故<b>および重大な物損事故</b>のリスクが保険で吸収しきれない</td><td><b>物損を追加</b>（Gemini 6）。倉庫型は預かり在庫の毀損・紛失が該当</td></tr>
+<tr><td class="num">E6</td><td><b>立替期間（入金までの日数 − 支払までの日数）が3か月超</b></td><td><b>全面変更</b>（Gemini 3）。入金サイト単独では片手落ちだった</td></tr>
+<tr><td class="num">E7</td><td>参入に必要な初期投資が<b>3,000万円</b>を超える</td><td><b>1,000万円 → 3,000万円に拡大</b>（坂野様のご指示）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">資金枠を3,000万円に広げたことで、拾えるようになる型</span>
+<b>「現場に機材を置いて月額を取る型」</b>が候補に入るようになります。初期投資は重いのですが、<b>売上が人の稼働に連動しない</b>という性質を持ちます。<br>
+また、<b>倉庫を借りて自社で運営する型</b>（保証金・棚・什器・フォークリフト等）も、1,000万円枠では入りにくかったものです。<b>坂野様が「現場＝倉庫の運営も含む」と定義を広げられたこととあわせて、この枠の拡大は候補の幅を大きく広げます。</b>
+</div>
+
+<p style="color:var(--muted); font-size:14px">※ 初期投資は <code>〜1,000万円</code> <code>〜2,000万円</code> <code>〜3,000万円</code> の3段階で印を付け、一覧で並べ替えられるようにします。</p>
+</section>
+
+<section id="s4">
+<h2>§4　実働者をどう確保するか（新設）</h2>
+
+<h3>4-1　組み方は「外注型」と「雇用型」に分ける（法的な理由）</h3>
+
+<div class="box ng">
+<span class="lbl">v2の設計には法的な誤りがありました</span>
+v2では「現場は外注に流す」と書きながら、乗り換えコストの手段5に「現場スタッフがこちらのやり方で訓練済み」と書いていました。<br>
+<b>この2つは同時に成立しません。</b>業務委託（外注）の相手に対して、発注者が作業手順を指示したり訓練したりすると、<b>実態は労働者派遣とみなされ「偽装請負」に当たるおそれ</b>があります。<br>
+根拠：厚生労働省「労働者派遣事業と請負により行われる事業との区分に関する基準（37号告示）」および同省の疑義応答集。<b>（告示の番号・公布年月日までは今回確認できていません＝【一部未確認】）</b>
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>組み方</th><th>できること</th><th>できないこと</th><th>実働者の定着策</th></tr></thead>
+<tbody>
+<tr>
+<td><b>外注型</b><br>（業務委託）</td>
+<td>成果物・完成状態を定義して発注する。品質基準・納期を契約で定める</td>
+<td><b>作業手順の指示・訓練・時間管理・直接の指揮命令</b></td>
+<td>単価／仕事量の安定／<b>事務作業の肩代わり（後述4-2）</b></td>
+</tr>
+<tr>
+<td><b>雇用型</b><br>（パート・正社員）</td>
+<td>作業手順の指示・訓練・シフト管理。品質を自社で作り込める</td>
+<td>—（ただし労務・社保・労災の責任を自社が負う）</td>
+<td>教育／シフトの融通／道具の支給</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p><b>カタログの各案に「この案は外注型で回るか、雇用型が必要か」を必ず書きます。</b>指揮命令が不可欠な構造なのに外注で回そうとしている案は、優先順位で −5点の補正がかかります。</p>
+
+<h3>4-2　職人側にも乗り換えコストを作る（Claudeの提案）</h3>
+
+<p>Geminiは「腕の良い外注は流出する」と指摘しましたが、対策は示していません。<b>単価を上げる以外の方法を提案します。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>手段</th><th>中身</th><th>坂野様の場合</th></tr></thead>
+<tbody>
+<tr><td><b>事務作業を肩代わりする</b></td><td>請求書の作成、入金の消し込み、経費の記録を代わりにやる</td><td><b>Rakuvi（帳票PDF一括生成）がそのまま使えます</b></td></tr>
+<tr><td><b>段取りを代わりに組む</b></td><td>回る順番・積む順番を自動で作って渡す</td><td><b>Snoker（ルート最適化）がそのまま使えます</b></td></tr>
+<tr><td><b>手戻りを減らす</b></td><td>住所不備で戻ってくる荷物・不在再配達を減らす</td><td><b>Rabelu（住所訂正・伝票発行）がそのまま使えます</b></td></tr>
+<tr><td>仕事量を安定させる</td><td>閑散期にも一定量を回す</td><td>定期案件（P3）の比率が効く</td></tr>
+<tr><td>道具を貸す</td><td>機材・端末を貸与する</td><td>資金枠3,000万円の使い道になりうる</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">なぜこれが効くと考えるか</span>
+<b>一人親方が最も嫌うのは、現場作業ではなく事務作業です</b>（請求書、見積、入金確認、経費の整理）。<b>ここを丸ごと引き受けると、他社の仕事を受けたときに「また自分で請求書を作らないといけない」という状態に戻ります。</b><br>
+<b>これは単価の上乗せより安く、しかも大手が真似しにくい</b>（大手は職人ごとの事務を個別に見ない）。<b>坂野様は既にこの3本を持っているので、追加開発もほぼ不要です。</b><br><br>
+<b class="v u">ただし、これは私の仮説であって、検証していません。</b>深掘りフェーズで職人に直接聞く質問項目に入れ、「事務を肩代わりされたら、単価が同じでもうちを優先しますか」と確認します。
+</div>
+</section>
+
+<section id="s5">
+<h2>§5　案の湧き出し口（12ソース）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>ソース</th><th>取れるもの</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>日本標準産業分類（総務省）の小分類を全部舐める</td><td>業種の全リスト（漏れが構造的に起きない）</td><td>Claude</td></tr>
+<tr><td class="num">2</td><td>許認可・登録・免許の一覧から逆引き</td><td>参入コスト（E2の判定材料）</td><td>Claude</td></tr>
+<tr><td class="num">3</td><td>M&Aマッチングサイトの売り案件</td><td>実際の売上・利益・従業員数・譲渡理由</td><td>Claude</td></tr>
+<tr><td class="num">4</td><td>求人媒体の職種別データ</td><td><b>P1（実働者の確保）の判定材料。配点最大の軸</b></td><td>Claude</td></tr>
+<tr><td class="num">5</td><td>法改正・制度カレンダー</td><td>法律で強制的に発生する需要</td><td>Claude</td></tr>
+<tr><td class="num">6</td><td>自治体の入札公告・落札結果</td><td>地場の実需と実際の落札単価</td><td>Claude</td></tr>
+<tr><td class="num">7</td><td>現場系フランチャイズの募集資料</td><td>1店舗あたりの収支モデル</td><td>Claude</td></tr>
+<tr><td class="num">8</td><td>業界団体・組合のサイトと会報</td><td>業界内部の困りごと、会員数の推移</td><td>Claude</td></tr>
+<tr><td class="num">9</td><td>既存事業の周辺</td><td>既存3ツール・保管ノウハウが効く現場</td><td>Claude</td></tr>
+<tr><td class="num">10</td><td>国内の中小が既にやっているサービスをトレース</td><td>需要が実証済みの案</td><td><b>坂野様</b></td></tr>
+<tr><td class="num">11</td><td>海外にあって日本にないサービス</td><td>海外で需要が実証済み。日本では先行者になれる</td><td><b>坂野様</b></td></tr>
+<tr style="background:var(--chg-bg)"><td class="num"><b>12</b></td><td><b>顧客の生の声が集まる場所</b><br>・くらしのマーケット／ミツモア等の依頼内容と価格相場<br>・Q&Aサイトの「◯◯で困っている」という投稿</td><td><b>客が何に困り、いくらなら払うかが客自身の言葉で分かる。</b>唯一「客側」から入るソース</td><td><b>Gemini</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>「誰もやっていない理由」の6分類（⑥を追加）</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th>理由</th><th>頻度</th><th>扱い</th></tr></thead>
+<tbody>
+<tr><td>① 需要がない</td><td>多い</td><td>P6で低得点</td></tr>
+<tr><td>② 法規制で禁止・グレー</td><td>多い</td><td>E4で除外</td></tr>
+<tr><td>③ やってみたが儲からず撤退済み</td><td>多い</td><td>P6で低得点</td></tr>
+<tr><td>④ やる人が確保できない</td><td>中</td><td>P1で低得点</td></tr>
+<tr><td>⑤ 本当に空いている</td><td>少ない</td><td>—</td></tr>
+<tr style="background:var(--chg-bg)"><td><b>⑥ 過去は技術的・コスト的に成立しなかったが、今は可能</b></td><td><b>要注目</b></td><td><b>P6で減点しない。</b>坂野様が生成AIで業務システムを自作できる体制のため、ここは「空白」ではなく「取れる空白」</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s6">
+<h2>§6　カタログの表示項目（16項目）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>v3での変更</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>現場の中身（誰が・どこで・何をするか）</td><td></td></tr>
+<tr><td class="num">2</td><td>客は誰か</td><td></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>3</b></td><td><b>狙う顧客の規模</b>（従業員数の目安）</td><td><b>新設</b>（Gemini 7）</td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>4</b></td><td><b>組み方と法的整合</b>（外注型／雇用型／偽装請負リスクの有無）</td><td><b>新設</b>（Gemini 9）</td></tr>
+<tr><td class="num">5</td><td>単価と原価</td><td></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>6</b></td><td><b>移動型／定置型の別と、1人1日の実件数</b></td><td><b>修正</b>（Gemini 1・3）</td></tr>
+<tr><td class="num">7</td><td>1人1日あたりの粗利額</td><td></td></tr>
+<tr><td class="num">8</td><td>月100万円に必要な人数（稼働率を反映）</td><td>修正</td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>9</b></td><td><b>必要運転資金と立替期間</b></td><td><b>新設</b>（Gemini 3）</td></tr>
+<tr><td class="num">10</td><td>リピート性（定期の比率）</td><td></td></tr>
+<tr><td class="num">11</td><td>実働者の確保（求人相場・外注先候補の実在）</td><td></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>12</b></td><td><b>実働者の定着策</b>（既存ツールの無償提供が効くか）</td><td><b>新設</b>（Claude提案）</td></tr>
+<tr><td class="num">13</td><td>許認可と取得期間／初期投資の段階</td><td></td></tr>
+<tr><td class="num">14</td><td>10年後の増減と根拠の確度</td><td></td></tr>
+<tr><td class="num">15</td><td>乗り換えさせない作り込み（顧客側）</td><td></td></tr>
+<tr><td class="num">16</td><td>先行事例（6分類のどれか）／既存資産が効くか</td><td></td></tr>
+<tr style="background:var(--warn-bg)"><td class="num">参考</td><td><b>想定される集客経路</b>（＝CAC関連）</td><td><b>表示のみ。順位付けにも除外にも使いません</b>（§9①で要ご判断）</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><b>各案の末尾に、優先順位スコアの内訳（P1〜P7と補正）を必ず表示します。</b></p>
+</section>
+
+<section id="s7">
+<h2>§7　深掘りフェーズ（修正）</h2>
+
+<p>坂野様が拾った案について行います。<b>順番を「安く早く殺せるものから」に並べ替えました。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">順</th><th>やること</th><th>担当</th><th>費用</th><th>何が分かるか</th></tr></thead>
+<tbody>
+<tr style="background:var(--chg-bg)">
+<td class="num"><b>1</b></td>
+<td><b>求人広告をテスト出稿する</b>（1本だけ、実際に募集を出す）</td><td>坂野様</td><td>数千円〜数万円</td>
+<td><b>実働者が本当に集まるか。応募件数・希望単価・経験の有無。</b>Geminiが最も致命的とした不確実性が、最も安く消えます<br><b>新設（Gemini 4・10）</b></td>
+</tr>
+<tr><td class="num">2</td><td>一人親方・小規模業者に外注の相談をする</td><td>坂野様</td><td>無料</td><td>外注先の実在。<b>あわせて「事務を肩代わりされたら優先するか」を確認（§4-2の検証）</b></td></tr>
+<tr><td class="num">3</td><td>客として相見積もりを3社取る</td><td>坂野様</td><td>無料</td><td>実単価・営業のやり方・レスポンス</td></tr>
+<tr><td class="num">4</td><td>ゲート0（事業性の6問）</td><td>Claude</td><td>—</td><td>机上で分かることを全部潰す</td></tr>
+<tr><td class="num">5</td><td>業界の展示会に行く</td><td>坂野様</td><td>交通費</td><td>1日で数十社。業界の困りごと</td></tr>
+<tr><td class="num">6</td><td>1件だけ人力でやってみる（Excelと電話で完遂）</td><td>坂野様</td><td>実費</td><td><b>客が本当に金を払うか。ここでしか分からない</b></td></tr>
+<tr><td class="num">7</td><td>要件定義 → 開発</td><td>Claude</td><td>—</td><td>6で詰まった場所が、そのまま作るものの仕様になる</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">順番を変えた理由</span>
+v2では「相見積もり → 職人打診」の順でしたが、<b>Geminiの指摘を受けて「実働者が集まるか」を最初に置きました。</b><br>
+<b>客が取れても実働者がいなければ事業は成立しませんが、実働者が集まらないことは求人広告1本で分かります。</b>最も安く、最も致命的な不確実性から潰す、という順番です。<br>
+坂野様は<b>「量が増えたら人を雇うだけ」</b>とお考えで、Geminiは<b>「そこが最大の壁」</b>と述べています。<b>この対立は、求人広告を1本出せば数万円で決着します。</b>
+</div>
+</section>
+
+<section id="s8">
+<h2>§8　未確認事項</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>確認できたこと</th><th>確認できなかったこと</th></tr></thead>
+<tbody>
+<tr><td>現業職の人手不足</td><td>有効求人倍率（季節調整値）1.17倍／令和8年5月・厚生労働省</td><td><b>職業別の内訳（建設・運搬・清掃等）は一次情報に届かず【未確認】。</b>事実として扱いません</td></tr>
+<tr><td>偽装請負の基準</td><td>厚労省「労働者派遣事業と請負により行われる事業との区分に関する基準（37号告示）」と疑義応答集が同省サイトに存在すること</td><td><b>告示の番号・公布年月日【未確認】。</b>実際の契約書を作る段階で、条文にあたる必要があります</td></tr>
+<tr><td>顧客の生の声のソース</td><td>くらしのマーケット・ミツモアが出店/手数料の仕組みを持つ稼働中サービスであること</td><td>実際にどこまで価格相場・依頼内容が閲覧できるか（ソースとして使う段階で実地確認）</td></tr>
+<tr><td>トヨタの1台あたり利益率（約15%）</td><td>—</td><td><b>【未確認】。</b>公式IRは売上総利益を単独で公表していません。<b>ただし粗利率を基準にしないという結論は、別の理由（回転数）で成立しています</b></td></tr>
+<tr><td>本書の業種・市場データ</td><td>—</td><td><b>本書は手順の提案であり、市場データは1件も調べていません。</b>案出し段階で一次情報にあたります</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s9">
+<h2>§9　決めていただきたいこと</h2>
+
+<div class="q">
+<b>① 顧客獲得コスト（CAC）の扱い　★これだけは私では決められません</b><br>
+　A. <b>現状どおり</b>：表示はするが、順位付けにも除外にも使わない（過去の決定を維持）<br>
+　B. 順位付けの軸に加える（例：P8として5〜10点）<br>
+　C. 表示もしない<br>
+　<span style="color:var(--muted)">※坂野様は過去に「集客の見込みを候補の選定条件に入れない」と決めておられます。Geminiと投資家役は、ここが欠けていることを重い問題として指摘しています。<b>決定を維持するか、今回に限り変えるかのご判断です。</b></span>
+</div>
+
+<div class="q">
+<b>② 優先順位の配点（§1）でよろしいですか</b><br>
+　A. この配点で進める（P1実働者25／P2収益20／P3リピート15／P4乗り換え15／P5既存資産10／P6先行事例10／P7参入の速さ5）<br>
+　B. 変更したい（どの軸を重く／軽くするかをご指定ください）
+</div>
+
+<div class="q">
+<b>③ 除外条件E1〜E7（§3）に過不足はありますか</b><br>
+　特に <b>E6（立替期間3か月超）</b> と <b>E2（許認可の取得3か月超）</b> は私が置いた線引きです。
+</div>
+
+<div class="q">
+<b>④ 案の件数</b><br>
+　A. 40〜50件　B. 60〜80件（現案）　C. 100件以上<br>
+　<span style="color:var(--muted)">※優先順位順に並ぶので、件数を増やしても読む負担はあまり変わりません。<b>Cでも実務上の問題は小さいと考えます。</b></span>
+</div>
+
+<div class="q">
+<b>⑤ この v3 で案出しに着手してよろしいですか</b><br>
+　承認いただければ、現場カテゴリ（物流／倉庫／設置・施工／点検・保守／回収・処分／製造・加工／機材貸出／現地代行）ごとにセッションを分けて着手します。
+</div>
+</section>
+
+<footer class="doc">
+探索手順 v3（Geminiレビュー反映・最終提案・未承認）／ 2026-08-26 作成<br>
+ファイル名：<code>_新規事業探索_現場型サービスの探し方_v3_2026-08-26.html</code><br>
+Geminiの指摘11件はすべてClaudeが事実確認済み。握りつぶした指摘はありません。Claudeが単独で確定させた事項もありません。
+</footer>
+
+</main>
+</div>
+</body>
+</html>

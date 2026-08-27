@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI×物理実体の探し方 v4（前提訂正・確定版案）</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1b1f; --muted:#5c5f66; --line:#dfe1e6;
+  --panel:#f6f7f9; --accent:#1d4ed8; --accent-soft:#e8eefc;
+  --warn:#8a4b00; --warn-bg:#fff4e5; --ok:#0f6a3f; --ok-bg:#e8f5ee;
+  --ng:#9b1c1c; --ng-bg:#fdeaea; --chg:#5b21b6; --chg-bg:#f1ebfd;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161a; --fg:#e6e8ec; --muted:#a0a5ae; --line:#2c3037;
+    --panel:#1c1f25; --accent:#7ba2ff; --accent-soft:#1e2a44;
+    --warn:#ffc477; --warn-bg:#33280f; --ok:#7fd3a5; --ok-bg:#12291d;
+    --ng:#ff9d9d; --ng-bg:#331717; --chg:#c9b3ff; --chg-bg:#241a3d;
+  }
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+  font-size:16px; line-height:1.85; font-variant-numeric:tabular-nums}
+.wrap{display:flex; align-items:flex-start; max-width:1300px; margin:0 auto; gap:32px; padding:0 20px}
+nav{position:sticky; top:0; flex:0 0 264px; max-height:100vh; overflow-y:auto; padding:28px 0 40px; font-size:13.5px; line-height:1.6}
+nav .navttl{font-weight:700; font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px}
+nav .navttl.sec{margin-top:16px; padding-top:12px; border-top:1px solid var(--line)}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:5px 10px; border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft); border-left-color:var(--accent)}
+main{flex:1 1 auto; min-width:0; padding:28px 0 100px; max-width:860px}
+header.doc{border-bottom:2px solid var(--line); padding-bottom:18px; margin-bottom:28px}
+h1{font-size:25px; line-height:1.45; margin:0 0 10px}
+.meta{color:var(--muted); font-size:13px; line-height:1.9}
+h2{font-size:20px; margin:52px 0 14px; padding:8px 0 8px 12px; border-left:5px solid var(--accent); background:var(--panel)}
+h2.part{border-left-color:var(--chg); font-size:22px; margin-top:64px}
+h3{font-size:16.5px; margin:30px 0 10px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+p{margin:12px 0} ul,ol{margin:12px 0; padding-left:24px} li{margin:6px 0}
+code{background:var(--panel); padding:2px 6px; border-radius:4px; font-size:14px}
+.tblwrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:620px}
+th,td{border-bottom:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+th{background:var(--panel); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:18px 0; background:var(--panel)}
+.box.warn{background:var(--warn-bg); border-color:var(--warn)}
+.box.ok{background:var(--ok-bg); border-color:var(--ok)}
+.box.ng{background:var(--ng-bg); border-color:var(--ng)}
+.box.chg{background:var(--chg-bg); border-color:var(--chg)}
+.box .lbl{font-weight:700; font-size:13px; display:block; margin-bottom:6px; letter-spacing:.03em}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)}
+.box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px; line-height:1.9}
+.formula{background:var(--accent-soft); border:1px solid var(--accent); border-radius:8px; padding:14px 18px; margin:16px 0; font-size:16px; line-height:2}
+.del{text-decoration:line-through; color:var(--muted)}
+.q{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:14px 0}
+.q b{color:var(--accent)}
+.type{border:1px solid var(--line); border-radius:10px; margin:16px 0; overflow:hidden}
+.type .hd{background:var(--accent-soft); padding:10px 16px; font-weight:700; border-bottom:1px solid var(--line)}
+.type .bd{padding:12px 16px}
+footer.doc{margin-top:70px; padding-top:18px; border-top:2px solid var(--line); color:var(--muted); font-size:13px}
+@media (max-width:900px){
+  .wrap{display:block; padding:0 16px}
+  nav{position:static; max-height:none; flex:none; padding:20px 0 0; border-bottom:1px solid var(--line); margin-bottom:10px}
+  main{max-width:none}
+}
+@media print{nav{display:none} body{font-size:11pt; background:#fff; color:#000} .wrap{display:block; max-width:none} h2{page-break-after:avoid} tr{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <p class="navttl">第1部：前提の訂正</p>
+  <a href="#a1">私の理解の誤り</a>
+  <a href="#a2">正しい狙い</a>
+  <a href="#a3">3つの型（α・β・γ）</a>
+  <a href="#a4">探し方がどう変わるか</a>
+  <p class="navttl sec">第2部：集客と需要</p>
+  <a href="#b1">ご質問への回答</a>
+  <a href="#b2">測れるもの／測れないもの</a>
+  <a href="#b3">結論と、私の懸念</a>
+  <p class="navttl sec">第3部：手順 v4</p>
+  <a href="#c1">v3からの変更点</a>
+  <a href="#c2">案の湧き出し口（14ソース）</a>
+  <a href="#c3">優先順位の配点（改訂）</a>
+  <a href="#c4">除外条件</a>
+  <a href="#c5">カタログの表示項目</a>
+  <a href="#c6">深掘りフェーズ</a>
+  <a href="#c7">決めていただきたいこと</a>
+</nav>
+
+<main>
+
+<header class="doc">
+  <h1>AI × 物理実体 の探し方 v4<br><span style="font-size:17px; color:var(--muted)">― 前提の訂正を反映した確定版（案）</span></h1>
+  <p class="meta">
+    作成日：2026-08-26 ／ 状態：<b>未承認（案）</b> ／ v1〜v3 は削除せず残置<br>
+    今回の改訂理由：①「ブルーカラー」の意味について<b>私の理解が根本的にずれていた</b>ため　②集客の見込みの扱いについてのご指摘
+  </p>
+</header>
+
+<h2 class="part" id="a1">第1部　前提の訂正</h2>
+
+<section>
+<h3>私の理解の誤り</h3>
+
+<div class="box ng">
+<span class="lbl">v1〜v3で私が置いていた前提（誤り）</span>
+<b>「既にある現場業界（物流・工事・清掃・回収など）に、坂野様が参入する」</b><br>
+だから私は、業種の全リストを舐め、許認可を調べ、既存の現場業者に相見積もりを取る、という設計をしていました。<b>主語が「既存のブルーカラー業界」になっていました。</b>
+</div>
+
+<div class="box ok">
+<span class="lbl">坂野様の実際の狙い（今回のご説明）</span>
+<b>「ソフトを開発するだけで完結するものは模倣が簡単なので、実際に倉庫を設けるとか、物理的に人を雇うといったことが発生する部分で、AIを使って何かサービスを提供できないか」</b><br><br>
+つまり ── <b>主語は坂野様のサービスであって、既存の現場業界ではありません。</b><br>
+・中核は<b>AIで作るソフト</b>である<br>
+・しかしソフト単体では<b>誰でも真似できる</b><br>
+・だから<b>物理的な実体（倉庫・在庫・機材・雇った人）を抱き合わせる</b><br>
+・その物理実体が<b>真似のコスト</b>になり、参入障壁になる
+</div>
+
+<p><b>この違いは、探し方を根本から変えます。</b>v1〜v3の設計は「業種から入る」ものでしたが、正しくは<b>「ソフトだけで成立しているサービスを見て、そこに物理実体を足せないか」という逆方向のルート</b>が必要でした。これが14ソースのうち<b>2本まるごと抜けていた</b>ということです。</p>
+</section>
+
+<section id="a2">
+<h3>正しい狙いを、一文にすると</h3>
+
+<div class="formula" style="text-align:center; font-size:18px">
+<b>AIが「判断」し、自社の物理実体が「実行」する。<br>
+売るのはソフトではなく、実行した結果そのもの。</b>
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th></th><th>ソフトを売る（従来型SaaS）</th><th><b>AI×物理実体（今回の狙い）</b></th></tr></thead>
+<tbody>
+<tr><td>売り物</td><td>ソフトの使用権</td><td><b>実行された結果</b>（保管された／運ばれた／作られた）</td></tr>
+<tr><td>真似のコスト</td><td>低い（同じものを作れば済む）</td><td><b>高い（倉庫・機材・人を用意する必要がある）</b></td></tr>
+<tr><td>大手が来たとき</td><td>機能を1つ足されて終わり</td><td><b>物理実体を作るところから始めなければならない</b></td></tr>
+<tr><td>客の乗り換え</td><td>解約すれば終わり</td><td><b>在庫・設備が物理的にこちらにある</b></td></tr>
+<tr><td>限界費用</td><td>ほぼゼロ（＝競合もゼロ）</td><td>ゼロではない（＝<b>価格が崩れにくい</b>）</td></tr>
+<tr><td>坂野様の武器</td><td>効くが、他社も同じ武器を持てる</td><td><b>AIで作れること＋物理を回せること、の両方が要る</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">この狙いは、坂野様の既存資産と完全に噛み合います</span>
+<b>坂野様は、既に両方をお持ちです。</b><br>
+・<b>AI側</b>：生成AIで業務システムを3本作った実績（Snoker／Rabelu／Rakuvi）<br>
+・<b>物理側</b>：寝かせ転売で<b>実際に在庫を保管し、状態を管理し、出荷している</b>という経験<br><br>
+<b>「AIでソフトが作れる人」は増えました。「物理の在庫を何年も管理してきた人」も大勢います。しかし両方を1人で持っている人は多くありません。</b>ここが坂野様固有の位置だと考えます。
+</div>
+</section>
+
+<section id="a3">
+<h3>3つの型（α・β・γ）</h3>
+
+<p>この狙いに当てはまる形は、大きく3つに分かれます。<b>案出しでは、すべての案をこの3つのどれかに分類します。</b></p>
+
+<div class="type">
+<div class="hd">型α　ソフト起点 ── 既にソフトだけで存在するサービスに、物理実体を足す</div>
+<div class="bd">
+<p><b>考え方</b>：世の中に「ソフトだけ」で提供されているサービスを列挙し、<b>「その先の物理作業まで自社でやったら、客はどちらを選ぶか」</b>を考える。</p>
+<p><b>骨格</b>：ソフトが判断 → <b>自社の倉庫・機材・人が実行</b> → 客は結果だけ受け取る</p>
+<p><b>強み</b>：需要は既にソフト側で実証されている（＝ブルーオーシャンの罠にかからない）</p>
+<p><b>弱み</b>：物理を持つぶん固定費が乗る。ソフト単体の競合より高くなる</p>
+</div>
+</div>
+
+<div class="type">
+<div class="hd">型β　物理起点 ── 既に物理でやられている仕事に、AIを足して自社で回す</div>
+<div class="bd">
+<p><b>考え方</b>：人手でやられている現場作業を、AIで一部自動化したうえで<b>自社が受注して回す</b>。ソフトを売るのではなく、仕事そのものを受ける。</p>
+<p><b>骨格</b>：客の仕事を受注 → <b>AIで手間を削る</b> → 自社の人・倉庫が実行 → 同業より安く／速く出せる</p>
+<p><b>強み</b>：需要が最も確実（今その仕事にお金が払われている）。v3までの設計はここに該当</p>
+<p><b>弱み</b>：既存業者と正面から競合する。実働者の確保が壁</p>
+</div>
+</div>
+
+<div class="type">
+<div class="hd">型γ　AIがないと成立しない ── 今まで採算が合わなかった物理サービス　<b style="color:var(--chg)">★本命候補</b></div>
+<div class="bd">
+<p><b>考え方</b>：<b>「昔から需要はあったが、人手でやると採算が合わないので誰もやらなかった」</b>仕事を探す。AIで判断部分のコストがほぼゼロになった今なら成立する。</p>
+<p><b>骨格</b>：需要は昔からある → <b>判断・仕分け・照合をAIが担う</b> → 物理の実行だけ人がやる → 初めて黒字になる</p>
+<p><b>強み</b>：<b>需要は実在するのに、競合がいない。</b>これが唯一の健全な「空白」</p>
+<p><b>弱み</b>：本当にAIで採算が合うのかを、実際に作って確かめるまで分からない</p>
+</div>
+</div>
+
+<div class="box chg">
+<span class="lbl">型γが、坂野様の2つのご発言を矛盾なくつなぎます</span>
+坂野様は<b>「誰もやっていないのは危険」</b>とおっしゃり、同時に<b>「AIで新しく何か作れないか」</b>ともおっしゃっています。一見すると逆向きです。<br><br>
+<b>型γは、この2つを両立させる唯一の形です。</b>なぜなら型γでは ──<br>
+・<b>需要の先行事例はある</b>（その困りごとに、今も人手や金が払われている）<br>
+・<b>解き方の先行事例だけがない</b>（人手では採算が合わなかったから）<br><br>
+<b>「需要が空いている」のは危険ですが、「解き方が空いている」のは機会です。</b>v4では、この2つを分けて評価します（第3部§3の P6）。
+</div>
+</section>
+
+<section id="a4">
+<h3>この訂正で、探し方はどう変わるか</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>箇所</th><th>v3（誤った前提）</th><th>v4（訂正後）</th></tr></thead>
+<tbody>
+<tr><td>案の入口</td><td>業種の全リストから入る（業種起点のみ）</td><td><b>業種起点に加え、「ソフトだけで存在するサービス」からの逆算ルートを追加</b>（ソース13）</td></tr>
+<tr><td>案の分類</td><td>現場カテゴリ8種</td><td>現場カテゴリ8種 <b>× 型α／β／γ</b> の2軸で分類</td></tr>
+<tr><td>優先順位の最重視</td><td>実働者の確保しやすさ</td><td><b>模倣されにくさ（物理実体の重さ）を同格に引き上げ</b>。狙いの中核が「真似されないこと」だったため</td></tr>
+<tr><td>先行事例の見方</td><td>「あり／なし」の1軸</td><td><b>「需要の先行事例」と「解き方の先行事例」に分離。</b>需要あり×解き方なし＝最高評価</td></tr>
+<tr><td>既存資産の扱い</td><td>加点項目の1つ（10点）</td><td><b>AIで作れる度合いとセットにして15点に。</b>AIで作れないなら型α・γは成立しないため</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">v3までの作業が無駄になったわけではありません</span>
+除外条件・収益性の式（移動と稼働率）・運転資金の見方・偽装請負の切り分け・実働者の確保 ── <b>これらはすべて「物理を持つ」以上そのまま必要です。</b>v4でも全部引き継いでいます。<br>
+<b>変わったのは「どこから案を持ってくるか」と「何を高く評価するか」の2点です。</b>
+</div>
+</section>
+
+<h2 class="part" id="b1">第2部　集客の見込みと需要について（ご質問への回答）</h2>
+
+<section>
+<h3>ご質問：集客の見込みは定量的に計算できるか</h3>
+
+<p class="lead"><b>結論から申し上げます。案出しの段階では、計算できません。坂野様のご判断が正しいです。</b></p>
+
+<p>顧客獲得コスト（CAC）は、次の式で決まります。</p>
+
+<div class="formula">
+<b>顧客獲得コスト ＝ 広告のクリック単価 ÷ 成約率</b>
+</div>
+
+<p><b>このうち「クリック単価」は実測できますが、「成約率」は実測できません。</b>成約率は、自社のサイトの出来・価格設定・営業の巧拙・信用の有無で決まるもので、<b>まだ何も作っていない段階では推測の数字しか置けません。</b>そして分母が推測である以上、割り算の答えも推測です。</p>
+
+<div class="box ng">
+<span class="lbl">つまり、こういうことが起きます</span>
+成約率を1%と置けば「CACは1万円」、3%と置けば「CACは3,300円」。<b>3倍違います。</b>そしてどちらが正しいかを判断する材料が、案出しの段階には1つもありません。<br>
+<b>「事実ではない数値になる可能性しか見えない」という坂野様のご指摘は、そのとおりです。</b>私が数字を出せば、それは<b>体裁の整った推測</b>にすぎず、しかも表に並ぶことで事実のように見えてしまいます。
+</div>
+</section>
+
+<section id="b2">
+<h3>では、何なら測れるのか</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>指標</th><th>測れるか</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td><b>その困りごとを検索している人の数</b>（月間検索数）</td><td><b class="v" style="color:var(--ok)">測れる</b></td><td>キーワードプランナー等の実データ</td></tr>
+<tr><td><b>マッチングサイトに実際に出ている依頼の件数</b></td><td><b style="color:var(--ok)">測れる</b></td><td>くらしのマーケット・ミツモア等の掲載実績</td></tr>
+<tr><td><b>自治体・企業が実際に発注している件数と金額</b></td><td><b style="color:var(--ok)">測れる</b></td><td>入札公告・落札結果（公開情報）</td></tr>
+<tr><td><b>その仕事をする人の求人が何件出ているか</b></td><td><b style="color:var(--ok)">測れる</b></td><td>求人媒体の実掲載数</td></tr>
+<tr><td><b>今その仕事で食べている事業者の数</b></td><td><b style="color:var(--ok)">測れる</b></td><td>公的統計・業界団体の会員数</td></tr>
+<tr><td><b>扱われている物量そのもの</b>（貨物量・廃棄量・着工数など）</td><td><b style="color:var(--ok)">測れる</b></td><td>公的統計</td></tr>
+<tr style="background:var(--ng-bg)"><td>成約率（CVR）</td><td><b style="color:var(--ng)">測れない</b></td><td>やってみるまで分からない</td></tr>
+<tr style="background:var(--ng-bg)"><td>顧客獲得コスト（CAC）</td><td><b style="color:var(--ng)">測れない</b></td><td>成約率に依存するため</td></tr>
+<tr style="background:var(--ng-bg)"><td>設定できる単価</td><td><b style="color:var(--ng)">測れない</b></td><td>相場は測れるが、自社がいくらで売れるかは別</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">上の6つは、すべて「需要があるかないか」を実データで示すものです</span>
+<b>坂野様のおっしゃる「集客の見込みではなく、需要があるかないかで判断する」は、この6つで実行できます。</b>推測を1つも混ぜずに済みます。
+</div>
+</section>
+
+<section id="b3">
+<h3>結論と、私からの懸念（1つだけ）</h3>
+
+<div class="box chg">
+<span class="lbl">v4での扱い（決定案）</span>
+<b>①「顧客獲得コスト（CAC）」は、案出し段階では出しません。</b>推測値になるため。<br>
+<b>②代わりに「需要の実測値」を表示します。</b>上の6指標のうち、その案で取れるものを載せます。<br>
+<b>③需要は優先順位の軸に入れます</b>（実データなので入れて問題ありません）。<br>
+<b>④CACは、案を選んだ後の深掘りフェーズで「実測」します。</b>広告を1本だけ出して、実際のクリック単価と反応を見る。推測を実測に置き換える、という順番にします。
+</div>
+
+<p>これで、Geminiが指摘した「CACの欠落」も実質的に埋まります。<b>Geminiは「案出し段階で計算せよ」と言っていましたが、そこは推測にしかなりません。段階をずらして実測すれば、指摘の中身は満たしつつ、事実でない数字を並べずに済みます。</b></p>
+
+<div class="box warn">
+<span class="lbl">私の懸念（お伝えしておくべきこと）</span>
+<b>「需要がある」ことと「その需要が自社に届く」ことは、別の話です。</b><br>
+月に1万人が検索していても、その1万人が坂野様のサイトにたどり着くとは限りません。既存の業者が広告費をかけて上位を押さえていれば、同じ土俵では取れません。<br><br>
+<b>ただし、これを案出し段階で数字にしようとすると、また推測に戻ります。</b>だから私は<b>「需要で選ぶ」というご判断に反対しません。</b><br>
+そのうえで、<b>ひとつだけ実測できる代理指標があります ── 広告のクリック単価（CPC）です。</b>これは実データで、しかも<b>「その市場で客の取り合いがどれだけ激しいか」を表します。</b>CPCが極端に高い市場は、広告では取れないと判断できます。<br>
+<b>これは「集客の見込み」ではなく「競争の激しさ」の指標です。表示だけして、順位付けには使わない ── という扱いを提案します。</b>ご不要であれば外します（§7②）。
+</div>
+</section>
+
+<h2 class="part" id="c1">第3部　手順 v4</h2>
+
+<section>
+<h3>v3からの変更点</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>変更点</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>全案を型α／β／γに分類する</b></td><td>前提の訂正（第1部）</td></tr>
+<tr><td class="num">2</td><td><b>ソース13（ソフトだけで存在するサービスからの逆算）を追加</b></td><td>型αの入口。v3には存在しなかった</td></tr>
+<tr><td class="num">3</td><td><b>ソース14（人手では採算が合わない仕事）を追加</b></td><td>型γの入口。v3には存在しなかった</td></tr>
+<tr><td class="num">4</td><td><b>優先順位の配点を6軸に再編。「模倣されにくさ」を最重視の一角に</b></td><td>狙いの中核が「真似されないこと」だったため</td></tr>
+<tr><td class="num">5</td><td><b>先行事例を「需要」と「解き方」に分離</b></td><td>型γを正しく評価するため</td></tr>
+<tr><td class="num">6</td><td><b>CACを表示項目から削除。「需要の実測値」に置き換え、優先順位の軸に昇格</b></td><td>第2部のご質問への回答</td></tr>
+<tr><td class="num">7</td><td>深掘りフェーズに「広告のテスト出稿」を追加</td><td>推測のCACを実測に置き換えるため</td></tr>
+<tr><td class="num">8</td><td>除外条件・収益性の式・運転資金・偽装請負・実働者確保は<b>v3のまま引き継ぎ</b></td><td>物理を持つ以上、すべて必要</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="c2">
+<h2>§2　案の湧き出し口（14ソース）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>ソース</th><th>主に出る型</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>日本標準産業分類の小分類を全部舐める</td><td>β</td><td>Claude</td></tr>
+<tr><td class="num">2</td><td>許認可・登録・免許の一覧から逆引き</td><td>β</td><td>Claude</td></tr>
+<tr><td class="num">3</td><td>M&Aマッチングサイトの売り案件</td><td>β</td><td>Claude</td></tr>
+<tr><td class="num">4</td><td>求人媒体の職種別データ</td><td>β・γ</td><td>Claude</td></tr>
+<tr><td class="num">5</td><td>法改正・制度カレンダー</td><td>β・γ</td><td>Claude</td></tr>
+<tr><td class="num">6</td><td>自治体の入札公告・落札結果</td><td>β</td><td>Claude</td></tr>
+<tr><td class="num">7</td><td>現場系フランチャイズの募集資料</td><td>β</td><td>Claude</td></tr>
+<tr><td class="num">8</td><td>業界団体・組合のサイトと会報</td><td>β・γ</td><td>Claude</td></tr>
+<tr><td class="num">9</td><td>既存事業の周辺（Snoker／Rabelu／Rakuvi／寝かせ在庫の保管）</td><td>α・β</td><td>Claude</td></tr>
+<tr><td class="num">10</td><td>国内の中小が既にやっているサービスをトレース</td><td>β</td><td>坂野様</td></tr>
+<tr><td class="num">11</td><td>海外にあって日本にないサービス</td><td>α・γ</td><td>坂野様</td></tr>
+<tr><td class="num">12</td><td>顧客の生の声（マッチングサイトの依頼内容・価格相場、Q&Aサイト）</td><td>β・γ</td><td>Gemini</td></tr>
+
+<tr style="background:var(--chg-bg)"><td class="num"><b>13</b></td>
+<td><b>ソフトだけで成立しているサービスを列挙し、「その先の物理作業まで自社でやったら」と考える</b><br>
+<span style="font-size:13px; color:var(--muted)">見る先：国内外のSaaS・業務ツールの一覧サイト、ソフト系スタートアップの資金調達ニュース、ノーコードツールの活用事例</span></td>
+<td><b>α</b></td><td><b>坂野様の趣旨から新設</b></td></tr>
+
+<tr style="background:var(--chg-bg)"><td class="num"><b>14</b></td>
+<td><b>「昔から需要はあるが、人手でやると採算が合わないので誰もやらない」仕事を探す</b><br>
+<span style="font-size:13px; color:var(--muted)">見る先：撤退・廃業したサービスの記録、業界の「やりたくない仕事」の話題、1件あたりの単価が低すぎて手が出されていない領域、大量の照合・仕分け・判定が必要な作業</span></td>
+<td><b>γ ★本命</b></td><td><b>坂野様の趣旨から新設</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">ソース14の当たり方（もう少し具体的に）</span>
+型γは「AIで判断コストが下がったから成立するようになった仕事」です。<b>探すときの合言葉は次の4つです。</b><br>
+・<b>「1件ずつ人が目で見て判断しないといけない」</b>作業（照合・仕分け・検品・状態判定）<br>
+・<b>「単価が安すぎて、人件費に見合わない」</b>と言われている作業<br>
+・<b>「件数が多すぎて、やりきれない」</b>と言われている作業<br>
+・<b>「専門知識が要るので、有資格者しかできない」</b>とされてきた判断のうち、資格が不要な前工程<br><br>
+<b>そして必ず「その先に物理作業が残るか」を確認します。</b>物理が残らないなら、それはソフト単体なので狙いから外れます。
+</div>
+</section>
+
+<section id="c3">
+<h2>§3　優先順位の配点（改訂・100点満点）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">配点</th><th>軸</th><th>高得点になる条件</th><th>v3から</th></tr></thead>
+<tbody>
+<tr><td class="num"><b>20</b></td><td><b>P1 模倣されにくさ</b></td><td>物理実体が重い（倉庫・機材・在庫・人）／データが溜まる／客の在庫や設備が物理的にこちらにある</td><td><b style="color:var(--chg)">15→20に引き上げ</b>（狙いの中核）</td></tr>
+<tr><td class="num"><b>20</b></td><td><b>P2 実働者の確保しやすさ</b></td><td>求人が実際に出ている／未経験可／外注先候補が実在する</td><td>25→20</td></tr>
+<tr><td class="num"><b>20</b></td><td><b>P3 収益の到達しやすさ</b></td><td>月100万円に必要な人数が少ない（§4の式）</td><td>20（変更なし）</td></tr>
+<tr><td class="num"><b>15</b></td><td><b>P4 AIで作れる度合い＋既存資産</b></td><td>判断部分をAIで置き換えられる／Snoker・Rabelu・Rakuvi・保管ノウハウが乗る</td><td><b style="color:var(--chg)">10→15</b>（AIで作れないと型α・γが成立しない）</td></tr>
+<tr><td class="num"><b>15</b></td><td><b>P5 リピート性</b></td><td>定期（保管・点検・保守・回収）の比率が高い</td><td>15（変更なし）</td></tr>
+<tr><td class="num"><b>10</b></td><td><b>P6 需要の実在（実測値）</b></td><td><b>第2部の6指標</b>で、実データとして需要を示せる</td><td><b style="color:var(--chg)">先行事例10 → 需要の実測10 に置き換え</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>補正（加点・減点）</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">補正</th><th>条件</th><th>理由</th></tr></thead>
+<tbody>
+<tr style="background:var(--ok-bg)"><td class="num" style="color:var(--ok)"><b>+10</b></td><td><b>需要の先行事例はあるが、解き方の先行事例がない（＝型γ）</b></td><td><b>唯一の健全な空白。</b>需要は実在し、競合だけがいない状態</td></tr>
+<tr style="background:var(--ok-bg)"><td class="num" style="color:var(--ok)"><b>+5</b></td><td>許認可不要かつ初期投資が軽い（すぐ試せる）</td><td>失敗の損失が小さい</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−10</b></td><td>需要の先行事例もない（＝真のブルーオーシャン）</td><td>坂野様のご見解どおり、危険側に倒す</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−10</b></td><td>10年後に減少しそう（推測レベル。確定なら除外条件で落ちる）</td><td>長期持続が第一条件</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−5</b></td><td>外注で回したいのに、指揮命令が不可欠な構造（偽装請負リスク）</td><td>法的に成立しない設計を上位に出さない</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−5</b></td><td>物理実体が実質ゼロ（＝ソフト単体になっている）</td><td><b>今回の狙いから外れているため。ただし落とさず、順位を下げるだけ</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box chg">
+<span class="lbl">P6と補正の設計が、今回いちばん重要な部分です</span>
+<b>「先行事例」を1軸で見ると、坂野様の2つのご発言が矛盾します。</b>そこで2つに割りました。<br><br>
+<b>需要の先行事例</b>＝ その困りごとに、今も人手や金が払われているか（実データで測れる）<br>
+<b>解き方の先行事例</b>＝ それをAIで解いている会社が既にあるか<br><br>
+<table style="min-width:0; margin-top:10px">
+<tr><th>需要</th><th>解き方</th><th>評価</th></tr>
+<tr><td>あり</td><td><b>なし</b></td><td style="color:var(--ok)"><b>+10　型γ。最も狙うべき</b></td></tr>
+<tr><td>あり</td><td>あり</td><td>補正なし。型β。競合と正面から戦う</td></tr>
+<tr><td><b>なし</b></td><td>なし</td><td style="color:var(--ng)"><b>−10　真のブルーオーシャン。危険</b></td></tr>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">配点はご自由に変えられます</span>
+案の中身を作り直すことなく、配点を変えて<b>並べ直すだけ</b>で済みます。一覧表はどの列でも並べ替えられるようにするので、<b>「模倣されにくい順」「AIで作れる順」「すぐ始められる順」でも見られます。</b>
+</div>
+</section>
+
+<section id="c4">
+<h2>§4　除外条件・収益性の式（v3から変更なし）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>除外条件</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td>坂野様ご自身が現場に立ち続けないと成立しない形しか組めない</td></tr>
+<tr><td class="num">E2</td><td>参入に必要な許認可の取得に3か月超かかる</td></tr>
+<tr><td class="num">E3</td><td>10年後に需要が減ることが<b>確定情報</b>で言える（推測では落とさない）</td></tr>
+<tr><td class="num">E4</td><td>違法・脱法、または規制上グレー</td></tr>
+<tr><td class="num">E5</td><td>人身事故および重大な物損事故のリスクが保険で吸収しきれない</td></tr>
+<tr><td class="num">E6</td><td>立替期間（入金までの日数 − 支払までの日数）が3か月超</td></tr>
+<tr><td class="num">E7</td><td>参入に必要な初期投資が3,000万円を超える</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="formula">
+<b>① 1人が1日にこなせる実件数</b>　＝ 1日の実働時間 ÷（1件の作業時間 ＋ 1件あたりの移動・段取り時間）<br>
+<b>② 1人1日あたりの粗利</b>　＝ ① × 1件あたりの粗利額<br>
+<b>③ 月の粗利</b>　＝ ② × 月の稼働日数 × 稼働率<br>
+<b>④ 月100万円に必要な人数</b>　＝ 1,000,000 ÷ ③
+</div>
+<p style="color:var(--muted); font-size:14px">※ 移動型（配送・設置・点検）は移動時間を必ず入れる。定置型（倉庫内作業・加工）は移動時間を入れず、段取り替え・待機を入れる。</p>
+</section>
+
+<section id="c5">
+<h2>§5　カタログの表示項目</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>v4での変更</th></tr></thead>
+<tbody>
+<tr><td class="num" style="color:var(--chg)"><b>1</b></td><td><b>型（α／β／γ）</b></td><td><b>新設</b></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>2</b></td><td><b>AIが担う判断／人と物理が担う実行</b>（この2つを分けて書く）</td><td><b>新設。狙いの中核なので必ず書く</b></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>3</b></td><td><b>物理実体は何か</b>（倉庫／在庫／機材／車両／雇った人）と、その重さ</td><td><b>新設。P1の判定材料</b></td></tr>
+<tr><td class="num">4</td><td>客は誰か／狙う顧客の規模</td><td></td></tr>
+<tr><td class="num">5</td><td>組み方と法的整合（外注型／雇用型／偽装請負リスク）</td><td></td></tr>
+<tr><td class="num">6</td><td>単価と原価／移動型・定置型の別／1人1日の実件数</td><td></td></tr>
+<tr><td class="num">7</td><td>1人1日あたりの粗利額／月100万円に必要な人数</td><td></td></tr>
+<tr><td class="num">8</td><td>必要運転資金と立替期間</td><td></td></tr>
+<tr><td class="num">9</td><td>リピート性（定期の比率）</td><td></td></tr>
+<tr><td class="num">10</td><td>実働者の確保／定着策（既存ツールの無償提供が効くか）</td><td></td></tr>
+<tr><td class="num">11</td><td>許認可と取得期間／初期投資の段階</td><td></td></tr>
+<tr><td class="num">12</td><td>10年後の増減と根拠の確度</td><td></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>13</b></td><td><b>需要の実測値</b>（第2部の6指標のうち取れたもの。数字と出どころを併記）</td><td><b>CACを置き換え</b></td></tr>
+<tr><td class="num" style="color:var(--chg)"><b>14</b></td><td><b>先行事例：需要あり／なし　×　解き方あり／なし</b></td><td><b>2軸に分離</b></td></tr>
+<tr><td class="num">15</td><td>優先順位スコアの内訳（P1〜P6と補正）</td><td></td></tr>
+<tr style="background:var(--warn-bg)"><td class="num">参考</td><td>広告のクリック単価（＝競争の激しさ）</td><td><b>表示のみ・順位付けに使わない。ご不要なら外します（§7②）</b></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="c6">
+<h2>§6　深掘りフェーズ（坂野様が案を拾った後）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">順</th><th>やること</th><th>担当</th><th>費用</th><th>推測が実測に変わるもの</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>求人広告をテスト出稿する</b></td><td>坂野様</td><td>数千〜数万円</td><td><b>実働者が集まるか</b>（応募件数・希望単価）</td></tr>
+<tr style="background:var(--chg-bg)"><td class="num">2</td><td><b>集客の広告をテスト出稿する</b></td><td>坂野様</td><td>数千〜数万円</td><td><b>実際のクリック単価と反応。推測のCACを実測に置き換える</b><br><b>新設（第2部④）</b></td></tr>
+<tr><td class="num">3</td><td>一人親方・小規模業者に外注の相談</td><td>坂野様</td><td>無料</td><td>外注先の実在／事務肩代わりが効くか</td></tr>
+<tr><td class="num">4</td><td>客として相見積もりを3社取る</td><td>坂野様</td><td>無料</td><td>実単価・営業のやり方</td></tr>
+<tr><td class="num">5</td><td><b>AIの判断部分が本当に使い物になるか、試作して確かめる</b></td><td>Claude</td><td>トークンのみ</td><td><b>型α・γは、ここが成立しないと全部崩れます</b></td></tr>
+<tr><td class="num">6</td><td>ゲート0（事業性の6問）</td><td>Claude</td><td>—</td><td>机上で分かることを全部潰す</td></tr>
+<tr><td class="num">7</td><td>1件だけ人力でやってみる</td><td>坂野様</td><td>実費</td><td><b>客が本当に金を払うか</b></td></tr>
+<tr><td class="num">8</td><td>要件定義 → 開発</td><td>Claude</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">1・2・5 が、この手順のいちばん効率の良い部分です</span>
+<b>合計で数万円と数日で、3つの最大の不確実性が実測に変わります。</b><br>
+・実働者は集まるか（1）　・客は広告で取れるか（2）　・AIで判断できるか（5）<br>
+<b>いずれもシステムを作る前、契約を結ぶ前、人を雇う前にできます。</b>
+</div>
+</section>
+
+<section id="c7">
+<h2>§7　決めていただきたいこと</h2>
+
+<div class="q">
+<b>① 第1部の前提の理解は、これで合っていますか</b><br>
+　「AIが判断し、自社の物理実体が実行する。売るのはソフトではなく実行した結果」<br>
+　<span style="color:var(--muted)">※ここがずれていると、また作り直しになります。<b>ここだけは念のため確認させてください。</b></span>
+</div>
+
+<div class="q">
+<b>② 広告のクリック単価（競争の激しさ）を表示しますか</b><br>
+　A. <b>表示する</b>（実データ。順位付けには使わない）<br>
+　B. 表示しない（需要の実測値だけで判断する）
+</div>
+
+<div class="q">
+<b>③ 優先順位の配点（§3）でよろしいですか</b><br>
+　模倣されにくさ20／実働者20／収益到達20／AIで作れる度合い15／リピート15／需要の実在10<br>
+　＋補正（型γに+10、真のブルーオーシャンに−10 ほか）
+</div>
+
+<div class="q">
+<b>④ 型α・β・γのどれを厚めに出しますか</b><br>
+　A. <b>3つとも均等に出す</b>（推奨。比べてから決められます）<br>
+　B. 型γ（AIで初めて成立する）を厚めに<br>
+　C. 型α（ソフト起点＋物理）を厚めに<br>
+　D. 型β（既存の現場＋AI）を厚めに
+</div>
+
+<div class="q">
+<b>⑤ 案の件数</b>　A. 40〜50件　B. 60〜80件　C. 100件以上
+</div>
+
+<div class="q">
+<b>⑥ この v4 で案出しに着手してよろしいですか</b><br>
+　承認いただければ、型ごと・ソースごとにセッションを分けて着手します。
+</div>
+</section>
+
+<footer class="doc">
+AI×物理実体の探し方 v4（未承認の案）／ 2026-08-26 作成<br>
+ファイル名：<code>_新規事業探索_AIと物理実体の探し方_v4_2026-08-26.html</code>　／　v1〜v3 は同フォルダに残置<br>
+本書に確定した事実は含まれていません。Claudeが単独で確定させた事項もありません。
+</footer>
+
+</main>
+</div>
+</body>
+</html>

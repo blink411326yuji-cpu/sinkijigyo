@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaaS探索の条件（案）― 数%〜10%取れる市場の定義</title>
+<style>
+:root{--bg:#fff;--fg:#1b1b1f;--muted:#5c5f66;--line:#dfe1e6;--panel:#f6f7f9;--accent:#1d4ed8;--accent-soft:#e8eefc;--ok:#0f6a3f;--ok-bg:#e8f5ee;--ng:#9b1c1c;--ng-bg:#fdeaea;--warn:#8a4b00;--warn-bg:#fff4e5;--chg:#5b21b6;--chg-bg:#f1ebfd}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e6e8ec;--muted:#a0a5ae;--line:#2c3037;--panel:#1c1f25;--accent:#7ba2ff;--accent-soft:#1e2a44;--ok:#7fd3a5;--ok-bg:#12291d;--ng:#ff9d9d;--ng-bg:#331717;--warn:#ffc477;--warn-bg:#33280f;--chg:#c9b3ff;--chg-bg:#241a3d}}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;font-size:16px;line-height:1.85;font-variant-numeric:tabular-nums}
+.wrap{display:flex;align-items:flex-start;max-width:1240px;margin:0 auto;gap:32px;padding:0 20px}
+nav{position:sticky;top:0;flex:0 0 250px;max-height:100vh;overflow-y:auto;padding:28px 0 40px;font-size:13.5px;line-height:1.6}
+nav .navttl{font-weight:700;font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+nav a{display:block;color:var(--fg);text-decoration:none;padding:5px 10px;border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft);border-left-color:var(--accent)}
+main{flex:1 1 auto;min-width:0;padding:28px 0 100px;max-width:830px}
+header.doc{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+h1{font-size:24px;line-height:1.45;margin:0 0 10px}
+.meta{color:var(--muted);font-size:13px;line-height:1.9}
+h2{font-size:20px;margin:50px 0 14px;padding:8px 0 8px 12px;border-left:5px solid var(--accent);background:var(--panel)}
+h3{font-size:16.5px;margin:28px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+p{margin:12px 0} ul,ol{margin:12px 0;padding-left:24px} li{margin:6px 0}
+code{background:var(--panel);padding:2px 6px;border-radius:4px;font-size:14px}
+.tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:580px}
+th,td{border-bottom:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;white-space:nowrap}
+.box{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:var(--panel)}
+.box.warn{background:var(--warn-bg);border-color:var(--warn)}
+.box.ok{background:var(--ok-bg);border-color:var(--ok)}
+.box.ng{background:var(--ng-bg);border-color:var(--ng)}
+.box.chg{background:var(--chg-bg);border-color:var(--chg)}
+.box .lbl{font-weight:700;font-size:13px;display:block;margin-bottom:6px}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)} .box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px;line-height:1.9}
+.formula{background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:16px;line-height:2}
+.q{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+.q b{color:var(--accent)}
+.del{text-decoration:line-through;color:var(--muted)}
+footer.doc{margin-top:60px;padding-top:18px;border-top:2px solid var(--line);color:var(--muted);font-size:13px}
+@media (max-width:900px){.wrap{display:block;padding:0 16px}nav{position:static;max-height:none;flex:none;padding:20px 0 0;border-bottom:1px solid var(--line);margin-bottom:10px}main{max-width:none}}
+@media print{nav{display:none}body{font-size:11pt;background:#fff;color:#000}.wrap{display:block;max-width:none}h2{page-break-after:avoid}tr{page-break-inside:avoid}}
+</style>
+</head>
+<body><div class="wrap">
+
+<nav>
+<p class="navttl">目次</p>
+<a href="#s1">1. 「10%取れる」を数字にする</a>
+<a href="#s2">2. 単価で必要顧客数が変わる</a>
+<a href="#s3">3. 通過条件（案）</a>
+<a href="#s4">4. 除外条件（案）</a>
+<a href="#s5">5. 探し先（母集団）</a>
+<a href="#s6">6. 優先順位の配点（改訂案）</a>
+<a href="#s7">7. この方針の弱点</a>
+<a href="#s8">8. 過去の台帳が読めない件</a>
+<a href="#s9">9. 決めていただきたいこと</a>
+</nav>
+
+<main>
+<header class="doc">
+<h1>SaaS探索の条件（案）<br><span style="font-size:17px;color:var(--muted)">― 「全体のパイの数%〜10%が取れる」を、探索できる条件に翻訳する</span></h1>
+<p class="meta">作成日：2026-08-26 ／ 状態：<b>未承認（案）</b>／ 調査は着手していません<br>
+ご依頼：AIで作れるSaaS・ネットで完結するサービスで、いま参入でき、<b>全体のパイの数%〜10%は取れると考えられるもの</b>を提案する</p>
+</header>
+
+<section id="s1">
+<h2>1. 「10%取れる」を数字にする</h2>
+
+<p class="lead"><b>この条件は、実は市場規模を一意に決めてしまいます。</b>先に計算します。</p>
+
+<div class="formula">
+月利100万円 ＝ <b>年1,200万円の利益</b><br>
+1人法人＋自作なので、原価は主に<b>サーバー代・決済手数料・広告費</b>のみ<br>
+→ 決済手数料 約3.6%、サーバー月数万円と置くと粗利率は<b>85%前後</b><br>
+→ 広告・販促を売上の15〜20%とすると、<b>必要な年間売上（ARR）は約2,000万円</b>
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>取れるシェア</th><th class="num">必要な市場規模（年間）</th><th>その市場に何社いるか（月5,000円の場合）</th></tr></thead>
+<tbody>
+<tr><td><b>10%</b></td><td class="num"><b>2.0億円</b></td><td>約3,300社</td></tr>
+<tr><td>7%</td><td class="num">2.9億円</td><td>約4,800社</td></tr>
+<tr><td>5%</td><td class="num">4.0億円</td><td>約6,700社</td></tr>
+<tr><td><b>3%</b></td><td class="num"><b>6.7億円</b></td><td>約11,000社</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">結論：狙うのは「年間市場規模 2〜7億円」のニッチ</span>
+<b>これが今回の探索条件の中核です。</b><br>
+・これより<b>大きい市場（年30億円超）</b>は、資本のある会社が複数いるので10%は取れません<br>
+・これより<b>小さい市場（年1億円未満）</b>は、全部取っても年1,200万円に届きません<br><br>
+<b>年2〜7億円という規模には意味があります。</b>上場企業にとって、この市場を全部取っても売上の数%にもならないため、<b>本気の予算が付きません。</b>「大手が来ない」の理由が、市場の小ささそのものになります。
+</div>
+
+<p style="color:var(--muted);font-size:14px">※ 上の粗利率85%・広告費15〜20%は<b>私が置いた仮定</b>であり、実測値ではありません。ここが変わると必要ARRが変わります（第9章①でご確認ください）。</p>
+</section>
+
+<section id="s2">
+<h2>2. 単価によって、必要な顧客数が10倍変わる</h2>
+
+<p><b>ここが今回いちばん重要な分岐です。</b>同じARR 2,000万円でも、単価によって集めるべき顧客数がまったく違います。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>月額</th><th class="num">年間1社あたり</th><th class="num">必要な顧客数</th><th>集客の現実味</th></tr></thead>
+<tbody>
+<tr><td>1,000円</td><td class="num">1.2万円</td><td class="num" style="color:var(--ng)"><b>1,670社</b></td><td style="color:var(--ng)">1人法人では厳しい。解約補充だけで手一杯になる</td></tr>
+<tr><td>3,000円</td><td class="num">3.6万円</td><td class="num" style="color:var(--ng)"><b>560社</b></td><td style="color:var(--ng)">相当な広告費と時間が要る</td></tr>
+<tr><td>10,000円</td><td class="num">12万円</td><td class="num"><b>170社</b></td><td>現実的な範囲に入る</td></tr>
+<tr><td>30,000円</td><td class="num">36万円</td><td class="num" style="color:var(--ok)"><b>56社</b></td><td style="color:var(--ok)">最も到達しやすい。ただし売れるまでが重い</td></tr>
+<tr><td>100,000円</td><td class="num">120万円</td><td class="num" style="color:var(--ok)"><b>17社</b></td><td>1社ごとに商談が要る＝時間の切り売りに近づく</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">私からの推奨と、その理由</span>
+<b>「月1万円以上を取れる領域」に絞ることを推奨します。</b><br>
+理由は解約です。SaaSは毎月一定割合が解約するので、<b>1,670社を維持するには、増やし続けながら毎月の解約も埋め続ける</b>必要があります。1人法人でこれを回すのは、開発ではなく<b>集客とサポートの量</b>で潰れます。<br><br>
+<b>ただし、坂野様は2026-08-18に「1,000円台から数万円で、個人にも法人にも売る」と決めておられます。</b>私の判断でこれを覆せないので、<b>第9章③でご判断ください。</b>
+</div>
+</section>
+
+<section id="s3">
+<h2>3. 通過条件（案）</h2>
+
+<p><b>この条件は、候補を1件も見る前に確定させます。</b>調べた後に基準を決めると、出てきた結果に合わせて基準が動くためです。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>条件</th><th>数値基準</th><th>なぜ要るか</th></tr></thead>
+<tbody>
+<tr><td class="num">T1</td><td><b>市場規模</b></td><td>年間 <b>2〜7億円</b></td><td>10%取って年2,000万円に届く下限と、10%が取れる上限（第1章）</td></tr>
+<tr><td class="num">T2</td><td><b>最有力サービスの規模</b></td><td>年商 <b>1〜5億円</b>程度</td><td>この規模なら資本力では負けても、機能と価格では並べる</td></tr>
+<tr><td class="num">T3</td><td><b>競合の数</b></td><td><b>3社以内</b>が理想（5社まで許容）</td><td>10社が分け合う市場では、後発が10%を取るのは難しい</td></tr>
+<tr><td class="num">T4</td><td><b>競合が存在する</b></td><td>1社以上、かつ<b>3年以上続いている</b></td><td>競合の存在＝需要の証拠。ゼロは「需要がない」の可能性が高い（既存方針）</td></tr>
+<tr><td class="num">T5</td><td><b>顧客</b></td><td>事業者（法人・個人事業主）</td><td>単価が取れ、解約されにくい</td></tr>
+<tr><td class="num">T6</td><td><b>単価</b></td><td>月<b>1万円以上</b>（→要ご判断）</td><td>第2章。必要顧客数を170社以下に収める</td></tr>
+<tr><td class="num">T7</td><td><b>自社サイトで売れる</b></td><td>他社ストアに乗らずに成立する</td><td>2026-08-16の決定（プラットフォーム非依存）</td></tr>
+<tr><td class="num">T8</td><td><b>他社基幹システムへの連携が必須でない</b></td><td>連携なしでも価値が出る</td><td>2026-08-18の決定（連携手段を持てない案は参入しない）</td></tr>
+<tr><td class="num">T9</td><td><b>10年後に増えるか横ばい</b></td><td>減ることが<b>確定情報</b>で言えない</td><td>Rabelu凍結の直接の原因（主客が縮小する層だった）</td></tr>
+<tr><td class="num">T10</td><td><b>AIで作れる</b></td><td>判断部分をAIで置換でき、1〜数人で作れる</td><td>開発体制の制約</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s4">
+<h2>4. 除外条件（機械的に落とす）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>落とす条件</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td>市場規模が年<b>30億円超</b></td><td>10%＝3億円。必ず資本のある会社が複数入る</td></tr>
+<tr><td class="num">E2</td><td>最有力が<b>上場企業</b>、または<b>10億円以上を調達済み</b></td><td>広告費と開発人員で勝負にならない</td></tr>
+<tr><td class="num">E3</td><td>大手SaaS（freee・マネーフォワード・サイボウズ・SmartHR等）の<b>標準機能に含まれている</b></td><td>無料同梱されると顧客に比べてもらえない</td></tr>
+<tr><td class="num">E4</td><td><b>他社ストア・エコシステム</b>への出店が前提</td><td>2026-08-16の決定</td></tr>
+<tr><td class="num">E5</td><td>参入に<b>許認可</b>が要り、取得に3か月超</td><td>2026-08-26の決定</td></tr>
+<tr><td class="num">E6</td><td><b>業法が重い領域</b>（医療機器該当・金融商品・人材紹介・電気通信事業の届出が要るもの等）</td><td>1人法人では規制対応の維持コストが利益を超える</td></tr>
+<tr><td class="num">E7</td><td>レセコン等<b>基幹システムとのAPI連携が必須</b>で、連携手段を持てない</td><td>2026-08-18の決定</td></tr>
+<tr><td class="num">E8</td><td>主客が<b>一般消費者（BtoC）</b>（→要ご判断）</td><td>広告費が重く解約率が高い。ただし高単価な個人向けは例外にする余地あり</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">v3の探索と違い、今回は落とします</span>
+前回（現場型105件）は<b>「絞り込まず全部並べる」</b>方針でした。<br>
+<b>今回は落とします。</b>理由は、今回の条件が<b>「数%〜10%取れること」という定量条件</b>だからです。市場規模30億円の案を並べても、10%は取れないので坂野様が選ぶ意味がありません。<br>
+<b>ただし落とした案も、落とした理由付きで一覧に残します。</b>
+</div>
+</section>
+
+<section id="s5">
+<h2>5. 探し先（母集団）</h2>
+
+<p><b>ここを固定しないと、思いついた領域しか見ないことになります。</b>7つを提案します。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>探し先</th><th>そこから取れるもの</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>IT導入補助金のITツール登録一覧</b></td><td><b>最も有力。</b>登録制で全ツールがカテゴリ・価格つきで公開されている。ニッチなカテゴリと、そこに何社いるかが一覧で分かる</td></tr>
+<tr><td class="num">2</td><td><b>SaaS比較サイトのカテゴリを全部舐める</b>（BOXIL・ITトレンド・アスピック等）</td><td>カテゴリの一覧。<b>掲載社数が3社以下のカテゴリ＝T3を満たす候補</b>として抽出できる</td></tr>
+<tr><td class="num">3</td><td><b>抽出した最有力の運営会社の規模を推定</b>（法人番号・会社概要・求人票・調達発表）</td><td>T2の判定材料。上場・大型調達済みならE2で落とす</td></tr>
+<tr><td class="num">4</td><td><b>業界団体・組合が会員に案内しているツール</b></td><td>業界内でしか知られていないニッチ。競合が少ない</td></tr>
+<tr><td class="num">5</td><td><b>「Excelでやっている」業務</b></td><td>ソフトがまだ無い、または高すぎて使われていない領域</td></tr>
+<tr><td class="num">6</td><td><b>海外にあって日本にない単機能SaaS</b></td><td>需要は海外で実証済み。日本では先行者になれる（坂野様のご提案）</td></tr>
+<tr><td class="num">7</td><td><b>既存3本の周辺</b>（Snoker／Rabelu／Rakuvi の顧客が隣で困っていること）</td><td>坂野様固有の切り口。ただし顧客層の重なりは要判断（第9章⑤）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">私が自覚している、この探し先の弱点</span>
+<b>①比較サイトは二次情報です。</b>掲載社数は「そのサイトに載っている数」であって、市場の競合数そのものではありません。掲載されていない競合が必ずいます。<b>候補として拾うのには使えますが、「競合3社」の断定には使えません。</b><br>
+<b>②市場規模の推定は、ほぼ必ず推測になります。</b>ニッチ市場の公的統計は存在しないので、「対象事業者数 × 導入率の仮定 × 単価」という掛け算になります。<b>導入率の仮定が推測である以上、市場規模も推測です。</b>ここは【推測】と明記して出します。<br>
+<b>③「10%取れる」の判定は、最後まで確定できません。</b>取れるかどうかは実際にやってみるまで分かりません。<b>できるのは「10%が構造的に不可能な市場を落とすこと」までです。</b>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. 優先順位の配点（改訂案）</h2>
+
+<p>2026-08-26に承認いただいた配点は<b>現場型（物理実体あり）</b>を前提にしていました。今回はSaaSなので、2つの軸が意味を持ちません。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>承認済みの配点（現場型）</th><th></th><th>今回の改訂案（SaaS）</th><th>変更理由</th></tr></thead>
+<tbody>
+<tr><td>AIで作れる度合い＋既存資産 <b>30</b></td><td>→</td><td>AIで作れる度合い＋既存資産 <b>30</b></td><td>変更なし（ご指定）</td></tr>
+<tr><td>収益の到達しやすさ <b>20</b></td><td>→</td><td><b>収益の到達しやすさ（必要顧客数の少なさ） 25</b></td><td>単価で必要顧客数が10倍変わるため重くした（第2章）</td></tr>
+<tr><td>リピート性 <b>15</b></td><td>→</td><td>リピート性（解約されにくさ）<b>15</b></td><td>変更なし</td></tr>
+<tr><td>需要の実在 <b>15</b></td><td>→</td><td>需要の実在（競合の存在と継続年数）<b>15</b></td><td>変更なし</td></tr>
+<tr><td>模倣されにくさ（物理実体の重さ）<b>10</b></td><td>→</td><td><b>市場規模の適正さ（2〜7億円に収まるか）15</b></td><td><b>SaaSに物理実体はない。</b>今回の防御は「市場が小さくて大手が来ない」ことだけなので、模倣されにくさの代わりに市場規模の適正さを見る</td></tr>
+<tr><td>実働者の確保しやすさ <b>10</b></td><td>→</td><td><span class="del">削除</span></td><td><b>SaaSに実働者は要らない。</b>10点を上の2軸へ振り分けた</td></tr>
+<tr><td colspan="4" style="background:var(--panel)"><b>補正（3つだけ、というご指定は維持）</b></td></tr>
+<tr><td>+10 需要あり×解き方なし</td><td>→</td><td><b>+10 競合が3社以内</b></td><td>10%を取れる可能性が構造的に高い</td></tr>
+<tr><td>±0</td><td>→</td><td><b>±0 競合4〜5社</b></td><td>—</td></tr>
+<tr><td>−10 需要なし</td><td>→</td><td><b>−10 競合が6社以上、または大手の標準機能に含まれる</b></td><td>10%が構造的に取りにくい</td></tr>
+</tbody>
+</table>
+</div>
+
+<p style="color:var(--muted);font-size:14px">※ 合計は100点＋補正±10で、承認済みの形を維持しています。<b>この改訂を承認いただけない場合は、承認済みの配点のまま進めます</b>（その場合「実働者10点」は全案が同点になり、実質的に無効な軸になります）。</p>
+</section>
+
+<section id="s7">
+<h2>7. この方針の弱点（正直に書きます）</h2>
+
+<div class="box ng">
+<span class="lbl">坂野様ご自身の指摘は、まだ解消されていません</span>
+今日の前半で坂野様はこうおっしゃいました ──<b>「ソフトを開発するだけで完結するものは模倣が簡単」。</b><br>
+<b>この指摘は今も正しいままです。</b>今回の方針で得られる防御は1つだけです。<br><br>
+<b>「市場が小さすぎて、資本のある会社が入ってくる理由がない」</b><br><br>
+これは<b>裏を返すと「成長した瞬間に防御が消える」</b>ということです。年2億円の市場が、何かのきっかけで年50億円の市場になったら、その瞬間に資本のある会社が入ってきます。<br>
+<b>つまりこの方針は「小さいまま利益を出し続ける」ことを選ぶ、という事業判断になります。</b>
+</div>
+
+<div class="box ok">
+<span class="lbl">ただし、これは坂野様の方針とは矛盾しません</span>
+坂野様は一貫して<b>「スケールは必須ではない。長期間持続できることが第一」</b>とおっしゃっています。<br>
+<b>年2〜7億円のニッチで数%〜10%を取り、小さいまま10年続ける</b>——これはその方針そのものです。<b>矛盾しているのは「模倣されにくさ」の一点だけで、それは市場の小ささで代替する、という整理になります。</b>
+</div>
+
+<div class="box warn">
+<span class="lbl">もう1つ、Rabelu凍結から引き継ぐべき教訓</span>
+2026-08-25に②Rabeluを凍結された決め手は<b>「最後に残った主客（FAX受注の卸）が縮小する層だった」</b>ことでした。<br>
+そのとき坂野様はこう記録されています ──<b>「要件定義の失敗の根本原因は、作りながら市場を調べたこと。次の案では順番を逆にし、競合と母数を先に固めてから要件書を書く」。</b><br>
+<b>今回、条件を先に確定させてから調査に入るという進め方は、この教訓そのものです。</b>この順番を崩さないでください。
+</div>
+</section>
+
+<section id="s8">
+<h2>8. 過去のアプリ候補台帳が読めません（要対応）</h2>
+
+<div class="box ng">
+<span class="lbl">重複調査の危険があります</span>
+坂野様は2026年8月に、アプリ候補台帳（<b>P-01〜P-54、W群、Q群</b>）を作り、多くの候補を調査・却下してこられました。保存先は <code>C:\dev\アプリ作成</code> と記録されています。<br><br>
+<b>ところが、いま接続されている <code>C:\dev</code> の直下には次の5つしかありません。</b><br>
+<code>_infra</code>／<code>_新規事業探索</code>／<code>①【Snoker】</code>／<code>②【Rabelu】</code>／<code>③【Rakuvi】</code><br><br>
+台帳の実体は見当たらず、Rakuviフォルダに <code>_アプリ候補台帳_W-01該当部分の抜粋_2026-08-20.md</code> が1つ残っているだけです。<br><br>
+<b>このまま調査すると、過去に調べて却下した案を、また調べて出す可能性があります。</b>
+</div>
+
+<div class="box ok">
+<span class="lbl">対応案（どちらでも進められます）</span>
+<b>案A：台帳のフォルダを接続していただく</b>（Claude デスクトップアプリの「フォルダを追加」から、台帳のある場所を追加）。着手前に既存候補と突合できるので、重複がなくなります。<br>
+<b>案B：接続せず進める。</b>その代わり、出した候補に<b>「過去の台帳と重複している可能性あり」の印</b>を付け、坂野様に見ていただく形にします。<br><br>
+<b>台帳がどこに移動したかご記憶にない場合は、案Bで進めるのが早いです。</b>
+</div>
+</section>
+
+<section id="s9">
+<h2>9. 決めていただきたいこと</h2>
+
+<div class="q">
+<b>① 必要ARRの前提（第1章）</b><br>
+　私は「粗利率85%・広告販促15〜20%」と仮定して<b>必要ARR 2,000万円</b>と置きました。<br>
+　A. この前提でよい　B. 変更したい（数字をご指定ください）
+</div>
+
+<div class="q">
+<b>② 狙う市場規模のレンジ（T1）</b><br>
+　A. <b>年2〜7億円</b>（10%〜3%が取れる範囲。推奨）<br>
+　B. もっと広く（年1〜15億円。候補は増えるが「10%取れる」は成立しにくくなる）<br>
+　C. もっと狭く（年2〜4億円。10%前後に限定。候補は激減する）
+</div>
+
+<div class="q">
+<b>③ 最低単価（T6）　★ここが今回いちばん効きます</b><br>
+　A. <b>月1万円以上に絞る</b>（必要顧客数170社以下。私の推奨）<br>
+　B. 月3,000円以上（必要顧客数560社）<br>
+　C. <b>下限を設けない</b>（2026-08-18の「1,000円台から数万円」の決定を維持）<br>
+　<span style="color:var(--muted)">※Cを選ばれる場合、必要顧客数が1,000社を超える案が上位に来ます。集客の負荷が跳ね上がることをご承知おきください。</span>
+</div>
+
+<div class="q">
+<b>④ 一般消費者（BtoC）を含めるか（E8）</b><br>
+　A. 除外する（事業者向けのみ）　B. 含める　C. <b>高単価な個人向けだけ含める</b>（士業・投資家・クリエイター・研究者など、月1万円以上を払う個人）
+</div>
+
+<div class="q">
+<b>⑤ 既存3本と顧客層が重なるものを許容するか</b><br>
+　2026-08-18に「次に作る案は既存2本と顧客層が重ならない領域から」と決めておられます。<br>
+　<b>ただし②Rabeluを凍結されたので、その顧客層（EC事業者・出荷のある事業者）は空いています。</b><br>
+　A. 決定どおり重ならない領域に限る　B. <b>Rabeluの層は空いたものとして解禁する</b>　C. 重なってもよい
+</div>
+
+<div class="q">
+<b>⑥ 配点の改訂（第6章）を承認しますか</b><br>
+　A. 改訂案で進める（収益到達25／市場規模の適正さ15／実働者は削除）<br>
+　B. 承認済みの配点のまま進める
+</div>
+
+<div class="q">
+<b>⑦ 過去の台帳（第8章）</b><br>
+　A. フォルダを接続する（場所をお教えいただければ、接続後に突合します）<br>
+　B. 接続せず、「重複の可能性あり」の印を付けて進める
+</div>
+
+<div class="q">
+<b>⑧ 案の件数</b><br>
+　A. 30〜40件　B. 50〜60件　C. 80件以上<br>
+　<span style="color:var(--muted)">※今回は除外条件で落とすため、前回の105件より少なくなります。条件を満たす市場自体がそれほど多くないためです。</span>
+</div>
+</section>
+
+<footer class="doc">
+SaaS探索の条件（案・未承認）／ 2026-08-26 作成／ 調査は着手していません<br>
+ファイル名：<code>_新規事業探索_SaaS探索の条件_案_2026-08-26.html</code><br>
+本書に確定した事実は含まれていません。第1章・第2章の計算は、明示した仮定の上に立つ試算です。
+</footer>
+
+</main></div></body></html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaaS探索の条件 v2（Geminiレビュー反映・最終提案）</title>
+<style>
+:root{--bg:#fff;--fg:#1b1b1f;--muted:#5c5f66;--line:#dfe1e6;--panel:#f6f7f9;--accent:#1d4ed8;--accent-soft:#e8eefc;--ok:#0f6a3f;--ok-bg:#e8f5ee;--ng:#9b1c1c;--ng-bg:#fdeaea;--warn:#8a4b00;--warn-bg:#fff4e5;--chg:#5b21b6;--chg-bg:#f1ebfd}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e6e8ec;--muted:#a0a5ae;--line:#2c3037;--panel:#1c1f25;--accent:#7ba2ff;--accent-soft:#1e2a44;--ok:#7fd3a5;--ok-bg:#12291d;--ng:#ff9d9d;--ng-bg:#331717;--warn:#ffc477;--warn-bg:#33280f;--chg:#c9b3ff;--chg-bg:#241a3d}}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;font-size:15.5px;line-height:1.85;font-variant-numeric:tabular-nums}
+.wrap{display:flex;align-items:flex-start;max-width:1300px;margin:0 auto;gap:32px;padding:0 20px}
+nav{position:sticky;top:0;flex:0 0 256px;max-height:100vh;overflow-y:auto;padding:28px 0 40px;font-size:13.5px;line-height:1.6}
+nav .navttl{font-weight:700;font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+nav .navttl.sec{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+nav a{display:block;color:var(--fg);text-decoration:none;padding:5px 10px;border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft);border-left-color:var(--accent)}
+main{flex:1 1 auto;min-width:0;padding:28px 0 100px;max-width:870px}
+header.doc{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+h1{font-size:24px;line-height:1.45;margin:0 0 10px}
+.meta{color:var(--muted);font-size:13px;line-height:1.9}
+h2{font-size:20px;margin:50px 0 14px;padding:8px 0 8px 12px;border-left:5px solid var(--accent);background:var(--panel)}
+h2.part{border-left-color:var(--chg);font-size:22px;margin-top:62px}
+h3{font-size:16.5px;margin:28px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+p{margin:12px 0} ul,ol{margin:12px 0;padding-left:24px} li{margin:6px 0}
+code{background:var(--panel);padding:2px 6px;border-radius:4px;font-size:14px}
+.tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:620px}
+th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;white-space:nowrap}
+.box{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:var(--panel)}
+.box.warn{background:var(--warn-bg);border-color:var(--warn)}
+.box.ok{background:var(--ok-bg);border-color:var(--ok)}
+.box.ng{background:var(--ng-bg);border-color:var(--ng)}
+.box.chg{background:var(--chg-bg);border-color:var(--chg)}
+.box .lbl{font-weight:700;font-size:13px;display:block;margin-bottom:6px}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)} .box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px;line-height:1.9}
+.v{font-weight:700;white-space:nowrap}
+.v.o{color:var(--ok)} .v.t{color:var(--warn)} .v.x{color:var(--ng)} .v.u{color:var(--muted)}
+.formula{background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:16px;line-height:2}
+.del{text-decoration:line-through;color:var(--muted)}
+.q{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+.q b{color:var(--accent)}
+.new{background:var(--chg-bg)}
+footer.doc{margin-top:60px;padding-top:18px;border-top:2px solid var(--line);color:var(--muted);font-size:13px}
+@media (max-width:900px){.wrap{display:block;padding:0 16px}nav{position:static;max-height:none;flex:none;padding:20px 0 0;border-bottom:1px solid var(--line);margin-bottom:10px}main{max-width:none}}
+@media print{nav{display:none}body{font-size:10.5pt;background:#fff;color:#000}.wrap{display:block;max-width:none}h2{page-break-after:avoid}tr{page-break-inside:avoid}}
+</style>
+</head>
+<body><div class="wrap">
+
+<nav>
+<p class="navttl">第1部：レビュー結果</p>
+<a href="#r0">採否のまとめ</a>
+<a href="#r1">指摘対応表（12件）</a>
+<a href="#r2">最重要の発見（インボイス）</a>
+<a href="#r3">同意しなかった点</a>
+<p class="navttl sec">第2部：条件 v2</p>
+<a href="#s0">変更点の一覧</a>
+<a href="#s1">通過条件（改訂）</a>
+<a href="#s2">除外条件（改訂）</a>
+<a href="#s3">探し先（改訂）</a>
+<a href="#s4">配点（中身を変更）</a>
+<a href="#s5">進め方の変更（最重要）</a>
+<a href="#s6">未確認事項</a>
+<a href="#s7">決めていただきたいこと</a>
+</nav>
+
+<main>
+<header class="doc">
+<h1>SaaS探索の条件 v2 ― Geminiレビュー反映・最終提案</h1>
+<p class="meta">作成日：2026-08-26 ／ 状態：<b>最終提案（未承認）</b>／ 調査は着手していません<br>
+Geminiの指摘<b>12件＋3つの立場</b>をすべてClaudeが事実確認しました。<b>握りつぶした指摘はありません。</b></p>
+</header>
+
+<h2 class="part" id="r0">第1部　Geminiレビューの結果</h2>
+
+<section>
+<h3>採否のまとめ</h3>
+
+<p class="lead"><b>今回のレビューは、前回（現場型）より明確に厳しく、かつ有用でした。</b>✕（誤り）と判定したのは1件、△（部分的に正しい）が4件、○が6件、保留が1件です。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">件数</th><th>判定</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td class="num">6</td><td><b class="v o">採用</b></td><td>立ち上げ期の資金計画の欠落／リーチ手段の条件追加／プロシューマーの解禁／ミッションクリティカル領域の除外／インボイスと定型約款／模倣者は資本を必要としない</td></tr>
+<tr><td class="num">4</td><td><b class="v t">条件付き採用</b></td><td>T8の書き直し（私の記述ミス）／探し先の入れ替え／配点の中身の変更／単価下限の緩和</td></tr>
+<tr><td class="num">1</td><td><b class="v x">一部✕</b></td><td>「IT導入補助金は母集団に不適切」── 比較サイトには当てはまるが、IT導入補助金には当てはまりません</td></tr>
+<tr><td class="num">1</td><td><b class="v u">保留</b></td><td>CACを選定条件に入れる件 ── 過去の決定と抵触するため、坂野様のご判断が必要</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">レビューで明確に得をした点</span>
+<b>①インボイスの経過措置が、来月（2026年10月1日）に変わります。</b>Geminiの指摘をきっかけに国税庁で確認したところ、<b>令和8年度税制改正で控除割合が見直されていました。</b>坂野様の課税事業者登録の予定と直接ぶつかります（第2章）。<br>
+<b>②「模倣してくるのは大手ではなくソロプレナー」という指摘。</b>私は「市場が小さいから資本のある会社が来ない」を防御としましたが、<b>模倣者は資本を必要としません。</b>私の論理の穴でした。<br>
+<b>③「分析麻痺で1年間何も決まらない」という失敗の形。</b>これが最も可能性の高い失敗だと私も同意します（第2部§5）。
+</div>
+</section>
+
+<section id="r1">
+<h3>指摘対応表（12件）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">No</th><th>Geminiの指摘（要約）</th><th>重要度<br>Gemini</th><th>事実確認</th><th>判定と理由</th></tr></thead>
+<tbody>
+
+<tr><td class="num">1</td>
+<td><b>粗利率85%・広告15〜20%は成熟期の数字。</b>立ち上げ期はCACが先行し、投下資本の多くを初期CACに使う計画が要る</td>
+<td>高／高</td><td><b class="v t">△ 部分的に正しい</b><br><span class="v u">CPC・CVRの数値は【未確認】</span></td>
+<td><b class="v o">採用。</b>私の計算は<b>「月利100万円に到達した時点の損益」</b>であって、<b>そこに至るまでの資金繰りではありません。</b>両者は別物ですが、<b>設計に後者が無かったのは事実です。</b>必要ARRの計算は維持し、<b>「到達までの投資額と期間」を別の条件として追加</b>しました。<br>なおGeminiが挙げたCPC300〜800円・CVR1.0〜2.5%は出典がなく、事実として扱いません</td></tr>
+
+<tr class="new"><td class="num">2</td>
+<td><b>年2〜7億円の極小ニッチは検索ボリュームが少なく、自社サイトのみのプル型集客は物理的に不可能。</b>顧客の集積地へ安価に届く固有の流通チャネルが絶対条件</td>
+<td>高／中</td><td><b class="v o">○ 妥当</b></td>
+<td><b class="v o">採用。ただし過去の決定と両立する形にしました。</b><br>坂野様は「集客の<b>見込み</b>を選定条件に入れない」と決めておられます。しかしGeminiが言っているのは<b>見込み（CVR・CAC）ではなく「顧客の集積地が実在するか」という事実</b>です。検索ボリューム・業界団体の会員数・専門メディアの存在は<b>すべて実測できます。</b><br>→ <b>T11「リーチ手段の実在」として追加。推測は一切使いません</b></td></tr>
+
+<tr><td class="num">3</td>
+<td><b>T8（他社基幹システムへの連携が必須でない）は、解約を防ぐ最大の要因を放棄している。</b>逆に連携できることを条件にすべき</td>
+<td>高／高</td><td><b class="v t">△ 私の記述ミスが原因</b></td>
+<td><b class="v t">条件付き採用。</b>坂野様の元の決定（2026-08-18）は<b>「連携が必須なのに、その連携手段を持てない案は参入しない」</b>でした。<b>「連携できる案を除外する」ではありません。</b>私のT8の書き方が悪く、Geminiに誤解させました。<br>→ <b>T8を書き直し</b>：「連携が必要な場合、相手が<b>公開APIを提供している</b>こと」。レセコンのような閉じた基幹システムが必須なら除外、公開APIのあるものなら歓迎、という整理です</td></tr>
+
+<tr class="new"><td class="num">4</td>
+<td><b>E8（BtoC除外）はプロシューマー（副業層・クリエイター・個人投資家）を切り捨てる</b></td>
+<td>中／高</td><td><b class="v o">○ 妥当</b><br><span class="v u">挙げられた売却額等は【未確認】</span></td>
+<td><b class="v o">採用。</b>私も第9章④で同じ選択肢（高単価な個人向けだけ含める）を用意していました。<b>Geminiの指摘と一致します。</b><br>→ <b>E8を「娯楽用途のみの純粋なBtoC」に限定</b>し、収益化・業務効率化を目的とする個人は対象に含めます</td></tr>
+
+<tr class="new"><td class="num">5</td>
+<td><b>「システム停止やデータ欠損が顧客の事業継続に直結する領域」の除外が欠落している。</b>1人法人ではSLAを担保できない</td>
+<td>高／高</td><td><b class="v o">○ 妥当</b></td>
+<td><b class="v o">採用。私が完全に落としていた条件です。</b>決済基幹・医療データのように停止が致命的な領域は、1人法人の体制（24時間365日の監視・復旧）では引き受けられません。<br>→ <b>E9として追加</b></td></tr>
+
+<tr><td class="num">6</td>
+<td><b>探し先1（IT導入補助金）と2（SaaS比較サイト）は母集団の入口として不適切。</b>掲載費が高くニッチSaaSは載っていない</td>
+<td>高／高</td><td><b class="v t">△ 半分正しく、半分誤り</b></td>
+<td><b class="v t">条件付き採用。</b><br><b>比較サイト（BOXIL・ITトレンド等）については、そのとおりです。</b>あれは有料広告なので、載っているのは<b>広告費を出せる規模の会社だけ</b>。母集団として偏ります。→ 格下げ<br>
+<b>しかしIT導入補助金は違います。</b>あれは広告ではなく<b>補助金の制度</b>です。公式ページ（中小機構）を確認しましたが<b>掲載料・登録料の記載はなく</b>、「登録したITツールは中小企業等によって当サイト上で検索されます」と明記されており、<b>公開一覧として使えます。</b>むしろ補助金目当てで小規模ベンダーも登録するインセンティブがあります。→ <b>維持</b><br>
+一方、Geminiが代わりに提案した<b>「クラウドソーシングで反復発注されているExcel・マクロ作成の依頼履歴」は非常に良い着眼で、私が持っていませんでした。</b>→ 追加</td></tr>
+
+<tr><td class="num">7</td>
+<td><b>「AIで作れる度合い30点」が最高配点なので、参入障壁が皆無のプロンプトラッパーが上位に来る</b></td>
+<td>中／高</td><td><b class="v o">○ 構造的に正しい</b></td>
+<td><b class="v t">条件付き採用。配点は変えず、中身の定義を変えます。</b><br>30点は<b>坂野様の明示的なご指定</b>（2026-08-26承認）なので、私の判断では下げられません。<br>→ 代わりに<b>「AIで作れる度合い」の定義を変更</b>します。<b>「AIのAPIを叩くだけで作れる」を高得点にせず、「業界特有のワークフローをAIで置き換えられる」を高得点にする。</b>これなら配点を動かさずに問題が解消します</td></tr>
+
+<tr><td class="num">8</td>
+<td><b>「月1万円以上」は、1人法人が最も獲得しやすいスモールビジネス層を排除する悪手。</b>3,000〜10,000円まで緩和すべき</td>
+<td>高／高</td><td><b class="v t">△ 部分的に正しい</b><br><span class="v u">挙げられた成功事例は【未確認】</span></td>
+<td><b class="v t">条件付き採用。</b>「月1万円は社内稟議が要りリードタイムが伸びる」という論理は妥当です。<br>ただし<b>「560社をStripeの顧客ポータルで維持できる」という論拠は弱い。</b>あれは請求処理の話であって、<b>問い合わせ対応の負荷の話ではありません。</b><br>→ <b>下限を月3,000円に緩和。ただし「セルフサーブで完結する設計（営業も個別サポートも不要）」を条件として抱き合わせます。</b>低単価が成立する条件はこれ1つだけです</td></tr>
+
+<tr class="new"><td class="num">9</td>
+<td><b>インボイス制度への対応と、民法上の定型約款（不当条項規制・変更ルール）が構造的に見落とされている</b></td>
+<td>高／高</td><td><b class="v o">○ 裏付けあり</b><br><b>（国税庁で確認）</b></td>
+<td><b class="v o">採用。今回のレビューで最も価値のある指摘でした。</b>→ <b>詳細は第2章</b></td></tr>
+
+<tr class="new"><td class="num">10</td>
+<td><b>弱点1（模倣容易性）が最も過小評価。</b>資本のある大手が来なくても、世界中のソロプレナーが同じ機能をより安く出してくる。<b>資本力の不在はもはや参入障壁として機能しない</b></td>
+<td>高／高</td><td><b class="v o">○ 妥当</b></td>
+<td><b class="v o">採用。私の論理の穴でした。</b><br>私は「市場が小さいから<b>資本のある会社</b>が来ない」を唯一の防御としました。<b>しかし模倣者は資本を必要としません。</b>坂野様ご自身がAIで3本を自作されたのと同じことを、他の誰かができます。<br>→ 防御の置き方を<b>「市場の小ささ」から「ドメイン知識とデータの蓄積」へ移します</b>（第2部§4）</td></tr>
+
+<tr><td class="num">11</td>
+<td><b>5つ目の弱点＝CACを後回しにしたことによる資金枯渇。</b>「エコシステムに乗らない」制約を一部緩和すべき</td>
+<td>高／<b>低</b></td><td><b class="v o">○ 論理は妥当</b></td>
+<td><b class="v u">保留（要ご判断）。</b>指摘の実質はNo.2と同じで、<b>No.2のT11（リーチ手段の実在）で実質的に手当てできます。</b><br>ただしGeminiの推奨する<b>「他社プラットフォームに乗らない制約の緩和」は、2026-08-16の坂野様の明示的な決定に真っ向から反します。</b>私の判断では覆せません。→ <b>第7章①でご判断ください</b><br>なおGemini自身が確信度を「低」と自己申告しています</td></tr>
+
+<tr class="new"><td class="num">12</td>
+<td><b>最も可能性の高い失敗は「分析麻痺」。</b>条件が厳格すぎ、母集団も不適切なので、1年間机上調査だけを繰り返して1件も決まらない</td>
+<td>高／中</td><td><b class="v o">○ 私も同意します</b></td>
+<td><b class="v o">採用。これが今回いちばん重い指摘です。</b>「比較サイトに載るほど成熟しているが、なぜか大手が放置している」市場は<b>矛盾しており、机上では見つからない</b>という指摘は鋭い。<br>→ <b>進め方そのものを変えます（第2部§5）。</b>ただし坂野様の教訓との関係を整理する必要があるので、そこで詳しく述べます</td></tr>
+
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="r2">
+<h2>第2章　最重要の発見：インボイスの経過措置が来月変わります</h2>
+
+<div class="box ng">
+<span class="lbl">国税庁で確認した事実（一次情報）</span>
+<b>令和8年度税制改正により、適格請求書発行事業者以外（＝免税事業者等）からの課税仕入れに係る経過措置の控除割合が見直されました。</b><br>
+出典：国税庁「令和8年度税制改正特集」<br><br>
+<div class="tblwrap"><table style="min-width:0">
+<thead><tr><th>期間</th><th class="num">控除割合</th></tr></thead>
+<tbody>
+<tr><td>〜令和8年9月30日（2026/9/30）</td><td class="num">80%</td></tr>
+<tr style="background:var(--ng-bg)"><td><b>令和8年10月1日〜令和10年9月30日</b></td><td class="num"><b>70%</b></td></tr>
+<tr><td>令和10年10月1日〜令和12年9月30日</td><td class="num">50%</td></tr>
+<tr><td>令和12年10月1日〜令和13年9月30日</td><td class="num">30%</td></tr>
+<tr><td>令和13年10月1日以降</td><td class="num">0%（控除不可）</td></tr>
+</tbody></table></div>
+<b>あわせて、免税事業者等からの課税仕入れの合計額が年1億円を超える場合、その超えた部分には適用できないことになりました（改正前の上限は10億円）。</b>
+</div>
+
+<div class="box warn">
+<span class="lbl">これが坂野様の予定と直接ぶつかります</span>
+記録によれば、<b>合同会社R.Y.S は2027年（令和9年）2月1日に課税事業者の登録となる</b>予定です。<br>
+つまり<b>2026年10月1日から2027年1月31日までの約4か月間</b>、BtoB向けにSaaSを販売すると、<b>買い手（顧客）は支払った消費税の70%しか控除できません。</b>顧客から見れば<b>実質3%高い</b>ことになります。<br><br>
+<b>ただし、これは実務上そこまで重い障害ではないと考えます。</b>理由は2つです。<br>
+① SaaSの要件定義から公開までには通常数か月かかるため、<b>公開時点では2027年2月を過ぎている可能性が高い</b><br>
+② 月3,000〜10,000円の価格帯では、3%は金額として数百円<br><br>
+<b>むしろ重要なのは、次の1点です。</b>
+</div>
+
+<div class="box ok">
+<span class="lbl">「課税事業者になること」と「適格請求書を出せること」は別です</span>
+課税事業者になっただけでは、適格請求書（インボイス）は発行できません。<b>別途「適格請求書発行事業者」の登録申請が必要です。</b><br>
+<b>→ BtoB向けSaaSを始める前提条件として、これを条件表に入れました（T12）。</b><br><br>
+また、Geminiが指摘した<b>民法の定型約款（第548条の2の不当条項規制、第548条の4の変更ルール）</b>についても、事業案を選んだ後のタスクとして手順に組み込みます。<b>ただし法令の解釈が絡むので、規約を作る段階で改めて確認が必要です。私の整理だけで確定させません。</b>
+</div>
+</section>
+
+<section id="r3">
+<h2>第3章　私がGeminiに同意しなかった点（迎合しないための記録）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>Geminiの主張</th><th>私の見解</th></tr></thead>
+<tbody>
+<tr><td><b>「IT導入補助金のツール登録は代行業者を通すなど手続きが煩雑で、極小規模のSaaS事業者には負担が大きい」</b>ため母集団に不適切</td>
+<td><b>✕ この論拠は成り立ちません。</b>Geminiは<b>比較サイトの掲載費用の話と、補助金の登録手続きの話を混ぜています。</b>中小機構の公式ページを確認しましたが<b>掲載料・登録料の記載はなく</b>、「登録したITツールは当サイト上で検索されます」と明記されています。<b>むしろ補助金目当てで小規模ベンダーも登録するので、ニッチが集まりやすい母集団です。</b>→ 維持します</td></tr>
+<tr><td>低単価でも<b>「Stripeの顧客ポータルを活用すれば1人法人でも560社の維持は十分に可能」</b></td>
+<td><b>△ 論拠がずれています。</b>顧客ポータルが解決するのは<b>請求・決済の処理</b>であって、<b>問い合わせ対応の負荷ではありません。</b>560社の維持を可能にするのは決済の自動化ではなく、<b>問い合わせが発生しない設計（セルフサーブ）</b>です。→ そちらを条件にしました</td></tr>
+<tr><td><b>「他社プラットフォームに乗らない制約を一部緩和すべき」</b></td>
+<td><b>保留。</b>これは2026-08-16の坂野様の明示的な決定に反します。<b>私の判断では覆せないので、判断をお願いする形にしました。</b>なおGemini自身が確信度「低」と自己申告しています</td></tr>
+<tr><td>Skebの売却額約10億円、文字数カウントアプリ累計700万円超、BtoB SaaSのCPC300〜800円・CVR1.0〜2.5% など</td>
+<td><b>【未確認】。</b>いずれも出典が示されておらず、私も一次情報で確認できていません。<b>事実として扱わず、判断の根拠にも使いません。</b>ただしこれらの数値が無くても、指摘の論理そのものは成立します</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">2往復目は不要と判断します</span>
+今回の変更は<b>本質的（条件と進め方が変わる）</b>ですが、重要度「高」で未解決のまま残った指摘はありません。<b>唯一の未解決はプラットフォーム非依存の制約で、これはGeminiに再度聞くことではなく坂野様がお決めになることです。</b>
+</div>
+</section>
+
+<h2 class="part" id="s0">第2部　探索条件 v2</h2>
+
+<section>
+<h3>変更点の一覧</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>変更</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>T11「リーチ手段の実在」を追加</b>（顧客の集積地が実測できるか）</td><td>Gemini 2</td></tr>
+<tr><td class="num">2</td><td><b>T12「適格請求書発行事業者の登録」を前提条件に追加</b></td><td>Gemini 9＋国税庁で確認</td></tr>
+<tr><td class="num">3</td><td><b>T8を書き直し</b>（連携が必要なら相手が公開APIを持つこと）</td><td>Gemini 3＋私の記述ミスの修正</td></tr>
+<tr><td class="num">4</td><td><b>T6の下限を月1万円 → 月3,000円に緩和。ただしセルフサーブ条件を抱き合わせ</b></td><td>Gemini 8</td></tr>
+<tr><td class="num">5</td><td><b>E8を「娯楽用途のみのBtoC」に限定</b>（プロシューマーを解禁）</td><td>Gemini 4</td></tr>
+<tr><td class="num">6</td><td><b>E9「1人法人でSLAを担保できないミッションクリティカル領域」を追加</b></td><td>Gemini 5</td></tr>
+<tr><td class="num">7</td><td><b>探し先を入れ替え</b>（比較サイトを格下げ、クラウドソーシングの反復発注を追加、IT導入補助金は維持）</td><td>Gemini 6＋私の反論</td></tr>
+<tr><td class="num">8</td><td><b>「AIで作れる度合い」の定義を変更</b>（配点30は維持）</td><td>Gemini 7</td></tr>
+<tr><td class="num">9</td><td><b>防御の置き方を変更</b>（市場の小ささ → ドメイン知識とデータの蓄積）</td><td>Gemini 10</td></tr>
+<tr><td class="num">10</td><td><b>進め方そのものを変更</b>（机上調査だけで進めない）</td><td>Gemini 12</td></tr>
+<tr><td class="num">11</td><td><b>T3・T4に「直近3年の新規参入の有無」を追加</b></td><td>Gemini 悲観論者・経路3＋私の追加</td></tr>
+<tr><td class="num">12</td><td><b>「到達までの投資額と期間」を別条件として追加</b></td><td>Gemini 1</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s1">
+<h2>§1　通過条件（改訂版）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>条件</th><th>基準</th><th>v1から</th></tr></thead>
+<tbody>
+<tr><td class="num">T1</td><td>市場規模</td><td>年間 2〜7億円</td><td>変更なし</td></tr>
+<tr><td class="num">T2</td><td>その市場の最有力サービスの規模</td><td>年商 1〜5億円程度</td><td>変更なし</td></tr>
+<tr><td class="num">T3</td><td>競合の数</td><td>3社以内が理想（5社まで許容）</td><td>変更なし</td></tr>
+<tr><td class="num">T4</td><td>競合が存在する</td><td>1社以上、かつ3年以上続いている</td><td>変更なし</td></tr>
+<tr class="new"><td class="num"><b>T4b</b></td><td><b>直近3年に新規参入があるか</b></td><td><b>新規参入が1社以上ある</b></td><td><b>新設。</b>3社が3年以上寡占し、誰も新しく入っていない市場は<b>入る余地がない可能性が高い</b>（悲観論者の経路3）</td></tr>
+<tr><td class="num">T5</td><td>顧客</td><td>事業者、または<b>収益化・業務効率化を目的とする個人</b></td><td>プロシューマーを追加</td></tr>
+<tr><td class="num">T6</td><td>単価</td><td><b>月3,000円以上</b></td><td><b>1万円 → 3,000円に緩和</b></td></tr>
+<tr class="new"><td class="num"><b>T6b</b></td><td><b>セルフサーブで完結する</b></td><td><b>営業も個別サポートも不要で、顧客が自分で登録・決済・利用開始できる</b></td><td><b>新設。T6を緩和する代わりの条件。</b>低単価が成立する唯一の条件</td></tr>
+<tr><td class="num">T7</td><td>自社サイトで売れる</td><td>他社ストアに乗らずに成立する</td><td>変更なし（→§7①で要判断）</td></tr>
+<tr><td class="num">T8</td><td><b>連携（書き直し）</b></td><td><b>連携が必要な場合、相手が公開APIを提供していること。</b>閉じた基幹システムへの連携が必須の案は除外</td><td><b>全面書き直し。</b>v1の書き方が誤解を招いた</td></tr>
+<tr><td class="num">T9</td><td>10年後に増えるか横ばい</td><td>減ることが確定情報で言えない</td><td>変更なし</td></tr>
+<tr><td class="num">T10</td><td>AIで作れる</td><td>1〜数人で作れる（定義は§4参照）</td><td>定義を変更</td></tr>
+<tr class="new"><td class="num"><b>T11</b></td><td><b>リーチ手段が実在する</b></td><td><b>次のいずれかを実測できる：</b>①その業務の検索語に月間検索数がある ②業界団体・組合に会員名簿がある ③専門メディア・展示会が存在する ④顧客リストが公開情報から作れる</td><td><b>新設。ただし「集客の見込み」は測りません。</b>集積地が<b>実在するかどうか</b>という事実だけを見ます</td></tr>
+<tr class="new"><td class="num"><b>T12</b></td><td><b>適格請求書発行事業者の登録</b></td><td><b>BtoB向けに販売開始する時点で登録済みであること</b></td><td><b>新設（第2章）</b></td></tr>
+<tr class="new"><td class="num"><b>T13</b></td><td><b>到達までの投資額と期間</b></td><td><b>ARR 2,000万円到達まで、投資額が資金枠（2,000〜3,000万円）に収まり、期間が36か月以内</b></td><td><b>新設（Gemini 1）</b></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s2">
+<h2>§2　除外条件（改訂版）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>落とす条件</th><th>v1から</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td>市場規模が年30億円超</td><td>変更なし</td></tr>
+<tr><td class="num">E2</td><td>最有力が上場企業、または10億円以上を調達済み</td><td>変更なし</td></tr>
+<tr><td class="num">E3</td><td>大手SaaSの標準機能に含まれている</td><td>変更なし</td></tr>
+<tr><td class="num">E4</td><td>他社ストア・エコシステムへの出店が前提</td><td>変更なし（→§7①で要判断）</td></tr>
+<tr><td class="num">E5</td><td>参入に許認可が要り、取得に3か月超</td><td>変更なし</td></tr>
+<tr><td class="num">E6</td><td>業法が重い領域</td><td>変更なし</td></tr>
+<tr><td class="num">E7</td><td><b>閉じた基幹システムとの連携が必須で、連携手段を持てない</b></td><td>T8に合わせて書き直し</td></tr>
+<tr><td class="num">E8</td><td><b>娯楽用途のみに限定された純粋な一般消費者向け</b></td><td><b>緩和。</b>収益化・業務効率化を目的とする個人は対象に含める</td></tr>
+<tr class="new"><td class="num"><b>E9</b></td><td><b>システムの停止や不具合が顧客の重大な経済的損失・法令違反に直結し、1人法人ではSLAを担保できない領域</b>（決済基幹、医療データ、人命に関わる監視など）</td><td><b>新設</b></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s3">
+<h2>§3　探し先（改訂版）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>探し先</th><th>位置づけ</th><th>v1から</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>IT導入補助金のITツール登録一覧</b>（中小機構）</td><td><b>主要な入口。</b>登録は補助金の制度であって有料広告ではなく、掲載料・登録料の記載は公式ページに見当たらない。登録ツールは公開・検索可能</td><td><b>維持（Geminiの指摘に反論）</b></td></tr>
+<tr class="new"><td class="num"><b>2</b></td><td><b>クラウドソーシングで反復発注されている依頼履歴</b>（Excel・マクロ・自動化ツールの作成依頼）</td><td><b>主要な入口。</b>同じような依頼が繰り返されている＝<b>需要の実データ。</b>しかも「ソフトが無いから人に頼んでいる」状態</td><td><b>新設（Geminiの提案）</b></td></tr>
+<tr><td class="num">3</td><td>業界団体・組合が会員に案内しているツール</td><td>主要な入口。T11（リーチ手段）と同時に確認できる</td><td>格上げ</td></tr>
+<tr><td class="num">4</td><td>海外にあって日本にない単機能SaaS</td><td>主要な入口</td><td>格上げ</td></tr>
+<tr><td class="num">5</td><td>「Excelでやっている」業務</td><td>補助的</td><td>変更なし</td></tr>
+<tr><td class="num">6</td><td>既存3本の周辺</td><td>補助的</td><td>変更なし</td></tr>
+<tr><td class="num">7</td><td><b>SaaS比較サイトのカテゴリ</b></td><td><b>格下げ。有料広告なので、載っているのは広告費を出せる規模の会社に偏る。</b>カテゴリ名の発見には使うが、競合数の断定には使わない</td><td><b>格下げ（Gemini 6）</b></td></tr>
+<tr><td class="num">8</td><td>抽出した最有力の運営会社の規模を推定</td><td>手法（探し先ではない）</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s4">
+<h2>§4　配点（点数は維持、中身を変更）</h2>
+
+<div class="box chg">
+<span class="lbl">配点は動かしません。「AIで作れる度合い」の定義だけを変えます</span>
+Geminiは「AIで作れる度合い30点が最高配点だから、誰でも作れる薄いラッパーが上位に来る」と指摘しました。<b>構造的に正しい指摘です。</b><br>
+しかし30点は坂野様の明示的なご指定なので、私の判断では下げられません。<b>そこで、配点を動かさずに問題を解消する方法を取ります。</b>
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">配点</th><th>軸</th><th>高得点の定義（v2で変更）</th></tr></thead>
+<tbody>
+<tr><td class="num"><b>30</b></td><td><b>AIで作れる度合い＋既存資産</b></td>
+<td><b class="v x">低得点：</b>生成AIのAPIを呼ぶだけで作れるもの（＝誰でも作れる）<br><b class="v o">高得点：</b><b>その業界特有の商慣習・帳票・判断基準を理解して初めて成立するもの</b>／既存3本（ルート最適化・住所訂正伝票・請求書PDF郵送）の部品が乗るもの</td></tr>
+<tr><td class="num"><b>25</b></td><td>収益の到達しやすさ</td><td>必要顧客数が少ない（単価が高い）／セルフサーブで完結する</td></tr>
+<tr><td class="num"><b>15</b></td><td>市場規模の適正さ</td><td>年2〜7億円に収まる</td></tr>
+<tr><td class="num"><b>15</b></td><td><b>リピート性（＝防御力）</b></td><td><b>v2で意味を変更。</b>単に「月額課金だから継続する」ではなく、<b>使い込むほどデータが溜まり、業務が組み込まれ、乗り換えのコストが上がる形になっているか</b></td></tr>
+<tr><td class="num"><b>15</b></td><td>需要の実在</td><td>競合の存在と継続年数／リーチ手段の実在（T11）</td></tr>
+<tr><td class="num" style="color:var(--ok)"><b>+10</b></td><td>補正</td><td>競合が3社以内、かつ直近3年に新規参入がある</td></tr>
+<tr><td class="num"><b>±0</b></td><td>補正</td><td>競合4〜5社</td></tr>
+<tr><td class="num" style="color:var(--ng)"><b>−10</b></td><td>補正</td><td>競合6社以上、または大手の標準機能に含まれる</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">防御の置き方を変えます（Gemini 10）</span>
+v1では防御を<b>「市場が小さいから資本のある会社が来ない」</b>に置いていました。<br>
+<b>しかし模倣者は資本を必要としません。</b>坂野様がAIで3本を自作されたのと同じことを、他の誰かができます。<b>資本力の不在は、もはや参入障壁として機能しません。</b><br><br>
+<b>→ 防御を「ドメイン知識とデータの蓄積」に置き換えます。</b>具体的には配点の2か所に反映しました：<br>
+・<b>30点の軸</b>：業界特有の商慣習を理解して初めて成立するものを高得点に<br>
+・<b>15点の軸</b>：使い込むほど乗り換えコストが上がる形になっているかを見る<br><br>
+<b>ただし正直に申し上げると、これでも完全な防御にはなりません。</b>坂野様は2026年8月に「この規模ではスイッチングコストをほとんど作れない」とご自身で結論しておられ、<b>その認識のほうが正確です。</b>この方針で得られるのは「模倣までの時間を稼ぐ」程度であって、模倣を防ぐことではありません。
+</div>
+</section>
+
+<section id="s5">
+<h2>§5　進め方の変更（今回いちばん重要）</h2>
+
+<div class="box ng">
+<span class="lbl">Geminiが挙げた「最も可能性の高い失敗」に、私も同意します</span>
+<b>「条件が厳格すぎるうえに母集団の抽出元が不適切なため、1年間ひたすら机上調査だけを繰り返し、参入すべき事業案が1件も決まらない（分析麻痺）」</b><br><br>
+Geminiの指摘の核心はここです ──<b>「比較サイトに載るほど成熟しているが、なぜか大手が放置している市場」は矛盾した状態であり、机上のスクリーニングではほぼ見つからない。</b>仮に見つかっても、見えない落とし穴（重い業法規制や極端な解約率）が潜んでいる。<br>
+<b>この指摘は妥当だと判断します。</b>
+</div>
+
+<div class="box warn">
+<span class="lbl">ただし、坂野様の教訓との関係を正確に整理する必要があります</span>
+Geminiは「調べる前ではなく調べながら市場の反応を測るアジャイルな検証へ回帰せよ」と述べています。<br>
+<b>これは一見、坂野様の教訓（「作りながら市場を調べたのが失敗の根本原因」）と正面から衝突します。</b><br><br>
+<b>しかし、衝突していません。</b>区別すべきなのは次の点です ──<br>
+<b>Rabeluで失敗したのは「開発しながら調べた」こと</b>です。2か月かけてコードを書きながら、市場の前提が5回壊れました。<br>
+<b>LPを1枚作って広告を数万円出すことは、開発ではありません。</b>LPは1日、広告は数万円で、しかも<b>壊れても捨てるだけ</b>です。<br><br>
+<b>→ したがって「机上調査 → LPと広告で実測 → その結果を見て要件定義 → 開発」という順番は、坂野様の教訓に反しません。</b>むしろ「机上だけで1年」のほうが、教訓が防ごうとした損失より大きくなります。
+</div>
+
+<h3>改訂した進め方</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">段階</th><th>やること</th><th>期間の目安</th><th>費用</th><th>ここで潰す不確実性</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>条件の確定（＝いま）</td><td>今回中</td><td>—</td><td>—</td></tr>
+<tr><td class="num">2</td><td>探し先8つから候補を広く集める</td><td>3〜5セッション</td><td>トークンのみ</td><td>—</td></tr>
+<tr><td class="num">3</td><td>通過条件・除外条件で機械的に落とす</td><td>2〜3セッション</td><td>トークンのみ</td><td>「10%が構造的に不可能な市場」を落とす</td></tr>
+<tr><td class="num">4</td><td>優先順位をつけてカタログ化 → <b>坂野様が3〜5件選ぶ</b></td><td>1セッション＋お読みいただく時間</td><td>—</td><td>—</td></tr>
+<tr class="new"><td class="num"><b>5</b></td><td><b>選んだ案ごとにLPを1枚作り、少額の広告を出す</b>（開発はしない。画面の絵と説明文だけ）</td><td><b>1案あたり1〜2週間</b></td><td><b>1案あたり数万円</b></td><td><b>①その言葉で人が検索するか ②クリック単価がいくらか ③申込みボタンを押す人がいるか</b><br>＝<b>推測だったCACが実測に変わる</b></td></tr>
+<tr><td class="num">6</td><td>実測で残った案だけ、ゲート0（事業性の6問）</td><td>1〜2セッション</td><td>トークンのみ</td><td>机上で分かることを全部潰す</td></tr>
+<tr><td class="num">7</td><td>要件定義 → 開発</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">この変更で得られること</span>
+<b>「CACを選定条件に入れない」という坂野様の決定を守ったまま、資金枯渇のリスクを潰せます。</b><br>
+CACを<b>推測で選定条件にする</b>のではなく、<b>候補を絞ってから実測する</b>。順番が違うだけで、Geminiが最も致命的とした「集客チャネルの欠落によるCAC高騰と資金枯渇」は、<b>数万円と2週間で判定できます。</b><br>
+<b>これはRabeluのときに無かった工程です。</b>あのときは要件書を承認してから2か月開発しました。
+</div>
+</section>
+
+<section id="s6">
+<h2>§6　未確認事項</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>確認できたこと</th><th>確認できなかったこと</th></tr></thead>
+<tbody>
+<tr><td><b>インボイスの経過措置</b></td><td><b>○ 国税庁「令和8年度税制改正特集」で確認。</b>令和8年10月1日〜令和10年9月30日は70%控除。以降50%→30%→0%。免税事業者等からの課税仕入れの合計が年1億円超の部分には適用不可（改正前は10億円）</td><td>なし</td></tr>
+<tr><td><b>IT導入補助金のツール登録</b></td><td>○ 中小機構の公式ページで、登録ツールが公開・検索対象になることを確認</td><td><b>登録料・掲載料の有無は公式ページに記載がなく【一部未確認】。</b>「記載が見当たらない」＝「無料」とは断定できません。<b>実際に使う段階で登録要領を読んで確認します</b></td></tr>
+<tr><td>民法の定型約款（548条の2・548条の4）</td><td>—</td><td><b>【未確認】。</b>Geminiの指摘であり、条文の存在と内容を私は一次情報で確認していません。<b>規約を作る段階で改めて確認します</b></td></tr>
+<tr><td>比較サイトの掲載費用</td><td>—</td><td><b>【未確認】（二次情報のみ）。</b>ただし<b>「有料広告なので母集団が偏る」という結論は、金額の正確さに依存しません</b></td></tr>
+<tr><td>Geminiが挙げた各種の数値<br>（CPC300〜800円、CVR1.0〜2.5%、Skeb売却額、個人開発の売上事例）</td><td>—</td><td><b>【未確認】。出典が示されておらず、事実として扱いません。</b>ただしこれらが無くても指摘の論理は成立します</td></tr>
+<tr><td>市場規模の推定（今後の調査）</td><td>—</td><td><b>ニッチ市場に公的統計は存在しないため、ほぼ必ず【推測】になります。</b>推定の計算式を必ず添えて出します</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s7">
+<h2>§7　決めていただきたいこと</h2>
+
+<div class="q">
+<b>① 「他社プラットフォームに乗らない」制約を維持しますか　★唯一の未解決</b><br>
+　Geminiと投資家役は<b>「この制約が最も致命的」</b>と結論しました。2026-08-16のご決定なので、私の判断では覆せません。<br>
+　A. <b>維持する</b>（T11「リーチ手段の実在」＋段階5のLP広告テストで手当てする。私の推奨）<br>
+　B. 集客の初期段階に限り、業界特化の専門メディア・業界団体とのアライアンスを許容する<br>
+　C. 他社ストア（Shopifyアプリ等）への出店も選択肢に戻す
+</div>
+
+<div class="q">
+<b>② 単価の下限（T6）</b><br>
+　A. <b>月3,000円以上＋セルフサーブ条件</b>（Geminiの指摘を反映した改訂案）<br>
+　B. 月1万円以上（v1の私の推奨）<br>
+　C. 下限を設けない（2026-08-18のご決定を維持）
+</div>
+
+<div class="q">
+<b>③ 進め方の変更（§5）を承認しますか　★これがいちばん効きます</b><br>
+　A. <b>承認する</b>（候補を絞った後、LP＋少額広告で実測してから要件定義へ）<br>
+　B. 承認しない（机上の調査だけで案を決め、そのまま要件定義へ）<br>
+　<span style="color:var(--muted)">※Bを選ばれる場合、Geminiが「最も可能性の高い失敗」とした分析麻痺のリスクが残ります。</span>
+</div>
+
+<div class="q">
+<b>④ 新設した条件（T4b・T6b・T11・T12・T13・E9）に過不足はありますか</b>
+</div>
+
+<div class="q">
+<b>⑤ 配点（§4）でよろしいですか</b><br>
+　点数は承認済みのまま、<b>「AIで作れる度合い」の定義</b>と<b>「リピート性」の意味</b>だけを変えています。
+</div>
+
+<div class="q">
+<b>⑥ 過去のアプリ候補台帳（P-01〜P-54ほか）</b><br>
+　A. フォルダを接続する（場所をお教えください）　B. 「重複の可能性あり」の印を付けて進める
+</div>
+
+<div class="q">
+<b>⑦ 案の件数</b>　A. 30〜40件　B. 50〜60件　C. 80件以上
+</div>
+</section>
+
+<footer class="doc">
+SaaS探索の条件 v2（最終提案・未承認）／ 2026-08-26 作成／ 調査は着手していません<br>
+ファイル名：<code>_新規事業探索_SaaS探索の条件_v2_2026-08-26.html</code>　／ v1 は同フォルダに残置<br>
+Geminiの指摘12件はすべてClaudeが事実確認済み。握りつぶした指摘はありません。Claudeが単独で確定させた事項もありません。<br>
+出典：国税庁「令和8年度税制改正特集」／中小機構「デジタル化・AI導入補助金2026 ITツールの登録申請」
+</footer>
+
+</main></div></body></html>

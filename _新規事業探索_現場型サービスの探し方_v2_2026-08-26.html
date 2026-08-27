@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>現場型サービスの探し方 v2（案出し型・改訂版）</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1b1f; --muted:#5c5f66; --line:#dfe1e6;
+  --panel:#f6f7f9; --accent:#1d4ed8; --accent-soft:#e8eefc;
+  --warn:#8a4b00; --warn-bg:#fff4e5; --ok:#0f6a3f; --ok-bg:#e8f5ee;
+  --ng:#9b1c1c; --ng-bg:#fdeaea; --chg:#5b21b6; --chg-bg:#f1ebfd;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161a; --fg:#e6e8ec; --muted:#a0a5ae; --line:#2c3037;
+    --panel:#1c1f25; --accent:#7ba2ff; --accent-soft:#1e2a44;
+    --warn:#ffc477; --warn-bg:#33280f; --ok:#7fd3a5; --ok-bg:#12291d;
+    --ng:#ff9d9d; --ng-bg:#331717; --chg:#c9b3ff; --chg-bg:#241a3d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+  font-size:16px; line-height:1.85; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1260px; margin:0 auto; gap:32px; padding:0 20px}
+nav{position:sticky; top:0; flex:0 0 262px; max-height:100vh; overflow-y:auto; padding:28px 0 40px; font-size:13.5px; line-height:1.6}
+nav .navttl{font-weight:700; font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:5px 10px; border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft); border-left-color:var(--accent)}
+nav a.sub{padding-left:22px; color:var(--muted); font-size:12.5px}
+main{flex:1 1 auto; min-width:0; padding:28px 0 100px; max-width:840px}
+header.doc{border-bottom:2px solid var(--line); padding-bottom:18px; margin-bottom:28px}
+h1{font-size:25px; line-height:1.45; margin:0 0 10px}
+.meta{color:var(--muted); font-size:13px; line-height:1.9}
+h2{font-size:20px; margin:52px 0 14px; padding:8px 0 8px 12px; border-left:5px solid var(--accent); background:var(--panel)}
+h3{font-size:16.5px; margin:30px 0 10px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+p{margin:12px 0}
+ul,ol{margin:12px 0; padding-left:24px}
+li{margin:6px 0}
+code{background:var(--panel); padding:2px 6px; border-radius:4px; font-size:14px}
+.tblwrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:600px}
+th,td{border-bottom:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+th{background:var(--panel); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:18px 0; background:var(--panel)}
+.box.warn{background:var(--warn-bg); border-color:var(--warn)}
+.box.ok{background:var(--ok-bg); border-color:var(--ok)}
+.box.ng{background:var(--ng-bg); border-color:var(--ng)}
+.box.chg{background:var(--chg-bg); border-color:var(--chg)}
+.box .lbl{font-weight:700; font-size:13px; display:block; margin-bottom:6px; letter-spacing:.03em}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)}
+.box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px; line-height:1.9}
+.flow{list-style:none; padding:0; margin:20px 0; counter-reset:st}
+.flow li{counter-increment:st; position:relative; padding:14px 16px 14px 64px; border:1px solid var(--line); border-radius:8px; margin:10px 0; background:var(--panel)}
+.flow li::before{content:"STEP " counter(st); position:absolute; left:12px; top:15px; font-size:10.5px; font-weight:700; color:#fff; background:var(--accent); padding:3px 6px; border-radius:4px}
+.flow li b{display:block; font-size:15.5px; margin-bottom:3px}
+.flow li span{color:var(--muted); font-size:13.5px}
+.tag{display:inline-block; font-size:11.5px; padding:1px 7px; border-radius:99px; border:1px solid var(--line); background:var(--bg); color:var(--muted); margin-right:4px}
+.tag.me{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
+.tag.you{border-color:var(--warn); color:var(--warn); background:var(--warn-bg)}
+.card{border:1px solid var(--line); border-radius:10px; padding:0; margin:18px 0; overflow:hidden}
+.card .hd{background:var(--accent-soft); padding:10px 16px; font-weight:700; border-bottom:1px solid var(--line)}
+.card .bd{padding:4px 16px 14px}
+.q{border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:14px 0}
+.q b{color:var(--accent)}
+.del{text-decoration:line-through; color:var(--muted)}
+footer.doc{margin-top:70px; padding-top:18px; border-top:2px solid var(--line); color:var(--muted); font-size:13px}
+@media (max-width:900px){
+  .wrap{display:block; padding:0 16px}
+  nav{position:static; max-height:none; flex:none; padding:20px 0 0; border-bottom:1px solid var(--line); margin-bottom:10px}
+  main{max-width:none}
+}
+@media print{
+  nav{display:none} body{font-size:11pt; background:#fff; color:#000}
+  .wrap{display:block; max-width:none} h2{page-break-after:avoid}
+  tr{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <p class="navttl">目次</p>
+  <a href="#s0">0. v1からの変更点</a>
+  <a href="#s1">1. 「現場」の定義（拡張）</a>
+  <a href="#s2">2. この探索の出力物</a>
+  <a href="#s3">3. 全体の流れ（案出し型）</a>
+  <a href="#s4">4. 除外条件（落とすのはここだけ）</a>
+  <a href="#s5">5. カタログの表示項目</a>
+  <a href="#s5b" class="sub">5-2. 粗利率をやめて何で見るか</a>
+  <a href="#s6">6. 乗り換えさせない作り込み</a>
+  <a href="#s7">7. ブルーオーシャンの罠</a>
+  <a href="#s8">8. 案の湧き出し口（11ソース）</a>
+  <a href="#s9">9. カタログの見本</a>
+  <a href="#s10">10. 選んだあとの流れ</a>
+  <a href="#s11">11. 工数と期間</a>
+  <a href="#s12">12. 未確認事項・保留</a>
+  <a href="#s13">13. 決めていただきたいこと</a>
+</nav>
+
+<main>
+
+<header class="doc">
+  <h1>現場型サービスの探し方 <b style="color:var(--chg)">v2</b><br>― 絞り込み型から「案出し型」へ全面改訂</h1>
+  <p class="meta">
+    作成日：2026-08-26 ／ v1（同日）を全面改訂 ／ 状態：<b>未承認（案）</b><br>
+    改訂の理由：<b>「絞り込みではなく案出しをしてほしい」</b>という坂野様のご指示。ほか10点の修正指示を反映。<br>
+    v1 は削除せず <code>_新規事業探索_現場型サービスの探し方_2026-08-26.html</code> に残しています。
+  </p>
+</header>
+
+<section id="s0">
+<h2>0. v1からの変更点（いただいた指示の反映一覧）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>いただいた指示</th><th>v1</th><th>v2でどうしたか</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>絞り込みではなく案出しがほしい。「絶対無理」だけ落として、あとは自分が選ぶ</b></td><td>30件→10件→3件と絞る設計</td><td><b>手順の骨格を作り替え。</b>関門を廃止し、除外条件に当たるものだけ落として全案をカタログで並べる</td></tr>
+<tr><td class="num">2</td><td>稼働の非線形性は重視しない。量が増えたら人を増やすだけ</td><td>軸5（1.3倍以下）</td><td><b>軸から削除。</b>「坂野様が現場に立ち続けないと成立しない」だけ除外条件に残した</td></tr>
+<tr><td class="num">3</td><td>粗利率30%は決めてほしくない。回転数が多いなら10%でもよい</td><td>粗利率30%以上</td><td><b>粗利率の基準を撤廃。</b>代わりに<b>「1人1日あたりの粗利額」</b>で見る形に変更（第5-2章）</td></tr>
+<tr><td class="num">4</td><td>許認可で守る必要はない。3か月以上かかるなら落とす</td><td>「3か月〜1年が最良」＝障壁として評価</td><td><b>評価を反転。</b>許認可は「壁」ではなく「参入コスト」として扱い、<b>取得3か月超は除外条件</b>へ</td></tr>
+<tr><td class="num">5</td><td>5年後ではなく10年後の増減で見る</td><td>5年後</td><td><b>10年後</b>に変更</td></tr>
+<tr><td class="num">6</td><td>「減る」で落とすのは確定情報のときだけ。「たぶん減る」は注記付きで残す</td><td>減る方向の根拠しか出なければ落とす</td><td><b>確定情報（公的統計の実績値・成立済みの法改正）でのみ落とす。</b>推測は<code>△減少懸念</code>の印を付けて残す</td></tr>
+<tr><td class="num">7</td><td>納得感は不要。収益優先</td><td>軸10（納得感）</td><td><b>削除</b></td></tr>
+<tr><td class="num">8</td><td>真似されてよい。データ蓄積と乗り換えにくさで防ぐ</td><td>「大手が来ない構造的理由」を必須</td><td><b>差し替え。</b>「大手が来ない理由」ではなく<b>「乗り換えさせない作り込みが設計できるか」</b>を見る（第6章）</td></tr>
+<tr><td class="num">9</td><td>誰でも参入できる現場でも落とさない。ハードルは後から作ればいい</td><td>現場の障壁が1つ以下なら落とす</td><td><b>除外条件から削除。</b>表示項目として残し、「後からどんなハードルを作れるか」を各案に書く</td></tr>
+<tr><td class="num">10</td><td>ブルーオーシャンは「需要がない／やってはいけない」可能性のほうが高い</td><td>言及なし</td><td><b>1章を新設（第7章）。</b>各案に<b>「先行事例あり／なし」の印</b>を必ず付け、なしの案には「なぜ空いているのか」の推定を添える</td></tr>
+<tr><td class="num">11</td><td>探し方に「国内の中小をトレース」「海外にあって日本にないもの」を加えたい</td><td>9ソース</td><td><b>ソース10・11として追加（第8章）。</b>先行事例がある＝需要が実証済みなので、指示10とも整合する</td></tr>
+<tr><td class="num">12</td><td>現場＝工事現場だけではない。物流・倉庫運営・発注〜発送代行も含む</td><td>工事系に寄った例示</td><td><b>第1章で定義を明記。</b>8つの現場カテゴリに拡張した</td></tr>
+<tr><td class="num">13</td><td>展示会に行くのは大いにあり</td><td>STEP4の一手段</td><td>維持。選んだ案の確認手段として残した</td></tr>
+<tr><td class="num">14</td><td>母集団ソースはこれでよいか、Claudeだけの意見では不安</td><td>—</td><td><b>Geminiクロスレビューの依頼文を別ファイルで作成。</b>「網羅性の検証」を最重要の観点に置いた</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s1">
+<h2>1. 「現場」の定義（拡張）</h2>
+
+<p>v1は工事系に寄った例示になっていました。<b>ご指摘のとおり、現場は工事現場だけではありません。</b>本手順では「現場」を次のように定義します。</p>
+
+<div class="box ok">
+<span class="lbl">本手順における「現場」の定義</span>
+<b>売上を立てるために、誰かが特定の場所に行き、物理的にモノや設備や人を動かす必要がある事業。</b><br>
+坂野様ご自身が動く必要はありません。人を雇う、外注する、いずれでも構いません。
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>現場カテゴリ</th><th>例</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>物流・配送</b></td><td>ラストワンマイル、定期便、チャーター、特殊品配送、引越</td></tr>
+<tr><td class="num">2</td><td><b>倉庫・保管・フルフィルメント</b></td><td>受注〜ピッキング〜梱包〜発送の代行、在庫保管、返品処理、検品、ラベル貼り</td></tr>
+<tr><td class="num">3</td><td><b>設置・施工・工事</b></td><td>機器設置、内装、電気、外構、看板、リフォーム</td></tr>
+<tr><td class="num">4</td><td><b>点検・保守・清掃</b></td><td>定期点検、消耗品交換、原状回復、特殊清掃、貯水槽・空調・消防</td></tr>
+<tr><td class="num">5</td><td><b>回収・処分・買取</b></td><td>不用品回収、廃棄物、リサイクル、機密文書処理、遺品整理</td></tr>
+<tr><td class="num">6</td><td><b>製造・加工・組立</b></td><td>小ロット加工、食品加工、詰替、組立代行、刺繍・印刷</td></tr>
+<tr><td class="num">7</td><td><b>設備・機材の設置貸出</b></td><td>現場に置いて月額を取る（什器・機材・センサー・自販機型）</td></tr>
+<tr><td class="num">8</td><td><b>人が現地で行う代行</b></td><td>立会い、撮影、計測、調査、鍵の受渡し、代理受取</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">この定義が坂野様に有利に働く点</span>
+<b>カテゴリ1・2は、坂野様の既存資産がそのまま乗ります。</b><br>
+・Snoker（ルート最適化）→ カテゴリ1<br>
+・Rabelu（住所訂正・伝票発行）→ カテゴリ1・2<br>
+・Rakuvi（帳票PDF一括生成・郵送代行）→ 全カテゴリの請求業務<br>
+・寝かせ転売で培った<b>在庫保管・状態管理・相場の目利き</b> → カテゴリ2・5<br>
+カタログでは、各案に<b>「既存資産が効くか」の欄</b>を必ず入れます。
+</div>
+</section>
+
+<section id="s2">
+<h2>2. この探索の出力物（何を受け取るのか）</h2>
+
+<p class="lead">
+出力するのは<b>「事業案のカタログ」</b>です。<b>Claudeは順位を付けません。絞り込みもしません。</b><br>
+坂野様が眺めて「これ面白そうだな」を拾える形で、共通のフォーマットに揃えて並べます。
+</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>形式</td><td>1ファイル完結のHTML。案を並べた一覧表＋1案1カードの詳細</td></tr>
+<tr><td>件数の目安</td><td><b>40〜80件</b>（除外条件で落とした残り全部。数は絞りません）</td></tr>
+<tr><td>並び順</td><td>優劣ではなく<b>現場カテゴリ順</b>。一覧表は列でソートできるようにします</td></tr>
+<tr><td>Claudeが付ける印</td><td>先行事例の有無／既存資産が効くか／10年後の増減／許認可の要否。<b>いずれも判定であって順位ではありません</b></td></tr>
+<tr><td>落とした案</td><td><b>落とした案も一覧に残し、落とした理由を書きます</b>（後から「これは？」と見返せるように）</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s3">
+<h2>3. 全体の流れ（案出し型）</h2>
+
+<ol class="flow">
+<li>
+  <b>除外条件を決める</b>
+  <span>「絶対無理」の定義だけを先に確定させる。合格ラインは作らない。</span>
+  <div style="margin-top:8px"><span class="tag me">Claude作成</span><span class="tag you">坂野様が承認</span></div>
+</li>
+<li>
+  <b>案を広く集める（11ソース）</b>
+  <span>国内の中小がやっていること／海外にあって日本にないもの／業種の全リスト／法改正 ほか。数を絞らずに集める。</span>
+  <div style="margin-top:8px"><span class="tag me">Claude</span></div>
+</li>
+<li>
+  <b>除外条件に当たるものだけ落とす</b>
+  <span>落とした案も理由付きで一覧に残す。ここ以外の選別はしない。</span>
+  <div style="margin-top:8px"><span class="tag me">Claude</span></div>
+</li>
+<li>
+  <b>カタログに揃えて並べる</b>
+  <span>13項目の共通フォーマットで、40〜80件を一覧＋カードに整形。</span>
+  <div style="margin-top:8px"><span class="tag me">Claude</span></div>
+</li>
+<li>
+  <b>坂野様が選ぶ</b>
+  <span>「これ面白そうだな」を拾う。何件でも構いません。</span>
+  <div style="margin-top:8px"><span class="tag you">坂野様</span></div>
+</li>
+<li>
+  <b>選ばれた案だけ深掘りする</b>
+  <span>ゲート0（事業性の6問）＋足で確かめる（相見積もり・職人打診・展示会）。ここで初めて深く掘る。</span>
+  <div style="margin-top:8px"><span class="tag me">Claude</span><span class="tag you">坂野様</span></div>
+</li>
+</ol>
+
+<div class="box chg">
+<span class="lbl">v1との構造の違い</span>
+v1：<span class="del">広く集める → 30件 → 10件 → 3件 → 1件</span>（Claudeが絞る）<br>
+v2：<b>広く集める → 絶対無理だけ落とす → 全部並べる → 坂野様が拾う → 拾ったものだけ深掘り</b><br>
+<b>調査のコストが、v1では「絞り込み」に、v2では「案出しの幅」に使われます。</b>同じ手間で見える案の数が数倍になります。
+</div>
+</section>
+
+<section id="s4">
+<h2>4. 除外条件（Claudeが落とすのはここだけ）</h2>
+
+<p><b>この7つに当たるものだけ落とします。それ以外は何があっても残します。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>除外条件</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td><b>坂野様ご自身が現場に立ち続けないと成立しない形しか組めない</b></td><td>ご方針（v1から維持。ご了承済み）</td></tr>
+<tr><td class="num">E2</td><td><b>参入に必要な許認可の取得に3か月超かかる</b>（実務経験年数の要件を含む）</td><td>ご指示。許認可で守る方針は取らないため、取得期間は純粋なコスト</td></tr>
+<tr><td class="num">E3</td><td><b>10年後に需要が減ることが「確定情報」で言える</b>（公的統計の実績値・成立済みの法改正）</td><td>ご指示。<b>推測レベルの「たぶん減る」では落としません</b></td></tr>
+<tr><td class="num">E4</td><td>違法・脱法、または規制上グレー</td><td>行政指導・許可取消で事業が消えるため</td></tr>
+<tr><td class="num">E5</td><td>人身事故のリスクが保険で吸収しきれない</td><td>1回で会社が飛ぶため</td></tr>
+<tr><td class="num">E6</td><td>入金サイトが90日超</td><td>資金1,000万円では回らない（黒字倒産の形）</td></tr>
+<tr><td class="num">E7</td><td>参入に必要な初期投資が1,000万円を超える</td><td>ご指定の資金枠。<b>1,000万円以内なら落としません</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">v1で落としていたが、v2では落とさないもの</span>
+<span class="del">誰でも参入できる現場</span> → <b>残す。</b>参入できても、後からハードルは作れる（第6章）<br>
+<span class="del">粗利率が低い</span> → <b>残す。</b>回転数で取れるなら粗利率は問題にならない（第5-2章）<br>
+<span class="del">大手に真似されうる</span> → <b>残す。</b>真似されたあとに乗り換えさせない作り込みで防ぐ<br>
+<span class="del">たぶん減りそうな市場</span> → <b>残す。</b>ただし <code>△減少懸念</code> の印と根拠の確度を明記
+</div>
+
+<div class="box warn">
+<span class="lbl">E7について、1点ご確認したいことがあります</span>
+「初期投資1,000万円超は除外」としましたが、<b>この枠の外し方によって候補の性格が大きく変わります。</b><br>
+たとえば「現場に機材を置いて月額を取る型」（第1章カテゴリ7）は、<b>初期投資が重いかわりに、人の稼働に売上が連動しません。</b>坂野様が「稼働の非線形性は重視しない」とおっしゃった以上この型の優先度は下がりますが、<b>資金1,000万円の最も効率的な使い道になりうる型でもあります。</b><br>
+第13章③でご判断をお願いします。
+</div>
+</section>
+
+<section id="s5">
+<h2>5. カタログの表示項目（13項目）</h2>
+
+<p><b>これは「落とすための基準」ではありません。</b>坂野様が眺めて判断するための、共通の記載欄です。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>書く内容</th><th>備考</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>現場の中身</td><td>誰が、どこで、何をするか</td><td></td></tr>
+<tr><td class="num">2</td><td>客は誰か</td><td>個人／事業者／どの業種</td><td></td></tr>
+<tr><td class="num">3</td><td>組み方</td><td>元請け（外注に流す）／自社施工／機材貸出／代行</td><td></td></tr>
+<tr><td class="num">4</td><td>単価と原価の目安</td><td>1件いくらで、原価がいくらか</td><td>粗利率は<b>表示のみ。基準にしない</b></td></tr>
+<tr><td class="num">5</td><td><b>1人1日あたりの粗利額</b></td><td>1人が1日でこなせる件数 × 1件あたり粗利</td><td><b>★収益性の主指標（第5-2章）</b></td></tr>
+<tr><td class="num">6</td><td>月100万円に必要な人数</td><td>100万円 ÷（1人日粗利 × 稼働日数）</td><td>到達性はこれで見る</td></tr>
+<tr><td class="num">7</td><td>リピート性</td><td>単発／定期（点検・保守・回収・保管）</td><td>大事とのご指示。<b>各案に必ず記載</b></td></tr>
+<tr><td class="num">8</td><td>やる人の確保</td><td>求人相場、外注先が実在するか</td><td>現場型が死ぬ最大の原因</td></tr>
+<tr><td class="num">9</td><td>許認可と取得期間</td><td>必要なもの、かかる期間</td><td>3か月超は除外（E2）</td></tr>
+<tr><td class="num">10</td><td>10年後の増減</td><td>増／減／横ばい＋根拠の確度（確定／推測）</td><td>推測で減る場合は<code>△</code>印を付けて残す</td></tr>
+<tr><td class="num">11</td><td><b>乗り換えさせない作り込みの案</b></td><td>使い込むほど他社へ移りにくくなる仕掛けを具体的に</td><td><b>★第6章</b></td></tr>
+<tr><td class="num">12</td><td><b>先行事例</b></td><td>国内で誰がやっているか／いなければ海外に誰がいるか／どちらもいなければ「なぜ空いているか」の推定</td><td><b>★第7章</b></td></tr>
+<tr><td class="num">13</td><td>既存資産が効くか</td><td>Snoker／Rabelu／Rakuvi／寝かせ在庫の保管ノウハウ</td><td>坂野様固有の切り口</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s5b">
+<h3>5-2. 粗利率をやめて、何で収益性を見るか</h3>
+
+<div class="box chg">
+<span class="lbl">ご指摘の要点を、そのまま数式にしました</span>
+坂野様のお言葉：<b>「1時間にこなせる件数が多いなら粗利率10%でもいい」</b><br>
+これは正しい考え方です。<b>粗利“率”は、回転数を無視した指標だからです。</b>そこで v2 では、主指標を次に置き換えます。<br><br>
+<b style="font-size:17px">1人1日あたりの粗利額（円／人日）＝ 1人が1日にこなせる件数 × 1件あたりの粗利額</b><br><br>
+そして到達性は <b>月100万円 ÷（1人日粗利 × 月の稼働日数）＝ 必要な人数</b> で見ます。
+</div>
+
+<p>具体例で見ると、粗利率が指標にならないことがはっきりします（<b>下記は説明用の仮の数字で、実在の相場ではありません</b>）。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>例</th><th class="num">単価</th><th class="num">粗利額</th><th class="num">粗利率</th><th class="num">1人1日の件数</th><th class="num">1人日粗利</th><th class="num">月100万に必要な人数</th></tr></thead>
+<tbody>
+<tr><td>A：粗利率が高いが回らない</td><td class="num">100,000円</td><td class="num">40,000円</td><td class="num">40%</td><td class="num">0.5件</td><td class="num">20,000円</td><td class="num">2.5人</td></tr>
+<tr><td>B：粗利率は低いが回る</td><td class="num">3,000円</td><td class="num">300円</td><td class="num" style="color:var(--ng)"><b>10%</b></td><td class="num">100件</td><td class="num" style="color:var(--ok)"><b>30,000円</b></td><td class="num" style="color:var(--ok)"><b>1.7人</b></td></tr>
+</tbody>
+</table>
+</div>
+<p style="color:var(--muted); font-size:14px">※ 稼働日数20日として計算。<b>粗利率10%のBのほうが、40%のAより少ない人数で月100万円に届きます。</b>v1の「粗利率30%以上」という基準は、Bのような案を全部落としてしまう欠陥のある基準でした。</p>
+
+<div class="box warn">
+<span class="lbl">1点だけ、事実関係の確認をお願いしたい箇所があります【未確認】</span>
+「トヨタでも1台あたり15%程度」というお話について、<b>私はこの数字を一次情報で確認できていません。</b>トヨタの公式IRページは売上総利益を単独では公表しておらず、有価証券報告書本体に当たる必要があります。<b>確認できていないので、この数字は事実として扱いません。</b><br><br>
+そのうえで、<b>指標の設計として1点だけ申し上げます。</b>製造業の売上総利益率（原価に材料費・工場の人件費・減価償却が入る）と、現場サービス業の粗利率（原価は主に外注費）は、<b>そもそも計算に入る中身が違うため、直接は比較できません。</b>したがって「トヨタが◯%だから30%は高い」という比較は、数字の正誤にかかわらず<b>成り立たない可能性があります。</b><br>
+<b>ただし結論は変わりません。</b>粗利率を基準にしないというご判断は、上の A／B の例のとおり<b>それ自体が正しい</b>ので、v2ではそのまま採用しています。
+</div>
+</section>
+
+<section id="s6">
+<h2>6. 乗り換えさせない作り込み（真似される前提の設計）</h2>
+
+<div class="box ok">
+<span class="lbl">ご指示の要点</span>
+「真似されてもいい。データの蓄積や、うちから他社へ移らない施策を打っていればある程度防げる」<br>
+<b>この考え方に沿って、v1の「大手が来ない構造的理由」を、この章に差し替えました。</b>
+</div>
+
+<p>「乗り換えたくない」を作る方法は、大きく6種類あります。<b>各案のカタログに、この6種のうちどれが使えるかを書きます。</b></p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>種類</th><th>中身</th><th>強さ</th><th>現場型との相性</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>データが溜まる</b></td><td>過去の作業履歴・写真・図面・在庫・顧客名簿がうちにある。移ると過去が消える</td><td style="color:var(--ok)"><b>強い</b></td><td>◎ 現場は記録が資産になる</td></tr>
+<tr><td class="num">2</td><td><b>相手の業務がうちの形に合う</b></td><td>客の社内フローがうちの画面・帳票に合わせて組まれる。移ると社内を作り直すことになる</td><td style="color:var(--ok)"><b>強い</b></td><td>◎</td></tr>
+<tr><td class="num">3</td><td><b>物理的に置いてある</b></td><td>機材・棚・什器・端末がうちの持ち物として現場にある。撤去と再設置の手間が発生する</td><td style="color:var(--ok)"><b>強い</b></td><td>◎ 現場型でしか作れない</td></tr>
+<tr><td class="num">4</td><td><b>客の客との接点を握る</b></td><td>エンドユーザーへの連絡・配送追跡・問い合わせをうちが持っている</td><td style="color:var(--ok)"><b>強い</b></td><td>○</td></tr>
+<tr><td class="num">5</td><td><b>人が慣れている</b></td><td>現場スタッフがうちのやり方で訓練済み。教え直しのコストが発生する</td><td>中</td><td>○</td></tr>
+<tr><td class="num">6</td><td>契約で縛る</td><td>年間契約・最低利用期間・違約金</td><td style="color:var(--warn)">弱い</td><td>△ 満了時に一斉に離れる。単独では効かない</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">1つだけ、率直に申し上げておきます</span>
+乗り換えコストは<b>「既に使っている客」には効きます。</b>しかし<b>「これから初めて選ぶ客」には効きません。</b><br>
+つまりこの作戦は、<b>「大手が入ってくる前に、どれだけ客を入れておけるか」という時間との勝負</b>になります。<b>先行の時間が短い案ほど、この作戦は効きにくい</b>ということです。<br>
+カタログでは各案に <b>「大手が入ってくるまでに何年ありそうか」の推定</b> を添えます（推定であることを明記します）。<b>これは落とすための項目ではなく、坂野様が選ぶときの材料です。</b>
+</div>
+</section>
+
+<section id="s7">
+<h2>7. ブルーオーシャンの罠（新設）</h2>
+
+<div class="box ok">
+<span class="lbl">ご指示の要点</span>
+「どこの会社もやっていないことをやるとなると、ブルーオーシャンに見えて、実は需要がなかったり、やってはいけないことであったりする可能性のほうが高い」<br>
+<b>これは私も同意します。v2ではこの前提を手順に組み込みました。</b>
+</div>
+
+<p><b>誰もやっていない</b>とき、理由は5つのどれかです。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>誰もやっていない理由</th><th>頻度の見立て</th><th>どう見分けるか</th></tr></thead>
+<tbody>
+<tr><td>① 需要がない（客が金を払わない）</td><td style="color:var(--ng)"><b>多い</b></td><td>近い代替サービスが有料で成立しているか</td></tr>
+<tr><td>② 法律・規制で禁止、またはグレー</td><td style="color:var(--ng)"><b>多い</b></td><td>所管省庁のFAQ・過去の行政指導事例</td></tr>
+<tr><td>③ やってみたが儲からない（撤退済み）</td><td style="color:var(--ng)"><b>多い</b></td><td>倒産・廃業・サービス終了の記録を探す</td></tr>
+<tr><td>④ やる人が確保できない</td><td>中</td><td>求人が「急募」だらけになっていないか</td></tr>
+<tr><td>⑤ 本当に空いている（＝当たり）</td><td style="color:var(--ok)"><b>少ない</b></td><td>①〜④を全部潰せたときだけ</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">v2での扱い</span>
+<b>「先行事例なし」の案を落とすことはしません</b>（ご指示のとおり、却下はしない）。<br>
+ただし<b>すべての案に「先行事例あり／なし」の印を必ず付け、「なし」の案には ①〜④ のどれに当たりそうかの推定を必ず添えます。</b><br>
+坂野様が選ぶときに、<b>「これは誰もやっていないから面白い」ではなく「これは誰もやっていないが、その理由は③の可能性が高い」</b>という形で見えるようにするのが目的です。
+</div>
+
+<div class="box ok">
+<span class="lbl">この前提から自然に導かれること</span>
+「先行事例がある案のほうが安全」ということは、<b>探し方としては「既にやっている人を探す」のが最も効率的</b>だということです。<br>
+坂野様がご提案くださった<b>「国内の中小をトレースする」「海外にあって日本にないものを持ってくる」</b>という2つの探し方は、まさにこの考え方と一致します。第8章のソース10・11として正式に採用しました。
+</div>
+</section>
+
+<section id="s8">
+<h2>8. 案の湧き出し口（11ソース）</h2>
+
+<p><b>ここが、坂野様が「Claudeだけの意見では不安」とおっしゃった箇所です。</b>Geminiクロスレビューでは、この章の網羅性を最重要の観点に置きます。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>ソース</th><th>取れるもの</th><th>先行事例</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>日本標準産業分類（総務省）の小分類を全部舐める</b></td><td>国が定めた業種の全リスト。漏れが構造的に起きない</td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">2</td><td>許認可・登録・免許の一覧から逆引き</td><td>参入コストが事前に読める。E2の判定材料</td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">3</td><td>M&Aマッチングサイトの売り案件</td><td>実際の売上・利益・従業員数・譲渡理由。<b>「儲かっている型」の実データ</b></td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">4</td><td>求人媒体の職種別データ</td><td>やる人の相場と供給の厚み（表示項目8）</td><td>—</td><td>Claude</td></tr>
+<tr><td class="num">5</td><td>法改正・制度カレンダー</td><td>法律で強制的に発生する需要。<b>10年後の増減の確定情報になりうる</b></td><td>—</td><td>Claude</td></tr>
+<tr><td class="num">6</td><td>自治体の入札公告・落札結果</td><td>地場の実需と実際の落札単価</td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">7</td><td>現場系フランチャイズの募集資料</td><td>1店舗あたりの収支モデル（件数・人員・初期費用）</td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">8</td><td>業界団体・組合のサイトと会報</td><td>業界内部の困りごと、会員数の推移（＝業界の増減）</td><td>あり</td><td>Claude</td></tr>
+<tr><td class="num">9</td><td>既存事業の周辺</td><td>Snoker／Rabelu／Rakuvi／寝かせ在庫の保管が効く現場</td><td>—</td><td>Claude</td></tr>
+<tr style="background:var(--chg-bg)"><td class="num">10</td><td><b>国内の中小が既にやっているサービスをトレース</b></td><td><b>需要が実証済みの案。</b>第7章の①③④が最初から潰れている</td><td><b>あり</b></td><td><b>坂野様のご提案</b></td></tr>
+<tr style="background:var(--chg-bg)"><td class="num">11</td><td><b>海外にあって日本にないサービス</b></td><td>海外で需要が実証済み。日本では先行者になれる</td><td><b>海外にあり</b></td><td><b>坂野様のご提案</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>ソース10・11の具体的な当たり方</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th>ソース</th><th>具体的にどこを見るか</th><th>注意点</th></tr></thead>
+<tbody>
+<tr>
+<td><b>10. 国内の中小をトレース</b></td>
+<td>①各都道府県の「元気な中小企業」表彰・認定の一覧　②業界紙の企業紹介　③商工会議所の会員名簿　④求人票（伸びている会社は採っている）　⑤M&A案件の業種内訳</td>
+<td><b>そのまま真似すると、その中小と正面から競合します。</b>「同じことを別の商圏で」か「同じことを別の客層に」のどちらかにずらす必要があります</td>
+</tr>
+<tr>
+<td><b>11. 海外にあって日本にないもの</b></td>
+<td>①海外のスタートアップ資金調達ニュース（現場系に絞る）　②海外のフランチャイズ募集一覧　③海外の業界団体　④海外の求人媒体に出てくる新しい職種</td>
+<td><b>日本にない理由が「規制」「商習慣」「人件費差」であることが多いです。</b>持ち込む前に「なぜ日本にないか」を必ず1行書きます（第7章と同じ扱い）</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">私が今の時点で自覚している、このソース一覧の弱点</span>
+Geminiに聞く前に、私自身が気づいている穴を先に出しておきます。<br>
+<b>①「現場で働いている人しか知らないこと」が1つも入っていません。</b>11ソースはすべて公開情報です。実際の困りごとは、その業界の人に聞かないと出てきません（→ STEP6の展示会・職人打診で補う設計にしていますが、それは案を選んだ後です）。<br>
+<b>②「客側の困りごと」から入るソースがありません。</b>すべて「業種」「事業者」から入っています。客（発注する側）が何に困っているかから探すルートが欠けています。<br>
+<b>③日本標準産業分類は、新しい業態を拾えません。</b>分類は数年ごとの改定なので、ここ数年で生まれた業態は「その他」に入っているか、載っていません。<br>
+<b>この3つは、Geminiレビューで重点的に見てもらう点として依頼文に明記しました。</b>
+</div>
+</section>
+
+<section id="s9">
+<h2>9. カタログの見本（この形で出します）</h2>
+
+<div class="box ng">
+<span class="lbl">下記は「書式の見本」です。中身の数字・事実は一切調べていません</span>
+実在の事業案として読まないでください。<b>各欄に何が入るかを示すためだけのダミー</b>です。
+</div>
+
+<div class="card">
+<div class="hd">［見本］No.27 ／ カテゴリ2：倉庫・フルフィルメント ／ 〇〇の△△代行</div>
+<div class="bd">
+<div class="tblwrap">
+<table>
+<tbody>
+<tr><th style="width:32%">1. 現場の中身</th><td>（誰が・どこで・何をするか）</td></tr>
+<tr><th>2. 客は誰か</th><td>（個人／事業者／業種）</td></tr>
+<tr><th>3. 組み方</th><td>元請け／自社施工／機材貸出／代行</td></tr>
+<tr><th>4. 単価・原価</th><td>単価 ◯円／原価 ◯円（粗利率 ◯% ※参考値）</td></tr>
+<tr><th>5. 1人1日の粗利</th><td><b>◯円／人日</b>（1日 ◯件 × 粗利 ◯円）</td></tr>
+<tr><th>6. 月100万に必要な人数</th><td><b>◯人</b>（稼働20日）</td></tr>
+<tr><th>7. リピート性</th><td>定期／単発（定期の割合 ◯%）</td></tr>
+<tr><th>8. やる人の確保</th><td>求人相場 日当◯円／外注先候補 ◯件（媒体名）</td></tr>
+<tr><th>9. 許認可</th><td>必要／不要（必要なら名称と取得期間）</td></tr>
+<tr><th>10. 10年後</th><td>増／横ばい／<code>△減少懸念</code>（根拠：確定／推測）</td></tr>
+<tr><th>11. 乗り換えさせる作り込み</th><td>第6章の1〜6のどれが使えるか＋具体案</td></tr>
+<tr><th>12. 先行事例</th><td><b>国内にあり</b>（社名・規模）／<b>海外のみ</b>（国・社名）／<b>なし</b>（→ 空いている理由の推定）</td></tr>
+<tr><th>13. 既存資産</th><td>Snoker ◯／Rabelu ◯／Rakuvi ◯／寝かせ在庫の保管 ◯</td></tr>
+<tr><th>ひとこと</th><td>この案の面白いところと、一番危ないところを各1行</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="box">
+<span class="lbl">一覧表のほうには何が並ぶか</span>
+80件をカードで読むのは大変なので、<b>まず一覧表で流し見できるようにします。</b>一覧の列は<b>「No／カテゴリ／案の名前／1人日粗利／必要人数／リピート／許認可／10年後／先行事例／既存資産」</b>の10列。<b>ここで気になったものだけカードを見る、という読み方を想定しています。</b>
+</div>
+</section>
+
+<section id="s10">
+<h2>10. 選んだあとの流れ（STEP6の中身）</h2>
+
+<p>坂野様が「これ面白そうだな」と拾った案について、初めて深く掘ります。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>順</th><th>やること</th><th>担当</th><th>目的</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>ゲート0（事業性の6問）</b>：いま客は何で代替しているか／競合が既に持っているもの／母数の引き算／10年後／死ぬ条件3つ／並べられたとき選ばれる理由</td><td>Claude</td><td>机上で分かることを全部潰す</td></tr>
+<tr><td>2</td><td><b>客として相見積もりを取る</b></td><td>坂野様</td><td>実際の単価・営業のやり方・レスポンス</td></tr>
+<tr><td>3</td><td><b>一人親方・小規模業者に外注の相談</b></td><td>坂野様</td><td><b>やる人が実在するかの確認</b></td></tr>
+<tr><td>4</td><td><b>業界の展示会に行く</b>（大阪ならインテックス大阪が近い）</td><td>坂野様</td><td>1日で数十社。業界の困りごとが丸ごと取れる</td></tr>
+<tr><td>5</td><td><b>1件だけ人力でやってみる</b>（システムを作らずExcelと電話で完遂）</td><td>坂野様</td><td><b>客が本当に金を払うか。ここでしか分からない</b></td></tr>
+<tr><td>6</td><td>要件定義 → 開発</td><td>Claude</td><td>5で詰まった場所が、そのまま作るものの仕様になる</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">2〜4でClaudeが用意するもの</span>
+坂野様が動く工程ですが、<b>丸投げにはしません。</b>相見積もりの依頼文、電話の質問表、聞いた内容を埋めるだけの記録シートを、案ごとに作ります。<b>坂野様は「送る・電話する・埋める」だけ</b>で済むようにします。
+</div>
+</section>
+
+<section id="s11">
+<h2>11. 工数と期間</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>STEP</th><th>担当</th><th>坂野様の稼働</th><th>期間の目安</th><th>費用</th></tr></thead>
+<tbody>
+<tr><td>1. 除外条件を決める</td><td>Claude＋承認</td><td>読んで承認：20分</td><td>今回中</td><td>—</td></tr>
+<tr><td>2〜4. 案出し＋カタログ化</td><td>Claude</td><td>ほぼゼロ</td><td>4〜7セッション</td><td>トークンのみ</td></tr>
+<tr><td>5. 選ぶ</td><td>坂野様</td><td>カタログを読む：1〜2時間</td><td>—</td><td>—</td></tr>
+<tr><td>6. 選んだ案の深掘り</td><td>Claude＋坂野様</td><td>1案あたり接触6〜10件</td><td>1案あたり2〜4週間</td><td>交通費程度</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">セッションの分け方（トークン節約）</span>
+案出しは情報量が多いため、<b>1セッションでは文脈が溢れます。</b>現場カテゴリ（第1章の8分類）ごとにセッションを分け、<b>結果は毎回 <code>C:\dev\_新規事業探索\</code> のファイルに書き出して引き継ぎます</b>（会話ではなくファイルを引き継ぐ）。カタログは最後に1本にまとめます。
+</div>
+</section>
+
+<section id="s12">
+<h2>12. 未確認事項・保留</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>状態</th><th>扱い</th></tr></thead>
+<tbody>
+<tr><td>トヨタの1台あたり利益率（約15%）</td><td><b>【未確認】</b></td><td>一次情報（有価証券報告書本体）に当たれていない。<b>事実として扱わない。</b>ただし粗利率を基準にしないという結論自体は、別の理由（第5-2章のA/B比較）で成立している</td></tr>
+<tr><td>本書に記載した業種・市場・法令の情報</td><td><b>未着手</b></td><td>本書は手順の提案であり、市場データを1件も調べていない。STEP2以降で一次情報に当たる</td></tr>
+<tr><td>母集団ソース11個の網羅性</td><td><b>Claudeの案のみ</b></td><td>坂野様のご指摘のとおり、私1人の意見。<b>Geminiクロスレビューにかける（別ファイル）</b></td></tr>
+<tr><td>古物商許可を前提とする案の扱い</td><td><b>未決</b></td><td>R.Y.S.は未保有。取得自体は可能だが、除外するか含めるか要ご判断（第13章④）</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s13">
+<h2>13. 決めていただきたいこと</h2>
+
+<div class="q">
+<b>① この v2 の手順で進めてよろしいですか</b><br>
+　承認／修正指示をお願いします。
+</div>
+
+<div class="q">
+<b>② 除外条件 E1〜E7（第4章）に、過不足はありますか</b><br>
+　特に <b>E6（入金サイト90日超）</b> は私が置いた条件です。長い入金サイトでも資金繰りが回るなら外せます。
+</div>
+
+<div class="q">
+<b>③ 初期投資の枠（E7）をどう置きますか</b><br>
+　A. 1,000万円以内に限る（現案）<br>
+　B. 1,000万円超の案も<b>印を付けて残す</b>（機材を置いて月額を取る型が拾えるようになります）<br>
+　C. 2,000万円まで許容する
+</div>
+
+<div class="q">
+<b>④ 古物商許可が前提になる案（中古品の売買・買取を伴うもの）はどうしますか</b><br>
+　A. 除外する　B. 含める（取得する前提）　C. 印を付けて残し、後で判断する<br>
+　<span style="color:var(--muted)">※取得期間はE2（3か月超なら除外）の判定対象になります。実際の標準処理期間は、案を出す段階で公的情報を確認します。</span>
+</div>
+
+<div class="q">
+<b>⑤ 案の件数はどのくらい欲しいですか</b><br>
+　A. 40〜50件（読みやすい）　B. 60〜80件（現案）　C. 100件以上（多いほどよい。セッション数と時間は増えます）
+</div>
+
+<div class="q">
+<b>⑥ Geminiクロスレビューを先に通しますか</b><br>
+　A. <b>先に通す</b>（依頼文は作成済み。母集団ソースの網羅性を見てもらってから案出しに入る）<br>
+　B. 案出しを先に始め、レビューは並行で行う<br>
+　<span style="color:var(--muted)">※坂野様は「母集団ソースがこれでよいか不安」と明示されたので、A を想定して依頼文を用意しました。</span>
+</div>
+</section>
+
+<footer class="doc">
+現場型サービスの探し方 v2（案出し型・未承認の案）／ 2026-08-26 作成<br>
+ファイル名：<code>_新規事業探索_現場型サービスの探し方_v2_2026-08-26.html</code>　／　v1：<code>_新規事業探索_現場型サービスの探し方_2026-08-26.html</code>（残置）<br>
+本書に確定した事実は含まれていません。Claudeが単独で確定させた事項もありません。
+</footer>
+
+</main>
+</div>
+</body>
+</html>
