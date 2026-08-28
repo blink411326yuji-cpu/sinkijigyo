@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaaS探索の条件 確定版（2026-08-28）</title>
+<style>
+:root{--bg:#fff;--fg:#1b1b1f;--muted:#5c5f66;--line:#dfe1e6;--panel:#f6f7f9;--accent:#1d4ed8;--accent-soft:#e8eefc;--ok:#0f6a3f;--ok-bg:#e8f5ee;--ng:#9b1c1c;--ng-bg:#fdeaea;--warn:#8a4b00;--warn-bg:#fff4e5;--chg:#5b21b6;--chg-bg:#f1ebfd}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e6e8ec;--muted:#a0a5ae;--line:#2c3037;--panel:#1c1f25;--accent:#7ba2ff;--accent-soft:#1e2a44;--ok:#7fd3a5;--ok-bg:#12291d;--ng:#ff9d9d;--ng-bg:#331717;--warn:#ffc477;--warn-bg:#33280f;--chg:#c9b3ff;--chg-bg:#241a3d}}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;font-size:15.5px;line-height:1.85;font-variant-numeric:tabular-nums}
+.wrap{display:flex;align-items:flex-start;max-width:1300px;margin:0 auto;gap:32px;padding:0 20px}
+nav{position:sticky;top:0;flex:0 0 250px;max-height:100vh;overflow-y:auto;padding:28px 0 40px;font-size:13.5px;line-height:1.6}
+nav .navttl{font-weight:700;font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+nav .navttl.sec{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+nav a{display:block;color:var(--fg);text-decoration:none;padding:5px 10px;border-left:2px solid var(--line)}
+nav a:hover{background:var(--accent-soft);border-left-color:var(--accent)}
+main{flex:1 1 auto;min-width:0;padding:28px 0 100px;max-width:870px}
+header.doc{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+h1{font-size:24px;line-height:1.45;margin:0 0 10px}
+.meta{color:var(--muted);font-size:13px;line-height:1.9}
+h2{font-size:20px;margin:48px 0 14px;padding:8px 0 8px 12px;border-left:5px solid var(--accent);background:var(--panel)}
+h2.part{border-left-color:var(--chg);font-size:22px;margin-top:60px}
+h3{font-size:16.5px;margin:28px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+p{margin:12px 0} ul,ol{margin:12px 0;padding-left:24px} li{margin:6px 0}
+code{background:var(--panel);padding:2px 6px;border-radius:4px;font-size:14px}
+.tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:600px}
+th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;white-space:nowrap}
+.box{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:var(--panel)}
+.box.warn{background:var(--warn-bg);border-color:var(--warn)}
+.box.ok{background:var(--ok-bg);border-color:var(--ok)}
+.box.ng{background:var(--ng-bg);border-color:var(--ng)}
+.box.chg{background:var(--chg-bg);border-color:var(--chg)}
+.box .lbl{font-weight:700;font-size:13px;display:block;margin-bottom:6px}
+.box.warn .lbl{color:var(--warn)} .box.ok .lbl{color:var(--ok)} .box.ng .lbl{color:var(--ng)} .box.chg .lbl{color:var(--chg)}
+.lead{font-size:17px;line-height:1.9}
+.v{font-weight:700;white-space:nowrap}
+.v.o{color:var(--ok)} .v.t{color:var(--warn)} .v.x{color:var(--ng)} .v.u{color:var(--muted)}
+.formula{background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:16px;line-height:2}
+.layer{border:2px solid var(--line);border-radius:10px;margin:16px 0;overflow:hidden}
+.layer .hd{padding:10px 16px;font-weight:700;border-bottom:1px solid var(--line)}
+.layer.l1 .hd{background:var(--ng-bg);color:var(--ng)}
+.layer.l2 .hd{background:var(--warn-bg);color:var(--warn)}
+.layer.l3 .hd{background:var(--accent-soft);color:var(--accent)}
+.layer.l4 .hd{background:var(--panel);color:var(--muted)}
+.layer .bd{padding:6px 16px 12px}
+.q{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+.q b{color:var(--accent)}
+.new{background:var(--chg-bg)}
+footer.doc{margin-top:60px;padding-top:18px;border-top:2px solid var(--line);color:var(--muted);font-size:13px}
+@media (max-width:900px){.wrap{display:block;padding:0 16px}nav{position:static;max-height:none;flex:none;padding:20px 0 0;border-bottom:1px solid var(--line);margin-bottom:10px}main{max-width:none}}
+@media print{nav{display:none}body{font-size:10.5pt;background:#fff;color:#000}.wrap{display:block;max-width:none}h2{page-break-after:avoid}tr{page-break-inside:avoid}}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle;white-space:nowrap;background:var(--chg-bg);color:var(--chg);border:1px solid var(--chg)}
+</style>
+</head>
+<body><div class="wrap">
+
+<nav>
+<p class="navttl">第1部：確定した条件</p>
+<a href="#p0">結論（3行）</a>
+<a href="#p1">1. 判定を4層に分ける</a>
+<a href="#p2">2. 除外条件（4つ）</a>
+<a href="#p3">3. 足切り（1つだけ）</a>
+<a href="#p4">4. 3段階評価（4項目）</a>
+<a href="#p5">5. 表示だけの項目</a>
+<a href="#p7">6. 市場規模の測り方（選定後に使う）</a>
+<a href="#p8">7. 探し先（12）</a>
+<a href="#p9">8. 進め方</a>
+<p class="navttl sec">第2部：レビュー対応</p>
+<a href="#r1">対応表（10観点）</a>
+<a href="#r2">同意しなかった点</a>
+<a href="#r3">2回のレビューの本質</a>
+<p class="navttl sec">第3部</p>
+<a href="#s1">未確認事項</a>
+<a href="#s2">確定した内容</a>
+</nav>
+
+<main>
+<header class="doc">
+<h1>SaaS探索の条件 確定版 ― この条件で探します</h1>
+<p class="meta">確定日：2026-08-28（改訂3）／ 状態：<b>確定（未確定なし）</b>／ 調査はこれから着手します<br>
+2026-08-26 の最終提案に、坂野様のご指示（2026-08-28）を反映した版です。<b>変更した箇所には「2026-08-28 変更」の印を付けています。</b><br>
+旧版（案・v2・最終版）は同フォルダに残置しています。</p>
+</header>
+
+<h2 class="part" id="p0">第1部　確定した条件</h2>
+
+<section>
+<h3>結論</h3>
+<p class="lead">
+<b>①判定を「除外・足切り・3段階評価・表示だけ」の4層に分けます。</b>坂野様の「絶対無理なものだけ弾く」という目的を守りながら、Geminiが最重要とした論点を1つだけ足切りに入れられます。<br>
+<b>②足切りは「使い続ける必然性があるか」の1項目だけにします。</b>これがGeminiが2回とも最終的に行き着いた論点であり、月利50万円を10年続けるために唯一必要な条件です。<br>
+<b>③案出しの段階では、収益や規模の計算をしません。</b>「サービスが実在する＝需要があり、現にお金が発生している」と見ます。単価・必要顧客数・推定年商は、<b>案を選んだ後に調べます</b>（2026-08-28 改訂3）。
+</p>
+
+<div class="box chg">
+<span class="lbl">なぜ足切りを1つだけ入れるのか（ここが今回の核心です）</span>
+坂野様は<b>「全項目を同じ3段階評価にし、重みの差をつけない」</b>と決められました。この方針自体は正しいと考えます。<br>
+<b>ただしそれだけだと、「誰でも1週間で作れて、誰でもすぐ乗り換えられるツール」が上位に来ます。</b>作りやすさと需要だけで評価すると、そうなるのは構造的に避けられません。<br><br>
+<b>そこで、評価の重みは一切いじらず、「使い続ける必然性が『小』の案は落とす」という足切りを1つだけ置きます。</b><br>
+これは<b>坂野様の「絶対無理なものを弾く」という目的そのもの</b>です。使い続ける理由がない案は、作っても解約で消えるので、絶対無理な部類に入ります。<b>重み付けを避けながら、同じ効果が出ます。</b>
+</div>
+</section>
+
+<section>
+<div class="box chg">
+<span class="lbl">2026-08-28 の確定で外したもの（2点）</span>
+<b>① 評価項目「既存資産が効くか」を削除しました。</b>（ご指示）<br>
+Snoker／Rabelu／Rakuviの部品が乗るかどうかは、案の良し悪しとは別の話です。これを評価に入れると、既存3本の周辺に案が寄ってしまいます。<b>外したことで、案の幅は広がります。</b><br><br>
+<b>② 「原価率は案ごとに分ける」（旧§6）を廃止しました。</b>（ご指示）<br>
+旧案では、AIを動かすたびに使う案（型B）は原価率30〜40%として必要売上を1.5〜1.8倍に見積もっていました。<b>これをやめます。</b>理由は、今はどの案でもAIを使うのが前提であり、<b>原価を抑える仕組みは案を調べる段階では分からず、選んだ後に考えるもの</b>だからです。<b>原価率で案を切り捨てることはしません。</b><br>
+<span style="color:var(--muted)">※これに伴い、旧§7〜§9の番号を §6〜§8 に繰り上げています（内容の対応：旧§7＝新§6、旧§8＝新§7、旧§9＝新§8）。</span>
+</div>
+</section>
+
+<section id="p1">
+<h2>1. 判定を4層に分ける</h2>
+
+<div class="layer l1">
+<div class="hd">第1層　除外（Claudeが機械的に落とす）── 4つだけ</div>
+<div class="bd">「絶対に無理」なものだけ。<b>これ以外の理由では落としません。</b></div>
+</div>
+
+<div class="layer l2">
+<div class="hd">第2層　足切り（1つだけ）── 使い続ける必然性が「小」なら落とす</div>
+<div class="bd">評価の重みはいじらず、この1項目だけを合否に使います。<b>落とした案は理由付きで一覧に残します。</b></div>
+</div>
+
+<div class="layer l3">
+<div class="hd">第3層　3段階評価（6項目・重みの差なし）── 落とさず、並べる材料</div>
+<div class="bd">大・中・小。<b>すべて同じ重み。</b>「大」の数が多い順に並べますが、順位は初期表示にすぎません。</div>
+</div>
+
+<div class="layer l4">
+<div class="hd">第4層　表示だけ（落とさない・評価もしない）── 坂野様が見るための材料</div>
+<div class="bd">数字にしにくいが判断に効くもの。<b>Claudeは点を付けません。</b></div>
+</div>
+</section>
+
+<section id="p2">
+<h2>2. 除外条件（4つだけ）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>落とす条件</th><th>理由</th></tr></thead>
+<tbody>
+<tr><td class="num">E1</td><td>最有力の競合が<b>上場企業</b>、または<b>10億円以上を調達済み</b></td><td>資本力で勝負にならない</td></tr>
+<tr><td class="num">E2</td><td>大手の標準機能に含まれており、<b>かつ自社では同等の実装ができないと確定する場合</b></td><td>坂野様のご指示どおり。「含まれている」だけでは落とさない</td></tr>
+<tr><td class="num">E3</td><td><b>閉じた基幹システム</b>（レセコン等、公開APIがないもの）との連携が必須で、その手段を持てない</td><td>技術的に成立しない</td></tr>
+<tr><td class="num">E4</td><td><b>違法・脱法、または規制上グレー</b></td><td>行政指導・許可取消で事業が消える</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">v2から削除したもの</span>
+<b>・娯楽用途のみのBtoC</b>（旧E4）→ <b>削除しました。</b>第2層の足切り（使い続ける必然性）に統合します。娯楽用途は自然に「小」になるので、条件を増やさずに同じ効果が出ます。<b>Geminiは「E4は必ず残すべき」と主張しましたが、条件を1つ増やすより足切りに統合するほうが整合すると判断しました。</b><br>
+<b>・適格請求書発行事業者の登録</b>（旧T12）→ <b>除外条件から外しました。</b>Geminiの指摘どおり、案出し段階のスクリーニング条件ではありません。<b>ただし忘れると事故るので、第4層の「着手前チェック」に移しました。削除ではありません。</b>
+</div>
+</section>
+
+<section id="p3">
+<h2>3. 足切り（1つだけ）</h2>
+
+<div class="box ng">
+<span class="lbl">使い続ける必然性が「小」の案は落とす</span>
+判定は3段階です。<b>「小」だけを落とします。</b>
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>判定</th><th>意味</th><th>例</th></tr></thead>
+<tbody>
+<tr><td><b class="v o">大</b></td><td>使い込むほど<b>その顧客固有のデータが溜まり</b>、他へ移すと過去が消える／業務の手順がこのツール前提で組まれる</td><td>顧客名簿・作業履歴・帳票の履歴が蓄積するもの</td></tr>
+<tr><td><b class="v t">中</b></td><td>毎月・毎週<b>必ず発生する業務</b>に使われ、使うのをやめる理由が特にない</td><td>定期的な集計・提出・発行など</td></tr>
+<tr><td><b class="v x">小</b></td><td><b>一度使えば用が済む</b>／気が向いたときだけ使う／他へ乗り換えても何も失わない</td><td>単発の変換ツール、娯楽用途、一度きりの計算</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box warn">
+<span class="lbl">なぜこの1項目なのか</span>
+<b>Geminiは1回目と2回目で、表現は違うが同じ結論に行き着きました。</b><br>
+1回目：「最も致命的なのは<b>集客チャネルの欠落</b>」<br>
+2回目：「最も致命的なのは<b>持続可能な競争優位性（モート）の欠落</b>」<br><br>
+<b>根っこは同じで、「作った後に何が守ってくれるのか」です。</b><br>
+そして<b>月利50万円を10年続けるために必要なのは、市場の独占ではありません。「解約されないこと」だけです。</b>だからモートを大げさに考える必要はなく、<b>「使い続ける理由があるか」を1つ見れば足ります。</b>
+</div>
+</section>
+
+<section id="p4">
+<h2>4. 3段階評価（4項目・重みの差なし）<span class="tag chg">2026-08-28 改訂3</span></h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>「大」の意味</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><b>作れる度合い</b></td><td>Coworkでかなりの部分を作れる。作れない部分も外注で埋められる</td></tr>
+<tr class="new"><td class="num">2</td><td><b>需要の実在</b></td><td><b>そのサービスが現に存在し、使われている。</b>競合の実在・レビュー・導入実績・掲載件数など<b>実測できる痕跡</b>がある。<br><b>サービスがあるということは、需要があり、現にお金が発生しているということ</b>と見ます（金額の推定はしません）</td></tr>
+<tr><td class="num">3</td><td><b>リーチ手段の実在</b></td><td>顧客の集積地が明確で、メール・電話・広告・ストアで届く経路がある</td></tr>
+<tr><td class="num">4</td><td><b>営業のしかたが合うか</b></td><td>メール・電話・ストア掲載、<b>およびGoogleのキーワード広告（検索連動型広告）</b>で獲得できる。<b>客先へ出向く営業を必要としない</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<p><b>「大」の数が多い順に並べます。</b>ただしこれは初期表示にすぎず、どの項目でも並べ替えられるようにします。</p>
+
+<div class="box chg">
+<span class="lbl">2026-08-28 改訂3：「収益の到達しやすさ」を評価から外しました（ご指示）</span>
+<b>ご指摘：</b>月収50万円くらいであれば、売り方・オプションの付け方・広告の打ち方でどうにでもなる。<b>サービスがあるということは需要があるということであり、ある程度お金が発生しているということ。</b>案出しの段階で、公表価格から利益を推定するところまではやらなくてよい。<b>それは案を出したあと、各案を調査していく中で確認する。</b><br><br>
+<b>反映：</b>評価項目から「収益の到達しやすさ」を削除し、<b>4項目</b>にしました。単価・必要顧客数・推定年商の計算は、<b>すべて §8 の段階6（選んだ案を1件ずつ調べる）で行います。</b><br>
+需要の見方も、<b>金額ではなく「そのサービスが現に存在し、使われているか」</b>に統一しました（#2）。
+</div>
+
+<div class="box chg">
+<span class="lbl">これまでの変更（2026-08-28）</span>
+<b>削除：</b>「既存資産が効くか」（Snoker／Rabelu／Rakuviの部品が乗るか）<br>
+<b>追加：</b>「営業のしかたが合うか」に、Googleのキーワード広告（検索連動型広告）<br><br>
+キーワード広告で見るのは、次の<b>実測できる事実だけ</b>です。<br>
+・その困りごとが<b>言葉で検索されているか</b>　・そのキーワードに<b>現に広告を出している会社があるか</b><br>
+<b>クリック単価から顧客獲得単価（CAC）を計算することはしません。</b>実際に広告を出してみるテスト出稿も、机上調査には入れません。
+</div>
+</section>
+
+<section id="p5">
+<h2>5. 表示だけの項目（落とさない・評価もしない）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>なぜ表示するか</th></tr></thead>
+<tbody>
+<tr class="new"><td class="num">1</td><td><b>主要競合の価格帯</b></td><td><b>見えた金額をそのまま書くだけです。</b>ここから必要顧客数や利益を計算することはしません（<b>2026-08-28 改訂3</b>。計算は選定後の調査で行います）。分からなければ「不明」と書きます</td></tr>
+<tr class="new"><td class="num">2</td><td><b>その課題に今いくら払っているか</b></td><td>外注履歴・求人の条件・競合の価格から、<b>分かった範囲で書きます。分からなければ「不明」で構いません（落としません）</b></td></tr>
+<tr class="new"><td class="num">3</td><td><b>AI推論を動かすたびに使うか</b></td><td><b>表示するだけです。</b>原価率による足切り・減点は行いません（旧§6を廃止したため）。<b>原価を抑える仕組みは、案を選んだ後に検討します</b>　<span class="tag chg">2026-08-28 変更</span></td></tr>
+<tr class="new"><td class="num">4</td><td>市場規模の推定と、その根拠</td><td><b>2026-08-28 改訂2：案出しの段階では記入しません。</b>選んだ案を調べる段階（§8 段階6）で埋めます。推定は【推測】と明記し、計算式を添えます</td></tr>
+<tr><td class="num">5</td><td>必要な許認可・業法上の論点</td><td>坂野様のご方針では除外条件にしないが、着手前に見る</td></tr>
+<tr><td class="num">6</td><td>競合が全員撤退していないか</td><td>撤退の記録は「過去にやって儲からなかった」証拠になる</td></tr>
+<tr class="new"><td class="num">7</td><td><b>着手前チェック：適格請求書発行事業者の登録</b></td><td>BtoB向けに販売開始する時点で登録が要る。<b>案の選定には使いませんが、忘れると事故ります</b></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+
+<section id="p7">
+<h2>6. 市場規模・収益の測り方（<b>探す段階では使いません</b>）<span class="tag chg">2026-08-28 改訂3</span></h2>
+
+<div class="box ng">
+<span class="lbl">v2の判定式は廃止しました（2026-08-26）</span>
+v2では<b>「市場規模 × 現実的に取れるシェア ≧ 年1,000万円」</b>としていました。<br>
+Geminiの指摘：<b>「市場規模も推測、取れるシェアも推測。推測の二乗になっており、判定基準として機能しない」。</b><br>
+<b>これはそのとおりです。</b>私自身もv2の弱点2で「推測に推測を掛ける構造になっている」と書いていました。<b>書いておきながら、判定式として採用したのは誤りでした。</b>
+</div>
+
+<div class="box chg">
+<span class="lbl">2026-08-28 改訂2：使うタイミングを後ろにずらしました（ご指示）</span>
+<b>ご指摘：</b>最有力競合の推定年商は<b>数字が出ないことも多々ある</b>ので、<b>探す段階では使わない。</b>案出しで案を出したあと、<b>その案に実際に需要があるかを調べる段階で使う。</b><br><br>
+<b>反映：</b>この測り方は<b>第2層（足切り）にも第3層（3段階評価）にも使いません。</b>案出しの段階では、年商が分からないことを理由に案を落とすことも、順位を下げることもしません。<br>
+<b>使うのは §8 の段階6「選んだ案を1件ずつ調べる」からです。</b>そこで数字が取れなければ「取れなかった」と書き、<b>取れない案を落とす材料にはしません</b>（別の材料で判断します）。<br><br>
+<b>2026-08-28 改訂3：収益に関する計算は、すべてこの段階に集約しました。</b>推定年商だけでなく、<b>競合の公開価格からの必要顧客数の計算・利益の推定も、案出しの段階では行いません。</b>「月収50万円程度であれば、売り方・オプション・広告の打ち方で調整できる」というご判断によります。
+</div>
+
+<h3>選定後に使う測り方（実測できる数字だけ）</h3>
+
+<div class="formula">
+<b>最有力競合の推定年商</b>　＝ 次のうち<b>取れたものだけ</b>から概算する<br>
+　・公表されている導入社数 × 公開されている料金<br>
+　・レビュー数・口コミ数 × 想定単価（レビュー数は<b>実測値</b>）<br>
+　・アプリストアの評価件数・ランキング推移<br>
+　・入札の落札実績、公表資料<br><br>
+<b>目安：この推定年商が年3,000万円を超えていれば、そこに自社が入る余地の議論ができる</b><br>
+<span style="color:var(--muted)">※あくまで議論の出発点であり、合否の判定には使いません。取れなかった場合は「不明」と書きます。</span>
+</div>
+
+<p><b>なぜ3,000万円か。</b>自社が年1,000万円を取るには、その市場に最低でもそれくらいの実績が先にある必要があるためです。<b>ただしこれは目安であって、落とす条件にはしません。</b></p>
+
+<div class="box warn">
+<span class="lbl">正直に申し上げておくこと</span>
+<b>この方法でも「取れるかどうか」は分かりません。</b>分かるのは「その市場に、現にいくらのお金が流れているか」だけです。<br>
+<b>ただしそれは実測値なので、推測を並べるよりはるかにマシです。</b>「10億円の市場で1%取ればいい」という希望的観測が入り込む余地がなくなります。<br>
+<b>そして、その数字が取れないこと自体はよくあります。</b>だから探す段階からは外しました。
+</div>
+</section>
+
+<section id="p8">
+<h2>7. 探し先（12）<span class="tag chg">2026-08-28 変更</span></h2>
+
+<p><b>Geminiの提案6つを、日本市場向けに翻訳して取り込みました。</b>加えて、Geminiが「この探し方では見つからない」と指摘した穴を1つ埋めています。</p>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>探し先</th><th>そこで何を見るか</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr class="new"><td class="num">1</td><td><b>IT導入補助金のITツール登録一覧</b><br><b>（案の発見源ではなく「参入しにくさ」の確認先）</b></td><td><b>2026-08-28 変更。</b>ここに登録されているカテゴリは、<b>「国が認めた」という看板を持つ確立した会社が既にいる</b>と見ます。顧客が2つを並べて比べたとき、その看板があるほうを選ぶ可能性が高く、<b>後から入るには不利</b>です。<br>したがって、<b>案を見つけるために見るのではなく、見つけた案が「もう看板を取られていないか」を確かめるために見ます。</b>該当した案は落としませんが、<b>「参入しにくい」の印を付けます</b><br><span style="color:var(--muted)">※創業1期未満・個人開発のツールは登録されないため、この一覧は「確立したツール」に偏ります（登録要件は【未確認】）</span></td><td><b>坂野様</b></td></tr>
+<tr><td class="num">2</td><td>クラウドソーシングの反復発注履歴<br>（ランサーズ・クラウドワークス・ココナラ）</td><td>同じExcel・マクロ・自動化の依頼が繰り返されている＝<b>ソフトが無いから人に頼んでいる状態。しかも実際にお金が払われている</b></td><td>Gemini＋Claude</td></tr>
+<tr class="new"><td class="num"><b>3</b></td><td><b>SaaSレビューサイトの低評価レビュー</b><br>（国内：ITreview／海外：G2・Capterra）</td><td><b>星2〜3のレビューに書かれた不満。</b>「機能が多すぎる」「ニッチな業務には高すぎる」が繰り返されている領域は、単機能で切り出せる</td><td><b>Gemini</b></td></tr>
+<tr class="new"><td class="num"><b>4</b></td><td><b>Q&A・SNSの「〜できるツールはないか」</b><br>（Yahoo!知恵袋／X／note／業界フォーラム／海外はReddit）</td><td><b>現場の人が自分の言葉で書いた困りごと。</b>「なぜ〜が無いのか」という投稿が一次情報になる</td><td><b>Gemini</b></td></tr>
+<tr class="new"><td class="num"><b>5</b></td><td><b>有料テンプレートの販売実績</b><br>（BOOTH／note有料記事／Excel・スプレッドシートの販売／海外はEtsy）</td><td><b>「ソフトが無いので、templateを買って手作業で回している」状態。</b>支払い意思が既に証明されている</td><td><b>Gemini</b></td></tr>
+<tr class="new"><td class="num"><b>6</b></td><td><b>マイクロSaaSのディレクトリ</b><br>（Micro SaaS Ideas、BigIdeasDB 等。海外）</td><td>実際にMRRが出ているニッチSaaSの事例が数百件単位。<b>どのカテゴリが利益を出しているかが分かる</b></td><td><b>Gemini</b></td></tr>
+<tr class="new"><td class="num"><b>7</b></td><td><b>紙とExcelで回っているレガシー産業</b><br>（歯科・整骨・不動産管理・地場の運送・建設・葬祭・農協 など）</td><td><b>Geminiが「この探し方では見つからない」と指摘した穴。</b>アプリストアにもIT導入補助金にも載らないが、一度入れば解約されない</td><td><b>Gemini</b></td></tr>
+<tr class="new"><td class="num"><b>8</b></td><td><b>他社ストアのアプリ一覧を「案の発見源」として見る</b><br>（Shopifyアプリ／Salesforce AppExchange 等）</td><td>プラットフォームの標準機能ではカバーできない領域。<b>そこに出店するかは別問題として、案の発見には使える</b></td><td><b>Gemini</b></td></tr>
+<tr><td class="num">9</td><td>アプリストアのカテゴリ別ランキングとレビュー</td><td>レビュー数＝需要の実測値。低評価レビューは不満の一次情報</td><td>Claude</td></tr>
+<tr><td class="num">10</td><td>業界団体・組合が会員に案内しているツール</td><td>業界内でしか知られていないもの。リーチ手段の確認も同時にできる</td><td>Claude</td></tr>
+<tr><td class="num">11</td><td>海外にあって日本にない単機能SaaS</td><td>海外で需要が実証済み。<b>日本にない理由の推定を必ず添える</b></td><td>坂野様</td></tr>
+<tr><td class="num">12</td><td>既存3本の周辺</td><td>Snoker／Rabelu／Rakuviの顧客が隣で困っていること</td><td>Claude</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box chg">
+<span class="lbl">#1 の位置づけを変えました（2026-08-28 ご指示）</span>
+<b>ご指摘：</b>IT導入補助金のITツール一覧に載っているということは、<b>国が認めているという看板を背負っている</b>ということであり、顧客がどちらを選ぼうかとなったときにそちらを選んでしまう。<b>参入できない可能性が上がる。</b><br><br>
+<b>反映：</b>#1を「案の発見源」から「参入しにくさの確認先」に変更しました。落とす条件にはせず、<b>該当した案には「参入しにくい」の印を付けて表示します</b>（第4層＝表示だけの扱い）。<br>
+<b>発見源としての穴は、#3〜#7（低評価レビュー／Q&A・SNS／有料テンプレート／マイクロSaaSディレクトリ／紙とExcelのレガシー産業）が埋めます。</b>これらはいずれも、まだ看板を取られていない領域が出てくる探し先です。
+</div>
+
+<div class="box ok">
+<span class="lbl">ご質問④への回答：探し先12に過不足はあるか（Claudeの判断）</span>
+<b>過不足はないと判断します。追加の提案はありません。</b><br>
+理由：12の探し先は<b>「不満から探す」（#3・#4・#9）／「支払いの実績から探す」（#2・#5）／「他所の成功例から探す」（#6・#8・#11）／「業界側から探す」（#7・#10・#12）</b>の4方向をすべて含んでおり、方向としての抜けがありません。<br><br>
+<b>ただし限界は正直に書きます。</b>#1を発見源から外したことで、<b>「国の補助金がついている＝予算が動いている」という需要の証拠を1つ手放しています。</b>その分は、#2（クラウドソーシングの反復発注）と#5（有料テンプレートの販売実績）＝<b>実際にお金が払われている痕跡</b>で代替します。
+</div>
+
+<p style="color:var(--muted);font-size:14px">※ SaaS比較サイト（BOXIL・ITトレンド等）は<b>有料広告なので載る会社が偏る</b>ため、母集団からは外しました。ただし<b>ITreviewの低評価レビュー</b>は、掲載の偏りとは別に不満の一次情報として使えるので、#3として残しています。</p>
+</section>
+
+<section id="p9">
+<h2>8. 進め方<span class="tag chg">2026-08-28 変更</span></h2>
+
+<div class="formula" style="text-align:center">
+<b>机上の調査 → 坂野様が目視で選ぶ → 選んだ案の需要と規模を調べる → 要件定義 → 成立するか最終チェック → 開発</b>
+</div>
+
+<p>ご指示どおり、LP・広告テストは入れません。<b>その代わり、机上調査の必須項目を1つ追加します。</b></p>
+
+<div class="box ok">
+<span class="lbl">机上調査で必ず確認すること（Geminiの指摘・採用）</span>
+<b>「その課題を解決するために、いま誰かがいくら払っているか」を、実測で確認する。</b><br><br>
+確認先：<br>
+・クラウドソーシングで、その作業がいくらで発注されているか<br>
+・その作業を担当する人の求人が、いくらで出ているか<br>
+・競合のサービスが、いくらで売られているか<br>
+・有料テンプレートが、いくらで売れているか<br><br>
+<b>今お金が動いていない課題には、ソフトにしてもお金は払われません。</b>これがLP・広告テストを外したことの穴を埋める、机上でできる最良の代替です。
+</div>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">段階</th><th>やること</th><th>担当</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>条件の確定（＝この文書）</td><td>坂野様</td></tr>
+<tr><td class="num">2</td><td>探し先12から候補を広く集める（<b>80件以上</b>）</td><td>Claude</td></tr>
+<tr><td class="num">3</td><td>除外条件4つ＋足切り1つで落とす（落とした案も理由付きで残す）</td><td>Claude</td></tr>
+<tr><td class="num">4</td><td>3段階評価をつけてカタログ化。<b>「今いくら払っているか」を必ず埋める</b></td><td>Claude</td></tr>
+<tr class="new"><td class="num">5</td><td><b>坂野様がカタログを目視で見て、調べる案を選ぶ</b></td><td><b>坂野様</b></td></tr>
+<tr class="new"><td class="num">6</td><td><b>選んだ案を1件ずつ、Claudeと一緒に調べる</b><br>・<b>本当に需要があるか</b>（競合の実在・レビュー・掲載件数）<br>・<b>いくらで売れているか</b>（競合の公開価格・必要顧客数）<br>・<b>最有力競合の推定年商</b>（§6の測り方。<b>収益の計算はすべてここで初めて行います</b>）<br>・ゲート0（事業性の6問）</td><td><b>坂野様＋Claude</b></td></tr>
+<tr class="new"><td class="num">7</td><td><b>要件定義と、「本当にいけるのか」の最終チェック</b></td><td><b>坂野様＋Claude</b></td></tr>
+<tr class="new"><td class="num">8</td><td><b>チェックを通れば開発</b></td><td><b>Claude</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box chg">
+<span class="lbl">2026-08-28 の変更点</span>
+旧版は「机上の調査 → 要件定義 → 開発」の3段でしたが、<b>机上調査の次に「坂野様が目視で選ぶ」段階を明示し、その後は1件ずつ調べながら要件定義を進める形にしました。</b><br>
+<b>Claudeが案を絞ってから渡すのではありません。</b>カタログを全件お見せし、選ぶのは坂野様です。選ばれた案だけを、深く調べます。
+</div>
+</section>
+
+<h2 class="part" id="r1">第2部　Geminiレビュー（第2回）の対応</h2>
+
+<section>
+<h3>対応表（観点1〜10）</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">観点</th><th>Geminiの指摘（要約）</th><th>事実確認</th><th>判定と反映</th></tr></thead>
+<tbody>
+<tr class="new"><td class="num">1</td><td><b>探し先の追加提案6つ</b>（低評価レビュー／Reddit等のQ&A／クラウドソーシングと有料テンプレート／他社ストア／マイクロSaaSディレクトリ／レガシー産業）</td><td><b class="v o">○ 有用</b></td><td><b class="v o">全部採用。</b>日本市場向けに翻訳し、8つ→12に拡張（§8）。<b>今回いちばんの収穫です</b></td></tr>
+<tr class="new"><td class="num">2</td><td>「取れるシェア」の推測は不可能。<b>推測の二乗になっている。</b>実測できる代替指標に置き換えよ</td><td><b class="v o">○ 妥当</b></td><td><b class="v o">採用。判定式を廃止しました。</b>私はv2の弱点2で自分でこの問題を書いておきながら、判定式として採用していました。<b>私の誤りです</b>（§7）</td></tr>
+<tr class="new"><td class="num">3</td><td><b>原価率5〜10%はAI組込み型では過小。</b>LLMのAPIは従量課金なので30〜40%になる</td><td><b class="v o">○ 論理として正しい</b><br><span class="v u">具体的な%は【未確認】</span></td><td><b class="v o">採用。</b>案を「作るときだけAIを使う型」と「動かすたびにAIを使う型」に分け、必要売上を変えました（§6）</td></tr>
+<tr><td class="num">4</td><td>適格請求書発行事業者の登録は案出し段階では不要。<b>削除し、代わりに市場規模の上限を復活させよ</b></td><td><b class="v t">△ 半分採用</b></td><td><b class="v t">条件付き。</b>登録は<b>削除ではなく「着手前チェック」に移動</b>（忘れると事故るため）。<b>市場規模の上限の復活は不採用。</b>坂野様が明示的に撤廃されたものです</td></tr>
+<tr class="new"><td class="num">5</td><td><b>重みなしの3段階評価だと、薄いAIツールが上位に残る。</b>「リピート性」を独立した足切りにせよ</td><td><b class="v o">○ 構造的に正しい</b></td><td><b class="v o">採用。今回いちばん実用的な指摘でした。</b>坂野様の「重みをつけない」方針を守ったまま、<b>足切りを1つだけ置く</b>形で反映（§3）</td></tr>
+<tr><td class="num">6</td><td>E4（娯楽用途の除外）は<b>必ず残すべき</b>。娯楽はデータが溜まらず解約率が高い</td><td><b class="v t">△ 論拠は妥当だが手段が違う</b></td><td><b class="v t">条件付き採用。</b>論拠には同意しますが、<b>条件を1つ増やすより足切りに統合するほうが整合します。</b>娯楽用途は自然に「使い続ける必然性＝小」になり、同じ結果になります</td></tr>
+<tr class="new"><td class="num">7</td><td>「競合が多い＝儲かる」は、<b>競合の価格帯が極端に低い場合には成り立たない</b></td><td><b class="v o">○ 鋭い</b></td><td><b class="v o">採用。</b>ただし落とす条件にはせず、<b>「主要競合の価格帯」を表示項目に</b>しました（§5）。坂野様の「上限を設けない」方針は維持します</td></tr>
+<tr><td class="num">8</td><td>「大手に真似されても負けない」は、<b>大手が無料バンドルした瞬間に崩壊する</b></td><td><b class="v o">○ 妥当</b></td><td><b class="v o">採用済み。</b>ゲート0の問6に<b>すでに「相手に無料同梱されて顧客に比べてもらえない案は通さない」が入っています。</b>深掘り段階で効きます</td></tr>
+<tr class="new"><td class="num">9</td><td>机上調査に<b>「今いくら払っているか」の事実確認が欠落</b></td><td><b class="v o">○ 妥当</b></td><td><b class="v o">採用。</b>LP・広告テストを外した以上、<b>これが机上でできる最良の代替</b>です。机上調査の必須項目にしました（§9）</td></tr>
+<tr><td class="num">10</td><td>弱点1が依然過小評価。<b>第4の弱点＝解約率コントロールの欠落</b></td><td><b class="v o">○ 妥当</b></td><td><b class="v o">採用。</b>観点5と同じ論点なので、足切りで一括して対応します</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="r2">
+<h3>私がGeminiに同意しなかった点</h3>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th>Geminiの主張</th><th>私の見解</th></tr></thead>
+<tbody>
+<tr><td><b>「市場規模の上限を復活させよ」</b>（観点4）</td><td><b>不採用。</b>坂野様が「個人向けアプリや中小向け低単価を全部除外してしまう」という理由で明示的に撤廃されたものです。<b>Geminiの論拠（大企業が本腰を入れるには小さすぎる、という防波堤）は妥当ですが、それはE1（上場企業・大型調達済みを除外）で実質的に代替できます</b></td></tr>
+<tr><td><b>「E4（娯楽用途の除外）は必ず残せ」</b>（観点6）</td><td><b>手段を変えました。</b>論拠には同意しますが、除外条件を増やすと「絶対無理だけ弾く」という坂野様の目的から離れます。<b>足切りに統合すれば、条件を増やさずに同じ効果が出ます</b></td></tr>
+<tr><td>小規模SaaSの70%がMRR1,000ドル未満／中央値MRR4,200ドル／上位6.1%のみ1万ドル突破／AIラッパーの90%が2026年末までに淘汰／売却はSDEの2.5〜4.5倍</td><td><b>【未確認】。</b>いずれも出典が海外のブログ・データベースで、私も一次情報で確認できていません。<b>事実として扱わず、判断の根拠にも使いません。</b>ただし<b>「月利50万円は小規模SaaSの上位に入る水準」という定性的な認識は、方向として妥当</b>だと考えます</td></tr>
+<tr><td>Stripe Billing +0.7%、Invoicing +0.4〜0.5%で実質4.3%</td><td><b>【未確認】。</b>Stripeの公式料金ページで裏取りしていません。<b>原価計算に効くので、案を選んだ後に確認します</b></td></tr>
+<tr><td>「持続可能な競争優位性の欠落」により<b>出資に値しない</b></td><td><b>この評価は、目的が違うので当たりません。</b>投資家が見るのは「資本を投下してシェアを取り、売却できるか」です。<b>坂野様の目的は「月利50万円が10年入り続けること」で、事業売却ではありません。</b>ただし<b>「使い続ける理由がないと解約で消える」という指摘の中身は正しい</b>ので、足切りとして採用しました</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box">
+<span class="lbl">3往復目は行いません</span>
+重要度「高」で未解決のまま残った指摘はありません。<b>唯一の対立（市場規模の上限）は、坂野様の明示的な決定に関わるものなので、Geminiに再度聞くことではありません。</b>
+</div>
+</section>
+
+<section id="r3">
+<h3>2回のレビューを通した、私の見立て</h3>
+
+<div class="box chg">
+<span class="lbl">Geminiは2回とも、表現を変えて同じことを言っています</span>
+1回目の結論：<b>「最も致命的なのは集客チャネルの欠落」</b><br>
+2回目の結論：<b>「最も致命的なのは持続可能な競争優位性の欠落」</b><br><br>
+<b>どちらも「作った後、何がこの事業を守るのか」という同じ問いです。</b><br><br>
+そして<b>坂野様のお立場は一貫しています</b> ──「模倣されてもいい」「この規模ではスイッチングコストは作れない」「小さく長く」。<br><br>
+<b>私の見立ては、両方が正しく、ただし「続く」の意味が違う、というものです。</b><br>
+・Geminiが言う「続く」＝ 事業として成長し、売却できる状態が続く<br>
+・坂野様が求める「続く」＝ <b>月50万円が5年10年入り続ける</b><br><br>
+<b>後者に必要なのは、市場の独占ではありません。「解約されないこと」だけです。</b><br>
+だから今回の設計では、モートを大げさに扱わず、<b>「使い続ける理由があるか」の1項目だけを足切りに置きました。</b>これが2回のレビューから引き出せた、最も実用的な結論だと考えます。
+</div>
+</section>
+
+<h2 class="part" id="s1">第3部</h2>
+
+<section>
+<h3>未確認事項</h3>
+<div class="tblwrap">
+<table>
+<thead><tr><th>項目</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td>インボイスの経過措置</td><td><b class="v o">○ 国税庁で確認済み。</b>令和8年10月1日〜令和10年9月30日は70%控除、以降50%→30%→0%</td></tr>
+<tr><td>IT導入補助金の登録要件（創業1期未満は登録できないか）</td><td><b class="v u">【未確認】。</b>Geminiの指摘。公式の登録要領PDFまでは確認できていません。<b>母集団の偏りとして注記するにとどめます</b></td></tr>
+<tr><td>AI組込み型SaaSの原価率30〜40%</td><td><b class="v u">【未確認】。</b><b>2026-08-28 に原価率による判定を廃止したため、案の選定には使いません。</b>「LLMのAPIは従量課金なので、使われるほど原価が乗る」という構造自体は残るので、<b>原価を抑える仕組みは案を選んだ後に検討します</b></td></tr>
+<tr><td>Stripeの手数料の内訳</td><td><b class="v u">【未確認】。</b>案を選んだ後に公式料金ページで確認します</td></tr>
+<tr><td>Geminiが挙げた各種の統計</td><td><b class="v u">【未確認】。</b>事実として扱いません</td></tr>
+<tr><td>今後の市場規模の推定</td><td><b>ほぼ必ず【推測】になります。</b>だから§6で実測値ベースに切り替えました</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s2">
+<h2>確定した内容（2026-08-28）</h2>
+
+<div class="tblwrap">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>ご回答</th></tr></thead>
+<tbody>
+<tr><td class="num">①</td><td>4層の判定（除外4／足切り1／3段階評価／表示だけ）</td><td><b class="v o">承認</b>　※3段階評価は6項目→<b>4項目</b>に変更</td></tr>
+<tr class="new"><td class="num">②</td><td>市場規模・収益の測り方（推定年商・単価・必要顧客数）</td><td><b class="v t">探す段階では一切使わない</b>　案を選んだ後に調べる</td></tr>
+<tr><td class="num">③</td><td>原価率を案ごとに分ける（型A／型B）</td><td><b class="v x">廃止</b>　原価率で案を切り捨てない</td></tr>
+<tr><td class="num">④</td><td>探し先12</td><td><b class="v o">承認</b>　※#1の位置づけを「参入しにくさの確認先」に変更</td></tr>
+<tr class="new"><td class="num">⑤</td><td>過去のアプリ候補台帳（P-01〜P-54ほか）</td><td><b class="v x">参照しない</b>　<b>ゼロベースで探す</b></td></tr>
+<tr><td class="num">⑥</td><td>案の件数</td><td><b class="v o">80件以上</b></td></tr>
+<tr><td class="num">⑦</td><td>評価項目「既存資産が効くか」</td><td><b class="v x">削除</b></td></tr>
+<tr><td class="num">⑧</td><td>営業のしかたにGoogleキーワード広告を追加</td><td><b class="v o">追加</b>　※CACの計算はしない</td></tr>
+<tr><td class="num">⑨</td><td>進め方（机上調査の次に「坂野様が目視で選ぶ」を明示）</td><td><b class="v o">確定</b></td></tr>
+<tr class="new"><td class="num">⑩</td><td>物理実体（AIと物理実体の探し方 v4）との関係</td><td><b class="v x">SaaSに一本化</b>　v4は休止（削除はせず残置）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="tblwrap" style="margin-top:12px">
+<table>
+<thead><tr><th class="num">#</th><th>項目</th><th>ご回答</th></tr></thead>
+<tbody>
+<tr class="new"><td class="num">⑪</td><td>3段階評価「収益の到達しやすさ」</td><td><b class="v x">削除</b>　サービスが実在する＝需要があり、お金が発生していると見る。<b>評価は4項目に</b></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="box ok">
+<span class="lbl">未確定はありません</span>
+この文書の内容で案出しに着手します。<b>探し先12から80件以上を集め、除外4つ＋足切り1つだけで落とし、4項目の3段階評価を付けた全件掲載のカタログをお出しします。収益の計算は行いません。</b>
+</div>
+</section>
+
+<footer class="doc">
+SaaS探索の条件 <b>確定版（改訂3）</b>／ 2026-08-28 確定／ 調査はこれから着手します<br>
+ファイル名：<code>_新規事業探索_SaaS探索の条件_確定版_2026-08-28.html</code>　／ 案・v2・最終版 は同フォルダに残置<br>
+第2部（Geminiレビュー第2回の対応）は 2026-08-26 時点の記録であり、内容は変更していません。<b>旧§6（原価率の型分け）に関する記述は、第1部で廃止した内容の経緯として残しています。</b><br>
+出典：国税庁「令和8年度税制改正特集」／中小機構「デジタル化・AI導入補助金2026 ITツールの登録申請」
+</footer>
+
+</main></div></body></html>

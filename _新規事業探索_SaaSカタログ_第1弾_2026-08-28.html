@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaaSカタログ 第1弾 51件</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1d22; --mut:#5b6270; --line:#dfe3ea; --soft:#f5f7fa;
+  --acc:#1f5fa8; --dai:#0f6b45; --daibg:#e3f4ec; --chu:#8a5a00; --chubg:#fdf1dc;
+  --sho:#8b2f2f; --shobg:#fbe9e9; --ok:#0f6b45; --okbg:#e3f4ec; --ng:#7a2f2f; --ngbg:#f6e7e7;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",system-ui,sans-serif;
+ line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums;}
+main{min-width:0}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;max-width:1280px;margin:0 auto;padding:24px 20px 80px;}
+nav{position:sticky;top:16px;align-self:start;border-right:1px solid var(--line);padding-right:12px;}
+nav a{display:block;padding:5px 0;color:var(--fg);text-decoration:none;font-size:13.5px;border-bottom:1px solid transparent;}
+nav a:hover{color:var(--acc);border-bottom-color:var(--line)}
+h1{font-size:24px;margin:0 0 4px;line-height:1.4}
+h2{font-size:19px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+.note{background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--acc);padding:12px 14px;margin:14px 0;font-size:14px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+thead th{background:var(--soft);position:sticky;top:0;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:after{content:"";}
+tbody tr:hover{background:var(--soft)}
+td.c{text-align:center;white-space:nowrap}
+td.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+.bdg{display:inline-block;min-width:1.7em;text-align:center;padding:1px 7px;border-radius:3px;font-size:12.5px;font-weight:700}
+.b-dai{background:var(--daibg);color:var(--dai)}
+.b-chu{background:var(--chubg);color:var(--chu)}
+.b-sho{background:var(--shobg);color:var(--sho)}
+.b-num{background:var(--soft);color:var(--fg)}
+.st{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;font-weight:700;white-space:nowrap}
+.st.nokoru{background:var(--okbg);color:var(--ok)}
+.st.otosu{background:var(--ngbg);color:var(--ng)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0;font-size:13.5px}
+.ctrl label{color:var(--mut)}
+select,input[type=search]{font:inherit;font-size:13.5px;padding:4px 7px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.card h3{margin:0 0 4px;font-size:16px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card .cid{font-size:12.5px}
+.card .meta{color:var(--mut);font-size:12.5px;margin:0 0 8px}
+#tbl{min-width:1000px}
+#tbl td:nth-child(2){min-width:210px}
+#tbl td:nth-child(3){min-width:150px}
+table.kv{min-width:520px}
+table.layers th:first-child,table.layers td:first-child{white-space:nowrap}
+table.kv th{width:190px;background:var(--soft);font-weight:600;white-space:nowrap}
+.hyw{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
+.hy{display:flex;gap:6px;align-items:center}
+.hyl{color:var(--mut)}
+ul.src{margin:6px 0 14px;padding-left:20px;font-size:13.5px}
+ul.src li{margin:2px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.kpi div{border:1px solid var(--line);border-radius:6px;padding:8px 14px;background:var(--soft);font-size:13px}
+.kpi b{display:block;font-size:20px;line-height:1.3}
+footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px}
+@media (max-width:860px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:12px}
+ nav{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 8px;
+   display:flex;flex-wrap:wrap;gap:4px 14px}
+}
+@media print{
+ nav,.ctrl{display:none}
+ .wrap{grid-template-columns:minmax(0,1fr);max-width:none;padding:0}
+ .card{break-inside:avoid}
+ body{font-size:10.5pt}
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<nav>
+<a href="#s1">1. この資料は何か</a>
+<a href="#s2">2. 判定に使った条件</a>
+<a href="#s3">3. 一覧（全51件・並べ替え可）</a>
+<a href="#s4">4. 各案の詳細</a>
+<a href="#s5">5. 探し先ごとに分かったこと</a>
+<a href="#s6">6. 次にやること</a>
+<a href="#s7">7. 出典</a>
+</nav>
+<main>
+
+<h1>新規事業探索　SaaSカタログ 第1弾（51件）</h1>
+<p class="lead">作成日 2026-08-28　／　合同会社R.Y.S　／　フェーズ5「案出し」の第1弾　／　探し先 #2・#3・#4・#5・#9 の5つ</p>
+
+<h2 id="s1">1. この資料は何か</h2>
+<p>「SaaS探索の条件 確定版（改訂3）」で決めた探し方に沿って集めた、事業案の一覧です。<strong>Claudeは案を絞り込みません。</strong>落とした案も理由を付けて全件載せています。選ぶのは坂野様です。</p>
+<div class="kpi">
+ <div>掲載した案<b>51 件</b></div>
+ <div>残った案<b>37 件</b></div>
+ <div>落とした案<b>14 件</b></div>
+ <div>今回使った探し先<b>5 / 12</b></div>
+</div>
+<div class="note">
+<strong>今回やっていないこと（意図的です）。</strong>単価・必要顧客数・利益・推定年商といった<strong>収益の計算は一切していません</strong>。確定版の方針どおり「そのサービスが現に存在し、使われている＝需要があり、現にお金が発生している」と見るところまでにとどめ、収益の確認は坂野様が案を選んだ後（進め方の段階6）に行います。<br>
+また、<strong>この資料は「見るための版」です。</strong>判定条件の正本は <span class="mono">_新規事業探索_SaaS探索の条件_確定版_2026-08-28.html</span>、決定の正本は <span class="mono">DECISIONS.md</span> です。食い違ったら正本を正とします。
+</div>
+<div class="note">
+<strong>数字と固有名詞の扱いについて。</strong>価格・件数・レビュー数は、公開ページで確認できたものだけを書いています。確認できなかったものは「不明」または<strong>【未確認】</strong>と明記しました。<strong>【未確認】を理由に案を落とすことはしていません</strong>（確認できた事実だけを却下理由に使う、という運用ルールに従っています）。
+</div>
+
+<h2 id="s2">2. 判定に使った条件</h2>
+<p>確定版（改訂3）の4層をそのまま当てています。</p>
+<div class="tw"><table class="layers">
+<thead><tr><th>層</th><th>内容</th><th>今回の扱い</th></tr></thead>
+<tbody>
+<tr><td>第1層　除外</td><td>E1 最有力競合が上場または10億円以上調達済み／E2 大手の標準機能に含まれ、かつ同等の実装ができないと確定／E3 公開APIのない基幹システムとの連携が必須で手段を持てない／E4 違法・脱法・規制上グレー</td><td>該当した案は「落とす」。ただし該当が【未確認】の案は落としていない</td></tr>
+<tr><td>第2層　足切り</td><td>使い続ける必然性が「小」なら落とす</td><td>該当2件（D-04・D-07）</td></tr>
+<tr><td>第3層　3段階評価</td><td>作れる度合い／需要の実在／リーチ手段の実在／営業のしかたが合うか（4項目・重みの差なし）</td><td>全件に付与。「大」の数の多い順が初期表示</td></tr>
+<tr><td>第4層　表示だけ</td><td>競合の価格帯／今いくら払っているか／参入しにくさ</td><td>分かった範囲で記載。不明でも落としていない</td></tr>
+</tbody></table></div>
+<p class="lead">※ 並び順は初期表示にすぎません。表の見出しを押すと並べ替えられます。</p>
+
+<h2 id="s3">3. 一覧（全51件・並べ替え可）</h2>
+<div class="ctrl">
+ <label>判定</label>
+ <select id="f-state"><option value="">すべて</option><option value="nokoru">残る</option><option value="otosu">落とす</option></select>
+ <label>使い続ける必然性</label>
+ <select id="f-hitsu"><option value="">すべて</option><option value="大">大</option><option value="中">中</option><option value="小">小</option></select>
+ <label>探し先</label>
+ <select id="f-src"><option value="">すべて</option></select>
+ <input type="search" id="f-q" placeholder="名前・業種で絞り込み" size="22">
+ <span id="cnt" class="mono"></span>
+</div>
+<div class="tw"><table id="tbl">
+<thead><tr>
+<th data-t="s">ID</th><th data-t="s">案の名前</th><th data-t="s">業種</th><th data-t="s">探し先</th>
+<th data-t="r">必然性</th><th data-t="r">作れる</th><th data-t="r">需要</th><th data-t="r">リーチ</th><th data-t="r">営業</th>
+<th data-t="n">「大」</th><th data-t="s">判定</th>
+</tr></thead>
+<tbody>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-01</td><td><a href="#A-01">受注CSVコンバータ</a></td><td>EC（多店舗運営）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-03</td><td><a href="#C-03">古物台帳クラウド</a></td><td>リユース・古着・買取・遺品整理</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-05</td><td><a href="#C-05">建設業許可の決算変更届アシスト</a></td><td>建設業許可業者</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る（着手前に法務確認が必須）</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-07</td><td><a href="#C-07">レシピ原価・理想原価の自動計算</a></td><td>飲食店・菓子製造</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="大"><td class="c mono">D-05</td><td><a href="#D-05">複数拠点の在庫・出入庫台帳</a></td><td>EC・物販（小規模）</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#5 テンプレート販売" data-hitsu="大"><td class="c mono">D-06</td><td><a href="#D-06">副業・個人事業主の収支〜確定申告前さばき</a></td><td>副業・フリーランス</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="otosu" data-src="#2 クラウドソーシング" data-hitsu="中"><td class="c mono">A-05</td><td><a href="#A-05">Excel売上台帳→請求書一括発行＋PDFメール送信</a></td><td>卸・小売・ブライダル・出版</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="中"><td class="c mono">A-08</td><td><a href="#A-08">求人原稿の多媒体入稿・書式変換</a></td><td>人材・採用代行</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#5 テンプレート販売" data-hitsu="中"><td class="c mono">D-01</td><td><a href="#D-01">シフト表＋人件費のリアルタイム集計（小売・飲食）</a></td><td>小売・飲食（小規模）</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#9 アプリストア" data-hitsu="中"><td class="c mono">E-01</td><td><a href="#E-01">棚卸バーコードスキャン→CSV書き出し</a></td><td>小売・卸・部品商・薬局</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#9 アプリストア" data-hitsu="中"><td class="c mono">E-04</td><td><a href="#E-04">飲食店のHACCP衛生記録（複数店舗・広告なし）</a></td><td>飲食・惣菜（小規模）</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">4</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#9 アプリストア" data-hitsu="大"><td class="c mono">E-03</td><td><a href="#E-03">サロン・治療院の電子カルテ（同期と検索）</a></td><td>美容室・ネイル・エステ・鍼灸整体</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">3</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="中"><td class="c mono">C-10</td><td><a href="#C-10">工事写真台帳・電子小黒板</a></td><td>建設（設備・電気・塗装）</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">3</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#9 アプリストア" data-hitsu="中"><td class="c mono">E-07</td><td><a href="#E-07">軽貨物・一人親方の日報＋売上記録</a></td><td>軽貨物・小規模運送</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c num">3</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-04</td><td><a href="#A-04">保育園の勤務シフト自動作成</a></td><td>保育・こども園</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-06</td><td><a href="#A-06">記帳代行の仕訳CSV変換</a></td><td>会計事務所・記帳代行</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#2" data-hitsu="大"><td class="c mono">A-07</td><td><a href="#A-07">FAX・PDF注文書→受注データ化</a></td><td>卸（食品・建材・電子部品・生花）</td><td class="c nowrap">#2</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-01</td><td><a href="#C-01">運送業の点呼記録簿＋アルコールチェック記録</a></td><td>運送・白ナンバー事業者</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-04</td><td><a href="#C-04">警備業の法定備付簿冊メーカー</a></td><td>警備（中小）</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-08</td><td><a href="#C-08">整備工場の車検・点検リマインダー</a></td><td>自動車整備（認証・指定工場）</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-09</td><td><a href="#C-09">作業日報→出面（でづら）自動集計</a></td><td>建設・電気・設備（10名前後）</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="大"><td class="c mono">D-02</td><td><a href="#D-02">訪問看護・介護の法定研修 計画＋実施記録台帳</a></td><td>訪問看護・介護施設</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="中"><td class="c mono">A-09</td><td><a href="#A-09">不動産ポータルの物件リサーチ自動リスト化</a></td><td>不動産（投資・買取再販）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">2</td><td class="c"><span class="st nokoru">残る（着手前に法務確認が必須）</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-02</td><td><a href="#A-02">内装・電気の数量拾い出し支援</a></td><td>建設（内装・電気・設備）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-03</td><td><a href="#A-03">建設下請の安全書類（グリーンファイル）作成</a></td><td>建設（一次・二次下請）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-11</td><td><a href="#A-11">輸出インボイス／パッキングリスト自動作成</a></td><td>貿易（小口輸出）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-12</td><td><a href="#A-12">個別指導塾のコマ割り・振替</a></td><td>学習塾（個別指導・そろばん）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-02</td><td><a href="#B-02">協力会社コンプラ期限台帳</a></td><td>建設・製造の元請／発注側</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-03</td><td><a href="#B-03">資格・免許の期限だけ通知</a></td><td>製造・建設・運送の安全衛生担当</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-05</td><td><a href="#B-05">電帳法のリネーム＆索引簿</a></td><td>一般企業（20〜100人）の経理</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-09</td><td><a href="#B-09">契約の更新日だけ管理</a></td><td>一般企業（20〜100人）の総務</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-11</td><td><a href="#B-11">工事台帳だけクラウド</a></td><td>専門工事会社（20〜50人）・一人親方</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-02</td><td><a href="#C-02">紙マニフェストの本社一元管理・未返送アラート</a></td><td>排出事業者（建設・製造・小売）</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#4 知恵袋" data-hitsu="大"><td class="c mono">C-06</td><td><a href="#C-06">給食のアレルゲン自動照合</a></td><td>保育園・学校・高齢者施設・給食受託</td><td class="c nowrap">#4 知恵袋</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="大"><td class="c mono">D-03</td><td><a href="#D-03">ヒヤリハット・事故報告書の下書き＋分析</a></td><td>介護・医療</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#9 アプリストア" data-hitsu="大"><td class="c mono">E-05</td><td><a href="#E-05">保育園の職員向け園務アプリ</a></td><td>保育園・こども園</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="otosu" data-src="#9 アプリストア" data-hitsu="大"><td class="c mono">E-06</td><td><a href="#E-06">設備・ビル点検の記録→PDF報告書</a></td><td>ビルメンテナンス・空調・消防設備（1〜10人）</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="otosu" data-src="#9 アプリストア" data-hitsu="大"><td class="c mono">E-09</td><td><a href="#E-09">LPガス・設備の検針／メーター読取記録</a></td><td>LPガス販売店・ビル管理・電気保安</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="中"><td class="c mono">B-04</td><td><a href="#B-04">インボイス登録番号の継続監視</a></td><td>中小企業の経理</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="中"><td class="c mono">B-08</td><td><a href="#B-08">総勘定元帳のあいまい検索</a></td><td>中小企業の経理・監査対応</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="中"><td class="c mono">C-11</td><td><a href="#C-11">小規模現場の月間工程表</a></td><td>建設・電気・内装</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#5 テンプレート販売" data-hitsu="中"><td class="c mono">C-12</td><td><a href="#C-12">外壁塗装の塗布量計算＋案件原価</a></td><td>外壁塗装</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#9 アプリストア" data-hitsu="中"><td class="c mono">E-08</td><td><a href="#E-08">外回り営業の訪問記録と地図</a></td><td>保険・リフォーム・食品卸の外回り営業</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="otosu" data-src="#5 テンプレート販売" data-hitsu="小"><td class="c mono">D-04</td><td><a href="#D-04">介護・看護記録の文例支援</a></td><td>訪問看護・介護・ケアマネ</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="otosu" data-src="#5 テンプレート販売" data-hitsu="小"><td class="c mono">D-07</td><td><a href="#D-07">ひとり美容室のメニュー価格・時間収益設計</a></td><td>美容室・小規模サロン</td><td class="c nowrap">#5 テンプレート販売</td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">1</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#2 クラウドソーシング" data-hitsu="大"><td class="c mono">A-10</td><td><a href="#A-10">運送の配車表・運行日報・傭車請求</a></td><td>運送（車両10〜30台）</td><td class="c nowrap">#2 クラウドソーシング</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c num">0</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-01</td><td><a href="#B-01">通勤費内訳オートフィル</a></td><td>一般企業（50〜300人）の経理・総務</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">0</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-06</td><td><a href="#B-06">取引先の指定様式そのまま請求</a></td><td>大手に納入する中小の卸・製造・下請</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">0</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="大"><td class="c mono">B-10</td><td><a href="#B-10">取引先マスタの変更検知</a></td><td>中小BtoB企業の営業事務・経理</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c num">0</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+<tr data-state="otosu" data-src="#9 アプリストア" data-hitsu="大"><td class="c mono">E-02</td><td><a href="#E-02">訪問介護・訪問看護の提供記録入力</a></td><td>訪問介護・訪問看護</td><td class="c nowrap">#9 アプリストア</td><td class="c"><span class="bdg b-dai">大</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c num">0</td><td class="c"><span class="st otosu">落とす</span></td></tr>
+<tr data-state="nokoru" data-src="#3 低評価レビュー" data-hitsu="中"><td class="c mono">B-07</td><td><a href="#B-07">承認の滞留だけ督促</a></td><td>一般企業（100〜300人）の管理部門</td><td class="c nowrap">#3 低評価レビュー</td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-chu">中</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c"><span class="bdg b-sho">小</span></td><td class="c num">0</td><td class="c"><span class="st nokoru">残る</span></td></tr>
+</tbody></table></div>
+
+<h2 id="s4">4. 各案の詳細</h2>
+<p class="lead">上の表の名前を押すと、その案の詳細に飛びます。</p>
+
+<article class="card" id="A-01" data-state="nokoru">
+  <h3><span class="mono cid">A-01</span> 受注CSVコンバータ <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：EC（多店舗運営）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>楽天・Yahoo・Amazon・BASE・自社ECを併売する小規模EC事業者の出荷担当が、モールごとに書式の違う受注CSVを、ヤマトB2クラウドや倉庫指定フォーマットへ毎回手作業とその場しのぎのマクロで変換している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「受注 CSV」で720件。「ECサイト受注CSV→ヤマト変換マクロ」2〜3万円、「Amazon→ネコピットCSV変換」1〜2万円、「複数EC CSV統合マクロ」2〜3万円など同型依頼が反復。ココナラ「CSV 変換」は757件。</td></tr>
+    <tr><th>既存の競合</th><td>ネクストエンジン、TEMPOSTAR、アシスト店長、CROSS MALL（いずれも受注管理の総合型）。変換だけの単機能SaaSは見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>ネクストエンジン 月額10,000円〜＋従量（公開）。単機能競合は不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>マクロ外注 1本 6,000〜50,000円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 店舗ごとの列マッピング定義が顧客固有の資産として溜まり、出荷手順がこのツール前提になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（CSV入出力で完結するためE3非該当）</td></tr>
+    <tr><th>判定の理由</th><td>除外4条件に触れず、足切りも通過</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】受注管理カテゴリは確立ツールが多いと見られるが、補助金の登録件数は未確認</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="A-02" data-state="nokoru">
+  <h3><span class="mono cid">A-02</span> 内装・電気の数量拾い出し支援 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設（内装・電気・設備）　／　探し先：#2 クラウドソーシング／#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>内装・電気工事会社の積算担当が、PDF・紙の図面から床材・巾木・器具・配線材の数量を目視で数え、Excelの拾い書に転記して見積を作っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「拾い出し」92件。同一発注者の反復が明示：「3回目 図面から数量の拾い出し」1〜2万円（エス・ビルド）、「継続依頼パートナー募集」5〜6千円（喜一建設）。知恵袋にも「電気の積算のフリーソフト」「拾い書で拾い直す」等の投稿が複数。</td></tr>
+    <tr><th>既存の競合</th><td>ヒロイくんIII／楽王シリーズ（アークシステム）、HELIOS、ヒロバ・ゼロ。積算ソフト比較記事に12〜15製品</td></tr>
+    <tr><th>主要競合の価格帯</th><td>ヒロイくんIII／楽王シリーズ 月額3,800円から（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>拾い出し外注 1案件 5,000〜20,000円。社内用積算システム開発 10〜30万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 単価マスタと部材名の言い換え辞書が育ち、過去見積との比較ができなくなる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（E2の懸念はあるが「同等の実装ができないと確定」には至らない）</td></tr>
+    <tr><th>判定の理由</th><td>E2は懸念どまり。既存品が月3,800円と安く、価格勝負にはしにくい点は要注意</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】積算カテゴリは確立ツールが多い側</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="A-03" data-state="nokoru">
+  <h3><span class="mono cid">A-03</span> 建設下請の安全書類（グリーンファイル）作成 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設（一次・二次下請）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>下請建設会社の事務担当が、現場ごとに作業員名簿・再下請負通知書・持込機械等使用届などの全建統一様式を、毎回ゼロから手入力・転記している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「グリーンサイト」14件だが単価が高く反復あり：「3回目 建設業 在宅ワーク 業務委託」10〜20万円、「安全書類全般の業務」30〜50万円、「安全書類作成代行」2〜5万円。行政書士事務所が登録代行を商品化。</td></tr>
+    <tr><th>既存の競合</th><td>グリーンサイト（MCデータプラス）、Greenfile.work（シェルフィー）、ビルディ</td></tr>
+    <tr><th>主要競合の価格帯</th><td>Greenfile.workの料金ページは「オプション費用なし・ID数無制限」の記載のみで金額の掲載なし。グリーンサイトは不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>月次業務委託 10〜50万円／単発 2〜5万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 作業員・保有機械・保険情報のマスタが溜まり、現場ごとの再出力がツール前提になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（MCデータプラスは非上場。親会社は上場だが、E1の文言は競合企業自体を指すため該当としない。【未確認】シェルフィーの調達状況）</td></tr>
+    <tr><th>判定の理由</th><td>E1は【未確認】であり、未確認を理由に落とさない（横断ルール）</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】ただし元請側の指定でグリーンサイトが事実上の標準になっている現場が多い点は不利材料</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="A-04" data-state="nokoru">
+  <h3><span class="mono cid">A-04</span> 保育園の勤務シフト自動作成 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：保育・こども園　／　探し先：#2 クラウドソーシング／#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>保育園の主任・園長が、常勤／パート／短時間勤務が混在し配置基準を満たす必要のあるシフト表を、毎月Excelで手組みしている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「シフト作成」101件。「【急募】保育園シフト自動作成ツールの開発依頼」9〜10万円、「【2回目】保育自動シフト作成アプリ開発」10〜20万円、「保育園の勤怠シフトを半自動で作るExcelマクロ」20〜30万円。知恵袋にも同型の質問が多数。</td></tr>
+    <tr><th>既存の競合</th><td>CoDMON（コドモン）シフト管理、ルクミーシフト管理、Shiftmation</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（各社とも問い合わせ制）。参考：ルクミーの園向け料金はカスタマイズ 月5,000円／スタンダード 月30,000円（税抜・公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>ツール開発外注 9〜30万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 職員の資格・希望休・配置ルールが蓄積し、他へ移すと過去のシフト履歴と制約設定が消える</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（コドモンは外部調達なしと報道。介護向けに広げるとカイポケ＝エス・エム・エス上場でE1該当となるため、保育に限定する前提）</td></tr>
+    <tr><th>判定の理由</th><td>保育に限定すればE1を回避できる。介護版は別案としてE1で落とす</td></tr>
+    <tr><th>参入しにくさ</th><td>コドモンが全国18,000施設に導入と公表されており、参入しにくい側</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="A-05" data-state="otosu">
+  <h3><span class="mono cid">A-05</span> Excel売上台帳→請求書一括発行＋PDFメール送信 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：卸・小売・ブライダル・出版　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>小規模事業者が、月末にExcelの売上管理表やPOS出力から得意先ごとの請求書を1枚ずつ手作りし、PDF化してメール送付している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「請求書 作成 マクロ」141件。業種の違う同型依頼が並ぶ：「売上管理から請求書自動発行」2〜3万円、「POS出力を所定の請求書に変換するマクロ」1〜2万円、「毎月の請求書システムの開発」10〜20万円。</td></tr>
+    <tr><th>既存の競合</th><td>マネーフォワード クラウド請求書、freee請求書、楽楽明細（ラクス）、board、MakeLeaps</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（本調査では各社の公開月額を取得できず）</td></tr>
+    <tr><th>今いくら払っているか</th><td>マクロ・システム外注 1〜20万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎月必ず発生するが、既存の請求書SaaSへ乗り換えても失うものが比較的少ない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（最有力競合のマネーフォワード・freee・ラクスがいずれも上場）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。ただし「既存Excel台帳の書式を一切変えずに読み込んで一括発行するだけ」に絞れば別案として再検討の余地はある</td></tr>
+    <tr><th>参入しにくさ</th><td>請求書カテゴリは補助金の確立ツールが多い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="A-06" data-state="otosu">
+  <h3><span class="mono cid">A-06</span> 記帳代行の仕訳CSV変換 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：会計事務所・記帳代行　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>小規模会計事務所が、顧問先から届く通帳コピー・POS日計表・カード明細を見ながら、会計ソフトへ毎月手で仕訳入力している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「記帳代行」495件、反復が明示：「3回目 会計事務所の仕訳入力」2〜3万円・継続、「記帳代行3か月分をMFクラウドに入力」1〜2万円・継続、「年間記帳代行作業」長期継続。</td></tr>
+    <tr><th>既存の競合</th><td>STREAMED（クラビス＝freeeグループ）、マネーフォワード クラウド記帳代行、TKC</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>月次外注 8,000〜100,000円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 顧問先ごとの摘要→勘定科目の変換辞書が育ち、精度が使うほど上がる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（STREAMEDはfreeeグループ＝上場、マネーフォワードも上場）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。特定業種の前処理（例：訪問介護の利用者別売上）に狭めれば別案になりうる</td></tr>
+    <tr><th>参入しにくさ</th><td>会計カテゴリは補助金の代表格で確立ツールが非常に多い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="A-07" data-state="nokoru">
+  <h3><span class="mono cid">A-07</span> FAX・PDF注文書→受注データ化 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：卸（食品・建材・電子部品・生花）　／　探し先：#2／#3／#4（3つの探し先で重複)</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>小規模卸の受注担当が、毎朝届くFAXやメール添付の注文書を見ながら、基幹システムやExcelへ手打ちしている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「発注書 FAX」96件（「FAXやメールで受けた受注を手打ち」と依頼文に明記、20〜30万円）。知恵袋にも「注文書がFAXで届く」「Excel注文書→受注台帳に自動転記したい」が反復。ITreviewの受発注カテゴリは43製品あるが、不満は「全面移行が重い」に集中。</td></tr>
+    <tr><th>既存の競合</th><td>zaico受注管理、TeleForm（ハンモック）、AnyForm OCR、DX Suite ほかAI-OCR各社</td></tr>
+    <tr><th>主要競合の価格帯</th><td>AI-OCRの費用相場は月額30,000円（BOXILが主要19サービスを調査）</td></tr>
+    <tr><th>今いくら払っているか</th><td>開発外注 4〜30万円、またはAI-OCR 月3万円前後</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 取引先ごとの帳票レイアウト定義と商品名の名寄せ辞書が溜まる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E1の恐れ（AI-OCR大手に上場企業を含む）。E2も懸念どまりで「確定」ではない</td></tr>
+    <tr><th>判定の理由</th><td>未確認を理由に落とさない。ただし19サービス以上が並ぶ過密カテゴリで、月3万円ではなく低額帯に絞る前提</td></tr>
+    <tr><th>参入しにくさ</th><td>AI-OCRは補助金の定番カテゴリと見られる（【未確認】）</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="A-08" data-state="nokoru">
+  <h3><span class="mono cid">A-08</span> 求人原稿の多媒体入稿・書式変換 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：人材・採用代行　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>人材紹介・派遣・採用代行の担当者が、1つの求人内容をIndeed・求人ボックス・自社サイト・業界特化媒体ごとの文字数制限と項目構成に合わせて手で書き直している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「求人原稿」605件、継続案件が多数：「Indeed求人作成・入稿代行／1件1,500円〜6,000円」継続、「1依頼1万円〜 アルバイト求人原稿作成」継続、「1,200〜1,600字／1,500円〜」長期継続。</td></tr>
+    <tr><th>既存の競合</th><td>採用係長、Airワーク採用管理、engage、HRMOS、ジョブオプLite</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（採用係長に料金ページはあるが具体額を取得できず）</td></tr>
+    <tr><th>今いくら払っているか</th><td>原稿外注 1件 1,500〜6,000円（求人票に明記）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 採用は継続業務だが、媒体側の無料ATSに吸収されやすい</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E2の懸念（Indeed／Airワークが無料で近い機能を提供）。確定ではない</td></tr>
+    <tr><th>判定の理由</th><td>未確認を理由に落とさない。ただし無料の代替が強く、参入しにくい側</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="A-09" data-state="nokoru">
+  <h3><span class="mono cid">A-09</span> 不動産ポータルの物件リサーチ自動リスト化 <span class="st nokoru">残る（着手前に法務確認が必須）</span></h3>
+  <p class="meta">業種：不動産（投資・買取再販）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>不動産投資・買取再販の会社が、楽待・健美家・アットホーム等の掲載物件を毎日人力で見て、条件に合う物件をExcelに転記している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「不動産 物件 入力」819件。「楽待からの物件リサーチ＆リスト作成」2〜3万円・継続案件あり（1件200円）、「物件情報リスト収集」300〜400円・継続。ランサーズ「スクレイピング」は3,439件。</td></tr>
+    <tr><th>既存の競合</th><td>入稿方向（いい物件One、ラクラクコンバート等）は多数。収集・監視方向の単機能SaaSは見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>リサーチ外注 1件200円／案件単位 2〜3万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎日発生するが、収集条件は他ツールへ移しやすい</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E4の恐れ（ポータルの利用規約でスクレイピングが禁止されている場合がある）</td></tr>
+    <tr><th>判定の理由</th><td>規約違反が確定すればE4で落とす。確認が済むまでは着手しない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="A-10" data-state="nokoru">
+  <h3><span class="mono cid">A-10</span> 運送の配車表・運行日報・傭車請求 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：運送（車両10〜30台）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>運送会社の配車担当が、翌日の配車表をExcelで組み、運行日報と傭車（下請）への支払・請求を手集計している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「運送 配車」32件（件数は薄いが単価が高い）：「運送配車表ソフト作成依頼」5〜10万円、「配車管理システムの開発」10〜20万円、「kintone＋JSの配車管理アプリ」50〜100万円。</td></tr>
+    <tr><th>既存の競合</th><td>次世代運行管理システムAIR ほか。比較記事に16〜23製品</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>システム開発外注 5〜100万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 車両・ドライバー・荷主・運賃タリフのマスタが溜まり、日報から請求までの手順がツール前提になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過。ただし営業のしかたが合わない（訪問・電話商談が主）</td></tr>
+    <tr><th>参入しにくさ</th><td>物流カテゴリは補助金の登録が多いと見られる（【未確認】）</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="A-11" data-state="nokoru">
+  <h3><span class="mono cid">A-11</span> 輸出インボイス／パッキングリスト自動作成 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：貿易（小口輸出）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>食品・水産物・中古品などを小口輸出する中小事業者が、出荷ごとにコマーシャルインボイスとパッキングリストをExcelで手作りし、商品リスト・重量・HSコードを毎回転記している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「インボイス 輸出」33件：「輸出用インボイス作成支援システム作成」2〜3万円、「魚介類輸出のインボイス・パッキングリスト作成」〜5,000円、「貿易書類作成・商品リスト更新」1件1,320円のタスク型（＝反復発注）。農林水産省の輸出支援サイトが「インボイスの作り方」を解説し外注まで案内している。</td></tr>
+    <tr><th>既存の競合</th><td>DEXTRE、ネットロック「輸出マスター」</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>1件1,320円のタスク外注／システム化で2〜10万円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 商品マスタ（英名・HSコード・原産地・重量）と取引先マスタが顧客固有に溜まる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="A-12" data-state="nokoru">
+  <h3><span class="mono cid">A-12</span> 個別指導塾のコマ割り・振替 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：学習塾（個別指導・そろばん）　／　探し先：#2 クラウドソーシング</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>教室長が、生徒の希望曜日と講師の出勤可能時間を突き合わせてコマ割りを組み、欠席の振替を手作業でやり直している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ランサーズ「塾 管理」624件：「個別指導塾のスケジュール自動化VBA開発」、「そろばん塾の生徒管理システム（VBA）」6〜7万円、「学習塾の入退室通知システム」30〜40万円。</td></tr>
+    <tr><th>既存の競合</th><td>Comiru（POPER）ほか、塾管理システム比較記事に17製品</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（Comiruに料金ページはあるが具体額を取得できず）</td></tr>
+    <tr><th>今いくら払っているか</th><td>開発外注 1,000〜400,000円（幅が大きい）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 生徒・講師・科目・振替履歴が溜まり、他へ移すと過去の受講履歴が消える</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E2の懸念（塾管理の総合SaaSが同機能を内包）。確定ではない</td></tr>
+    <tr><th>判定の理由</th><td>「コマ割りと振替だけ」に絞る前提。過密カテゴリで価格も崩れている点は不利</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】比較記事に17製品が並ぶ準過密カテゴリ</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-01" data-state="nokoru">
+  <h3><span class="mono cid">B-01</span> 通勤費内訳オートフィル <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：一般企業（50〜300人）の経理・総務　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>交通系ICの利用履歴を取り込んでも、訪問先・目的・内訳区分を1件ずつ手で選び直す作業が毎月残る。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview ジョブカン経費精算 星3「交通系ICカードから交通費データ読み込んでも申請時の内訳を毎回選ぶ手間は一向に改善されない」／楽楽精算 星2.5「設定作業が複雑で、専門知識がない担当者では実装に膨大な時間を要する」。経費精算は「機能不足」より「毎回の手間が減らない」に不満が集中。</td></tr>
+    <tr><th>既存の競合</th><td>駅すぱあと通勤費Web（ヴァル研究所）、NAVITIME経費精算。経費精算SaaS内の一機能としては楽楽精算・ジョブカン・バクラク</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（ITreviewの価格ページは「調査中」表示）</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】経費精算SaaSの利用料に内包され、この作業単体への支出は分離されていない</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 通勤区間・定期区間・訪問先の対応表が顧客ごとに蓄積し、移すと過去の判定履歴が消える</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】ヴァル研究所の資本状況）</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】経費精算カテゴリ自体は登録が多いと見られる</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="B-02" data-state="nokoru">
+  <h3><span class="mono cid">B-02</span> 協力会社コンプラ期限台帳 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設・製造の元請／発注側　／　探し先：#3 低評価レビュー（海外カテゴリ比較）</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>協力会社から集める労災保険証券・建設業許可証・車両保険証券の有効期限をExcelで管理し切れず、失効に気づけない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>G2に Insurance Compliance という独立カテゴリが存在し、myCOI・Certificial・TrustLayerが単機能製品として並ぶ。一方ITreviewには該当カテゴリが無く、Greenfile.workはレビュー0件。日本側にこの単機能が存在しない。</td></tr>
+    <tr><th>既存の競合</th><td>国内の単機能は見当たらない。近接：グリーンサイト、Greenfile.work。海外：myCOI、Certificial、TrustLayer</td></tr>
+    <tr><th>主要競合の価格帯</th><td>Greenfile.workの料金ページに金額の掲載なし。グリーンサイトは不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 協力会社ごとの証券・許可の履歴が溜まり、抜けると監査時に過去を再構成できない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（国内の最有力競合を特定できず）</td></tr>
+    <tr><th>判定の理由</th><td>海外に単機能カテゴリが成立し、日本に無い型。空いている側</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-03" data-state="nokoru">
+  <h3><span class="mono cid">B-03</span> 資格・免許の期限だけ通知 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：製造・建設・運送の安全衛生担当　／　探し先：#3 低評価レビュー（海外カテゴリ比較）</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>フォークリフト・玉掛け・クレーン・特定化学物質などの技能講習／免許の有効期限と再教育時期を、名簿Excelで管理している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>Capterraに Certification Tracking Software という単機能カテゴリが存在し、Expiration Reminderが月49ドルから掲載。日本側のITreviewには専用カテゴリが無く、近接のSkillnoteは低評価レビューがほぼ存在しない（＝小規模層が導入していない可能性）。</td></tr>
+    <tr><th>既存の競合</th><td>Skillnote、スキルナビ、タレントマネジメントSaaS内の資格管理機能。国内の単機能は見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明。参考：海外Expiration Reminderは月49ドル</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】Excel運用が主で支出ゼロの可能性</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 従業員ごとの資格取得・更新履歴が年単位で溜まり、移行すると再取得日が追えなくなる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】Skillnoteの資本状況）</td></tr>
+    <tr><th>判定の理由</th><td>海外に単機能カテゴリが成立し、日本に無い型</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-04" data-state="nokoru">
+  <h3><span class="mono cid">B-04</span> インボイス登録番号の継続監視 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：中小企業の経理　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>取引先マスタの適格請求書発行事業者登録番号を一括照合し、登録取消・失効を継続監視したいが、内蔵機能は自社が使っていない製品側にしかない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview ジョブカン経費精算 星3「インボイス制度対応以外ではほとんど機能追加は無く進歩しない」＝インボイス対応が抱き合わせ機能として扱われている。技術面では国税庁が公表システムのWeb-APIを公開している。</td></tr>
+    <tr><th>既存の競合</th><td>invox、バクラク、TOKIUM等の請求書受領SaaSの内蔵機能。無料の単発照合ツールも存在</td></tr>
+    <tr><th>主要競合の価格帯</th><td>無料ツールが存在するため単発照合は実質0円</td></tr>
+    <tr><th>今いくら払っているか</th><td>ほぼ0円（無料ツール＋手作業）。【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎月の請求書処理で発生するが、乗り換えても失うデータは少ない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（E2は懸念どまり。国税庁APIが公開されており自社実装は可能）</td></tr>
+    <tr><th>判定の理由</th><td>足切りは「中」で通過。ただし無料の代替が強い</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-05" data-state="nokoru">
+  <h3><span class="mono cid">B-05</span> 電帳法のリネーム＆索引簿 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：一般企業（20〜100人）の経理　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>電子取引データの保存自体はクラウドストレージで足りるのに、電帳法の検索要件（取引年月日・取引先・金額）を満たすファイル名規則の付与と索引簿作成だけが手作業で残る。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview invox電子帳簿保存 星2〜2.5「過去に保存した請求書はどこにいっちゃったかな？というような感じになります」。文書管理カテゴリでは「保存できるが探せない」型の不満が出ている。</td></tr>
+    <tr><th>既存の競合</th><td>invox電子帳簿保存、バクラク電子帳簿保存、楽楽電子保存。「リネーム＋索引簿だけ」の単機能は見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 保存規則と索引簿が年度をまたいで積み上がり、途中で変えると過去分の一貫性が崩れる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】invoxの調達状況。バクラク＝LayerXは大型調達済みだが最有力競合とまでは確定できない）</td></tr>
+    <tr><th>判定の理由</th><td>未確認を理由に落とさない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】電帳法対応ツールは登録が多いと見られる</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-06" data-state="nokoru">
+  <h3><span class="mono cid">B-06</span> 取引先の指定様式そのまま請求 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：大手に納入する中小の卸・製造・下請　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>自社の販売管理から出た請求データを、取引先ごとに違う指定Excel様式やWeb-EDI画面へ毎月手で転記している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview BtoBプラットフォーム受発注 星3「既存のプラットフォームに自社業務フローを変更して乗せることが負担が大きかった」／星3「各種登録をもっと簡単にしてもらいたい」。「相手のプラットフォームに自社を合わせる負担」が繰り返し出ている。</td></tr>
+    <tr><th>既存の競合</th><td>単機能としては見当たらない。近接：RPA、EDI変換サービス</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】人件費として吸収されている可能性</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 取引先ごとの様式マッピング定義が資産になり、他へ移すと作り直しになる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（Excel様式への出力に限定すればE3非該当。Web-EDI画面の自動操作まで必須とするとE3の恐れ）</td></tr>
+    <tr><th>判定の理由</th><td>Excel様式への出力に限定する前提。悩みが言語化されにくく検索されにくいのが弱点</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="B-07" data-state="nokoru">
+  <h3><span class="mono cid">B-07</span> 承認の滞留だけ督促 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：一般企業（100〜300人）の管理部門　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>ワークフローに溜まった未承認の申請が種類ごとに区別されず、担当者が自分で通知を仕分けて催促して回っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview rakumoワークフロー 星2.5「WFの種類ごとに未承認WFの通知を出せない（自分が関与する全ての種類のWFの通知を一緒くたにしか表示できない）」／星3「過去のものを探すときもっと細かく検索したい」。</td></tr>
+    <tr><th>既存の競合</th><td>単体の督促SaaSは見当たらない。ワークフローSaaS各社のリマインド機能に内包</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>0円（既存ワークフロー料金に内包）と推定。【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎週発生するが、既存ワークフロー側が同等機能を出せば乗り換えても失うものは少ない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E2・E3とも懸念どまり（対象ワークフローのAPI公開状況次第）</td></tr>
+    <tr><th>判定の理由</th><td>足切りは通過するが、4項目の評価が最も低い部類</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="B-08" data-state="nokoru">
+  <h3><span class="mono cid">B-08</span> 総勘定元帳のあいまい検索 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：中小企業の経理・監査対応　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>総勘定元帳から特定の取引を探すとき、科目コードの範囲指定しかできず、摘要の部分一致で横断検索できない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview 勘定奉行クラウド 星3〜3.5「総勘定元帳で科目検索する際、科目コード〜科目コードという条件指定になるため虫食いでの検索ができない」。会計カテゴリの低評価は「機能不足」ではなく「探せない」に寄っている。</td></tr>
+    <tr><th>既存の競合</th><td>単機能としては見当たらない。近接：各会計ソフトの検索機能、BIツール</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>0円（会計ソフト料金に内包）と推定。【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 月次・決算期に必ず使うが、会計ソフト側が改善すれば失うものは少ない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（CSV取り込み方式ならE3非該当）</td></tr>
+    <tr><th>判定の理由</th><td>足切りは通過。リーチ手段が弱い</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-09" data-state="otosu">
+  <h3><span class="mono cid">B-09</span> 契約の更新日だけ管理 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：一般企業（20〜100人）の総務　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>締結済み契約書の自動更新日・解約通知期限を把握できず、不要な契約を1年延長してしまう。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview クラウドサイン 星2〜3「印紙税が不要な電子契約でも利用料金が1通200円必要なので、コストカットにはそれほど貢献しておりません」。電子契約は送信通数課金への不満が中心で、締結後の期限管理は課金対象外の空白になっている。</td></tr>
+    <tr><th>既存の競合</th><td>LegalOn Cloud、ContractS CLM、Hubble、各電子契約サービスの書類管理機能</td></tr>
+    <tr><th>主要競合の価格帯</th><td>クラウドサイン Light 月額11,000円＋送信1通220円／Corporate 月額28,000円＋送信1通220円（税別・公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>電子契約サービス料金に内包（上記の公開価格）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 契約の更新履歴と通知設定が積み上がり、移すと期限管理の連続性が切れる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（最有力競合のLegalOn Technologiesが大型調達済み）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1</td></tr>
+    <tr><th>参入しにくさ</th><td>契約管理は補助金の登録ツールが多いと見られる（【未確認】）</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="B-10" data-state="nokoru">
+  <h3><span class="mono cid">B-10</span> 取引先マスタの変更検知 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：中小BtoB企業の営業事務・経理　／　探し先：#3 低評価レビュー</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>取引先の社名変更・本店移転・合併を、請求書の返送や郵便の宛先不明で初めて知る。名刺管理SaaSは高くて導入できない層。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview Sansan 星2〜3「コスト。その一言に尽きる」（精度は高いが値上がりが大きく、プランの選択肢を増やしてほしい）。名刺管理カテゴリでは「価格に対する範囲の狭さ」が低評価の中心。</td></tr>
+    <tr><th>既存の競合</th><td>Sansan、uSonar（ランドスケープ）。「変更検知だけ」の単機能は見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 自社マスタと外部データの突合結果が蓄積し、移すと差分履歴が消える</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】Sansanを最有力競合とみなすとE1該当（上場）。変更検知単機能では該当を特定できず</td></tr>
+    <tr><th>判定の理由</th><td>未確認を理由に落とさない。国税庁法人番号公表サイトのWeb-API仕様の確認が前提（【未確認】）</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="B-11" data-state="nokoru">
+  <h3><span class="mono cid">B-11</span> 工事台帳だけクラウド <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：専門工事会社（20〜50人）・一人親方　／　探し先：#3 低評価レビュー／#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>工事ごとの原価集計（労務費・材料費・外注費）だけが必要なのに、建設ERPや施工管理SaaSを丸ごと契約させられる。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>ITreview 建設業ERP PROCES.S 星3〜3.5「初期費用がかかり、他社のクラウドツールと比べると割高」／星2.5「エラーチェック処理がちゃんと実装されていない」。ITreviewに「工事台帳システム」という細分カテゴリが既に18製品で存在。BOOTHでは建設TOOLSが「現場別 原価・人工・利益管理Excel」3,980円をシリーズ化し、Sheet Smithは工事台帳をVER.2→VER.2.5と改訂している（＝売れて改訂された痕跡）。</td></tr>
+    <tr><th>既存の競合</th><td>どっと原価（建設ドットウェブ）、アイピア、サクミル、ANDPAD、PROCES.S</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>Excelテンプレート 1,500〜7,980円（買い切り）／ココナラのオーダーメイド 5,000〜15,000円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 工事ごとの原価実績が年をまたいで蓄積し、移すと過去工事の粗利が追えなくなる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】ANDPADを最有力競合とみなすとE1該当（大型調達済み）。工事台帳単機能では該当を特定できず</td></tr>
+    <tr><th>判定の理由</th><td>ANDPAD非導入の1〜5名層に絞れば正面衝突を避けられる</td></tr>
+    <tr><th>参入しにくさ</th><td>ITreviewに「工事台帳システム」18製品が既に存在＝確立ツールが多い側</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="C-01" data-state="otosu">
+  <h3><span class="mono cid">C-01</span> 運送業の点呼記録簿＋アルコールチェック記録 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：運送・白ナンバー事業者　／　探し先：#4 知恵袋／#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>運行管理者と運転者が、乗車前後の点呼と酒気帯び確認の結果を毎日記録し1年保存する必要がある。紙・手書きが残り、アプリを入れても電波の悪い駐車場で送信エラーになり最初からやり直しになる。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋に「点呼記録簿を今手書きでやっている」「Excelで作った点呼簿を印刷して手書き」「電子印鑑にしてよいか」が反復。App Storeではアルコールチェック系が軒並み低評価：Fleet Driver 星1.81／105件、FLEETGUIDE 星1.79、LINKEETH DRIVE 星1.51。レビュー原文「通信環境が良くないとデータ送信がエラーになり最初から入力し直し…地下駐車場など電波が悪い場所も多いのにこの仕様は使えません」。</td></tr>
+    <tr><th>既存の競合</th><td>SmartDrive Fleet、LINKEETH（NTTドコモビジネス）、Bqey（東海理化）、リコー点呼業務改善パック、IT点呼キーパー（テレニシ）</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（比較記事12サービスとも金額の公開なし）</td></tr>
+    <tr><th>今いくら払っているか</th><td>検知器の実機購入費は発生。記録アプリ単体の支払額は不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 法令上1年間の記録保存義務があり、記録の連続性が切れると監査対応ができない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（NTTドコモビジネス・東海理化・パイオニア・リコーが上場、SmartDriveも大型調達済み）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。需要と不満の証拠は今回の51件で最も強い部類のため、「機器連携なし・記録簿のみ」で最有力競合が別に立つと確認できた場合は再検討の価値がある</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="C-02" data-state="nokoru">
+  <h3><span class="mono cid">C-02</span> 紙マニフェストの本社一元管理・未返送アラート <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：排出事業者（建設・製造・小売）　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>複数事業場を持つ排出事業者の環境担当が、各事業場が発行した紙マニフェストのA〜E票の返送期限（90日／180日）を本社でExcel集約して追っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「各事業場で発行したマニフェスト伝票を本社で管理するためのエクセル帳票」＝統一フォーマットがなく本社で一元追跡できないと本文に明記。「マニフェスト印刷のみのフリーソフトはないか」「記入ミスの訂正方法」も反復。</td></tr>
+    <tr><th>既存の競合</th><td>JWNET（電子マニフェスト）、e-reverse.com、環境エース一元くん。比較記事に11製品</td></tr>
+    <tr><th>主要競合の価格帯</th><td>JWNET 排出事業者A料金 基本料26,400円/年＋11円/件／B料金 基本料1,980円/年＋22円/件（90件まで無料）／C料金 基本料110円/年（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>紙運用の事業者は伝票購入費のみ。金額は【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 5年保存義務があり、過去の伝票台帳が資産になる。毎月必ず発生する</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（E2の懸念はあるが「紙のまま運用せざるを得ない事業者の集約管理」に絞れば回避できる）</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過。産廃処理業者が顧客へ無償配布する例がある点は競合要因</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】比較記事に11製品</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="C-03" data-state="nokoru">
+  <h3><span class="mono cid">C-03</span> 古物台帳クラウド <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：リユース・古着・買取・遺品整理　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>古物営業法で義務づけられた買取／引渡の記録（相手方の確認・品目・特徴）を、Excelや手書き簿冊で付けている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋に「古物台帳」のタグページが存在するほど質問が反復（「フリーソフトでどこか良いソフトありませんか」「おすすめのExcelシートは」「用紙と提出について」）。現役経営者のnote「古物台帳の電子化、実際どれが使える？」が、Excel自作は改ざん防止が弱い／専用アプリはサービス終了時のデータ移行リスク、と整理している。</td></tr>
+    <tr><th>既存の競合</th><td>RECORE（リユース向けPOS）、スマレジ買取オプション、NRAクラウド、NV CLOUD。確立した専用SaaSの固有名詞は薄い</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（noteは専用アプリ相場を「数千円〜数万円/月」と記述するのみで製品名・金額の明示なし）</td></tr>
+    <tr><th>今いくら払っているか</th><td>多くはExcel・紙で0円。【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 台帳は最終記載から3年保存が必要で、警察の立入時に提示する。過去データが移せないと実務が止まる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（E1〜E4いずれも該当を確認できず）</td></tr>
+    <tr><th>判定の理由</th><td>今回51件のうち最も空いている部類。POS付帯機能として無料同梱される流れは要監視</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】比較記事も少なく、確立した専用SaaSが見当たらない</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="C-04" data-state="nokoru">
+  <h3><span class="mono cid">C-04</span> 警備業の法定備付簿冊メーカー <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：警備（中小）　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>警備員指導教育責任者が、教育計画書・教育実施簿・指導計画書・指導実施簿・警備員名簿など8種の法定備付簿冊を毎月／毎年Wordで作り直している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋に「警備員名簿」タグページが存在。「法定備付簿冊の8種類を教えてください」「教育実施簿を書面で残す場合は」「毎月、警備員指導実施計画に基づき」など、作成負担そのものの質問が反復。</td></tr>
+    <tr><th>既存の競合</th><td>コンピュータマネジメント「警備業システム」、AtomicSoftware「警備フォース」、ガードエクスプレス。既存は配置・管制・給与の一元型が中心</td></tr>
+    <tr><th>主要競合の価格帯</th><td>隊員50〜100名規模で 単機能型 月3〜6万円前後、一元管理型 月5〜10万円前後（警備フォース運営の比較記事）</td></tr>
+    <tr><th>今いくら払っているか</th><td>上記の月3〜10万円が既存の相場。簿冊専用に払っている額は【未確認】</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 教育記録は警備員ごとに毎年度積み上がり、公安委員会の立入検査で過去分を見せる。移行すると履歴が切れる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（競合2社の上場・大型調達は確認できず＝【未確認】）</td></tr>
+    <tr><th>判定の理由</th><td>簿冊単機能は空いている。既存の主戦場（配置・管制・給与）と正面衝突しない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="C-05" data-state="nokoru">
+  <h3><span class="mono cid">C-05</span> 建設業許可の決算変更届アシスト <span class="st nokoru">残る（着手前に法務確認が必須）</span></h3>
+  <p class="meta">業種：建設業許可業者　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>毎期の決算変更届（建設業法様式の財務諸表への組み替え）と工事経歴書（工事を金額順に並べて記載）を手作業で作っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「去年まで行政書士に依頼していたところを今年は私が作成することに」「工事経歴書をExcelのマクロで入力手間を省きたい」「建設業許可の変更届って自分でやるとなると大変でしょうか」など、外注をやめて自社でやりたいという投稿が反復。</td></tr>
+    <tr><th>既存の競合</th><td>ワイズ「Wisdom2023 建設業許可申請書類作成システム」。ほかは行政書士への外注</td></tr>
+    <tr><th>主要競合の価格帯</th><td>Wisdomの価格は【未確認】。外注側は行政書士の料金表が複数公開（建設業許可申請90,000円をうたう事務所あり）</td></tr>
+    <tr><th>今いくら払っているか</th><td>決算変更届を行政書士に外注している事業者が多数（知恵袋に「去年まで行政書士に依頼」）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 許可業者は毎年必ず提出。過去期の工事経歴・財務データが翌年以降の入力を省く資産になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（本人申請は適法でE4非該当）</td></tr>
+    <tr><th>判定の理由</th><td>行政書士法との線引き（書類の代理作成に当たらない設計）が【未確認】。確認前に着手しない</td></tr>
+    <tr><th>参入しにくさ</th><td>確立SaaSの固有名詞が1つしか見つからず、空いている部類</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="C-06" data-state="nokoru">
+  <h3><span class="mono cid">C-06</span> 給食のアレルゲン自動照合 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：保育園・学校・高齢者施設・給食受託　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>管理栄養士が、毎月の献立の全食材を児童ごとのアレルゲン（卵・乳・小麦・大豆…）と目視照合し、除去食一覧を作っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「献立作成業務をしております。アレルギー成分のチェック作業について、現在、手作業」＝本文に「漏れが怖い」「条件付き書式や検索を試したが効率化には程遠く」「食材が100種類以上あり手作業の条件設定は非効率」と明記。同型の質問が複数。</td></tr>
+    <tr><th>既存の競合</th><td>らくらく献立8（夢工房）、献ダテマン（TAS）。栄養管理システム比較に15製品。既存は栄養計算＋発注＋原価の総合型が中心</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】投稿者はExcelで0円運用</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 児童ごとのアレルゲン台帳と自園の食材マスタが蓄積し、毎月使う。事故が起きれば責任問題になるため定着しやすい</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（アレルゲン判定の誤りは健康被害に直結するため免責と運用設計の慎重さが要るが、規制違反ではない）</td></tr>
+    <tr><th>判定の理由</th><td>アレルゲン照合の単機能は空いている</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="C-07" data-state="nokoru">
+  <h3><span class="mono cid">C-07</span> レシピ原価・理想原価の自動計算 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：飲食店・菓子製造　／　探し先：#4 知恵袋／#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>メニュー1品ごとの食材使用量×仕入単価をExcelで組んで原価率を出そうとしており、仕入単価が変わるたびに全メニューを直している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「メニュー一つずつの原価計算をしようと思います」「菓子製造をしており原価表を作りたい」「有料でもかまいません」＝支払い意思が明言されている。BOOTHではゼロ料理「飲食店原価計算エクセル表&amp;レシピ管理表」が15,800円（税込）で単体販売。ココナラ「飲食店の原価計算」8,000円は評価80件。</td></tr>
+    <tr><th>既存の競合</th><td>レシピオ（food-mart）、テンポス レシピ/原価管理、フーディングジャーナル原価管理ASP、ダ・ヴィンチ</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>テンプレート 3,000〜15,800円（買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 食材マスタとレシピが自社固有の資産として溜まり、移すと全レシピの再入力が必要になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>15,800円のExcelが単体で売れている＝支払い意思の実測が強い。無料テンプレとの競合が実質的な壁</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】飲食×原価の専業SaaSは5社程度と、シフト・建設より薄い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="C-08" data-state="otosu">
+  <h3><span class="mono cid">C-08</span> 整備工場の車検・点検リマインダー <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：自動車整備（認証・指定工場）　／　探し先：#4 知恵袋</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>顧客車両の車検満了日・点検時期をExcelで管理し、案内はがきの宛先抽出と点検整備記録簿の作成を手作業でやっている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「自動車整備業の車両管理ができるソフトはありますか」「エクセルで車検・点検の車両管理表を作りたい」「整備記録簿(2年)のExcel様式雛形を探しております」「顧客カルテをパソコンで管理したい」が反復。</td></tr>
+    <tr><th>既存の競合</th><td>ブロードリーフ（クラウド型業務支援システム）、ディーアイシージャパン「新一等書記官」、ソフトプランナー「GATCH」。比較記事に10製品</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】投稿側はExcel運用</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 顧客・車両・整備履歴が積み上がり、次回車検の営業原資そのものになる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（最有力競合のブロードリーフが上場）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。「車検満了日の通知だけ」に絞る形で最有力競合が別に立つなら再検討の余地</td></tr>
+    <tr><th>参入しにくさ</th><td>ブロードリーフが業界標準として厚い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="C-09" data-state="nokoru">
+  <h3><span class="mono cid">C-09</span> 作業日報→出面（でづら）自動集計 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設・電気・設備（10名前後）　／　探し先：#4 知恵袋／#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>職人の手書き日報を事務が集めてExcelに打ち直し、現場別の出面（人工）と個人別出勤簿・工事原価に振り分けている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>知恵袋「小さな建設業の作業日報を、現在手書き」「日報、個人別出勤簿をExcelで」「手書きの日報をエクセルに変換する方法」が反復。App Storeの日報アプリは低評価で、不満が一点に集中：かんたん作業日報 星2.33／18件のレビュー原文「PDF化して人に送れるといいなぁ」「(メールやExcel等に)書き出しすることは可能でしょうか？」＝入力はできるが出せない。</td></tr>
+    <tr><th>既存の競合</th><td>gamba!、日報革命、nanoty、サクミル、KANNA、ANDPAD、ミライ工事管理、アプリオン</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>【未確認】手書き＋Excelで0円運用が痕跡の実態</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 現場・職人・工事の実績が毎日積み上がり、工事台帳と給与計算の元データになる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】比較記事に並ぶ製品の資本背景。ANDPADは隣接領域）</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過。20製品が並ぶ過密カテゴリだが、勝ち筋は新機能ではなく「出力ができる」ことに絞られている</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】建設DX枠は登録が多いと見られる</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="C-10" data-state="nokoru">
+  <h3><span class="mono cid">C-10</span> 工事写真台帳・電子小黒板 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設（設備・電気・塗装）　／　探し先：#5 テンプレート販売／#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>現場写真をExcelに1枚ずつ貼り付けて台帳を作り、提出前夜に数時間かけている。撮影のたびに黒板の内容を変えるのに画面を往復する。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>蔵衛門工事黒板 星4.71／レビュー20,288件だが最終更新2021-09-24で約5年停止。レビュー原文「撮影画面上で直接編集できず、毎回前の画面に戻る必要があります。200枚以上撮影する現場では、この往復操作が大きな時間ロス」。BOOTHでも「工事写真台帳メーカーPro」4,980円、「工事写真AI台帳」980円など専業ショップが複数、さらに「月額の施工管理ソフト、写真管理しか使ってない人へ」980円という出品まで存在。</td></tr>
+    <tr><th>既存の競合</th><td>蔵衛門（LECRE）、ミライ工事、電子小黒板PhotoManager（ワイズ）、どこでも写真管理Plus（福井コンピュータ）、KANNA、ANDPAD</td></tr>
+    <tr><th>主要競合の価格帯</th><td>蔵衛門工事黒板 ライセンスキー 43,600円（税抜）／端末1台につき1枚（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>端末1台あたり4万円台の買い切りライセンス。テンプレ・ツールは500〜4,980円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 撮影済み写真と黒板データが台帳として蓄積するが、写真原本は手元に残るため乗り換えコストは中程度</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】LECREの資本状況。福井コンピュータは上場だが最有力競合とまでは確定できない）</td></tr>
+    <tr><th>判定の理由</th><td>レビュー2万件が積み上がったまま更新が5年止まっている＝今回51件で最も具体的な空き。国交省の電子小黒板要件（改ざん検知）への対応可否は【未確認】</td></tr>
+    <tr><th>参入しにくさ</th><td>確立ツールが多いカテゴリだが、個人開発の新規参入が現に続いている</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">3／4</span></div></div>
+</article>
+
+<article class="card" id="C-11" data-state="nokoru">
+  <h3><span class="mono cid">C-11</span> 小規模現場の月間工程表 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：建設・電気・内装　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>現場監督が月間工程表を毎月Excelで書き直し、日付列の作り直しと職種行の入れ替えに時間を取られている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH 現場Excelテンプレ工房「【年月を入れるだけ】月間工程表テンプレート」1,980円。同ショップは原価管理表1,980円・月間シフト表1,000円を並行販売し、さらに「現場の事務まわり一式 業務テンプレ5点セット」6,980円をセット化している（＝単品が売れたのでバンドル化した形跡）。</td></tr>
+    <tr><th>既存の競合</th><td>【未確認】小規模向け工程表専用SaaSの固有名詞は特定できず。施工管理SaaSに機能として内包</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>1,980円（単品）／6,980円（5点セット）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎月必ず作り直す業務だが、出力はPDF・印刷で完結し過去データの蓄積価値が薄い</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>【未確認】E2の懸念（施工管理SaaSの標準機能に含まれる）。確定ではない</td></tr>
+    <tr><th>判定の理由</th><td>足切りは「中」で通過。ただし蓄積が薄く、4項目の評価も高くない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="C-12" data-state="nokoru">
+  <h3><span class="mono cid">C-12</span> 外壁塗装の塗布量計算＋案件原価 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：外壁塗装　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>面積から塗料の必要缶数を電卓で出し、見積と実際の材料費がずれて粗利が読めない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH Sheet Smith「外壁塗装工事専用・案件情報＆原価管理＋塗布量計算機能付き」500円。同ショップは工事台帳をVER.2→VER.2.5と改訂し、無料のシフト表テンプレに「300DL突破」と実績を明記している（今回確認できた唯一のDL実績表示）。</td></tr>
+    <tr><th>既存の競合</th><td>eペイント（ソフトピア）＝外壁塗装の面積計算・見積・契約書が連動するWebアプリ</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>テンプレート 500円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 見積は案件ごとに毎回発生するが、単価マスタ以外の蓄積が薄い。実績原価を溜める設計にできれば「大」に寄せられる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>専業SaaSが1本しか特定できず密度は低い</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="D-01" data-state="otosu">
+  <h3><span class="mono cid">D-01</span> シフト表＋人件費のリアルタイム集計（小売・飲食） <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：小売・飲食（小規模）　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>Excelでシフトを組んだあと人件費と労働時間を別集計しており、月末に予算超過が判明する。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH「シフト表」検索で全69件、有料出品が層をなす：「シフトつくる君」1,980円〜（Pro／ライト／無料の3段階）、「シフト作成ツール ブラウザで開くだけ」8,000円、「シフト表・人件費自動集計テンプレート」1,280円ほか。無料版は300DL突破を明記。ココナラ「シフト表」は423件、「シフト自動作成ツール」5,000円は販売実績17件。</td></tr>
+    <tr><th>既存の競合</th><td>oplus、らくしふ、ジョブカン、Airシフト（リクルート）、Sync Up</td></tr>
+    <tr><th>主要競合の価格帯</th><td>oplusは無料プランを掲げる。有料プランの金額は【未確認】</td></tr>
+    <tr><th>今いくら払っているか</th><td>テンプレ 980〜8,000円（買い切り）、ココナラのオーダーメイド 3,000〜19,000円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 毎月必ず発生しやめる理由はないが、スタッフ登録以外の蓄積が薄く乗り換え障壁は低い</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（Airシフトはリクルート＝上場）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。加えて無料SaaSが複数あり価格が崩れている</td></tr>
+    <tr><th>参入しにくさ</th><td>比較サイトが常設されており確立ツールが多い領域</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="D-02" data-state="nokoru">
+  <h3><span class="mono cid">D-02</span> 訪問看護・介護の法定研修 計画＋実施記録台帳 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：訪問看護・介護施設　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>管理者が、義務化された法定研修（感染症・BCP・虐待防止等）の年間計画作成と実施記録を毎年Excelで組み直し、実地指導で記録不備を指摘される。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTHで今回最高価格帯：「訪問看護ステーション 毎月の研修 これ1つで1年分」14,800円、「訪問看護 法令必須研修 完全セット」12,000円、「令和8年度版 介護施設 法令必須研修 完全セット」12,000円。年度版を毎年出し直している＝毎年買い替えられている痕跡。</td></tr>
+    <tr><th>既存の競合</th><td>iBow e-Campus（eWeLL）、学研訪問看護サポート、日本訪問看護財団eラーニング、カイポケ</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>12,000〜14,800円（年度ごとの買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 研修の実施記録は数年分を実地指導で遡って求められる資料であり、移行すると過去の証跡が切れる。法改正で毎年更新が要る</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（eWeLLは上場だが、競合はeラーニング＝コンテンツ販売であり、計画・記録・受講管理の台帳とは主戦場が違う）</td></tr>
+    <tr><th>判定の理由</th><td>1万円超のExcelが年度ごとに売れている＝支払い意思の実測が今回最も強い部類</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">2／4</span></div></div>
+</article>
+
+<article class="card" id="D-03" data-state="nokoru">
+  <h3><span class="mono cid">D-03</span> ヒヤリハット・事故報告書の下書き＋分析 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：介護・医療　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>現場職員がヒヤリハット／事故報告書を手書きしてExcelに転記しており、書くのに時間がかかり、溜まった報告が分析されず再発防止に使われていない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH「匿名AIヒヤリハット・事故報告書（介護・医療スタッフ向け）」1,980円、同ショップ「匿名AI介護記録_施設版」1,980円。個人が作ったAI下書きツールが有料で並んでいる。</td></tr>
+    <tr><th>既存の競合</th><td>ヒヤリハット単機能の専業サービスは見当たらない。ワイズマン、リハブクラウド等の介護ソフトの一機能として内包</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（介護ソフト本体の価格に埋没）</td></tr>
+    <tr><th>今いくら払っているか</th><td>1,980円（テンプレ・ツール買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 事故・ヒヤリハットの記録は事業所に蓄積義務があり、年次の分析・研修材料になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（E2の懸念はあるが、介護ソフト未導入の小規模事業所という逃げ道がある）</td></tr>
+    <tr><th>判定の理由</th><td>単機能の専業が見当たらない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="D-04" data-state="otosu">
+  <h3><span class="mono cid">D-04</span> 介護・看護記録の文例支援 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：訪問看護・介護・ケアマネ　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>日々の記録・申し送り・家族報告の文章を毎回ゼロから書き、表現が人によってばらつく。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH takuyashopが職種別に3本を横展開：「介護記録ポケット 文例244」1,480円、「訪問看護記録ポケット 文例238」1,480円、「ケアマネ支援経過記録ポケット 文例240」1,480円。同一フォーマットの職種別展開＝1本目が売れた形跡。</td></tr>
+    <tr><th>既存の競合</th><td>カイポケ、ほのぼのNEXT、iBow等の記録機能に文例が内包。単機能の文例SaaSは見当たらない</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>1,480円（PDF文例集の買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-sho">小</span> 文例集は買って読めば終わりに近く、記録本体を保持しない限り乗り換え障壁がない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>足切り（使い続ける必然性が「小」）。記録本体を保持する設計に変えれば別案になる</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="D-05" data-state="nokoru">
+  <h3><span class="mono cid">D-05</span> 複数拠点の在庫・出入庫台帳 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：EC・物販（小規模）　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>自社倉庫とFBA・外部倉庫の在庫をExcelで別々に持ち、どこに何個あるか合算できていない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH「在庫管理」検索で全1,386件。「複数倉庫拠点・複数商品を一つのエクセルで管理」980円＝複数拠点合算という具体的な不満がそのまま商品名になっている。ココナラ「アマゾン物販の売上利益を月別で管理」8,000円は販売実績60件。Etsyにも同種スプレッドシートのカテゴリが成立。</td></tr>
+    <tr><th>既存の競合</th><td>プライスター、マカド、ネクストエンジン、ロジクラ、zaico</td></tr>
+    <tr><th>主要競合の価格帯</th><td>マカド 月額4,980円／プライスター 月額5,280円（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>テンプレ 300〜980円、ココナラのオーダーメイド 8,000〜10,000円、既存SaaS 月4,980〜5,280円</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 商品マスタと入出庫履歴が日次で溜まり、切り替えると棚卸の連続性が切れる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（Amazon SP-APIは公開APIのためE3非該当。連携なしの手入力版なら確実に非該当）</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】ネクストエンジン等の確立ツールが多い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="D-06" data-state="otosu">
+  <h3><span class="mono cid">D-06</span> 副業・個人事業主の収支〜確定申告前さばき <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：副業・フリーランス　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>売上と経費をExcelに手打ちして年末にまとめて整理し、申告直前に領収書と突き合わせて数日つぶしている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH「確定申告」検索で全392件という厚み。「白色申告対応 収支帳テンプレート」900円、「個人事業主向け帳簿Excelシステム Polaris」3,960円、「副業の売上・経費を自動集計する収支管理Excel」780円ほか多数。</td></tr>
+    <tr><th>既存の競合</th><td>freee、マネーフォワード クラウド確定申告、やよいの青色申告オンライン</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>350〜3,960円（買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 帳簿は年をまたいで積み上がり、移行コストが高い</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（freee・マネーフォワードともに上場）、E2も該当（会計SaaSの中核機能そのもの）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1・E2</td></tr>
+    <tr><th>参入しにくさ</th><td>確立したツールが極めて多い領域</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="D-07" data-state="otosu">
+  <h3><span class="mono cid">D-07</span> ひとり美容室のメニュー価格・時間収益設計 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：美容室・小規模サロン　／　探し先：#5 テンプレート販売</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>メニュー価格を感覚で決めており、施術時間あたりいくら稼げているかを把握していない。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>BOOTH「ひとり美容室のメニュー価格・時間収益診断 PRICE DESIGN」500円、「MyCarte for Windows」980円、「顧客リスト1000名様分デジタルプランナー」3,300円。ただし美容室カテゴリはチラシ・SNS素材が大半で、業務ツールの出品は薄い。</td></tr>
+    <tr><th>既存の競合</th><td>【未確認】メニュー価格設計に特化したサービスは特定できず。サロンボード（リクルート）等はカルテ・予約が主戦場</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>500〜3,300円（買い切り）</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-sho">小</span> 価格診断は一度やれば用が済む。顧客カルテ側と結合しない限り買って終わりになる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし</td></tr>
+    <tr><th>判定の理由</th><td>足切り（使い続ける必然性が「小」）</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="E-01" data-state="nokoru">
+  <h3><span class="mono cid">E-01</span> 棚卸バーコードスキャン→CSV書き出し <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：小売・卸・部品商・薬局　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>年数回の実地棚卸で、スマホでJANを読んで数量を入れCSVで基幹側に渡したいだけなのに、読取精度・重複送信で在庫が狂う。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>棚卸メール（個人開発）星4.30／800件だが最終更新2022-03-05で約4年半停止。レビュー原文「バーコードを読み取らない。数年前まで普通に使えていたのに」「一度でもメールでデータを送り、履歴を削除したけど、次に送ったデータに前のデータが入ってて重複が頻発。在庫が狂いまくってる」「新しいiPhone13や15は読み込みができないことが多い」「アップデートされると嬉しい」。</td></tr>
+    <tr><th>既存の競合</th><td>zaico、Assetment Neo、Convi.BASE、バーコードde実棚</td></tr>
+    <tr><th>主要競合の価格帯</th><td>zaico 新プラン（2026年6月〜）スターター 月額8,980円（税込9,878円）／ベーシック 月額49,800円／プロフェッショナル 月額150,000円〜（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>レビューに「広告視聴を有料オプションで省きたい」という支払い意思の記述あり。金額は不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 棚卸は毎月〜四半期ごとに必ず発生し、自社JAN対応表を貯めるほど乗り換えにくくなる。単発の読取だけなら乗り換えは容易</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（【未確認】zaicoの調達状況）</td></tr>
+    <tr><th>判定の理由</th><td>レビュー800件が積み上がったまま更新停止＝空きが実測できた。新型端末で読めないという不満まで書かれている</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】スマホ棚卸ツール単体は無料〜低額が主戦場で、補助金の土俵に乗らない可能性がある</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="E-02" data-state="otosu">
+  <h3><span class="mono cid">E-02</span> 訪問介護・訪問看護の提供記録入力 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：訪問介護・訪問看護　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>訪問先で提供したサービスを記録する際、利用者を探す→担当サービスを探す→提供したサービスを探す、の階層をたどるため紙より時間がかかる。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>Care Palette 訪問アプリ（NDソフトウェア）星2.81／36件。レビュー原文「紙で書くより入力作業に時間がかかるようになり、残業時間が増えました」「訪問記録の入力反応が遅すぎる」。かんたん介護記録カナミック 星3.07、えがおDE看護 星2.29 など、どれも3点前後に張り付いている。</td></tr>
+    <tr><th>既存の競合</th><td>カイポケ（エス・エム・エス）、ほのぼのNEXT（NDソフトウェア）、カナミックネットワーク、介五郎、CareViewer</td></tr>
+    <tr><th>主要競合の価格帯</th><td>カイポケ 訪問介護 月額25,000円（税別）・初期費用0円（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>介護ソフト一式として月2.5万円前後</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 利用者台帳・提供記録が介護報酬請求の根拠として蓄積し、過去記録を移せない</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（エス・エム・エス、カナミックネットワーク、NDソフトウェアがいずれも上場）。E3の懸念も大きい（既存介護ソフトへの請求データ受け渡しにAPIが要る／公開状況は【未確認】）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。加えて営業のしかたが代理店・訪問営業で合わない</td></tr>
+    <tr><th>参入しにくさ</th><td>上場3社が揃っており参入難度は高い</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">0／4</span></div></div>
+</article>
+
+<article class="card" id="E-03" data-state="nokoru">
+  <h3><span class="mono cid">E-03</span> サロン・治療院の電子カルテ（同期と検索） <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：美容室・ネイル・エステ・鍼灸整体　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>施術カルテをiPhoneとiPadで共有したいのに同期が壊れる。店舗数や年数が増えるとカルテを開くのに数分かかる。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>カスターマン 星3.98／524件だが最終更新2020-08-06で約6年停止。レビュー原文「だんだん重たくなってきて…ささっとメモしたいのに、すごく待たされるのがストレス」「有料会員になったのに同期できない」。顧客カルテ+POS（個人）星2.59／76件「30店舗分で使っています。一年ほど使っているとカルテを開くのも名前検索もすごく時間がかかります。だいたい3分から長い時で5分」。</td></tr>
+    <tr><th>既存の競合</th><td>LiME、KaruteKun、サロンボード（リクルート）、リザービア、SALONS</td></tr>
+    <tr><th>主要競合の価格帯</th><td>リザービア Basic S 月額21,000円／Advance 月額33,000円・初期費用約100,000円（公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>予約管理込みで月2万円台を払っている店舗が実在。カルテ単体への支払額は不明。ただし個人店が課金する実例はレビューで確認</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 顧客ごとの施術履歴・薬剤配合・ビフォーアフター写真が年単位で蓄積し、移せば過去が消える</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（サロンボードは上場企業のサービスだが、カルテ単機能の実在プレイヤーは個人・小規模が中心）</td></tr>
+    <tr><th>判定の理由</th><td>競合の失点箇所が「同期」と「データ量が増えたときの速度」に集中しており、勝ち筋が新機能ではなく作り込みにある</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】カルテ単体アプリは補助金の比較土俵に乗っていない可能性がある</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">3／4</span></div></div>
+</article>
+
+<article class="card" id="E-04" data-state="nokoru">
+  <h3><span class="mono cid">E-04</span> 飲食店のHACCP衛生記録（複数店舗・広告なし） <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：飲食・惣菜（小規模）　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>HACCPに沿った衛生管理の義務化で、冷蔵庫温度・従業員の健康チェック・清掃の記録を毎日つけ、保健所と営業許可更新に備える必要がある。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>飲食店HACCP ベーシック（個人開発）星4.79／512件・更新2026-08-03＝個人開発でレビュー512件を積み上げた実例。同時に最新レビューで離反が出ている：「広告を見ないと入力できなくなった。アップデート前は広告は下部に小さくあるだけで入力はできたが、今は広告（60秒〜）を見ないと入力できない仕組み。使いづらくなったので、他のを利用しようと思う」。複数店舗版は星4.46だがレビュー24件のみで、無料版との差が20倍以上。</td></tr>
+    <tr><th>既存の競合</th><td>飲食店HACCP（個人）、お店のHACCP（USEN）、カミナシ、HACCP Bell、厚労省の無料アプリ</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明（比較記事に金額の記載なし）</td></tr>
+    <tr><th>今いくら払っているか</th><td>不明。無料アプリ＋広告視聴で運用している店舗が多数いることはレビューで確認</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 法令で毎日の記録が必要で、保健所の立入や営業許可更新で過去記録を求められる。ただし現状は無料アプリで足りている店舗が多い</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（USEN・カミナシは大手だが、1〜数店舗規模では個人開発アプリが実際に首位で、そこが最有力競合）</td></tr>
+    <tr><th>判定の理由</th><td>首位アプリの広告強制への離反が最新レビューに現れており、有料・複数店舗版に空きが見える</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】個人店は補助金申請自体が手間なため、補助金の土俵外で戦える可能性がある</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">4／4</span></div></div>
+</article>
+
+<article class="card" id="E-05" data-state="otosu">
+  <h3><span class="mono cid">E-05</span> 保育園の職員向け園務アプリ <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：保育園・こども園　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>導入済みICTの職員用アプリでは食事チェックやシフト確認ができず、スマホで完結せずPC・タブレットに戻る必要がある。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>コドモンポケット2（職員用）星1.96／119件。レビュー原文「このアプリで出来ることが少なすぎる。食事入力ができない、シフト確認ができない、お迎え時間順に並べられない」「改善して欲しいところを伝えていますが、むしろ余計な仕事が増えてます。たぶん、契約が切れたら他の会社に変えると思います」。れんらくアプリ 星2.30／1,249件、ルクミー for FAMILY 星1.75／781件と、不満レビューの量は今回最大級。</td></tr>
+    <tr><th>既存の競合</th><td>コドモン、ルクミー（ユニファ）、ハグノート、れんらくアプリ（VISH）、キッズリー</td></tr>
+    <tr><th>主要競合の価格帯</th><td>ルクミー カスタマイズ 月額5,000円／スタンダード 月額30,000円（税抜・公開）</td></tr>
+    <tr><th>今いくら払っているか</th><td>園単位で月額5,000〜30,000円台</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 園児台帳・出欠・連絡帳・写真が年度をまたいで蓄積し、行政提出物とも紐づく</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（ユニファは累積調達額93億円、VISHは上場）。E3も該当の恐れ（既存ICTへの相乗りに連携手段が要る／公開状況は【未確認】）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。採用決定が園長・法人本部で、ストアからは届かない点も合わない</td></tr>
+    <tr><th>参入しにくさ</th><td>こどもDX推進協会がICTカタログを公開しており確立ツールが多数</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="E-06" data-state="otosu">
+  <h3><span class="mono cid">E-06</span> 設備・ビル点検の記録→PDF報告書 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：ビルメンテナンス・空調・消防設備（1〜10人）　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>月次・年次の点検を紙のチェックシートで回り、事務所に戻って報告書に清書している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>App Storeで「設備点検」「点検表」に該当するアプリがほとんど存在せず、あってもレビューが1桁〜数十件（MENTENA 星3.79／28件、i-Repo FreeDraw 星4.67／3件、現場レポート 星5.00／10件）。「設備点検 チェック」「清掃 チェックリスト 報告」ではヒット0〜1件＝供給が薄い一方、需要の実測値も取れなかった。</td></tr>
+    <tr><th>既存の競合</th><td>カミナシ、i-Repo（CIMTOPS）、MENTENA、管理ロイド、点検エース</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> 点検履歴が資産ごとに蓄積し、次回点検の比較や法定報告の根拠になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（最有力競合のカミナシがシリーズBで約30億円調達済み）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。加えてレビュー件数という需要の実測値が取れなかった</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="E-07" data-state="nokoru">
+  <h3><span class="mono cid">E-07</span> 軽貨物・一人親方の日報＋売上記録 <span class="st nokoru">残る</span></h3>
+  <p class="meta">業種：軽貨物・小規模運送　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>走行距離・案件別売上・点呼記録を毎日つけ、確定申告と荷主への請求に使っている。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>小規模プレイヤーが乱立し定番不在：delilog 星4.20／10件・更新2026-08-13、CarryNote 星3.86／7件、IT点呼キーパーv2 星3.06／18件、トヨタの共有車管理は星2.50／4件で2022年から更新停止。一方「シンプル走行距離記録」（個人）は星4.22／600件＝走行記録だけなら実測需要がある。</td></tr>
+    <tr><th>既存の競合</th><td>delilog、CarryNote、IT点呼キーパー（テレニシ）、ハコベル、ビジネスナビタイム</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 日報・売上は毎日発生し確定申告のため1年単位で蓄積するが、表計算で代替できる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>なし（軽貨物一人親方セグメントの最有力競合は個人開発。NAVITIME・東計電算は上場だが主戦場が違う）</td></tr>
+    <tr><th>判定の理由</th><td>除外・足切りとも通過。ストア掲載中心で成立している前例がある</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】個人事業主が顧客のため補助金の対象になりにくい可能性がある</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">3／4</span></div></div>
+</article>
+
+<article class="card" id="E-08" data-state="otosu">
+  <h3><span class="mono cid">E-08</span> 外回り営業の訪問記録と地図 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：保険・リフォーム・食品卸の外回り営業　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>どこに行って何を話したかを訪問順に記録し、次回の再訪リストを地図で組みたい。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>マピリスタ（個人）星3.78／244件だが最終更新2023-05-22で3年以上停止。GODOOR（ゼンリンデータコム）星2.80／20件、cyzen 星2.89／36件。カスターマン（星3.98／524件）にも訪問予定機能への不満あり。</td></tr>
+    <tr><th>既存の競合</th><td>cyzen、UPWARD、GODOOR（ゼンリンデータコム）、マピリスタ（更新停止中）、Salesforce</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-chu">中</span> 訪問履歴は日々蓄積するがSFA／CRMへの置換が容易で、乗り換えの痛みが小さい</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（ゼンリンデータコムは上場ゼンリンの子会社、Salesforceも上場）。E2の恐れも（SFAのモバイル機能に含まれる）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】SFA・営業支援は補助金の登録が非常に多いと見られる</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-chu">中</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<article class="card" id="E-09" data-state="otosu">
+  <h3><span class="mono cid">E-09</span> LPガス・設備の検針／メーター読取記録 <span class="st otosu">落とす</span></h3>
+  <p class="meta">業種：LPガス販売店・ビル管理・電気保安　／　探し先：#9 アプリストア</p>
+  <div class="tw"><table class="kv">
+    <tr><th>困りごと</th><td>毎月決まった巡回でメーター値を控え、事務所で表計算に転記している。</td></tr>
+    <tr><th>探し先で見つけた痕跡</th><td>App Storeの該当アプリはすべてレビュー1桁で、メーカー付属アプリしかない（モバイル検針＝三菱電機 星3.60／10件、hakaru.ai byGMO 星3.75／12件、ToruMeter＝東芝 星4.50／4件、kensAin 星5.00／7件・2022年更新停止）。件数が少なすぎて不満の一次情報が取れず、需要の実測値が得られなかったカテゴリ。</td></tr>
+    <tr><th>既存の競合</th><td>hakaru.ai byGMO、ToruMeter（東芝）、モバイル検針（三菱電機）、kensAin</td></tr>
+    <tr><th>主要競合の価格帯</th><td>不明</td></tr>
+    <tr><th>今いくら払っているか</th><td>不明</td></tr>
+    <tr><th>使い続ける必然性</th><td><span class="bdg b-dai">大</span> メーターごとの月次値が時系列で蓄積し、前月差分の算出と請求根拠になる</td></tr>
+    <tr><th>除外条件（E1〜E4）</th><td>E1該当（三菱電機・東芝・GMOがいずれも上場）。E3の恐れも（LPガス販売店の請求システムとの連携／公開状況は【未確認】）</td></tr>
+    <tr><th>判定の理由</th><td>除外条件E1。加えて需要の実測値が取れず、ストア検索もほぼ機能していない</td></tr>
+    <tr><th>参入しにくさ</th><td>【未確認】</td></tr>
+  </table></div>
+  <div class="hyw"><div class="hy"><span class="hyl">作れる度合い</span><span class="bdg b-dai">大</span></div><div class="hy"><span class="hyl">需要の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">リーチ手段の実在</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">営業のしかたが合うか</span><span class="bdg b-sho">小</span></div><div class="hy"><span class="hyl">「大」の数</span><span class="bdg b-num num">1／4</span></div></div>
+</article>
+
+<h2 id="s5">5. 探し先ごとに分かったこと</h2>
+<h3>#2 クラウドソーシングの反復発注</h3>
+<p>反復発注が依頼のタイトルに直接出る（「3回目」「2回目」「継続依頼あり」）ため、痕跡としては今回いちばん確度が高い探し先でした。件数が最も厚いのは<strong>「A社の書式のCSV／PDF → B社の書式へ変換」</strong>型（受注CSV 720件、請求書マクロ 141件）で、変換定義が顧客ごとに違うため大手の標準機能で吸収されにくい構造があります。一方で会計・請求書・記帳代行は上場企業と正面衝突するため、除外条件E1に触れやすい領域でした。</p>
+<h3>#3 SaaSレビューサイトの低評価</h3>
+<p>国内の星2〜3の不満は「機能が足りない」ではなく<strong>「毎回の手間が減らない」「探せない」「設定が複雑」</strong>に集中していました。価格への不満も絶対額ではなく「使っていない範囲まで払わされている」という形で出ます。ただし業種特化のニッチ（安全書類・介護・産廃）はレビュー自体が数件しかなく、<strong>ITreviewはニッチの需要検証には使えません</strong>。その裏取りは#4・#9で行いました。また、海外のG2・Capterraには「保険証券コンプライアンス追跡」「資格の有効期限追跡」という<strong>単機能カテゴリが独立して成立</strong>しており、日本に同名カテゴリが無いという空きが見つかりました（B-02・B-03）。</p>
+<h3>#4 Q&amp;A・SNSの困りごと</h3>
+<p>最も繰り返されていたのは<strong>「法令で作る義務がある帳票を、専用ソフトがないままExcel・手書きで作っている」</strong>型でした（点呼記録簿・古物台帳・警備の教育実施簿・建設業の決算変更届・マニフェスト）。毎月・毎年必ず発生し、保存義務があるため定着しやすい構造です。ただし投稿者の大半は<strong>今すでに0円で回している</strong>ため、有償化の壁は機能ではなく「法令に適合している安心」と「過去記録が残ること」にあります。</p>
+<h3>#5 有料テンプレートの販売実績</h3>
+<p>金額が突出しているのは<strong>法令・監査で証跡が要る領域</strong>で、訪問看護・介護の法定研修セットが12,000〜14,800円、飲食店の原価計算Excelが15,800円と、他ジャンル（300〜2,000円）より一桁高い値が付いていました。払う理由が「便利」ではなく「無いと困る」だからです。売れている証拠は<strong>シリーズ化・バージョン改訂・年度版の出し直し</strong>に出ます。一方、テンプレ起点の案は「買って終わり」が多数派で、必然性が「大」になるのは顧客固有のデータが溜まるものに限られました。</p>
+<h3>#9 アプリストアのランキングとレビュー</h3>
+<p>いちばん具体的だったのは<strong>「レビューが積み上がったまま更新が止まっている個人開発アプリ」</strong>で、蔵衛門工事黒板（★4.71／20,288件・2021年更新停止）、棚卸メール（★4.30／800件・2022年停止）、カスターマン（★3.98／524件・2020年停止）、マピリスタ（★3.78／244件・2023年停止）の4件が見つかりました。低評価レビューの中身は機能不足ではなく<strong>「オフラインで送信に失敗して再入力」「端末間で同期しない」「データが増えると数分待たされる」</strong>という実装品質への不満に偏っており、勝ち筋は新機能ではなく既存アプリが落としている一点の作り込みにあります。逆に「設備点検」「検針」などは供給が薄い一方で<strong>レビュー件数という需要の実測値がまったく取れず</strong>、この探し方では裏付けができませんでした。</p>
+
+<h2 id="s6">6. 次にやること</h2>
+<p>確定版の目標は80件以上です。今回は探し先12のうち5つを使って51件を出しました。残りの探し先で第2弾を作り、合計85件前後にします。</p>
+<div class="tw"><table>
+<thead><tr><th>回</th><th>使う探し先</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td>第1弾（この資料）</td><td>#2 クラウドソーシング／#3 低評価レビュー／#4 Q&amp;A・SNS／#5 有料テンプレート／#9 アプリストア</td><td>完了・51件</td></tr>
+<tr><td>第2弾</td><td>#6 マイクロSaaSディレクトリ（海外）／#7 紙とExcelで回っているレガシー産業／#8 他社ストアのアプリ一覧／#10 業界団体・組合が案内しているツール／#11 海外にあって日本にない単機能／#12 既存3本（Snoker・Rabelu・Rakuvi）の周辺</td><td>未着手</td></tr>
+<tr><td>第3弾</td><td>第1弾・第2弾を1本のカタログに統合。#1（IT導入補助金のITツール一覧）で「参入しにくさ」の印を確定させる</td><td>未着手</td></tr>
+</tbody></table></div>
+<p>そのうえで、坂野様が全件を目視で見て、深く調べる案を選びます（進め方の段階5）。</p>
+<div class="note"><strong>着手前に確認が必要な案が2件あります。</strong>A-09（不動産ポータルの物件リサーチ）は各ポータルの利用規約でスクレイピングが禁止されていないか、C-05（建設業許可の決算変更届）は行政書士法との線引きが、それぞれ【未確認】です。どちらも選ばれた場合は、開発の前に確認します。</div>
+
+<h2 id="s7">7. 出典</h2>
+<p class="lead">2026-08-28 に確認したものです。時間が経つと内容が変わります。</p>
+<h3>探し先#2 クラウドソーシング</h3><ul class="src"><li><a href="https://www.lancers.jp/work/search?keyword=%E5%8F%97%E6%B3%A8%20CSV" target="_blank" rel="noopener">ランサーズ 受注CSV 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E6%8B%BE%E3%81%84%E5%87%BA%E3%81%97" target="_blank" rel="noopener">ランサーズ 拾い出し 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B5%E3%82%A4%E3%83%88" target="_blank" rel="noopener">ランサーズ グリーンサイト 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E3%82%B7%E3%83%95%E3%83%88%E4%BD%9C%E6%88%90" target="_blank" rel="noopener">ランサーズ シフト作成 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E8%AB%8B%E6%B1%82%E6%9B%B8%20%E4%BD%9C%E6%88%90%20%E3%83%9E%E3%82%AF%E3%83%AD" target="_blank" rel="noopener">ランサーズ 請求書 作成 マクロ 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E8%A8%98%E5%B8%B3%E4%BB%A3%E8%A1%8C" target="_blank" rel="noopener">ランサーズ 記帳代行 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E7%99%BA%E6%B3%A8%E6%9B%B8%20FAX" target="_blank" rel="noopener">ランサーズ 発注書 FAX 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E6%B1%82%E4%BA%BA%E5%8E%9F%E7%A8%BF" target="_blank" rel="noopener">ランサーズ 求人原稿 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E4%B8%8D%E5%8B%95%E7%94%A3%20%E7%89%A9%E4%BB%B6%20%E5%85%A5%E5%8A%9B" target="_blank" rel="noopener">ランサーズ 不動産 物件 入力 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E9%81%8B%E9%80%81%20%E9%85%8D%E8%BB%8A" target="_blank" rel="noopener">ランサーズ 運送 配車 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E3%82%A4%E3%83%B3%E3%83%9C%E3%82%A4%E3%82%B9%20%E8%BC%B8%E5%87%BA" target="_blank" rel="noopener">ランサーズ インボイス 輸出 検索</a></li><li><a href="https://www.lancers.jp/work/search?keyword=%E5%A1%BE%20%E7%AE%A1%E7%90%86" target="_blank" rel="noopener">ランサーズ 塾 管理 検索</a></li><li><a href="https://coconala.com/search?keyword=CSV%20%E5%A4%89%E6%8F%9B" target="_blank" rel="noopener">ココナラ CSV変換 検索</a></li><li><a href="https://crowdworks.jp/pages/guides/employer/pricing" target="_blank" rel="noopener">クラウドワークス 発注相場</a></li></ul>
+<h3>探し先#3 SaaSレビューサイトの低評価</h3><ul class="src"><li><a href="https://www.itreview.jp/products/jobcankeihiseisan/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview ジョブカン経費精算（低評価順）</a></li><li><a href="https://www.itreview.jp/products/rakurakuseisan/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview 楽楽精算（低評価順）</a></li><li><a href="https://www.itreview.jp/products/invox-storage/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview invox電子帳簿保存（低評価順）</a></li><li><a href="https://www.itreview.jp/products/rakumo-workflow/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview rakumoワークフロー（低評価順）</a></li><li><a href="https://www.itreview.jp/products/kanjobugyocloud/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview 勘定奉行クラウド（低評価順）</a></li><li><a href="https://www.itreview.jp/products/cloudsign/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview クラウドサイン（低評価順）</a></li><li><a href="https://www.itreview.jp/products/sansan/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview Sansan（低評価順）</a></li><li><a href="https://www.itreview.jp/products/btobplatform-jyuhattyu/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview BtoBプラットフォーム受発注（低評価順）</a></li><li><a href="https://www.itreview.jp/products/process/reviews?q%5Bs%5D=rank+asc" target="_blank" rel="noopener">ITreview 建設業ERP PROCES.S（低評価順）</a></li><li><a href="https://www.itreview.jp/categories/construction-ledger-system" target="_blank" rel="noopener">ITreview 工事台帳システム カテゴリ（18製品）</a></li><li><a href="https://www.itreview.jp/categories/ordering-system" target="_blank" rel="noopener">ITreview 受発注システム カテゴリ（43製品）</a></li><li><a href="https://www.itreview.jp/products/greenfile/reviews" target="_blank" rel="noopener">ITreview Greenfile.work（レビュー0件）</a></li><li><a href="https://www.g2.com/categories/insurance-compliance" target="_blank" rel="noopener">G2 Insurance Compliance カテゴリ</a></li><li><a href="https://www.capterra.com/certification-tracking-software/" target="_blank" rel="noopener">Capterra Certification Tracking Software</a></li><li><a href="https://www.cloudsign.jp/price/" target="_blank" rel="noopener">クラウドサイン 料金（公開）</a></li><li><a href="https://www.invoice-kohyo.nta.go.jp/web-api/index.html" target="_blank" rel="noopener">国税庁 適格請求書発行事業者公表システム Web-API</a></li></ul>
+<h3>探し先#4 Q&amp;A・SNSの困りごと</h3><ul class="src"><li><a href="https://chiebukuro.yahoo.co.jp/tag/tags.php?tag=%E5%8F%A4%E7%89%A9%E5%8F%B0%E5%B8%B3" target="_blank" rel="noopener">Yahoo!知恵袋 古物台帳 タグ</a></li><li><a href="https://chiebukuro.yahoo.co.jp/tag/tags.php?tag=%E8%AD%A6%E5%82%99%E5%93%A1%E5%90%8D%E7%B0%BF" target="_blank" rel="noopener">Yahoo!知恵袋 警備員名簿 タグ</a></li><li><a href="https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11247608231" target="_blank" rel="noopener">知恵袋 給食のアレルギー成分チェックが手作業</a></li><li><a href="https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13313200633" target="_blank" rel="noopener">知恵袋 マニフェストを本社で一元管理したい</a></li><li><a href="https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13198354508" target="_blank" rel="noopener">知恵袋 点呼記録簿を手書きでやっている</a></li><li><a href="https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11306343991" target="_blank" rel="noopener">知恵袋 決算変更届を自分で作成することに</a></li><li><a href="https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q12220887477" target="_blank" rel="noopener">知恵袋 警備業の法定備付簿冊8種類</a></li><li><a href="https://note.com/kaitori_nv_cloud/n/n973f751dec7e" target="_blank" rel="noopener">note 古物台帳の電子化 3つの方法を比較</a></li><li><a href="https://www.jwnet.or.jp/jwnet/youshiki/payment/fee/index.html" target="_blank" rel="noopener">JWNET 利用料金（公開）</a></li><li><a href="https://service.keibi-force.com/column/keibigyo-system-guide/" target="_blank" rel="noopener">警備業システムの選び方（料金相場）</a></li><li><a href="https://boxil.jp/mag/a8318/" target="_blank" rel="noopener">AI-OCR 料金比較19サービス（BOXIL）</a></li><li><a href="https://premium.ipros.jp/ark-sys/product/detail/2000427209/" target="_blank" rel="noopener">ヒロイくんIII 月額3,800円から</a></li></ul>
+<h3>探し先#5 有料テンプレートの販売実績</h3><ul class="src"><li><a href="https://booth.pm/ja/search/%E5%B7%A5%E4%BA%8B%E5%8F%B0%E5%B8%B3" target="_blank" rel="noopener">BOOTH 工事台帳 検索</a></li><li><a href="https://booth.pm/ja/search/%E3%82%B7%E3%83%95%E3%83%88%E8%A1%A8" target="_blank" rel="noopener">BOOTH シフト表 検索</a></li><li><a href="https://booth.pm/ja/search/%E8%A8%AA%E5%95%8F%E7%9C%8B%E8%AD%B7" target="_blank" rel="noopener">BOOTH 訪問看護 検索</a></li><li><a href="https://booth.pm/ja/search/%E4%BB%8B%E8%AD%B7" target="_blank" rel="noopener">BOOTH 介護 検索</a></li><li><a href="https://booth.pm/ja/search/%E7%A2%BA%E5%AE%9A%E7%94%B3%E5%91%8A" target="_blank" rel="noopener">BOOTH 確定申告 検索（392件）</a></li><li><a href="https://booth.pm/ja/search/%E5%9C%A8%E5%BA%AB%E7%AE%A1%E7%90%86" target="_blank" rel="noopener">BOOTH 在庫管理 検索（1,386件）</a></li><li><a href="https://zeroryori.com/shop/excel/" target="_blank" rel="noopener">ゼロ料理 飲食店原価計算エクセル表 15,800円</a></li><li><a href="https://coconala.com/search?keyword=%E5%8E%9F%E4%BE%A1%E7%AE%A1%E7%90%86" target="_blank" rel="noopener">ココナラ 原価管理 検索</a></li><li><a href="https://makad.pw/" target="_blank" rel="noopener">マカド 料金</a></li><li><a href="https://www.kuraemon.com/kokuban/" target="_blank" rel="noopener">蔵衛門 電子小黒板</a></li></ul>
+<h3>探し先#9 アプリストアのランキングとレビュー</h3><ul class="src"><li><a href="https://apps.apple.com/jp/app/id1168968091" target="_blank" rel="noopener">蔵衛門工事黒板（★4.71／20,288件・2021年更新停止）</a></li><li><a href="https://www.kuraemon.com/price/kokuban/" target="_blank" rel="noopener">蔵衛門工事黒板 ライセンス価格 43,600円（税抜）</a></li><li><a href="https://apps.apple.com/jp/app/id1459728517" target="_blank" rel="noopener">棚卸メール（★4.30／800件・2022年更新停止）</a></li><li><a href="https://apps.apple.com/jp/app/id1470731874" target="_blank" rel="noopener">カスターマン（★3.98／524件・2020年更新停止）</a></li><li><a href="https://apps.apple.com/jp/app/id957306049" target="_blank" rel="noopener">マピリスタ（★3.78／244件・2023年更新停止）</a></li><li><a href="https://apps.apple.com/jp/app/id1439176650" target="_blank" rel="noopener">飲食店HACCP ベーシック（★4.79／512件）</a></li><li><a href="https://apps.apple.com/jp/app/id1641415099" target="_blank" rel="noopener">Fleet Driver（★1.81／105件）</a></li><li><a href="https://apps.apple.com/jp/app/id1364921140" target="_blank" rel="noopener">コドモンポケット2 職員用（★1.96／119件）</a></li><li><a href="https://apps.apple.com/jp/app/id1495011826" target="_blank" rel="noopener">Care Palette 訪問アプリ（★2.81／36件）</a></li><li><a href="https://apps.apple.com/jp/app/id1662253648" target="_blank" rel="noopener">かんたん作業日報（★2.33／18件）</a></li><li><a href="https://mk.zaico.co.jp/lp/2026-new-plan-vision" target="_blank" rel="noopener">zaico 新料金プラン（公開）</a></li><li><a href="https://ads.kaipoke.biz/home-visit/price.html" target="_blank" rel="noopener">カイポケ 訪問介護 月額25,000円（公開）</a></li><li><a href="https://lookmee.jp/plan/" target="_blank" rel="noopener">ルクミー 料金プラン（公開）</a></li><li><a href="https://and-us.jp/5617/" target="_blank" rel="noopener">リザービア 料金</a></li><li><a href="https://thebridge.jp/2024/08/unifa-series-e-round-funding" target="_blank" rel="noopener">ユニファ 累積調達額93億円</a></li><li><a href="https://forbesjapan.com/articles/detail/64995" target="_blank" rel="noopener">コドモン 外部調達なしで全国18,000施設</a></li><li><a href="https://tomoruba.eiicon.net/articles/4098" target="_blank" rel="noopener">カミナシ シリーズB 約30億円調達</a></li></ul>
+<h3>探し先#1 参入しにくさの確認先</h3><ul class="src"><li><a href="https://it-shien.smrj.go.jp/search/" target="_blank" rel="noopener">デジタル化・AI導入補助金2026 ITツール検索</a></li></ul>
+
+<footer>
+新規事業探索　SaaSカタログ 第1弾（51件）／作成 2026-08-28／合同会社R.Y.S<br>
+判定条件の正本：_新規事業探索_SaaS探索の条件_確定版_2026-08-28.html　／　決定の正本：DECISIONS.md　／　この資料は「見るための版」です。食い違ったら正本を正とします。
+</footer>
+</main>
+</div>
+
+<script>
+(function(){
+ var tbl=document.getElementById('tbl');
+ var tb=tbl.tBodies[0];
+ var rows=[].slice.call(tb.rows);
+ var srcSel=document.getElementById('f-src');
+ var seen={};
+ rows.forEach(function(r){ var s=r.dataset.src; if(!seen[s]){seen[s]=1; var o=document.createElement('option'); o.value=s; o.textContent=s; srcSel.appendChild(o);} });
+ function apply(){
+  var st=document.getElementById('f-state').value;
+  var hi=document.getElementById('f-hitsu').value;
+  var sr=srcSel.value;
+  var q=document.getElementById('f-q').value.trim();
+  var n=0;
+  rows.forEach(function(r){
+   var ok=(!st||r.dataset.state===st)&&(!hi||r.dataset.hitsu===hi)&&(!sr||r.dataset.src===sr)
+        &&(!q||r.textContent.indexOf(q)>=0);
+   r.style.display=ok?'':'none'; if(ok)n++;
+  });
+  document.getElementById('cnt').textContent=n+' 件を表示';
+ }
+ ['f-state','f-hitsu','f-src','f-q'].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener('change',apply); el.addEventListener('input',apply);
+ });
+ var order={'大':0,'中':1,'小':2};
+ var dir={};
+ [].slice.call(tbl.tHead.rows[0].cells).forEach(function(th,i){
+  th.addEventListener('click',function(){
+   var t=th.dataset.t; dir[i]=!dir[i]; var d=dir[i]?1:-1;
+   rows.sort(function(a,b){
+    var x=a.cells[i].textContent.trim(), y=b.cells[i].textContent.trim();
+    if(t==='n') return (parseFloat(x)-parseFloat(y))*d;
+    if(t==='r') return ((order[x]|0)-(order[y]|0))*d;
+    return x.localeCompare(y,'ja')*d;
+   });
+   rows.forEach(function(r){tb.appendChild(r);});
+  });
+ });
+ apply();
+})();
+</script>
+
+</body>
+</html>
