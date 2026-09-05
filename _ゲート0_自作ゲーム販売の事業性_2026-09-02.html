@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲート0：Robloxを使わず、自作ゲームを販売する案（Steam／スマホ）</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5b5b5b; --line:#d8d8d8;
+  --accent:#1b4f8a; --accentbg:#eef4fb;
+  --ng:#8a1b1b; --ngbg:#fbeeee;
+  --ok:#1b6b3a; --okbg:#eef8f1;
+  --warn:#8a5a00; --warnbg:#fdf6e8;
+  --code:#f3f3f3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161719; --fg:#e9e9ea; --muted:#a8a8ab; --line:#3a3c40;
+    --accent:#7fb2ea; --accentbg:#1d2733;
+    --ng:#f08a8a; --ngbg:#33201f;
+    --ok:#7fd3a0; --okbg:#1c2b22;
+    --warn:#e8bf6a; --warnbg:#2e2718;
+    --code:#22242a;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+body{
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.85; font-size:16px; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto}
+nav{
+  position:sticky; top:0; align-self:flex-start; flex:0 0 260px;
+  max-height:100vh; overflow-y:auto; padding:24px 14px 40px; border-right:1px solid var(--line);
+  font-size:13.5px; line-height:1.7;
+}
+nav h2{font-size:13px; color:var(--muted); margin:0 0 10px; letter-spacing:.08em}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:3px 6px; border-radius:4px}
+nav a:hover{background:var(--accentbg); color:var(--accent)}
+nav .sub{padding-left:16px; font-size:12.5px; color:var(--muted)}
+main{flex:1 1 auto; min-width:0; padding:24px 28px 90px}
+h1{font-size:24px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:20px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:6px solid var(--accent); background:var(--accentbg)}
+h3{font-size:17px; margin:28px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px}
+h4{font-size:15px; margin:20px 0 6px; color:var(--accent)}
+p{margin:10px 0}
+ul,ol{margin:10px 0; padding-left:1.5em}
+li{margin:5px 0}
+.meta{color:var(--muted); font-size:13.5px; margin-bottom:22px}
+.tblwrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:560px}
+th,td{border-bottom:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accentbg); color:var(--accent); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.box{border:1px solid var(--line); border-left:6px solid var(--accent); background:var(--accentbg); padding:14px 16px; margin:18px 0; border-radius:0 6px 6px 0}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0; color:inherit}
+.tag{display:inline-block; font-size:12px; padding:1px 8px; border-radius:10px; border:1px solid currentColor; margin-right:6px; white-space:nowrap}
+.t-ng{color:var(--ng)} .t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-info{color:var(--accent)}
+.calc{background:var(--code); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin:14px 0; font-size:15px}
+.calc div{margin:4px 0}
+.big{font-size:19px; font-weight:700; color:var(--accent)}
+.note{font-size:13.5px; color:var(--muted)}
+code{background:var(--code); padding:1px 5px; border-radius:3px; font-size:13.5px}
+.src{font-size:13.5px}
+.src li{margin:7px 0; word-break:break-word}
+a{color:var(--accent)}
+hr{border:none; border-top:1px solid var(--line); margin:34px 0}
+.kpi{display:flex; flex-wrap:wrap; gap:12px; margin:16px 0}
+.kpi div{flex:1 1 190px; border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:var(--code)}
+.kpi .n{font-size:22px; font-weight:700; color:var(--accent); display:block; line-height:1.3}
+.kpi .l{font-size:13px; color:var(--muted)}
+.bar{display:flex; height:26px; border-radius:4px; overflow:hidden; margin:12px 0 4px; border:1px solid var(--line)}
+.bar span{display:block; font-size:11.5px; color:#fff; text-align:center; line-height:26px; white-space:nowrap; overflow:hidden}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt}
+  h2{background:none}
+}
+@media (max-width:820px){
+  .wrap{display:block} nav{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); flex:none} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h2>目次</h2>
+  <a href="#s0">0. 結論（先に）</a>
+  <a href="#s1">1. 「純粋なゲーム」の3つの出し先</a>
+  <a href="#s2">2. Steamの現実（数字）</a>
+  <a href="#s3">3. スマホの現実（数字）</a>
+  <a href="#s4">4. Robloxとの比較</a>
+  <a href="#s5">5. ★収益の「形」が要求と合わない</a>
+  <a href="#s6">6. 判定表（調べる前に決めた基準）</a>
+  <a href="#s7">7. ゲート0 問1〜問6</a>
+  <a class="sub" href="#q1">問1 いま何で達成しているか</a>
+  <a class="sub" href="#q2">問2 競合が持っている機能</a>
+  <a class="sub" href="#q3">問3 母数の引き算</a>
+  <a class="sub" href="#q4">問4 5年後に増えるか</a>
+  <a class="sub" href="#q5">問5 死ぬ条件3つ</a>
+  <a class="sub" href="#q6">問6 うちを選ぶ理由</a>
+  <a href="#s8">8. 判定結果</a>
+  <a href="#s9">9. 必要な環境・知識・期間</a>
+  <a href="#s10">10. 何があって何が足りないか</a>
+  <a href="#s11">11. 選択肢と推奨</a>
+  <a href="#s12">12. 次にやること（承認待ち）</a>
+  <a href="#s13">13. 出典</a>
+</nav>
+<main>
+
+<h1>ゲート0：事業性の確認（第2回）<br>「Robloxを使わず、純粋なゲームを作って販売する」案</h1>
+<p class="meta">
+作成日：2026年9月2日　／　作成：Claude（Cowork）　／　対象：合同会社R.Y.S<br>
+状態：<strong>未承認（判断材料）</strong>　／　前回資料：<code>_ゲート0_Roblox事業性の確認_2026-09-02.html</code><br>
+今回の対象：Steam（PC買い切り）、スマホアプリ（App Store／Google Play）、その他の直販。
+</p>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0">0. 結論（先に）</h2>
+
+<div class="box ng">
+<h4>判定：<span class="tag t-ng">進まない</span>　ただし理由が前回と違います</h4>
+<p>Robloxのときは「<strong>選ばれる理由が書けない</strong>」で止まりました。<br>
+今回はそれに加えて、<strong>もっと手前の、構造的な理由で止まります。</strong></p>
+<p class="big" style="margin-top:12px">買い切りゲームは、坂野様が求めている「月50万円が5年10年入り続ける」形になりません。</p>
+<p>売上は発売から数週間に集中し、その後は減っていきます。1本売って終わりです。
+これを毎月50万円にするには、<strong>ヒットを出し続ける</strong>しかありません。詳細は<a href="#s5">5章</a>。</p>
+</div>
+
+<h4>参考までに、数字はこうです（2025年のSteam）</h4>
+<div class="kpi">
+  <div><span class="n">約20,000本</span><span class="l">2025年にSteamで発売された本数（1日55本以上）</span></div>
+  <div><span class="n">65.9%</span><span class="l">売上1,000ドル未満だった割合</span></div>
+  <div><span class="n">約40%</span><span class="l">Steamの登録料100ドルすら回収できなかった割合</span></div>
+  <div><span class="n">8%</span><span class="l">売上10万ドル（約1,500万円）を超えた割合</span></div>
+</div>
+<div class="bar">
+  <span style="flex:65.9; background:#8a1b1b">$1,000未満 65.9%</span>
+  <span style="flex:26.1; background:#8a5a00">中間層 26.1%</span>
+  <span style="flex:8; background:#1b6b3a">$10万超 8%</span>
+</div>
+<p class="note">※出所：game-developers.org による2025年Steam収益分布の分析。Valveは売上を公表しないため、レビュー数からの推計です。</p>
+
+<div class="box ok">
+<h4>ただし、Robloxより明確に良い点が2つあります</h4>
+<ol>
+<li><strong>取り分が段違いに良い。</strong>Roblox の実効2割強に対し、Steam は<strong>70%</strong>がそのまま現金で入ります。</li>
+<li><strong>作ったものが自分の資産になる。</strong>Robloxはプラットフォームが「見せない」と決めたら終わりですが、Steamのゲームは自分の商品として残り、Steam以外（Epic、itch.io、自社サイト）でも売れます。</li>
+</ol>
+<p>つまり<strong>「事業の柱」にはなりませんが、「Robloxよりは筋がいい」</strong>のは事実です。</p>
+</div>
+
+<hr>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1">1. 「純粋なゲーム」の出し先は、実質3つです</h2>
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>出し先</th><th>収益の形</th><th>初期費用</th><th>集客の主戦場</th></tr></thead>
+<tbody>
+<tr><td><strong>①</strong></td><td><strong>Steam</strong>（PC買い切り）</td><td>1本◯◯円で売る。<strong>買い切り</strong></td><td>1本につき$100（約15,000円）</td><td>発売前のウィッシュリスト集め</td></tr>
+<tr><td><strong>②</strong></td><td><strong>スマホ</strong>（App Store／Google Play）</td><td>基本無料＋アプリ内課金。<strong>継続課金</strong></td><td>Apple $99/年、Google $25（初回のみ）</td><td>広告出稿（お金を払って人を買う）</td></tr>
+<tr><td><strong>③</strong></td><td>itch.io・自社サイト直販</td><td>買い切り／投げ銭</td><td>0円</td><td>SNS・コミュニティ。集客力は最も弱い</td></tr>
+</tbody>
+</table></div>
+<p>③は収益規模が①②より1〜2桁小さいため、以下では①と②を中心に判定します。</p>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2">2. Steamの現実（数字）</h2>
+
+<h3>2-1. 売上の分布</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>指標</th><th>数字</th><th>出所</th></tr></thead>
+<tbody>
+<tr><td>Steam上の有料ゲーム総数</td><td><strong>99,206本</strong>（全体13万6,281本から選別）</td><td>We Love It 分析</td></tr>
+<tr><td><strong>上位1%が占める収益シェア</strong></td><td class="t-ng"><strong>84.5%</strong></td><td>同上</td></tr>
+<tr><td>生涯収益の中央値（全期間）</td><td>約 <strong>$3,622</strong>（約54万円）</td><td>同上</td></tr>
+<tr><td>生涯収益の90パーセンタイル</td><td>約 $236,184</td><td>同上</td></tr>
+<tr><td>レビューが1件もないゲーム</td><td><strong>8,024本</strong></td><td>同上</td></tr>
+<tr><td>$100の登録料すら回収できていないゲーム</td><td><strong>5,000本以上</strong></td><td>同上</td></tr>
+<tr><td colspan="3" style="background:var(--code)"><strong>直近3年に発売された41,000本に絞ると、さらに厳しくなります</strong></td></tr>
+<tr><td>$5,000未満</td><td class="t-ng"><strong>76.5%</strong></td><td>Gamalytic</td></tr>
+<tr><td>$5,000〜$50,000</td><td>13.4%</td><td>同上</td></tr>
+<tr><td>$50,000〜$200,000</td><td>4.5%</td><td>同上</td></tr>
+<tr><td>$200,000以上</td><td>5.6%</td><td>同上</td></tr>
+<tr><td>直近3年の中央値収益</td><td class="t-ng">約 <strong>$700</strong>（約10万円）</td><td>同上</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>★内訳を読む（ゲート0の決まりです）</h4>
+<p>「Steamのインディーゲームは2025年に全体収益の約4分の1を稼いだ」という景気のいい数字があります。
+<strong>しかしその内訳を読むと、新作インディー上位5本だけで5億ドル超を稼いでいます。</strong><br>
+つまり「インディーが儲かっている」のではなく、<strong>「ごく一部のインディーが、インディー全体の数字を1人で作っている」</strong>状態です。
+平均値を自分の計画に使ってはいけない、という典型例です。</p>
+</div>
+
+<h3>2-2. 出すための条件と費用</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>登録料（Steam Direct）</td><td><strong>1本につき $100 USD</strong>。返金不可だが、<strong>調整後総収益が$1,000に達した後の支払いで回収される</strong></td></tr>
+<tr><td>分配率</td><td><strong>開発者70%／Steam 30%</strong>（累計1,000万ドル超で75%、5,000万ドル超で80%）</td></tr>
+<tr><td>支払いに必要なもの</td><td>Steamworksの管理者権限を持つアカウント。Steamウォレット残高は使用不可。請求書は支払い時にログインしていた個人名義で発行される</td></tr>
+<tr><td>税</td><td>各国のVAT／消費税が加算される</td></tr>
+<tr><td><strong>AI利用の開示</strong></td><td>2024年1月導入、<strong>2026年1月に更新。</strong>プレイヤーが目にするAI生成物（アート・音声・ローカライズ・物語・マーケ素材）は<strong>ストアページでの開示が必須</strong>。開発中だけ使うツール（コード補助など）は開示不要</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>AI開示ルールは、坂野様の想定に直接効きます</h4>
+<p>坂野様の構想は「AIで作る」ことが前提です。Steamでは<strong>キャラ絵・BGM・テキストをAIで作った場合、ストアページに表示する義務があります。</strong><br>
+前回お伝えした『Codex Mortis』の例のとおり、いま「100% AI製」という表示は<strong>売上にマイナスに働きます</strong>（Steam掲示板で「AI slop」と呼ばれ、購入ボイコットが起きた）。<br>
+<strong>回避策：</strong>コードだけAIに書かせ、絵と音は素材集を買うか外注する。この場合、開示は不要になります（＝ルール上は「開発ツール」扱い）。</p>
+</div>
+
+<h3>2-3. ★Steamで勝敗が決まるのは「発売前」です</h3>
+<p>ここが、素人がいちばん誤解する点です。<strong>Steamでは、ゲームの出来より前に「発売日までに何人がウィッシュリスト（欲しいものリスト）に入れたか」で結果がほぼ決まります。</strong>
+Steamのおすすめ枠に載るかどうかが、この数字で決まるためです。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>発売時のウィッシュリスト数</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td>〜5,000未満</td><td class="t-ng">商業的には成立しない水準</td></tr>
+<tr><td>5,000</td><td>商業的な最低限</td></tr>
+<tr><td><strong>約7,000</strong></td><td><strong>「Popular Upcoming」（発売前の注目枠）に載る実質的な足切り</strong></td></tr>
+<tr><td>8,000</td><td>堅実なインディー発売</td></tr>
+<tr><td>50,000</td><td>強い発売</td></tr>
+<tr><td>90,000以上</td><td>ブレイク領域</td></tr>
+</tbody>
+</table></div>
+<div class="calc">
+<div class="note">■ 初週売上の目安（ウィッシュリストからの換算率：5,000〜4万件なら20%）</div>
+<div>ウィッシュリスト 25,000件 × 20% ＝ 約 <strong>5,000本</strong></div>
+<div>5,000本 × $19.99（約3,000円）＝ 初週ネット収益 約 <strong>$47,200</strong>（約700万円）</div>
+<div class="note" style="margin-top:8px">逆算すると、<strong>初週700万円を得るには、発売前に25,000人を集めておく必要がある</strong>ということです。</div>
+</div>
+<div class="box ng">
+<p><strong>この25,000人を、どうやって集めるのか。</strong>これがSteamの本当の勝負です。<br>
+方法は、SNSでの継続的な発信、ゲームイベント（Steam Next Fest等）への出展、実況者への配布、Discordコミュニティ運営——<strong>すべて「ゲームを作る」のとは別の仕事</strong>です。
+実際、インディー開発では<strong>全体の作業時間の約25%がマーケティングに費やされる</strong>とされています。</p>
+</div>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3">3. スマホの現実（数字）</h2>
+
+<h3>3-1. 出すための条件と費用</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>Apple App Store</th><th>Google Play</th></tr></thead>
+<tbody>
+<tr><td>開発者登録</td><td><strong>$99／年</strong>（法人も同額）</td><td><strong>$25</strong>（初回のみ、更新なし）</td></tr>
+<tr><td>手数料（標準）</td><td>30%</td><td>30%</td></tr>
+<tr><td>手数料（小規模）</td><td><strong>15%</strong>（Small Business Program。登録制）</td><td><strong>15%</strong>（年間売上100万ドルまで。登録制）</td></tr>
+<tr><td>サブスク</td><td>2年目以降15%</td><td>初日から15%</td></tr>
+<tr><td>無料アプリ（課金なし）</td><td>手数料なし（登録料のみ）</td><td>手数料なし（登録料のみ）</td></tr>
+</tbody>
+</table></div>
+<p>手数料の条件はSteamより有利です（15%）。<strong>問題は費用ではなく、集客の構造です。</strong></p>
+
+<h3>3-2. ★スマホゲームは「広告費を払って人を買う」ゲームです</h3>
+<p>スマホの基本無料ゲームは、Steamのように「面白ければ広まる」市場ではありません。
+<strong>広告を出してインストールを買い、その人が課金する額（LTV）が広告費（CPI）を上回るかどうか</strong>という、完全に計算の世界です。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>地域（カジュアル・パズル系／Android）</th><th>CPI＝1インストールあたりの広告費</th></tr></thead>
+<tbody>
+<tr><td>米国</td><td>$1.50〜$3.50</td></tr>
+<tr><td>西欧</td><td>$0.60〜$1.50</td></tr>
+<tr><td>中南米・東南アジア</td><td>$0.15〜$0.60</td></tr>
+<tr><td>インド</td><td>$0.08〜$0.30</td></tr>
+<tr><td><strong>iOS</strong></td><td class="t-warn"><strong>同ジャンル・同市場でAndroidの3〜4倍</strong></td></tr>
+</tbody>
+</table></div>
+<p>そして業界の目安は「<strong>CPIは、そのユーザーが生涯に落とす金額（LTV）の30〜70%に収まっていること</strong>」です。
+つまり<strong>広告費の6〜7割は、そのまま消えます。</strong></p>
+
+<div class="box ng">
+<h4>これは坂野様の選定軸①に真正面から反します</h4>
+<p>坂野様は「<strong>資金力（マネー勝負）では大手に勝てないので、資金勝負にならない領域を選ぶ</strong>」と決めておられます。<br>
+スマホの基本無料ゲームは、<strong>その定義そのものが資金勝負</strong>です。
+広告費を積める会社が勝ち、積めない会社は誰にも見つかりません。
+参考として、あるインディーのモバイルRPGは<strong>月10万ドル（約1,500万円）を広告費に投じています。</strong></p>
+<p>なお「まず市場性テストだけやる」なら $600〜$1,200（約9〜18万円）で1週間ほど実測できます。これは現実的な金額です。</p>
+</div>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4">4. Roblox・Steam・スマホの比較</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>Roblox</th><th>Steam（買い切り）</th><th>スマホ（基本無料）</th></tr></thead>
+<tbody>
+<tr><td>初期費用</td><td class="t-ok">ほぼ0円</td><td class="t-ok">$100／本</td><td class="t-warn">$99＋$25＋<strong>広告費</strong></td></tr>
+<tr><td>手取り（実効）</td><td class="t-ng">約26.6%</td><td class="t-ok"><strong>70%</strong></td><td class="t-ok">70〜85%（ただし広告費が別）</td></tr>
+<tr><td>収益の形</td><td class="t-ok">継続課金（積み上がる）</td><td class="t-ng"><strong>買い切り（減衰する）</strong></td><td class="t-ok">継続課金（積み上がる）</td></tr>
+<tr><td>集客の主体</td><td class="t-ng">プラットフォーム任せ（おすすめ欄）</td><td class="t-warn">自力（ウィッシュリスト）</td><td class="t-ng">お金（広告）</td></tr>
+<tr><td>中央値の収益</td><td>$1,575／年<br><span class="note">（換金資格者24,500人のみ）</span></td><td>$3,622（生涯）<br><span class="note">直近3年なら約$700</span></td><td>公開データなし</td></tr>
+<tr><td>作ったものが資産になるか</td><td class="t-ng">ならない（Roblox内でしか存在しない）</td><td class="t-ok"><strong>なる</strong>（他ストアでも売れる）</td><td class="t-warn">なる（ただしストア依存）</td></tr>
+<tr><td>AI利用の扱い</td><td class="t-ng">質が低ければ発見システムに出さないと公言</td><td class="t-warn">プレイヤーが見る部分は開示義務</td><td class="t-warn">ストアごとに方針が異なる</td></tr>
+<tr><td>坂野様の選定軸との相性</td><td class="t-ng">×（勝ち筋がセンス頼み）</td><td class="t-warn">△（資金勝負ではないが継続収入にならない）</td><td class="t-ng">×（資金勝負そのもの）</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5">5. ★今回の核心：収益の「形」が要求と合わない</h2>
+
+<p>坂野様が求めているのは、記録に残っているとおり<strong>「月50万円が5年10年入り続ける」</strong>形です。
+事業の成長でも売却でもなく、<strong>安定した継続収入</strong>です。ここに買い切りゲームを当てはめると、こうなります。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>買い切りゲーム（Steam）</th><th>坂野様の要求</th></tr></thead>
+<tbody>
+<tr><td>売上のタイミング</td><td>発売から数週間に集中し、その後は減衰</td><td>毎月ほぼ一定</td></tr>
+<tr><td>翌年の売上</td><td>セール時に山が来るが、基本は右肩下がり</td><td>変わらず入り続ける</td></tr>
+<tr><td>月50万円を続ける方法</td><td class="t-ng"><strong>ヒットを作り続けるしかない</strong></td><td>1回作れば続く</td></tr>
+<tr><td>1本あたりの制作期間</td><td>小規模で6〜18か月、中規模で2〜4年</td><td>——</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>数字で言うとこうなります</h4>
+<p>年600万円（月50万円）を買い切りゲームで維持しようとすると：</p>
+<ul>
+<li>1本あたり<strong>売上860万円</strong>（Steam手数料30%を引いて600万円）が必要</li>
+<li>これは<strong>Gamalyticの分類で「$50,000〜$200,000」の帯</strong>。直近3年のゲームでは<strong>4.5%</strong>しか到達していません</li>
+<li>しかもこれは<strong>生涯収益</strong>なので、翌年また同じだけ必要になります</li>
+<li>1本の制作に小規模でも6〜18か月かかるため、<strong>「上位4.5%のゲームを、毎年1本ずつ作り続ける」</strong>のが要件になります</li>
+</ul>
+<p><strong>これは事業計画ではなく、才能への賭けです。</strong></p>
+</div>
+
+<div class="box">
+<h4>逆に言うと、継続収入という条件を外すなら評価は変わります</h4>
+<p>「1本当たれば数千万円入り、外れれば時間を失う」という形で構わないのであれば、Steamは<strong>宝くじよりはるかに条件のいい賭け</strong>です（初期費用$100、取り分70%、資産が残る）。<br>
+<strong>ただしそれは、坂野様がこれまで一貫して避けてこられた形です。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6">6. 判定表（★調べる前に決めた基準）</h2>
+<p class="note">前回と同じ基準を使います（基準が案ごとに動かないようにするためです）。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>これに当たったら「進まない」</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>主客が5年後に減る</td></tr>
+<tr><td>2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td></tr>
+<tr><td>3</td><td>死ぬ条件3つのうち、1つでも既に起きている</td></tr>
+<tr><td>4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標（月50万円）に届かない</td></tr>
+<tr><td>5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td></tr>
+<tr><td>6</td><td>顧客がうちを選ぶ理由を1つも書けない</td></tr>
+<tr><td>6b</td><td>顧客がそもそも2つを並べて比べない</td></tr>
+<tr><td>7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7">7. ゲート0：6つの問い</h2>
+
+<h3 id="q1">問1　この客は、いま同じ目的を何で達成しているか</h3>
+<p><strong>客＝ゲームを買って遊ぶ人。目的＝「面白い時間を過ごす」。</strong></p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>探し先</th><th>実際に何があるか</th><th>この案の目的を満たすか</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>同じカテゴリ</td><td>Steam上の有料ゲーム<strong>99,206本</strong>。2025年だけで約20,000本が追加</td><td>満たす（同じ棚）</td></tr>
+<tr><td>2</td><td><strong>上位カテゴリ</strong></td><td><strong>Xbox Game Pass等の定額遊び放題</strong>（月1,000円台で数百本）／<strong>基本無料の大作</strong>（Fortnite・原神・APEX等）／Steam自身のおすすめ・ランキング枠</td><td class="t-ng"><strong>完全に内包している。</strong>「3,000円のインディー1本」を買う理由が、定額サービスと無料大作に構造的に奪われている</td></tr>
+<tr><td>3</td><td>下位・単機能</td><td>itch.ioの無料ゲーム、ブラウザゲーム、Steamの無料ゲーム</td><td>満たす（しかも無料）</td></tr>
+<tr><td>4</td><td>汎用ツール</td><td><strong>YouTube・TikTok・Netflix・SNS</strong>（可処分時間そのものの奪い合い）</td><td>満たす</td></tr>
+<tr><td>5</td><td>人手</td><td>該当なし（消費者向けのため）</td><td>——</td></tr>
+</tbody>
+</table></div>
+<p><span class="tag t-ok">5つとも埋まりました</span>（判定条件5には当たりません）。<br>
+<span class="tag t-ng">ただし②で判定条件2に該当します。</span>定額遊び放題と基本無料大作が、「買い切りゲームを買う」という行動そのものを内包しています。</p>
+
+<h3 id="q2">問2　競合が「既に持っている機能」を、先に全部書いたか</h3>
+<p>Robloxのときと同じで、この案には「新しい機能」がありません。ジャンル（ローグライク／サバイバル／クラフト／ホラー／パズル／街づくり）はすべて既に大量に存在します。
+<strong>「機能で差をつける案」ではなく、「面白さの勝負に参加する案」です。</strong></p>
+<p class="note">確認した具体例：Steam上の同系統ヒット作（Vampire Survivors／Balatro／Stardew Valley／Dome Keeper 等）。いずれも「新機能」ではなく「遊びの手触り」で勝っています。</p>
+
+<h3 id="q3">問3　母数の引き算したか。その統計の内訳を読んだか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>段</th><th>数字</th><th>種別</th></tr></thead>
+<tbody>
+<tr><td>2025年にSteamで発売された本数</td><td>約20,000本</td><td>推計</td></tr>
+<tr><td>↓ 売上$1,000未満</td><td>65.9%（約13,180本）</td><td>推計</td></tr>
+<tr><td>↓ 売上$100,000超</td><td class="t-warn"><strong>8%（約1,600本）</strong></td><td>推計</td></tr>
+<tr><td>直近3年で $50,000〜$200,000 に届いた割合</td><td class="t-ng"><strong>4.5%</strong></td><td>Gamalytic推計</td></tr>
+<tr><td>直近3年の中央値収益</td><td class="t-ng">約 $700</td><td>Gamalytic推計</td></tr>
+</tbody>
+</table></div>
+<p><strong>判定条件4への回答：</strong>2025年の新作20,000本の1%＝200位に入れば、売上10万ドル超は確実で目標に届きます。
+<strong>形式上は条件4に当たりません。</strong>ただし「20,000本中の上位200本に入る」＝<strong>1%</strong>であり、しかも<strong>毎年それを繰り返す</strong>必要があります（5章）。</p>
+<p class="note">★内訳の注記：Steamの売上データはValveが公表しておらず、<strong>すべてレビュー数からの推計</strong>です（1レビュー＝35売上などの係数を使用）。数字の精度には幅があります。<span class="tag t-warn">推計</span></p>
+
+<h3 id="q4">問4　この客は5年後、増えるか減るか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>指標</th><th>方向</th><th>根拠</th></tr></thead>
+<tbody>
+<tr><td>Steam全体の売上</td><td class="t-ok">増加</td><td>2025年のSteam全体は約160億ドル規模。インディーが全体収益の約4分の1を占めるまで成長</td></tr>
+<tr><td>プレイヤー数</td><td class="t-ok">増加</td><td>PCゲーム市場は拡大が続いている</td></tr>
+<tr><td><strong>年間リリース本数</strong></td><td class="t-ng"><strong>急増</strong></td><td>2024年 19,714本 → 2025年 約20,000本 → 2026年は8月時点で既に15,814本</td></tr>
+<tr><td><strong>1本あたりの取り分</strong></td><td class="t-ng"><strong>薄まる方向</strong></td><td>売上の伸びよりも、供給の伸びが速い。AIで制作コストが下がるため、この傾向は今後さらに加速する</td></tr>
+</tbody>
+</table></div>
+<p><span class="tag t-ok">判定条件1には当たりません</span>——客は増えます。<br>
+<strong>しかし「客が増える」と「自分が稼げる」は別です。</strong>ライバルの増え方のほうが速いため、<strong>1本あたりの期待値は下がり続けます。</strong></p>
+
+<h3 id="q5">問5　この案が死ぬ条件を3つ書き、その場で確認したか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>「〜が起きたら、この案は成立しない」</th><th>その場での確認結果</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>発売時にウィッシュリストが7,000件に届かなければ成立しない（おすすめ枠に載らず、誰にも見つからない）</td>
+<td class="t-ng"><strong>★実質的に既に起きています。</strong>現時点で坂野様には、ゲームファンに向けた発信媒体・フォロワー・コミュニティ・実績が1つもありません。ゼロから7,000件を集める経路が現時点で存在しません</td>
+</tr>
+<tr>
+<td>2</td>
+<td>「AI製」の表示が購入回避を招いたら成立しない</td>
+<td class="t-warn"><strong>部分的に起きています。</strong>Steamは2024年1月にAI開示を義務化、2026年1月に基準を明確化。Codex Mortisの実例で購入ボイコットが発生済み。<strong>ただし絵と音を人力／素材集にすれば開示不要になり、回避可能</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>リリース本数の増加で発見されなくなったら成立しない</td>
+<td class="t-ng"><strong>★進行中です。</strong>1日55本以上が発売され、8,024本はレビューが1件もついていません</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="tag t-ng">判定条件3に該当します。</span>死ぬ条件1と3が、既に起きている状態です。</p>
+
+<h3 id="q6">問6　うちを選ぶ理由は何か</h3>
+<h4>① 並べられるか</h4>
+<p><strong>並べられます。</strong>Steamのストアページでは、坂野様のゲームと、専業スタジオが3年かけたゲームが、同じサムネイルの大きさで並びます。</p>
+
+<h4>② うちを選ぶ理由</h4>
+<div class="box ng">
+<p><strong>1つも書けませんでした。</strong>（Robloxのときと同じ結論です）</p>
+<p>ゲート0では「使いやすさ・価格・導入の速さ・サポート・特定業種への合わせ込み」も正当な理由として認めています。
+しかし買い切りゲームで購入者が見るのは、<strong>スクリーンショット・トレーラー・レビュー点数の3つだけ</strong>です。
+坂野様が現在お持ちの資産（法人・資金・物販の経験・仕入れルート・B2B営業）からは、この3つのどれにも辿り着けません。</p>
+<p><strong>→ 判定条件6に該当します。</strong></p>
+</div>
+
+<h4>③ 顧客はそもそも2つを並べて比べてくれるか</h4>
+<p>比べてくれません。Steamのおすすめ枠は<strong>「既にウィッシュリストが集まっているゲーム」を優先して表示する</strong>仕組みのため、
+無名の新作は<strong>比較の画面に出てくる前に落ちます。</strong><br>
+<strong>→ 判定条件6bにも該当します。</strong></p>
+
+<hr>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8">8. 判定結果</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>Roblox案（前回）</th><th>自作ゲーム案（今回）</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>主客が5年後に減る</td><td class="t-ok">当たらない</td><td class="t-ok">当たらない</td></tr>
+<tr><td><strong>2</strong></td><td>上位カテゴリが内包している</td><td class="t-ok">当たらない</td><td class="t-ng"><strong>★該当</strong>（定額遊び放題・基本無料大作）</td></tr>
+<tr><td><strong>3</strong></td><td>死ぬ条件の1つが既に起きている</td><td class="t-warn">グレー</td><td class="t-ng"><strong>★該当</strong>（死因1・3）</td></tr>
+<tr><td>4</td><td>母数×単価×1%が目標に届かない</td><td class="t-warn">形式上は届く</td><td class="t-warn">形式上は届く</td></tr>
+<tr><td>5</td><td>探し先に埋まっていないものがある</td><td class="t-ok">当たらない</td><td class="t-ok">当たらない</td></tr>
+<tr><td><strong>6</strong></td><td>うちを選ぶ理由を1つも書けない</td><td class="t-ng">★該当</td><td class="t-ng"><strong>★該当</strong></td></tr>
+<tr><td><strong>6b</strong></td><td>顧客が2つを並べて比べない</td><td class="t-ng">★該当</td><td class="t-ng"><strong>★該当</strong></td></tr>
+<tr><td>7</td><td>並べられない理由が弱い</td><td class="t-ok">当たらない</td><td class="t-ok">当たらない</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>判定：<strong>「進まない」</strong>（条件2・3・6・6bに該当）</h4>
+<p>ゲート0の決まりに従い、<strong>要件定義（何を作るか）には進めません。</strong><br>
+なお前回のRoblox案より該当条件が<strong>2つ増えています</strong>（条件2と3）。
+数字だけ見ればSteamのほうが取り分は良いのですが、<strong>ゲート0の基準では、今回のほうが厳しい判定になりました。</strong></p>
+</div>
+
+<div class="box">
+<h4>ゲート0で防げないこと（必ずお伝えします）</h4>
+<p>ゲート0が防げるのは「調べれば分かること」だけです。次は防げません。</p>
+<ul>
+<li>坂野様が作ったものが、実際に面白いかどうか</li>
+<li>1本目を出してみたら、想定外にウィッシュリストが集まるかどうか</li>
+</ul>
+<p>これらは<strong>実際にストアページを1枚作って公開してみる</strong>ことでしか分かりません。
+<strong>ちなみにStreamのストアページ公開は、ゲームが完成していなくてもできます。</strong>
+これは「ゲームを作らずに需要だけ測る」ことができる、数少ない方法です（→<a href="#s11">11章</a>の案G）。</p>
+</div>
+
+<h4>着手前チェック：この母数に、どうやって届くのか（★合否には使いません）</h4>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>記載</th></tr></thead>
+<tbody>
+<tr><td>知ってもらう経路</td><td>①Steam Next Fest（体験版の展示イベント）②X／TikTokでの開発過程の発信 ③実況者への配布 ④Redditのジャンル別コミュニティ</td></tr>
+<tr><td>月に何人に届きうるか</td><td class="t-ng"><strong>書けませんでした。</strong>いずれも「フォロワーがゼロの状態から」であり、7,000件のウィッシュリストに何か月かかるかを見積もる根拠がありません</td></tr>
+<tr><td>結論</td><td><strong>経路は書けたが、届く数は書けなかった。</strong>これが最初に潰すべき不確実性です</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9">9. 必要な環境・知識・期間</h2>
+<p class="note">判定は「進まない」ですが、ご質問いただいた項目なので事実としてお答えします。</p>
+
+<h3>環境（費用はほとんどかかりません）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>必要なもの</th><th>費用</th></tr></thead>
+<tbody>
+<tr><td>PC</td><td>3D開発なら メモリ32GB・SSD・GPU搭載（RTX 4060以上が快適）。2Dなら16GBで足りる</td><td>手持ちPCで開始可</td></tr>
+<tr><td>ゲームエンジン</td><td><strong>Godot</strong>（完全無料・軽い・AIとの相性が良い）／<strong>Unity</strong>（情報量が最多）／<strong>Unreal</strong>（3Dの絵は最強だが重い）</td><td>0円（小規模なら実質無料）</td></tr>
+<tr><td>3Dモデル・絵</td><td>Blender（無料）／有料素材集（Unity Asset Store等）</td><td>0〜数万円</td></tr>
+<tr><td>音・BGM</td><td>フリー素材／有料素材集</td><td>0〜数万円</td></tr>
+<tr><td>ストア登録</td><td>Steam Direct $100／Apple $99・年／Google $25</td><td>約15,000〜30,000円</td></tr>
+</tbody>
+</table></div>
+
+<h3>知識</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>知識</th><th>要る度合い</th><th>AIで代替できるか</th></tr></thead>
+<tbody>
+<tr><td>C#（Unity）またはGDScript（Godot）</td><td>読んで分かる程度</td><td class="t-warn">書くのは代替可。<strong>読めないと直せない</strong></td></tr>
+<tr><td>ゲームエンジンの操作</td><td>必須</td><td class="t-ng">代替不可。自分で触る</td></tr>
+<tr><td>3Dの基本（座標・当たり判定・カメラ・ライト）</td><td>必須</td><td class="t-warn">部分的に代替可</td></tr>
+<tr><td><strong>ゲームデザイン（何が面白いか）</strong></td><td><strong>ここが本体</strong></td><td class="t-ng"><strong>代替不可</strong></td></tr>
+<tr><td><strong>ストアページの作り方・マーケティング</strong></td><td><strong>ここが本体その2</strong></td><td class="t-warn">文章はAIで代替可。<strong>絵と動画の質は代替できない</strong></td></tr>
+</tbody>
+</table></div>
+
+<h3>期間（実績データ）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>規模</th><th>期間</th><th>実例</th></tr></thead>
+<tbody>
+<tr><td>小規模な商用ゲーム</td><td>6〜18か月</td><td>Vampire Survivors 約1年／Dome Keeper 約17か月</td></tr>
+<tr><td>中規模インディー</td><td>2〜4年</td><td>Celeste 約2.5年／Hollow Knight 約3年</td></tr>
+<tr><td>ソロ開発の代表例</td><td>2〜7年</td><td>Balatro 約2.2年／Stardew Valley 4.5年（1日10時間）／Animal Well 約7年（副業）</td></tr>
+</tbody>
+</table></div>
+<p class="note">※上記はいずれも<strong>AI登場前の実績</strong>です。AIによってコードを書く時間は確実に短縮されますが、
+「面白いかどうかを何度も試して直す」時間と、マーケティングの時間（全体の約25%）は短縮されません。</p>
+
+<hr>
+
+<!-- ============ 10 ============ -->
+<h2 id="s10">10. 坂野様に「何があって」「何が足りていないか」</h2>
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>項目</th><th>この案での効き方</th></tr></thead>
+<tbody>
+<tr><td class="t-ok"><strong>ある</strong></td><td>AIに作らせて直す進め方（Cowork開発の実績）</td><td class="t-ok"><strong>強く効く。</strong>Godot／Unityへの移行は「道具の持ち替え」で済む</td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>法人格・資金体力</td><td class="t-warn">Steamでは不要（$100で足りる）。<strong>強みが活きない</strong></td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>YouTube動画の自動作成プロジェクト</td><td class="t-warn"><strong>ここは前回より効く可能性がある。</strong>Steamの集客はSNS発信そのもの。ただし<strong>ゲーム向けの発信は日本語より英語圏が主戦場</strong></td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>物販での「売れる／売れない」の目利き</td><td class="t-warn">ジャンル選びには活きうる。ただし対象が<strong>フィギュア等ではなくゲーム</strong>なので、そのままは使えない</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td><strong>ゲームファンに向けた発信媒体・フォロワー・コミュニティ</strong></td><td class="t-ng"><strong>致命的。</strong>ウィッシュリスト7,000件の入口がゼロ。ここが死因1</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td><strong>ゲームを面白くする設計力・絵の質</strong></td><td class="t-ng"><strong>致命的。</strong>購入判断はスクリーンショットとトレーラーで決まる</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td>ゲームエンジンの経験</td><td class="t-warn">3〜6か月で埋まる。障害としては小さい</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>2回のゲート0で見えた、共通の構造</h4>
+<p>Roblox案でも自作ゲーム案でも、<strong>同じ場所で止まっています。</strong></p>
+<p class="big">坂野様の資産は「会社を相手にする商売（B2B）」で効く形をしており、<br>ゲーム販売は「消費者の感性に選ばれる商売（B2C・エンタメ）」で、<br>この2つは使うカードがまったく違います。</p>
+<p>これは能力の問題ではありません。<strong>持っているカードと、勝負のルールが噛み合っていない</strong>という構造の問題です。
+仮に3年かけてゲーム制作のスキルを身につけたとしても、そのとき戦う相手は<strong>10年それだけをやってきた人たち</strong>です。</p>
+</div>
+
+<hr>
+
+<!-- ============ 11 ============ -->
+<h2 id="s11">11. 選択肢と推奨</h2>
+<p class="note">preferences のとおり、複数案＋推奨を提示します。<strong>決めるのは坂野様です。</strong></p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>案</th><th>内容</th><th>費用</th><th>月50万円の現実性</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td><strong>E</strong></td><td>Steamで買い切りゲームを売る</td><td>1本6〜18か月かけて制作し、$100で出す</td><td>約15,000円＋時間</td><td class="t-ng">上位1%を毎年繰り返す必要。<strong>継続収入にならない</strong></td><td class="t-ng">進まない</td></tr>
+<tr><td><strong>F</strong></td><td>スマホの基本無料ゲーム</td><td>広告でインストールを買い、課金で回収</td><td class="t-ng">広告費が青天井</td><td class="t-ng">資金勝負。<strong>選定軸①に反する</strong></td><td class="t-ng">進まない</td></tr>
+<tr><td><strong>G</strong></td><td><strong>ストアページだけ先に作って需要を測る</strong></td><td>ゲームを作らず、Steamのストアページ（絵とトレーラーだけ）を公開し、ウィッシュリストが何件つくかを実測する</td><td>$100＋絵の制作費</td><td>——（測定が目的）</td><td class="t-warn"><strong>検証としては筋が通る</strong></td></tr>
+<tr><td><strong>C</strong></td><td>法人向けRoblox／メタバース制作の受託</td><td>企業の販促・採用向けワールドを受注制作</td><td>ほぼ0円＋営業</td><td class="t-warn">案E・Fより桁違いに高い</td><td class="t-warn">未判定（別途ゲート0）</td></tr>
+<tr><td><strong>D</strong></td><td><strong>ゲームには進まず、他案に集中</strong></td><td>SaaS探索の承認6項目に戻る</td><td>0円</td><td>——</td><td class="t-ok">——</td></tr>
+</tbody>
+</table></div>
+
+<h3>推奨：<strong>案D を主軸に置く。ゲームに関心があるなら、案G だけを「実験」として1回やる</strong></h3>
+<div class="box ok">
+<p><strong>理由（3つ）</strong></p>
+<ol>
+<li><strong>案Gは、ゲート0が「防げない」と明示した部分を、最小コストで実測できる唯一の方法です。</strong>
+ゲームを作らずにストアページだけ公開し、<strong>「7,000件のウィッシュリストが集まる経路があるか」だけを検証できます。</strong>
+これで集まらなければ、6〜18か月の制作に入る前に止められます。費用は$100＋絵の制作費のみ。<br>
+<span class="note">※ゲート0の決まりでは、市場・顧客に関する死因は「絵・紙のモックアップ・手作業」で検証してよいことになっています。案Gはこれに該当します。</span></li>
+<li><strong>案E・Fは、坂野様がこれまで決めてこられた方針と真正面から矛盾します。</strong>
+Fは資金勝負（選定軸①に反する）、Eは継続収入にならない（「月50万円が5年10年」に反する）。
+<strong>ここで方針を曲げると、これまで積み上げた判断軸が意味を失います。</strong></li>
+<li><strong>SaaS探索の承認6項目が、8月26日から10日間止まったままです。</strong>
+こちらは坂野様の資産（法人・資金・B2B営業）が実際に効く形をしています。
+<strong>Robloxもゲームも、こちらを止めてまでやる案ではありません。</strong></li>
+</ol>
+</div>
+
+<div class="box warn">
+<h4>率直に申し上げます</h4>
+<p>坂野様は9月2日だけで、<strong>ニッチSNS → Robloxゲーム制作 → Robloxのようなプラットフォーム運営 → 自作ゲーム販売</strong>と、4つの案を検討されています。
+どれも「AIで作れるようになったから」という同じ動機から出ています。</p>
+<p><strong>その動機自体は正しいです。</strong>作る力は実際に激変しました。<br>
+ただ、<strong>4案とも「作れるか」で選ばれていて、「誰が金を払うか」から選ばれていません。</strong>
+そして4案とも、止まった場所は同じ（問6：選ばれる理由が書けない）でした。</p>
+<p>ここは案を増やす局面ではなく、<strong>「坂野様の資産が効く土俵はどこか」を1回決める局面</strong>だと考えます。
+それを決めるための道具が、いま止まっているSaaS探索の条件（最終版）です。</p>
+</div>
+
+<hr>
+
+<!-- ============ 12 ============ -->
+<h2 id="s12">12. 次にやること（承認待ち）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>選択肢</th><th>Claudeがやること</th></tr></thead>
+<tbody>
+<tr><td>①</td><td><strong>推奨</strong>：この判定を受け入れ、SaaS探索の承認6項目に戻る</td><td>止まっている6項目を再提示し、承認を取る</td></tr>
+<tr><td>②</td><td>案G（ストアページだけ先に作って需要を測る）の手順書を作る</td><td>ジャンル選定→ストアページ作成→ウィッシュリスト実測までの手順をHTMLで出す。判定基準（何件集まったら本制作に進むか）も先に決める</td></tr>
+<tr><td>③</td><td>案C（法人向け受託）のゲート0を実施する</td><td>国内受託会社の実態・料金・実績を調査し、6問を埋めて判定する</td></tr>
+<tr><td>④</td><td>この2回の判定をGeminiにクロスレビューさせる</td><td>cross-review スキルに従い、貼り付け用のレビュー依頼文を作成する</td></tr>
+<tr><td>⑤</td><td>判定に納得できない／前提が違う</td><td>どこが違うかご指摘ください。前提を直して再判定します</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 13 ============ -->
+<h2 id="s13">13. 出典</h2>
+
+<h4>公式・一次情報</h4>
+<ul class="src">
+<li>Steamworks Documentation「Steam Direct Fee」（$100／本、$1,000到達後に回収、Steamウォレット使用不可）<br>https://partner.steamgames.com/doc/gettingstarted/appfee</li>
+<li>Steamworks Partner Program<br>https://partner.steamgames.com/steamdirect</li>
+</ul>
+
+<h4>収益分布・市場データ</h4>
+<ul class="src">
+<li>GamesRadar+「the top 1% of games earn 84.5% of estimated revenue」（有料99,206本、中央値$3,622、レビュー0が8,024本、$100未回収が5,000本以上）<br>https://www.gamesradar.com/games/behold-the-whole-history-of-steams-economy-in-one-picture-the-top-1-percent-of-games-earn-84-5-percent-of-estimated-revenue-and-most-games-barely-make-anything/</li>
+<li>Game Dev Reports「Gamalytic: 67% of games on Steam earned less than $5k」（直近3年41,000本：76.5%が$5k未満、中央値約$700、$50k〜$200kが4.5%）<br>https://gamedevreports.substack.com/p/gamalytic-67-of-games-on-steam-earned</li>
+<li>game-developers.org「2025 Steam Game Revenue Distribution」（2025年約20,000本、65.9%が$1,000未満、約40%が$100未回収、$100k超は8%、新作インディー上位5本で5億ドル超）<br>https://game-developers.org/2025-steam-game-revenue-distribution</li>
+<li>WN Hub「Indie projects generated a quarter of the total game revenue on Steam by the end of 2025」<br>https://wnhub.io/news/analytics/item-49645</li>
+</ul>
+
+<h4>ウィッシュリスト・開発期間</h4>
+<ul class="src">
+<li>Steam Page Analyzer「How Many Wishlists Before Launch? Steam Benchmarks 2026」（5,000／7,000／8,000／50,000／90,000の段階、初週転換率15〜25%）<br>https://www.steampageanalyzer.com/blog/how-many-wishlists-before-launch</li>
+<li>Steam Page Analyzer「How Long Does It Take to Make an Indie Game?」（小規模6〜18か月、中規模2〜4年、Stardew Valley 4.5年、Balatro 2.2年、マーケが全体の約25%）<br>https://www.steampageanalyzer.com/blog/how-long-does-it-take-to-make-an-indie-game</li>
+</ul>
+
+<h4>AI開示ルール</h4>
+<ul class="src">
+<li>Digital Watch Observatory「New Steam rules redefine when AI use must be disclosed」（2026年1月更新。プレイヤーが見るAI生成物は開示必須、開発ツールは不要）<br>https://dig.watch/updates/new-steam-rules-redefine-when-ai-use-must-be-disclosed</li>
+<li>XenoSpectrum「『Codex Mortis』が突きつける『バイブコーディング』の未来と"スロップ"論争」（AI製表示による購入ボイコットの実例）<br>https://xenospectrum.com/codex-mortis-first-fully-ai-generated-game-vibe-coding-controversy/</li>
+</ul>
+
+<h4>スマホ（手数料・広告費）</h4>
+<ul class="src">
+<li>SplitMetrics「Google Play and App Store Fees」（Apple $99/年、Google $25、手数料30%／小規模15%）<br>https://splitmetrics.com/blog/google-play-apple-app-store-fees/</li>
+<li>Game Growth Advisor「Mobile Game CPI Benchmarks 2026」（地域別CPI、iOSはAndroidの3〜4倍、CPIはLTVの30〜70%が目安、市場性テスト$600〜1,200）<br>https://gamegrowthadvisor.com/blog/2026-03-17-user-acquisition-cpi-benchmarks-2026/</li>
+<li>Prism News「Indie mobile RPG spends $100,000 a month on user acquisition ads」<br>https://www.prismnews.com/hobbies/mobile-gaming/indie-mobile-rpg-spends-100000-a-month-on-user-acquisition</li>
+</ul>
+
+<h4>この資料の限界（必ずお読みください）</h4>
+<div class="box warn">
+<ul>
+<li><strong>【推計】</strong>Steamの売上データはValveが一切公表していません。本資料の収益分布はすべて<strong>レビュー数からの逆算による推計</strong>です（1レビュー＝35売上などの係数を使用）。調査主体によって数字に幅があります</li>
+<li><strong>【未確認】</strong>2026年のSteam年間リリース本数（8月時点で15,814本という数字のみ確認。通年の着地は不明）</li>
+<li><strong>【未確認】</strong>スマホゲームの収益分布（App Store／Google Playとも、Steamに相当する分布データが公開されていません）</li>
+<li><strong>【未確認】</strong>日本の法人がSteam／App Storeの売上を受け取る際の消費税・源泉徴収の扱い。税理士への確認が必要です</li>
+<li>この資料の賞味期限は<strong>約6か月（2027年3月まで）</strong>とお考えください。ただしAI関連のルールはより早く変わる可能性があります</li>
+</ul>
+</div>
+
+<p class="note" style="margin-top:40px; border-top:1px solid var(--line); padding-top:16px">
+この資料は「見るための版」です。判定が「進まない」のため、<code>ZENTEI.md</code>（前提台帳）は作成していません（進む場合のみ作成します）。<br>
+記帳先フォルダをご指定いただければ、<code>DECISIONS.md</code> への記帳内容をお出しします。<br>
+関連資料：<code>_ゲート0_Roblox事業性の確認_2026-09-02.html</code>（第1回）
+</p>
+
+</main>
+</div>
+</body>
+</html>

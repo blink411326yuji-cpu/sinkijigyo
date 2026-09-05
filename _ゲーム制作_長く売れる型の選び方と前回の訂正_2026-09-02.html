@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲーム制作：長く売れ続ける型の選び方と、前回の記述の訂正</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5b5b5b; --line:#d8d8d8;
+  --accent:#1b4f8a; --accentbg:#eef4fb;
+  --ng:#8a1b1b; --ngbg:#fbeeee;
+  --ok:#1b6b3a; --okbg:#eef8f1;
+  --warn:#8a5a00; --warnbg:#fdf6e8;
+  --code:#f3f3f3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161719; --fg:#e9e9ea; --muted:#a8a8ab; --line:#3a3c40;
+    --accent:#7fb2ea; --accentbg:#1d2733;
+    --ng:#f08a8a; --ngbg:#33201f;
+    --ok:#7fd3a0; --okbg:#1c2b22;
+    --warn:#e8bf6a; --warnbg:#2e2718;
+    --code:#22242a;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+body{
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.85; font-size:16px; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto}
+nav{
+  position:sticky; top:0; align-self:flex-start; flex:0 0 265px;
+  max-height:100vh; overflow-y:auto; padding:24px 14px 40px; border-right:1px solid var(--line);
+  font-size:13.5px; line-height:1.7;
+}
+nav h2{font-size:13px; color:var(--muted); margin:0 0 10px; letter-spacing:.08em}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:3px 6px; border-radius:4px}
+nav a:hover{background:var(--accentbg); color:var(--accent)}
+nav .sub{padding-left:16px; font-size:12.5px; color:var(--muted)}
+main{flex:1 1 auto; min-width:0; padding:24px 28px 90px}
+h1{font-size:24px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:20px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:6px solid var(--accent); background:var(--accentbg)}
+h3{font-size:17px; margin:28px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px}
+h4{font-size:15px; margin:20px 0 6px; color:var(--accent)}
+p{margin:10px 0}
+ul,ol{margin:10px 0; padding-left:1.5em}
+li{margin:5px 0}
+.meta{color:var(--muted); font-size:13.5px; margin-bottom:22px}
+.tblwrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:560px}
+th,td{border-bottom:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accentbg); color:var(--accent); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.box{border:1px solid var(--line); border-left:6px solid var(--accent); background:var(--accentbg); padding:14px 16px; margin:18px 0; border-radius:0 6px 6px 0}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0; color:inherit}
+.tag{display:inline-block; font-size:12px; padding:1px 8px; border-radius:10px; border:1px solid currentColor; margin-right:6px; white-space:nowrap}
+.t-ng{color:var(--ng)} .t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-info{color:var(--accent)}
+.calc{background:var(--code); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin:14px 0; font-size:15px}
+.calc div{margin:4px 0}
+.big{font-size:19px; font-weight:700; color:var(--accent)}
+.note{font-size:13.5px; color:var(--muted)}
+code{background:var(--code); padding:1px 5px; border-radius:3px; font-size:13.5px}
+.src{font-size:13.5px}
+.src li{margin:7px 0; word-break:break-word}
+a{color:var(--accent)}
+hr{border:none; border-top:1px solid var(--line); margin:34px 0}
+.kpi{display:flex; flex-wrap:wrap; gap:12px; margin:16px 0}
+.kpi div{flex:1 1 190px; border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:var(--code)}
+.kpi .n{font-size:22px; font-weight:700; color:var(--accent); display:block; line-height:1.3}
+.kpi .l{font-size:13px; color:var(--muted)}
+.strike{text-decoration:line-through; color:var(--muted)}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt}
+  h2{background:none}
+}
+@media (max-width:820px){
+  .wrap{display:block} nav{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); flex:none} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h2>目次</h2>
+  <a href="#s0">0. 結論</a>
+  <a href="#s1">1. ★訂正：3番は言い過ぎでした</a>
+  <a href="#s2">2. 坂野様の着眼点はデータで正しい</a>
+  <a href="#s3">3. 長寿の3条件</a>
+  <a class="sub" href="#j1">条件1 システム駆動</a>
+  <a class="sub" href="#j2">条件2 MOD／UGC対応</a>
+  <a class="sub" href="#j3">条件3 一緒に遊べる</a>
+  <a href="#s4">4. ジャンル別の実績データ</a>
+  <a href="#s5">5. 5つの型の比較</a>
+  <a href="#s6">6. 推奨する型</a>
+  <a href="#s7">7. Steam と スマホ の再評価</a>
+  <a href="#s8">8. ★判定基準を変える提案</a>
+  <a href="#s9">9. 始め方（もしやるなら）</a>
+  <a href="#s10">10. 次にやること</a>
+  <a href="#s11">11. 出典</a>
+</nav>
+<main>
+
+<h1>ゲーム制作：長く売れ続ける「型」の選び方<br><span style="font-size:17px; font-weight:normal">および、前回資料の記述の訂正</span></h1>
+<p class="meta">
+作成日：2026年9月2日　／　作成：Claude（Cowork）　／　対象：合同会社R.Y.S<br>
+関連資料：<code>_ゲート0_Roblox事業性の確認_2026-09-02.html</code>（第1回）、<code>_ゲート0_自作ゲーム販売の事業性_2026-09-02.html</code>（第2回）<br>
+状態：<strong>未承認（判断材料）</strong>
+</p>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0">0. 結論</h2>
+
+<div class="box ok">
+<h4>1. ご指摘のとおりです。前回の「3番（スマホは定義上、資金勝負）」は言い過ぎでした。訂正します。</h4>
+<p>ただし、調べ直して出てきた数字は<strong>坂野様の見立てとも私の元の記述とも違いました。</strong>詳細は<a href="#s1">1章</a>。</p>
+</div>
+
+<div class="box ok">
+<h4>2. 「パッチで足していくだけで延命できる型を作ればいい」という着眼点は、データで裏付けられます。</h4>
+<p>これは業界では確立した設計思想で、しかも<strong>効果が数字で測られています。</strong>特に強いのは<strong>MOD（ユーザーが自分で改造・追加できる仕組み）への対応</strong>で、<br>
+売上は1年目 +8% → <strong>5年目 +31%</strong>、同時接続プレイヤー数は2年後 +75% → <strong>5年後 +115%</strong>という差がついています。</p>
+</div>
+
+<div class="box warn">
+<h4>3. ただし、順番が逆になっています。</h4>
+<p>長く売れ続けるという性質は、<strong>「当たったゲームに後からついてくる性質」</strong>であって、<strong>「当たらなかったゲームを当たりに変える性質」ではありません。</strong><br>
+Terraria が10年以上売れ続けているのは、まず2011年に当たったからです。<br>
+<strong>つまりこの設計思想は「当たった後の伸びしろ」を最大化しますが、「当たる確率」自体は上げません。</strong>
+そこは分けて考える必要があります。</p>
+</div>
+
+<div class="box">
+<h4>4. そして、いちばん大事な話。</h4>
+<p>「<strong>ゲームを作ってみたい気持ちがある。それを収益化できたらいい</strong>」——ここを最初に言っていただけて、話が整理できました。<br>
+<strong>これは「事業案」ではなく「やりたいこと＋収益化の希望」です。</strong>だとすれば、私が2回かけたゲート0（事業性の判定）は、そもそも当てはめる道具が違いました。<br>
+判定の基準を変える提案を<a href="#s8">8章</a>に書きます。</p>
+</div>
+
+<hr>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1">1. ★訂正：前回の「3番」について</h2>
+
+<div class="box ng">
+<h4>撤回する記述</h4>
+<p class="strike">「スマホの基本無料ゲームは、その定義そのものが資金勝負です。」</p>
+<p><strong>これは不正確でした。</strong>広告を1円も使わずにオーガニック（自然流入）だけで伸びたゲームは実在しますし、
+坂野様がおっしゃるとおり<strong>1アプリに毎月数百万〜数千万円を投じるのは、パブリッシャー規模の話であって、個人・小規模の話ではありません。</strong>
+「定義上」と書いたのは、私が結論を強く出しすぎました。</p>
+</div>
+
+<h3>調べ直した結果（こちらが事実です）</h3>
+<p>広告費の額そのものより、<strong>「小さい広告予算がなぜ効かないのか」</strong>という構造のほうが問題でした。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>事実</th><th>数字</th></tr></thead>
+<tbody>
+<tr><td>インディーのモバイルゲームが<strong>月1万ドル（約150万円）</strong>を超える確率</td><td class="t-warn"><strong>100本に1本</strong></td></tr>
+<tr><td>月3万ドル（約450万円）を超える確率</td><td>300本に1本</td></tr>
+<tr><td>月10万ドル（約1,500万円）を超える確率</td><td>1,000本に1本未満</td></tr>
+<tr><td><strong>パブリッシャーの審査を通ったゲーム</strong>が月3万ドルに達する確率</td><td class="t-ok"><strong>約10本に1本</strong>（30倍に跳ね上がる）</td></tr>
+<tr><td>インディーチームの広告予算</td><td>80〜90%が<strong>月3,000ドル（約45万円）未満</strong></td></tr>
+<tr><td>その予算でのオーガニック獲得</td><td class="t-ng">月<strong>200〜500インストール</strong></td></tr>
+<tr><td>競争力のある状態になるまでに必要なアップデート回数</td><td>成功した更新が<strong>4〜5回</strong>。2週間ごとに出しても<strong>11〜18か月</strong></td></tr>
+<tr><td>オーガニック獲得ユーザーの8週間後の残存率</td><td class="t-ok"><strong>4.5%</strong>（有料獲得は3.5%）</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>正確に言い直すと、こうなります</h4>
+<p><strong>×（撤回）</strong>：「スマホは定義上、資金勝負である」<br>
+<strong>○（訂正後）</strong>：「スマホは、<strong>広告費を出せる相手と同じ棚に並ぶ市場</strong>である。<br>
+広告費ゼロでも参入できるが、その場合<strong>月200〜500インストールから始まり、11〜18か月のあいだ更新を出し続けて、ようやく勝負の土俵に乗る</strong>。
+その道を通り切った先で、月1万ドルに届くのが100本に1本。」</p>
+<p><strong>そして注目すべきは：オーガニックで来たユーザーのほうが、広告で買ったユーザーより長く残る（4.5% vs 3.5%）</strong>という事実です。
+つまり<strong>お金をかけない道は、遅いが質は高い</strong>、というのが正確な姿でした。ここは坂野様の見立てのほうが実態に近かったです。</p>
+</div>
+
+<div class="box">
+<h4>あわせて、比較のために</h4>
+<p>前回「Steamは上位1%」と書きましたが、これも角度を変えると印象が変わります。</p>
+<div class="kpi">
+  <div><span class="n">2.99%</span><span class="l">2025年にSteamで発売された20,282本のうち、レビュー1,000件超（＝売上15万ドル相当）に到達した割合（608本）</span></div>
+  <div><span class="n">前年は2.44%</span><span class="l">つまり成功率は<strong>上がっています</strong></span></div>
+  <div><span class="n">100本に1本</span><span class="l">スマホで月1万ドルに届く確率</span></div>
+</div>
+<p><strong>Steamの「1本作って約3%」と、スマホの「1本作って約1%（ただし継続収入）」。桁としては同じ土俵です。</strong>
+前回、私はSteamを「上位1%」、スマホを「資金勝負」と別の言葉で書いてしまい、比較しづらくしていました。ここもお詫びして訂正します。</p>
+</div>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2">2. 坂野様の着眼点は、データで正しい</h2>
+<p>「大幅なシステム変更やストーリーの再構築が必要ない、パッチで足していくだけの何かを作ればいい」——これは業界で
+<strong>「システム駆動型」</strong>あるいは<strong>「エバーグリーン設計」</strong>と呼ばれる考え方で、実在するやり方です。</p>
+
+<h3>実例（すべて発売から何年も売れ続けているゲーム）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>タイトル</th><th>発売</th><th>Steam累計売上（推計）</th><th>なぜ続いているか</th></tr></thead>
+<tbody>
+<tr><td><strong>Terraria</strong></td><td>2011年</td><td>約5億4,800万ドル</td><td>探索・クラフト・戦闘の組み合わせ。<strong>15年間、無料アップデートを出し続けている</strong></td></tr>
+<tr><td><strong>Stardew Valley</strong></td><td>2016年</td><td>約5億8,100万ドル</td><td>課金要素なし。<strong>MOD対応</strong>。個人開発者が今も無料更新を続けている</td></tr>
+<tr><td><strong>Minecraft</strong></td><td>2009年</td><td>累計42億ドル超</td><td><strong>MOD文化そのもの。</strong>プレイヤーが遊びを作り足す構造</td></tr>
+<tr><td><strong>Hollow Knight</strong></td><td>2017年</td><td>約3億1,600万ドル</td><td>口コミによる緩やかな成長。無料DLCを追加</td></tr>
+<tr><td><strong>Vampire Survivors</strong></td><td>2022年</td><td>——</td><td><strong>約1年で作られた小規模ゲーム。</strong>以後、キャラ・武器・ステージをパッチとDLCで足し続けている</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ok">
+<h4>Vampire Survivors が、坂野様の言われる型の典型です</h4>
+<p>ドット絵で、キャラは画面を歩き回るだけ、武器は自動で撃たれる——<strong>技術的にはとても単純なゲームです。</strong><br>
+それでも長く遊ばれているのは、<strong>「武器×キャラ×アイテムの組み合わせ」で遊びが無限に増える構造</strong>だからです。
+そして<strong>追加コンテンツは「新しい武器を1個足す」だけ</strong>で成立します。ストーリーを書き直す必要も、システムを作り直す必要もありません。</p>
+</div>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3">3. 長く売れ続けるゲームの3条件</h2>
+<p>調査の結果、「作り続けなくても収益が続く」ための条件は、次の3つに整理できました。</p>
+
+<h3 id="j1">条件1：コンテンツ駆動ではなく「システム駆動」であること</h3>
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>コンテンツ駆動</th><th><strong>システム駆動</strong></th></tr></thead>
+<tbody>
+<tr><td>遊びの源</td><td>用意した中身（ストーリー・ステージ・敵）</td><td><strong>要素の組み合わせ</strong>（武器×スキル×地形）</td></tr>
+<tr><td>遊べる時間</td><td>中身の量そのまま。10時間分作れば10時間</td><td class="t-ok"><strong>組み合わせの数だけ増える</strong></td></tr>
+<tr><td>追加コンテンツ</td><td class="t-ng">章を書き足す＝毎回ゼロから作る</td><td class="t-ok"><strong>要素を1個足すだけ。既存の全要素と掛け算になる</strong></td></tr>
+<tr><td>例</td><td>ADV、ノベル、ストーリーRPG、ステージ制アクション</td><td>ローグライト、シミュレーション、放置ゲー、サンドボックス、オートバトラー</td></tr>
+<tr><td>坂野様の要求との相性</td><td class="t-ng">×（作り続けが前提）</td><td class="t-ok"><strong>◎</strong></td></tr>
+</tbody>
+</table></div>
+<p><strong>これが坂野様の言われた「ストーリーの再構築が必要ない何か」の正体です。</strong>用語としては「システム駆動」「リプレイ性のある設計」と呼ばれます。</p>
+
+<h3 id="j2">条件2：MOD／UGC（プレイヤーが自分で追加できる仕組み）に対応していること</h3>
+<p><strong>3条件のうち、最も効果が数字ではっきりしているのがこれです。</strong>
+GameDiscoverCo と Mod.io が、初月売上100万ドル超のSteamゲーム約1,200本を追跡した結果：</p>
+<div class="tblwrap"><table>
+<thead><tr><th>指標</th><th>MOD対応あり vs なし の差</th></tr></thead>
+<tbody>
+<tr><td>売上（1年目）</td><td>+8%</td></tr>
+<tr><td><strong>売上（5年目）</strong></td><td class="t-ok"><strong>+31%</strong></td></tr>
+<tr><td>同時接続プレイヤー数（2年後）</td><td class="t-ok"><strong>+75%</strong></td></tr>
+<tr><td><strong>同時接続プレイヤー数（5年後）</strong></td><td class="t-ok"><strong>+115%</strong></td></tr>
+<tr><td>DLC売上</td><td class="t-ok"><strong>+105%</strong>（MODがDLCの売上を食うどころか、倍にしている）</td></tr>
+</tbody>
+</table></div>
+<div class="box ok">
+<p><strong>意味するところ：</strong>MODに対応すると、<strong>プレイヤーが自分で追加コンテンツを作ってくれます。</strong>
+坂野様が「パッチで足していく」と言われた作業の一部を、<strong>お客さんが無料でやってくれる</strong>ということです。<br>
+しかも年数が経つほど差が開きます（1年目+8% → 5年目+31%）。<strong>まさに「5年10年続く」ための仕組みです。</strong></p>
+</div>
+
+<h3 id="j3">条件3：一緒に遊べる（協力プレイ）／配信で映えること</h3>
+<p>Steamのロングテール（発売後も売れ続ける度合い）を調べたデータで、突出して伸びたゲームには共通点がありました。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>ゲーム</th><th>初年度売上 ÷ 初週売上</th><th>特徴</th></tr></thead>
+<tbody>
+<tr><td>2023年発売の全ゲームの中央値</td><td>2.64倍</td><td>——</td></tr>
+<tr><td>初週1万〜5万本の規模</td><td>3.6〜3.77倍（最も良い）</td><td>——</td></tr>
+<tr><td><strong>Lethal Company</strong></td><td class="t-ok"><strong>507倍</strong></td><td>協力プレイのホラー。配信者が遊んで爆発</td></tr>
+<tr><td>Class of '09: The Re-Up</td><td>106倍</td><td>配信・SNSでの話題化</td></tr>
+<tr><td>Pizza Tower</td><td>22.5倍</td><td>同上</td></tr>
+</tbody>
+</table></div>
+<p class="note">※ただし計画は「3倍以下」で立てるべき、というのがデータ提供元の推奨です。507倍は例外中の例外として扱ってください。</p>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4">4. ジャンル別の実績データ（2025年）</h2>
+
+<h3>4-1. 2025年に「成功した」ゲームのジャンル内訳</h3>
+<p>Steamで<strong>レビュー1,000件超</strong>（＝売上15万ドル・約2,250万円相当の目安）に到達した608本の内訳です。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>順位</th><th>ジャンル</th><th>本数</th><th>システム駆動か</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>ナラティブ（物語もの）</td><td>51</td><td class="t-ng">×（コンテンツ駆動）</td></tr>
+<tr><td>2</td><td><strong>シミュレーション</strong></td><td>43</td><td class="t-ok">◎</td></tr>
+<tr><td>3</td><td>ホラー</td><td>39</td><td class="t-warn">△（協力型なら◎）</td></tr>
+<tr><td>4</td><td>RPG</td><td>28</td><td class="t-ng">×</td></tr>
+<tr><td><strong>5</strong></td><td><strong>アイドル／インクリメンタル（放置ゲー）</strong></td><td><strong>27</strong></td><td class="t-ok"><strong>◎</strong></td></tr>
+<tr><td>6</td><td><strong>ローグライク／ローグライト</strong></td><td>22</td><td class="t-ok">◎</td></tr>
+<tr><td>7</td><td>成人向け</td><td>21</td><td>——</td></tr>
+<tr><td>8</td><td>マルチプレイヤーシューター</td><td>21</td><td class="t-warn">△</td></tr>
+<tr><td>9</td><td>シューター</td><td>21</td><td class="t-warn">△</td></tr>
+<tr><td>10</td><td><strong>マネジメント（経営・運営もの）</strong></td><td>19</td><td class="t-ok">◎</td></tr>
+</tbody>
+</table></div>
+<p class="note">※このトップ10のうち9つは前年までと同じ顔ぶれです。<strong>流行り廃りではなく、構造的にこの並びになっています。</strong></p>
+
+<h3>4-2. ジャンル別の「当たりやすさ」</h3>
+<p>We Love It が約10万本を分析した結果（2026年8月）：</p>
+<div class="tblwrap"><table>
+<thead><tr><th>ジャンル</th><th>評価</th></tr></thead>
+<tbody>
+<tr><td><strong>サンドボックス</strong></td><td class="t-ok"><strong>ヒット率27.4%で最高。中央値収益も最高</strong>（2017年には市場平均の約15倍）</td></tr>
+<tr><td>ビジュアルノベル／シミュレーション／RPG／ホラー／ポイント&クリック</td><td class="t-ok">中央値収益が高い</td></tr>
+<tr><td>FPS／アクションRPG／レース</td><td class="t-warn">当たると大きいが、当たる確率は低い</td></tr>
+<tr><td><strong>プラットフォーマー（横スクロールアクション）</strong></td><td class="t-ng"><strong>収益が低い。特に2020年以降、市場平均を大きく下回る</strong></td></tr>
+</tbody>
+</table></div>
+<p class="note">※すべて Boxleiter 法（レビュー数×35）による<strong>推計</strong>です。実売データではありません。</p>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5">5. 5つの型の比較</h2>
+<p>3条件と実績データを踏まえ、坂野様の条件（3Dを作りたい／プログラミング初心者／AI活用／時間が限られる）で現実的な型を5つに絞りました。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>型</th><th>代表例</th><th>制作の重さ</th><th>3D対応</th><th>パッチ延命</th><th>MOD相性</th><th>2025年の実績</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>①</strong></td><td><strong>放置ゲー／インクリメンタル</strong><br><span class="note">数字が自動で増える。要素を解放していく</span></td>
+<td>Cookie Clicker系</td>
+<td class="t-ok"><strong>最軽量</strong>（絵がほぼ要らない）</td>
+<td class="t-ng">2Dが基本</td>
+<td class="t-ok">◎ 新しい階層を足すだけ</td><td class="t-warn">△</td><td class="t-ok"><strong>5位・27本</strong></td>
+</tr>
+<tr>
+<td><strong>②</strong></td><td><strong>ローグライト</strong><br><span class="note">1回30分。死んだらやり直し。組み合わせで遊ぶ</span></td>
+<td>Vampire Survivors<br>Balatro</td>
+<td class="t-ok">軽い（1年で作れた実例あり）</td>
+<td class="t-warn">3Dも可</td>
+<td class="t-ok"><strong>◎ 武器・キャラを1個足すだけ</strong></td><td class="t-ok">◯</td><td class="t-ok">6位・22本</td>
+</tr>
+<tr>
+<td><strong>③</strong></td><td><strong>経営／コロニーシム</strong><br><span class="note">拠点を運営し、人や資源を回す</span></td>
+<td>RimWorld<br>Factorio</td>
+<td class="t-warn">重い</td>
+<td class="t-warn">2D見下ろしが主流</td>
+<td class="t-ok">◎</td><td class="t-ok"><strong>◎ MODが最も根付くジャンル</strong></td><td class="t-ok"><strong>2位・43本／10位・19本</strong></td>
+</tr>
+<tr>
+<td><strong>④</strong></td><td><strong>サンドボックス／クラフト</strong><br><span class="note">世界を自由に作る・壊す</span></td>
+<td>Minecraft<br>Terraria</td>
+<td class="t-ng"><strong>最重量</strong></td>
+<td class="t-ok">◎</td><td class="t-ok">◎</td><td class="t-ok">◎</td><td class="t-ok"><strong>ヒット率27.4%で最高</strong></td>
+</tr>
+<tr>
+<td><strong>⑤</strong></td><td><strong>協力ホラー</strong><br><span class="note">友達と数人で入って怖い目に遭う</span></td>
+<td>Lethal Company</td>
+<td class="t-ng">重い（通信＋サーバー費）</td>
+<td class="t-ok">◎</td><td class="t-ok">◎ ステージ・敵を足すだけ</td><td class="t-ok">◎</td><td class="t-ok">3位・39本</td>
+</tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6">6. 推奨する型</h2>
+
+<div class="box ok">
+<h4>推奨：<strong>②ローグライト（3D）＋ MOD対応を最初から設計に入れる</strong></h4>
+<p><strong>理由（4つ）</strong></p>
+<ol>
+<li><strong>坂野様の「3Dを作りたい」と両立する唯一の軽量ジャンルです。</strong>①放置ゲーは2D前提、③経営シムは見下ろし2Dが主流。②ローグライトは3Dでも成立し、しかも<strong>ステージが狭くて済む</strong>（1回30分で終わるため、広い世界を作らなくてよい）。</li>
+<li><strong>実際に1年で作られた実例があります。</strong>Vampire Survivors は約1年。④サンドボックスや⑤協力ホラーは、通信処理やサーバー運用が入るため初心者には重すぎます。</li>
+<li><strong>坂野様の「パッチで足すだけ」に、構造がそのまま一致します。</strong>武器を1個足すと、既存の全キャラ・全アイテムと掛け算になって遊びが増えます。これは他のどのジャンルよりも「足す作業が軽い」型です。</li>
+<li><strong>AIとの相性が最も良い型です。</strong>ローグライトの中身は「敵の湧き方」「武器の効果」「数値の伸び方」といった<strong>ルールの記述</strong>で、絵や物語の比重が小さい。前回お伝えしたSteamのAI開示ルールも、<strong>コードだけAIに書かせるなら開示不要</strong>です。</li>
+</ol>
+</div>
+
+<div class="box warn">
+<h4>代替案（推奨しませんが、選択肢として）</h4>
+<ul>
+<li><strong>①放置ゲー</strong>：最も軽く、2025年の実績も5位と高い。<strong>ただし2Dで、坂野様の「3Dを作りたい」を満たしません。</strong>「まず1本完成させて感覚を掴む」目的なら、これが最短です。</li>
+<li><strong>③経営／コロニーシム</strong>：MOD文化が最も根付き、2025年実績も2位と最高クラス。<strong>ただし制作が重く、初心者の1本目には向きません。</strong>2本目以降の選択肢です。</li>
+</ul>
+</div>
+
+<div class="box ng">
+<h4>避けるべき型（はっきり不利です）</h4>
+<ul>
+<li><strong>ストーリー主体のRPG・アドベンチャー</strong>：コンテンツ駆動の代表。作った分しか遊べず、追加のたびにゼロから書く。坂野様の要求と正反対</li>
+<li><strong>横スクロールアクション（プラットフォーマー）</strong>：データ上、2020年以降<strong>市場平均を大きく下回る</strong>ジャンル。しかも操作の気持ちよさという、最も職人技が要る部分で勝負することになる</li>
+<li><strong>オープンワールド／大型3D</strong>：制作量が個人の限界を超える</li>
+</ul>
+</div>
+
+<hr>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7">7. Steam と スマホ の再評価（訂正を反映）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>Steam（買い切り）</th><th>スマホ（基本無料）</th></tr></thead>
+<tbody>
+<tr><td>成功確率</td><td>約<strong>3%</strong>（レビュー1,000件超＝売上15万ドル相当）</td><td>約<strong>1%</strong>（月1万ドル超）</td></tr>
+<tr><td>収益の形</td><td class="t-warn">買い切り。1年目に売上の3〜4割が集中し、以後は減衰</td><td class="t-ok"><strong>継続課金。当たれば毎月入り続ける</strong></td></tr>
+<tr><td>運営の手間</td><td class="t-ok">パッチを出さなくても、売り続けられる</td><td class="t-ng"><strong>更新を止めると売上が落ちる。11〜18か月は出し続ける前提</strong></td></tr>
+<tr><td>広告費</td><td class="t-ok">不要（ウィッシュリスト集めが代わり）</td><td class="t-warn">なくても可。ただしオーガニックのみだと月200〜500インストールから</td></tr>
+<tr><td>初期費用</td><td>$100／本</td><td>Apple $99/年＋Google $25</td></tr>
+<tr><td>手数料</td><td>30%</td><td class="t-ok">15%（小規模事業者プログラム）</td></tr>
+<tr><td>作ったものが資産になるか</td><td class="t-ok">◎ 他ストアでも売れる</td><td class="t-warn">△ ストア依存</td></tr>
+<tr><td>MODによる延命</td><td class="t-ok"><strong>◎ Steam Workshopがある</strong></td><td class="t-ng">× 事実上不可</td></tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>「5年10年入り続ける」という目的だけで見ると、判定は割れます</h4>
+<ul>
+<li><strong>収益の「形」だけならスマホ</strong>（継続課金なので、当たれば積み上がる）</li>
+<li><strong>手間のかからなさと、作ったものが残ることならSteam</strong>（更新を止めても売れ続ける。MODで寿命が伸びる）</li>
+</ul>
+<p><strong>私の推奨はSteamです。</strong>理由は、スマホの継続課金は「継続的な運営」という坂野様が最も避けたい形（時間の切り売り）とセットになっているのに対し、
+Steam＋MOD対応は<strong>「作った後、手を動かさなくてもプレイヤーが延命してくれる」</strong>という、
+坂野様の要求により近い形だからです。</p>
+</div>
+
+<hr>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8">8. ★判定基準を変える提案（ここが本題です）</h2>
+
+<p>「ゲームを作ってみたい気持ちがある。それを収益化できたらいい」と伺いました。
+これを踏まえると、<strong>私が2回かけた判定の道具（ゲート0）は、そもそも当てはめる対象が違っていました。</strong></p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>A：事業として見る</th><th>B：やりたいこと＋収益化の希望として見る</th></tr></thead>
+<tbody>
+<tr><td>判定の道具</td><td>ゲート0（6問）</td><td class="t-ok"><strong>損失上限の設定</strong></td></tr>
+<tr><td>合格の条件</td><td>月50万円が5年10年見込めるか</td><td class="t-ok"><strong>失っていい時間とお金の上限を先に決め、その範囲に収まるか</strong></td></tr>
+<tr><td>判定結果</td><td class="t-ng">2回とも「進まない」</td><td class="t-ok"><strong>成立する（上限を決めれば）</strong></td></tr>
+<tr><td>失敗したときの扱い</td><td>事業判断のミス</td><td>想定内（上限内で終わったなら成功）</td></tr>
+<tr><td>他案への影響</td><td>SaaS探索と資源を奪い合う</td><td class="t-warn">時間は奪い合う（ここは正直に）</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ok">
+<h4>私の推奨：<strong>Bの枠で扱う。ただし上限を先に決める</strong></h4>
+<p>ゲート0は「これに会社の将来を賭けてよいか」を判定する道具です。
+<strong>「作ってみたい。当たれば嬉しい」に対しては、この道具は厳しすぎて、正しく機能しません。</strong></p>
+<p>代わりに、着手前に次の3つを決めることをご提案します。<strong>これが決まっていれば、ゲート0は不要です。</strong></p>
+<ol>
+<li><strong>投入する時間の上限</strong>（例：週◯時間まで。他案の作業を止めない範囲）</li>
+<li><strong>投入するお金の上限</strong>（例：◯万円まで。Steam登録$100＋素材費が中心なので、数万円で足ります）</li>
+<li><strong>撤退の条件</strong>（例：ストアページ公開後◯か月でウィッシュリストが◯件に届かなければ止める）</li>
+</ol>
+<p><strong>この3つが決まっていれば、外れても損失は事前に確定しています。</strong>
+そして当たった場合は、坂野様が求めている「作り続けなくても入り続ける収益」に、実際に届く可能性があります。</p>
+</div>
+
+<div class="box warn">
+<h4>ただし、正直に申し上げておくこと</h4>
+<p>坂野様は現在、<strong>SaaS探索の承認6項目が8月26日から止まっており</strong>、ほかにニッチSNS案・応援アプリ案・代理店案・ルートアプリ案を並行して抱えておられます。<br>
+ゲーム制作は<strong>お金はほとんどかかりませんが、時間は確実に取ります</strong>（最短の型でも数か月）。
+「お金を失わないから低リスク」ではなく、<strong>「時間を他案から奪う」という形のコスト</strong>である点だけ、上限を決めるときにご考慮ください。</p>
+</div>
+
+<hr>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9">9. 始め方（もし進める場合）</h2>
+<p class="note">これは提案であり、確定ではありません。承認をいただいてから着手します。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>段階</th><th>やること</th><th>期間の目安</th><th>ここで潰す不確実性</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td><strong>上限を決める</strong>（時間・お金・撤退条件の3つ）</td>
+<td>この場で</td>
+<td>——（前提の固定）</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>ゲームエンジンを1つ選び、「動くもの」を1つ作る</strong><br>目標は完成品ではなく「キャラが動いて敵が湧いて倒せる」まで</td>
+<td>2〜4週間</td>
+<td class="t-ok"><strong>「AIと組んで、自分が3Dゲームを作れるのか」</strong><br>ここで無理なら、以降は全部無意味なので即撤退できる</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>Steamのストアページだけ先に公開する</strong>（前回の案G）<br>ゲームは未完成でよい。絵とトレーラーだけ用意する</td>
+<td>2〜4週間<br>費用 $100＋素材費</td>
+<td class="t-ok"><strong>「集客の経路が自分にあるか」</strong><br>ウィッシュリストが何件つくかを実測する</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>撤退条件と照合して、続けるか止めるかを決める</td>
+<td>——</td>
+<td>——</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>続ける場合のみ、本制作。<strong>MOD対応を設計に含める</strong></td>
+<td>6〜12か月</td>
+<td>——</td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>この順番にした理由</h4>
+<p>ふつうは「作る → 出す → 宣伝する」ですが、<strong>それだと6〜12か月使ったあとに「誰も来なかった」と分かります。</strong><br>
+段階1と2を先に置くと、<strong>合計1〜2か月・費用2万円程度で、「作れるか」と「客が来るか」の両方が分かります。</strong>
+ダメだった場合、失うのは1〜2か月です。</p>
+<p class="note">※ゲート0の決まりでも「市場・顧客に関する不確実性は、絵やモックアップで検証してよい／技術に関する不確実性は実際に動かして確かめる」とされています。段階1が技術、段階2が市場に対応します。</p>
+</div>
+
+<h3>使うもの（段階1で決めること）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>エンジン</th><th>特徴</th><th>初心者＋AIとの相性</th></tr></thead>
+<tbody>
+<tr><td><strong>Godot</strong></td><td>完全無料。軽い。ロイヤリティなし</td><td class="t-ok">◎ 軽くて起動が速く、試行錯誤の回転が速い。ただし日本語情報はUnityより少ない</td></tr>
+<tr><td><strong>Unity</strong></td><td>日本語の情報量が最多。素材も豊富</td><td class="t-ok">◎ <strong>詰まったときに調べられる情報量は最大</strong>。初心者にはこちらが安全</td></tr>
+<tr><td>Unreal Engine</td><td>3Dの見た目は最高</td><td class="t-ng">× 重く、初心者には過剰</td></tr>
+</tbody>
+</table></div>
+<p><strong>推奨は Unity です。</strong>理由は「AIが間違えたときに、自分で調べて確かめられる情報量が最も多い」ため。
+初心者にとっては、エンジンの性能よりこちらが効きます。</p>
+
+<hr>
+
+<!-- ============ 10 ============ -->
+<h2 id="s10">10. 次にやること（承認待ち）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>選択肢</th><th>Claudeがやること</th></tr></thead>
+<tbody>
+<tr><td>①</td><td><strong>Bの枠（やりたいこと＋収益化）で進める</strong></td><td>まず上限3つ（時間・お金・撤退条件）を一緒に決め、そのうえで段階1の手順書をHTMLで出す</td></tr>
+<tr><td>②</td><td>型の選定からやり直したい</td><td>ローグライト以外の型で、坂野様の条件に合うものを再検討する</td></tr>
+<tr><td>③</td><td>やはり事業として成立させたい</td><td>受託（案C）のゲート0を実施する。ゲーム制作の実績はその営業材料になる</td></tr>
+<tr><td>④</td><td>ゲームは一旦置き、SaaS探索に戻る</td><td>止まっている承認6項目を再提示する</td></tr>
+<tr><td>⑤</td><td>この訂正・分析をGeminiにクロスレビューさせる</td><td>cross-review スキルに従い、貼り付け用の依頼文を作成する</td></tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>私が推奨するのは①です</h4>
+<p>2回のゲート0で「事業としては通らない」と判定しましたが、
+<strong>「作ってみたい」という動機がある以上、それを事業の物差しで測り続けるのは、判断の道具として間違っています。</strong><br>
+上限を決めれば、外れても損失は確定します。そして<strong>坂野様は既にCoworkでAIと組んで作る経験を積んでおられるので、段階1（動くものを作る）は、一般的な初心者より通過しやすいはずです。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 11 ============ -->
+<h2 id="s11">11. 出典</h2>
+
+<h4>訂正の根拠（モバイル）</h4>
+<ul class="src">
+<li>CAS.ai「The Mobile Game Publishing Reality: Why Most Indies Fail and What Actually Works」（100本に1本が月$10k、300本に1本が月$30k、1,000本に1本未満が月$100k／インディーの80〜90%が月$3,000未満の予算／オーガニックのみで月200〜500インストール／競争力までに更新4〜5回・11〜18か月／パブリッシャー通過なら月$30kが約1/10）<br>https://cas.ai/blog/the-mobile-game-publishing-reality-why-most-indies-fail-and-what-actually-works/</li>
+<li>GameBiz Consulting「Paid vs. Organic User Acquisition in Mobile Games」（オーガニックの8週間後リテンション4.5% vs 有料3.5%／カジュアルCPI平均$2.17）<br>https://www.gamebizconsulting.com/blog/paid-organic-user-acquisition-mobile-games</li>
+</ul>
+
+<h4>ジャンル別・成功率</h4>
+<ul class="src">
+<li>How To Market A Game「What the hell happened in 2025?」（2025年リリース20,282本、レビュー1,000件超608本、成功率2.99%／前年2.44%／ジャンル別トップ10／1,000レビュー ≒ 売上$150,000+）<br>https://howtomarketagame.com/2026/01/27/what-the-hell-happened-in-2025/</li>
+<li>AUTOMATON WEST「Study of best-selling genres on Steam shows sandbox games continue to stand out in revenue」（We Love It Steam Revenue Report 2026年8月／約10万本／サンドボックスのヒット率27.4%／プラットフォーマーは2020年以降低迷／Boxleiter法による推計）<br>https://automaton-media.com/en/news/study-of-best-selling-genres-on-steam-shows-sandbox-games-continue-to-stand-out-in-revenue/</li>
+<li>GameDiscoverCo「Which genres have 'ruled' Steam? A new view!」（生涯$100万超のゲームのジャンル別収益シェア：アクション58.37%／RPG17.11%／ストラテジー13.97%／シミュレーション9.76%）<br>https://newsletter.gamediscover.co/p/which-genres-have-ruled-steam-a-new</li>
+</ul>
+
+<h4>ロングテール・MOD／UGC</h4>
+<ul class="src">
+<li>GameDiscoverCo（Game Dev Reports経由）「Games' long tail revenue on Steam in 2024」（2023年コホートの中央値2.64倍／初週1万〜5万本が3.6倍で最良／Lethal Company 507倍・Class of '09 106倍・Pizza Tower 22.5倍）<br>https://gamedevreports.substack.com/p/gamediscoverco-games-long-tail-revenue</li>
+<li>Steam Page Analyzer「Steam First-Week Sales」（初週が初年度の22〜38%／計画は3倍以下で立てる／週2の収益が10%を切ると危険信号）<br>https://www.steampageanalyzer.com/blog/steam-first-week-sales</li>
+<li>GameDiscoverCo × Mod.io「Analysis: UGC (still) powers sales &amp; retention」（<strong>初月$100万超の約1,200本を追跡。売上1年目+8%→5年目+31%／同時接続2年後+75%→5年後+115%／DLC売上+105%</strong>）<br>https://newsletter.gamediscover.co/p/analysis-ugc-still-powers-sales-and</li>
+</ul>
+
+<h4>エバーグリーンの実例</h4>
+<ul class="src">
+<li>Outlook Respawn「Inside the $100 Million Club: Top Indie Game Revenue Stories」（Terraria 2011年・約$548M／Stardew Valley 2016年・約$581M／Hollow Knight 2017年・約$316M／Minecraft 2009年・累計$42億超／Palworld 2024年・約$471M）<br>https://respawn.outlookindia.com/gaming/gaming-originals/inside-the-100-million-club-top-indie-game-revenue-stories</li>
+<li>Steam Page Analyzer「How Long Does It Take to Make an Indie Game?」（Vampire Survivors 約1年／Balatro 約2.2年／Stardew Valley 4.5年）<br>https://www.steampageanalyzer.com/blog/how-long-does-it-take-to-make-an-indie-game</li>
+</ul>
+
+<h4>この資料の限界（必ずお読みください）</h4>
+<div class="box warn">
+<ul>
+<li><strong>【推計】</strong>Steamの売上・販売本数はValveが公表していません。本資料の数字はすべて<strong>レビュー数からの推計</strong>（Boxleiter法、レビュー数×35等）です。調査主体により結果に幅があります</li>
+<li><strong>【推計】</strong>「レビュー1,000件 ≒ 売上15万ドル」も目安であり、価格帯・ジャンルにより実際は大きく前後します</li>
+<li><strong>【条件付き】</strong>MOD／UGCの効果データ（+31%等）は、<strong>初月売上100万ドル超のゲーム約1,200本</strong>が対象です。無名の新作にそのまま当てはまる保証はありません。<strong>この点は本資料で最も注意すべき箇所です</strong></li>
+<li><strong>【未確認】</strong>日本の法人がSteam売上を受け取る際の消費税・源泉徴収の扱い。税理士への確認が必要です</li>
+<li>本資料の賞味期限は<strong>約6か月（2027年3月まで）</strong>とお考えください</li>
+</ul>
+</div>
+
+<p class="note" style="margin-top:40px; border-top:1px solid var(--line); padding-top:16px">
+この資料は「見るための版」です。前回2回の資料（<code>_ゲート0_Roblox事業性の確認_2026-09-02.html</code>／<code>_ゲート0_自作ゲーム販売の事業性_2026-09-02.html</code>）のうち、<br>
+<strong>後者の「3-2. スマホゲームは資金勝負」の記述は、本資料の1章で訂正しました。</strong>食い違う場合は本資料を正とします。<br>
+記帳先フォルダをご指定いただければ、<code>DECISIONS.md</code> への記帳内容をお出しします。
+</p>
+
+</main>
+</div>
+</body>
+</html>

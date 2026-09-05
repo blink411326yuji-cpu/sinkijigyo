@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新規事業の探し方 v5（案）同梱されない形から逆算する</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5a5a5a; --line:#d5d8dd; --soft:#f5f6f8;
+  --accent:#1f4e79; --ng:#a8202a; --ngbg:#fdeced; --ok:#1f6b3a; --okbg:#eaf5ee;
+  --warn:#8a5a00; --warnbg:#fdf3e0; --key:#4b2e83; --keybg:#f1ecfa;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16181c; --fg:#e8eaed; --muted:#a8adb6; --line:#3a3f47; --soft:#1e2126;
+    --accent:#8ab4e8; --ng:#ff9098; --ngbg:#3a1d20; --ok:#7ed39a; --okbg:#17301f;
+    --warn:#f0c36b; --warnbg:#332714; --key:#c3aef0; --keybg:#241c33;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:15px; line-height:1.9; font-variant-numeric:tabular-nums;}
+.wrap{display:flex; align-items:flex-start; max-width:1200px; margin:0 auto}
+nav{position:sticky; top:0; width:270px; flex:0 0 270px; max-height:100vh; overflow-y:auto;
+  padding:24px 14px; border-right:1px solid var(--line); font-size:13px; line-height:1.7;}
+nav h2{font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px; font-weight:600}
+nav a{display:block; padding:4px 6px; color:var(--fg); text-decoration:none; border-radius:4px}
+nav a:hover{background:var(--soft); color:var(--accent)}
+main{flex:1 1 auto; min-width:0; padding:28px 30px 90px}
+h1{font-size:23px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:19px; margin:46px 0 12px; padding:6px 0 6px 12px; border-left:5px solid var(--accent); background:var(--soft)}
+h3{font-size:16px; margin:28px 0 8px; color:var(--accent)}
+h4{font-size:14px; margin:18px 0 6px}
+p{margin:.7em 0}
+.meta{color:var(--muted); font-size:13px; margin:0 0 18px}
+.tblwrap{overflow-x:auto; margin:12px 0 18px; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:540px}
+th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+th{background:var(--soft); font-weight:600}
+td.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-left-width:5px; border-radius:6px; padding:12px 16px; margin:16px 0; background:var(--soft)}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box.key{border-left-color:var(--key); background:var(--keybg)}
+.box h4{margin-top:0}
+.tag{display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap}
+.tag.ng{background:var(--ng); color:#fff}
+.tag.ok{background:var(--ok); color:#fff}
+.tag.key{background:var(--key); color:#fff}
+.tag.gray{background:var(--muted); color:var(--bg)}
+code{background:var(--soft); padding:1px 5px; border-radius:3px; font-size:.92em}
+ul,ol{margin:.5em 0; padding-left:1.5em}
+li{margin:.35em 0}
+small{color:var(--muted)}
+a{color:var(--accent)}
+hr{border:0; border-top:1px solid var(--line); margin:34px 0}
+.big{font-size:17px; font-weight:600; line-height:1.7}
+@media print{nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt;color:#000;background:#fff}}
+@media (max-width:860px){.wrap{display:block} nav{position:static;width:auto;max-height:none;border-right:0;border-bottom:1px solid var(--line)} main{padding:20px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<h2>もくじ</h2>
+<a href="#s0">0. 結論</a>
+<a href="#s1">1. 4件が同じ死に方をした</a>
+<a href="#s2">2. なぜそうなるのか</a>
+<a href="#s3">3. 「AIで作れる」は武器ではない</a>
+<a href="#s4">4. では何が資産になるのか</a>
+<a href="#s5">5. 同梱されない4つの形</a>
+<a href="#s6">6. 御社が持っている資産（要確認）</a>
+<a href="#s7">7. 探し方の手順（v5案）</a>
+<a href="#s8">8. どこから探すか（母集団）</a>
+<a href="#s9">9. 判定基準の変更点</a>
+<a href="#s10">10. この提案への反論</a>
+<a href="#s11">11. 選択肢と推奨</a>
+<a href="#s12">12. 決めていただきたいこと</a>
+</nav>
+<main>
+<h1>新規事業の探し方 v5（案）<br>「同梱されない形」から逆算する</h1>
+<p class="meta">
+作成日：2026-08-28 ／ 状態：<strong>案（未承認）</strong> ／ 対象：新規事業探索<br>
+きっかけ：坂野様のご指摘「SaaS単体では他社との差別化が難しい。既存SaaSの真似事では厳しい。SaaSだけではダメな気がする」<br>
+この資料は「見るための版」です。記載が正本と食い違ったときは <strong>正本（<code>DECISIONS.md</code>）を正</strong> とします。
+</p>
+
+<h2 id="s0">0. 結論</h2>
+<div class="box key">
+<p class="big" style="margin-top:0">坂野様の直感は、データで裏付けられます。ただし「探し方が悪かった」のではありません。</p>
+<ol>
+<li><strong>探し方（SaaS探索の条件・確定版）は、正しく機能しました。</strong>5件を調べて4件を安く殺しました。これは失敗ではなく、ゲート0の成功です。開発に入る前に落とせています。</li>
+<li><strong>しかし4件は全部、同じ理由で死にました。</strong>「より大きい製品への無料同梱」です。1件ずつ理由が違うなら運ですが、4件が同じなら構造です。</li>
+<li><strong>間違っていたのは「機能の空白」を資産だと思ったこと</strong>です。ソフトの機能は、AI時代には特に、資産になりません。誰でも作れて、既に顧客を持っている会社なら追加費用ゼロで足せるからです。</li>
+</ol>
+<p style="margin-bottom:0"><strong>したがって提案は「探し方を良くする」ではなく、探す起点を変えることです。</strong>「どんな困りごとが空いているか」から探すのをやめ、<strong>「大手が同梱したくても、できない／したくない形は何か」から逆算します。</strong></p>
+</div>
+
+<h2 id="s1">1. 4件が同じ死に方をした（実データ）</h2>
+<div class="tblwrap">
+<table>
+<tr><th>案</th><th>判定</th><th>誰に同梱されていたか</th><th>同梱された時期</th></tr>
+<tr><td>C-03 古物台帳クラウド</td><td><span class="tag ng">却下</span></td><td><strong>RECORE</strong>（買取プラン月16,500円に<strong>追加課金なし</strong>で標準搭載）／スマレジ買取オプション／タロスPOS デジタル台帳</td><td>スマレジ 2024年5月／タロス 2026年4月</td></tr>
+<tr><td>E-01 棚卸バーコード→CSV</td><td><span class="tag ng">却下</span></td><td><strong>Airレジ</strong>（アプリは<strong>すべて無料</strong>。棚卸明細CSVも出せる）／zaicoは最安プランから標準搭載</td><td>既に定着</td></tr>
+<tr><td>C-04 警備業の法定備付簿冊</td><td><span class="tag ng">止める推奨</span></td><td><strong>警備フォース</strong>（月26,000円の管制・給与・請求に<strong>無料同梱</strong>）／EasyKeiby5／警備教育Pro</td><td><strong>2026年4月21日</strong></td></tr>
+<tr><td>J-04 代理店向けSNS投稿の承認フロー</td><td><span class="tag ng">止める推奨</span></td><td><strong>Canva Business</strong>（¥18,800/年/人に同梱）／<strong>SocialDog</strong>が承認ワークフローを追加</td><td><strong>2026年8月27日</strong>（調査の前日）</td></tr>
+<tr><td>K-03 Amazon・楽天の価格自動改定</td><td><span class="tag ok">通過</span></td><td>Amazon純正の「価格の自動設定」は無料。<strong>ただし有料の専業15社以上が現に成立している</strong>のが違い</td><td>—</td></tr>
+</table>
+</div>
+<div class="box ng">
+<p style="margin:0"><strong>注目すべきは時期です。</strong>タロスPOSが2026年4月、警備フォースが2026年4月21日、SocialDogが2026年8月27日。<strong>すべて直近1〜2年、いくつかは今この瞬間に進行しています。</strong>これは「昔から埋まっていた」のではなく、<strong>今まさに埋まり続けている</strong>ということです。</p>
+</div>
+
+<h2 id="s2">2. なぜそうなるのか（同梱の重力）</h2>
+<p>偶然ではなく、ソフトウェアという商品の性質から必然的にこうなります。理由は3つです。</p>
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>ソフトの性質</th><th>そこから起きること</th></tr>
+<tr><td>1</td><td><strong>複製の費用がゼロ</strong>。作ったものを1万人に配っても原価はほぼ増えない</td><td>誰でも真似できる。機能そのものは秘密にできない（画面を見れば分かる）</td></tr>
+<tr><td>2</td><td><strong>同梱の費用がほぼゼロ</strong>。既に顧客を持っている会社は、機能を1つ足すだけで済む</td><td><strong>これが最大の理由。</strong>向こうは「ついでの1機能」として無料で出せる。こちらはそれを主商品にして戦うことになる</td></tr>
+<tr><td>3</td><td><strong>顧客は1つにまとめたい</strong>。請求書も、ログインも、問い合わせ窓口も、少ないほうがいい</td><td>機能が同じなら、顧客は既に使っている製品の中にある方を選ぶ。<strong>比較されずに負ける</strong></td></tr>
+</table>
+</div>
+<div class="box key">
+<p style="margin:0"><strong>この3つが揃うと、「うまくいった単機能SaaS」は必ず大きい製品に吸収されます。</strong>競争に負けるのではありません。<strong>うまくいったからこそ吸収されます。</strong>売れていない機能は誰も同梱しません。<br>
+つまり単機能SaaSは、<strong>成功すると死ぬ</strong>という構造を持っています。</p>
+</div>
+<p>ここから、非常に厳しい帰結が出ます。</p>
+<ul>
+<li><strong>「まだ誰もやっていない機能」の正体は2つしかない</strong>：①やる価値が小さいから誰もやっていない ②もうすぐ誰かがやる。<strong>3つ目（価値があるのに、これからもずっと空いている）は、ほぼ存在しません。</strong></li>
+<li>C-04がまさに①でした（需要はあるが、顧客が払うのは500円のnote記事）。J-04が②でした（前日に埋まった）。</li>
+</ul>
+
+<h2 id="s3">3. 「AIで作れる」は武器ではない</h2>
+<div class="box ng">
+<p style="margin:0">これは申し上げにくいことですが、正直に書きます。<br>
+<strong>「AIを使えば自分でも作れる」ことは、優位性になりません。</strong>理由は単純で、<strong>既存プレイヤーも同じAIを持っているから</strong>です。</p>
+</div>
+<p>むしろAIは、この構造を<strong>悪化</strong>させています。</p>
+<ul>
+<li>以前は、大手が1機能を足すのに数か月かかりました。だから小さい会社が先行できる時間がありました</li>
+<li>いまは大手も同じAIで足せるので、<strong>同梱の速度が上がっています</strong></li>
+<li>実際、SocialDogは承認ワークフローを<strong>この調査の前日</strong>に出しました</li>
+</ul>
+<p><strong>AIが変えたのは「作る費用」であって、「守る力」ではありません。</strong>コスト構造の話であり、資産の話ではないのです。<br>
+AIが本当に効くのは、<strong>すでに守れる何かを持っている人が、そこにAIを足すとき</strong>です。何も持っていない状態でAIだけを持っても、同じことが全員にできます。</p>
+
+<h2 id="s4">4. では何が資産になるのか</h2>
+<p><strong>資産の定義は1行で言えます：「相手がそれを手に入れるのに、お金と時間がかかるもの」。</strong></p>
+<div class="tblwrap">
+<table>
+<tr><th>資産の種類</th><th>コピーに必要なもの</th><th>大手が同梱できるか</th></tr>
+<tr><td><strong>物（在庫・設備・立地・車両・倉庫）</strong></td><td>資金と時間</td><td>できない（買うしかない）</td></tr>
+<tr><td><strong>契約（独占輸入権・正規代理店・専属）</strong></td><td>相手の合意</td><td>できない（相手が首を縦に振らない限り）</td></tr>
+<tr><td><strong>関係・信用（特定の取引先・仕入先との年単位の付き合い）</strong></td><td>年単位の時間</td><td>できない</td></tr>
+<tr><td><strong>免許・登録（取得に審査期間が要るもの）</strong></td><td>審査期間</td><td>できない<br><small>※ただし坂野様は「取得に3か月〜半年かかるものは取りたくない」とのご方針</small></td></tr>
+<tr><td><strong>蓄積データ（自社が実際に事業を回した結果しか出ないもの）</strong></td><td>実際に事業を回した年数</td><td>できない</td></tr>
+<tr><td><strong>相手が引き受けたくない手間・責任</strong></td><td>「やりたくない」という相手の判断</td><td><strong>できるが、したくない</strong></td></tr>
+<tr><td style="background:var(--ngbg)"><strong>ソフトの機能</strong></td><td style="background:var(--ngbg)"><strong>ほぼゼロ（AI時代は特に）</strong></td><td style="background:var(--ngbg)"><strong>できる。しかも無料で</strong></td></tr>
+</table>
+</div>
+<p><strong>単機能SaaSは、この表の一番下にしか立っていませんでした。だから4件とも落ちたのです。</strong></p>
+
+<h2 id="s5">5. 同梱されない4つの形（新しい母集団の定義）</h2>
+<p>ここが提案の中心です。<strong>問いの向きを反対にします。</strong></p>
+<div class="tblwrap">
+<table>
+<tr><th></th><th>問い方</th><th>結果</th></tr>
+<tr><td><strong>旧（SaaS探索の条件）</strong></td><td>「どんな困りごとが空いているか」→ 空いている機能を探す</td><td>見つけた空白が、そもそも空いている理由を持たない。<strong>4件とも同梱で死んだ</strong></td></tr>
+<tr><td><strong>新（v5案）</strong></td><td><strong>「大手が同梱したくても、できない／したくない形は何か」→ その形の中だけで事業を探す</strong></td><td>探す前の段階で、同梱という最大の死因をふるい落としてある</td></tr>
+</table>
+</div>
+<p>調べた範囲では、<strong>同梱されない形は次の4つしかありません。</strong>これが新しい母集団の定義になります。</p>
+
+<div class="box">
+<h4>類型① 人が動く部分が必要（大手はソフトに人を張りたがらない）</h4>
+<p style="margin-bottom:0">代行・現場作業・設置・回収・検品・撮影・投函など、<strong>ソフトだけでは終わらず、誰かが実際に手を動かす必要がある事業</strong>。<br>
+大手のソフト会社は粗利率が命なので、人件費が乗る仕事を自社の製品に組み込みたがりません。<strong>「ソフト＋人」のセットは、ソフト単体より真似されにくい。</strong><br>
+<small>※これは休止中の手順v4「AIと物理実体」（D-016で休止）が狙っていた形そのものです。</small></p>
+</div>
+
+<div class="box">
+<h4>類型② 物・在庫を持つ必要がある</h4>
+<p style="margin-bottom:0">仕入れ・保管・出荷・立替が発生する事業。<strong>在庫は資金を食うので、真似するには相手も同じ金額を投じる必要があります。</strong><br>
+<small>※既存の寝かせ転売、および検討中の海外ブランド正規代理店（<code>overseas-distributor</code>）はこの形です。</small></p>
+</div>
+
+<div class="box">
+<h4>類型③ 責任・リスクを引き受ける必要がある</h4>
+<p style="margin-bottom:0">保証・立替払い・与信・返品の引き取り・法的責任を負う形。<strong>大手ほどリスクを取りたがりません</strong>（社内の承認が下りない）。<br>
+「ソフトを売る」ではなく「結果を保証する」に変えると、同梱では代替できなくなります。</p>
+</div>
+
+<div class="box">
+<h4>類型④ 相手の商売と食い合う</h4>
+<p style="margin-bottom:0">大手がそれをやると、<strong>自分の既存の売上を削ることになる</strong>形。構造的に手を出せません。<br>
+（例：手数料で稼いでいる会社が、手数料を減らすサービスを自分で出せない、など）</p>
+</div>
+
+<div class="box key">
+<p style="margin:0"><strong>そして重要なのは、御社は①②③を実際にやれる立場にあるということです。</strong>法人格があり、従業員がいて、在庫を持った経験があり、資金を回した経験がある。<br>
+<strong>1人法人の本当の強みは「AIで作れること」ではなく、「大手が面倒がる部分を、実際に引き受けられること」です。</strong></p>
+</div>
+<h2 id="s6">6. 御社が持っている資産（たたき台・★要確認）</h2>
+<div class="box warn">
+<p style="margin:0"><strong>ここは私の把握している範囲で書いたたたき台です。</strong>抜け・誤りが必ずあるので、<strong>確認と追記をお願いします。</strong>この棚卸しが、v5の探索すべての出発点になります（仮置きで進めると、また同じことになります）。</p>
+</div>
+<div class="tblwrap">
+<table>
+<tr><th>種類</th><th>持っているもの（たたき台）</th><th>これで何ができるか</th><th>確認</th></tr>
+<tr><td><strong>物</strong></td><td>寝かせ転売の在庫。保管している場所</td><td>在庫を持つ形の事業に耐えられる。保管能力の上限が分かれば、類型②の規模が決まる</td><td>保管できる量・場所の条件は？</td></tr>
+<tr><td><strong>関係</strong></td><td>韓国のB2B仕入先（Juju Trading）との継続的な取引</td><td>言語・現地との関係は真似されにくい。仕入れ側の独自ルートは類型②の核になる</td><td>他に継続している仕入先は？</td></tr>
+<tr><td><strong>蓄積データ</strong></td><td>BASEでの通算 注文5,356件・顧客4,384名・商品名814種（2024-08〜2026-08）。海外発送13件（台湾・韓国・香港・米国・英国）</td><td><strong>「何がいくらで、どれくらいの期間で売れるか」の実データ</strong>。これは他社が買えない。目利きの根拠になる</td><td>この数字で合っていますか</td></tr>
+<tr><td><strong>人</strong></td><td>法人（合同会社R.Y.S）＋従業員</td><td>類型①（人が動く）を実際に引き受けられる。ここが1人でやっている人との差</td><td>いま動かせる人数・時間は？</td></tr>
+<tr><td><strong>実務経験</strong></td><td>古物・EC・海外発送・決済トラブル（チャージバック訴訟）・税務まわりの実地経験</td><td>類型③（責任を引き受ける）の土台。トラブル処理を実際に経験している事業者は少ない</td><td>—</td></tr>
+<tr><td><strong>道具</strong></td><td>Cowork／AIで業務システムを自作できる（Snorker・Rabelu・Rakuvi）。NAS環境</td><td><strong>資産ではなくコスト構造の優位。</strong>「同じことを他社より安く回せる」には効くが、「他社が真似できない」には効かない</td><td>—</td></tr>
+<tr><td><strong>資金</strong></td><td>—</td><td>在庫・設備を持つ類型②の規模を決める</td><td><strong>この事業に投じられる上限は？</strong>（金額でなく「在庫で数百万か、数十万か」の桁だけでも）</td></tr>
+</table>
+</div>
+<p><strong>逆に、持っていないもの（正直に）</strong>：特定業界への人脈（警備・広告・古物業界のいずれにも接点なし）、許認可、社外への販売チャネル（BASE以外）。<br>
+<small>J-04・C-04でいずれも「業界団体・展示会・代理店という主要な販売経路に、当社は1本も線がない」が出ました。<strong>これは新しい事業を選ぶときの制約条件です。</strong></small></p>
+
+<h2 id="s7">7. 探し方の手順（v5案）</h2>
+<div class="tblwrap">
+<table>
+<tr><th>段</th><th>やること</th><th>合格の条件</th></tr>
+<tr><td><strong>段1</strong></td><td><strong>資産の棚卸しを確定させる</strong>（6節の表を坂野様が埋める）。「いま持っているもの」と「半年以内に持てるもの」を分ける</td><td>表が埋まっていること。<strong>ここを飛ばして案出しに行かない</strong></td></tr>
+<tr><td><strong>段2</strong></td><td><strong>戦う類型を1〜2つに決める</strong>（①人が動く／②物を持つ／③責任を取る／④食い合う）。棚卸しの結果から自動的に絞れるはず</td><td>選んだ理由が、段1の資産で説明できること</td></tr>
+<tr><td><strong>段3</strong></td><td><strong>選んだ類型の母集団ソースから、案を広く出す</strong>（8節）。ここは従来どおり<strong>絞り込まず、数を出す</strong>（坂野様のご方針＝落としてよいのは「絶対に無理」なものだけ）</td><td>案が30件以上</td></tr>
+<tr><td><strong>段4</strong></td><td><strong>1件ずつゲート0にかける。</strong>ただし問6を強化する（9節）</td><td>止める条件7＋1に該当しないこと</td></tr>
+<tr><td><strong>段5</strong></td><td>通った案を、<strong>システムを作る前に人力で1件やってみる</strong></td><td>1件でもお金が発生すること</td></tr>
+<tr><td><strong>段6</strong></td><td><strong>そこで初めてソフトを作る</strong>（自社の効率を上げる道具として）</td><td>—</td></tr>
+</table>
+</div>
+<div class="box key">
+<p style="margin:0"><strong>いちばん大きな変更点は、ソフトの位置づけです。</strong><br>
+旧：<strong>ソフトが商品</strong>（＝同梱で死ぬ）<br>
+新：<strong>ソフトは道具。</strong>商品は「人が動く／物を持つ／責任を取る」の方で、ソフトはそれを他社より安く速く回すために使う。<br>
+この形なら、大手が同じソフトを作っても、<strong>人も物も責任も引き受けたくないので、追ってきません。</strong></p>
+</div>
+
+<h2 id="s8">8. どこから探すか（類型別の母集団ソース）</h2>
+<h3>類型①（人が動く）を選ぶ場合</h3>
+<ul>
+<li><strong>M&Aマッチングサイト</strong>の「売上あり・小規模・労働集約」の案件一覧 — <small>坂野様のご方針どおり買収はせず、情報源として使う。「小さいのに続いている商売」の実物カタログとして最良</small></li>
+<li><strong>求人サイトで「代行」「〜スタッフ募集」が継続して出ている領域</strong> — 募集が続く＝人手が足りている状態ではない＝金が動いている</li>
+<li><strong>業界団体・組合が会員向けに案内しているサービス</strong> — <small>C-04の調査で、団体は情報を会員専用ページに置いていることが分かった。「そこに何かがある」痕跡は取れる</small></li>
+<li><strong>クラウドソーシングの反復発注</strong>（従来の探し先#2）— ただし今回は「ソフト化できる仕事」ではなく<strong>「人がやり続けている仕事」</strong>として見る</li>
+</ul>
+<h3>類型②（物を持つ）を選ぶ場合</h3>
+<ul>
+<li><strong>海外の展示会の出展者リスト</strong>（坂野様が「展示会に行くのは大いにあり」と表明済み）</li>
+<li><strong>クラウドファンディング</strong>（海外で成功し、日本に正規代理店がいないもの）</li>
+<li><strong>日本に正規代理店がいない海外ブランド</strong> — <small>既に <code>overseas-distributor</code> として進行中。v5ではこれが類型②の本命になる</small></li>
+<li><strong>自社のBASEの販売実績から、伸びているのに仕入れが安定していないカテゴリ</strong> — 自社データが起点なので、他社は同じ発想に至れない</li>
+</ul>
+<h3>類型③（責任を取る）を選ぶ場合</h3>
+<ul>
+<li><strong>EC事業者が「自分ではやりたくない」業務</strong>：検品・返品処理・不良対応・チャージバック対応・海外発送の関税処理</li>
+<li><strong>保証・立替の形にできる取引</strong>：買取保証、売れ残りの引き取り、代金の立替</li>
+<li><small>御社はチャージバック訴訟まで経験しています。<strong>「トラブルを引き受けた経験」がある事業者は、この類型で本当に少ない。</strong></small></li>
+</ul>
+<h3>類型④（食い合う）を選ぶ場合</h3>
+<ul>
+<li>手数料・広告費で稼いでいるプラットフォームがあり、その手数料や広告費を<strong>減らす</strong>サービス</li>
+<li><small>ただしこれは母集団が小さく、探すのが難しい類型です。単独では推奨しません</small></li>
+</ul>
+
+<h2 id="s9">9. 判定基準の変更点（ゲート0の改訂案）</h2>
+<p>止める条件は7つのまま残し、<strong>1つだけ足します。</strong></p>
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>止める条件</th><th>変更</th></tr>
+<tr><td>1〜5</td><td>（従来どおり）</td><td>変更なし</td></tr>
+<tr><td>6・6b・7</td><td>（従来どおり）</td><td>変更なし</td></tr>
+<tr><td><strong>8（新設）</strong></td><td><strong>「大手がこれを同梱しない構造的な理由」を1つも書けない</strong></td><td><strong>新設。</strong>①人が動く ②物を持つ ③責任を取る ④食い合う のどれかに当てはまることを、具体的に説明できなければ落とす。<strong>「今その大手がやっていないから」は理由にならない</strong>（従来の条件7と同じ考え方）</td></tr>
+</table>
+</div>
+<div class="box ok">
+<h4>もう1つ、手順として足したいこと（J-04・C-04で実際に困った点）</h4>
+<ul style="margin-bottom:0">
+<li><strong>除外条件E1（上場・大型調達の競合）を、案出しの段階で必ず埋める。</strong>【未確認】のまま「残る」にしない。J-04はこれで、本来落ちる案を選定してしまいました（→ D-036 で再点検を提案中）</li>
+<li><strong>競合の更新履歴（お知らせ・リリースノート）を必ず1年分さかのぼる。</strong>今回これが最も効きました。SocialDogの前日リリースも、警備フォースの4月リリースも、ここで見つかっています</li>
+</ul>
+</div>
+
+<h2 id="s10">10. この提案への反論（自分で書きます）</h2>
+<p>この提案が正しいとは限りません。反対の見方を4つ挙げます。</p>
+<div class="box warn">
+<h4>反論1：「時間を切り売りする事業はやりたくない」というご方針と正面から衝突する</h4>
+<p style="margin-bottom:0"><strong>これが最大の論点です。</strong>類型①（人が動く）は、放っておくと時間の切り売りになります。<br>
+ただし坂野様は別のところで「<strong>作業が増えれば雇うパート・正社員が増えるだけ</strong>」「稼働の非線形性は重視しない」とも述べておられます。<br>
+つまり境界は<strong>「坂野様ご自身の時間を売るか」</strong>であって、「人が動くか」ではないのかもしれません。<strong>ここは私の解釈なので、確認が必要です。</strong></p>
+</div>
+<div class="box warn">
+<h4>反論2：K-03は通った。SaaS全否定は行き過ぎ</h4>
+<p style="margin-bottom:0">事実です。K-03（Amazon・楽天の価格自動改定）はゲート0を通っています。理由は「純正が無料でも、有料の専業15社が現に成立している＝顧客が比べたうえで有料を選んでいる」から。<br>
+<strong>したがってv5は「SaaSをやらない」ではありません。</strong>「ソフトを主商品にするなら、K-03のように<strong>無料の純正がある上で有料が成立している証拠</strong>が要る」という条件付きです。<br>
+<small>ただしK-03にも注意点が5つあります（競合15社以上／SP-APIが2026年1月31日から年1,400ドルの固定費／独占禁止法の論点ほか）。「通った＝良い案」ではありません。</small></p>
+</div>
+<div class="box warn">
+<h4>反論3：案の数が減る</h4>
+<p style="margin-bottom:0">坂野様は「膨大な案を広く出してほしい。落としてよいのは絶対に無理なものだけ」とご方針を出されています。<strong>v5は入口で母集団を絞るので、これと矛盾します。</strong><br>
+折衷案：<strong>段3（案出し）では従来どおり数を出し、絞るのは段4のゲート0だけにする。</strong>ただし母集団ソース自体は類型に合わせて選ぶ——という形なら両立できます。</p>
+</div>
+<div class="box warn">
+<h4>反論4：そもそも探索を続けるべきか</h4>
+<p style="margin-bottom:0">御社には既に2本、実際に動いている新規事業があります。<strong>海外ブランドの正規代理店（<code>overseas-distributor</code>）</strong>と<strong>配送ドライバー向けルートアプリ（Snorker）</strong>です。前者はまさに類型②（物＋契約）で、v5の考え方に最も合致します。<br>
+<strong>「新しい案を探す」より「その2本に資源を集中する」ほうが正しい可能性は、真剣に検討する価値があります。</strong></p>
+</div>
+
+<h2 id="s11">11. 選択肢と推奨</h2>
+<div class="tblwrap">
+<table>
+<tr><th>案</th><th>内容</th><th>メリット</th><th>デメリット</th></tr>
+<tr><td><strong>案A<br>（推奨）</strong></td><td><strong>v5「同梱されない形から逆算する」を正式な探し方にする。</strong>まず6節の資産棚卸しを埋め、類型を1〜2つ選び、そこから案出しをやり直す。SaaS単体も候補から外さないが、ゲート0に条件8を足す</td><td>4件が死んだ原因に直接効く。既存の資産（在庫・仕入先・データ・人）を活かせる</td><td>案出しをやり直すことになる。カタログ101件の多くが対象外になる</td></tr>
+<tr><td>案B</td><td><strong>休止中の手順v4（AIと物理実体）を再開する。</strong>D-016（SaaSに一本化）を撤回</td><td>既にv4は承認済みで、文書もカタログv1（105件）も残っている。すぐ動ける</td><td>v4は「AIが判断し自社の物理実体が実行する」形に限定されており、類型③（責任）・④（食い合う）が入らない</td></tr>
+<tr><td>案C</td><td><strong>SaaS探索を続ける。</strong>ただし除外条件に「同梱されやすさ」を追加し、E1を必ず確認する</td><td>変更が小さい。カタログ101件をそのまま使える</td><td><strong>4件が死んだ構造そのものには手を付けない。</strong>残る案も同じ死に方をする可能性が高い</td></tr>
+<tr><td>案D</td><td><strong>新規探索を一旦止め、既存2本（代理店契約・Snorker）に集中する</strong></td><td>いちばん現実的かもしれない。代理店契約は類型②で、v5の考え方に最も合う</td><td>「新しい柱を探す」という当初の目的からは離れる</td></tr>
+</table>
+</div>
+<div class="box key">
+<p style="margin:0"><strong>Claudeの推奨は 案A です。</strong>理由は、案Bだと類型③（責任を引き受ける）が入らないためです。<strong>御社はチャージバック訴訟まで経験しており、この類型は他社が持っていない経験が直接活きる場所</strong>だと考えます。<br>
+<strong>ただし案Dも真剣に検討に値します。</strong>「探し方を良くする」ことと「探すのをやめて手持ちに集中する」ことは、どちらも正しい答えになり得ます。<strong>これは坂野様の判断です。</strong></p>
+</div>
+
+<h2 id="s12">12. 決めていただきたいこと</h2>
+<ol>
+<li><strong>案A〜Dのどれで進めるか</strong>（またはこれ以外）</li>
+<li><strong>「時間を切り売りしたくない」の境界はどこか</strong> — ㋐坂野様ご自身の時間を使わなければよい（人を雇うのは可）／㋑人件費が乗る事業そのものを避けたい。<strong>ここでv5の中身が大きく変わります</strong></li>
+<li><strong>6節の資産棚卸しの確認・追記</strong> — とくに「この事業に投じられる資金の桁」と「いま動かせる人の時間」</li>
+<li><strong>この結論をGeminiのクロスレビューにかけるか</strong> — cross-review スキルは「新規事業の参入や撤退の判断」を対象にしています。<strong>探索の方向転換はこれに当たるので、Claudeの推奨は「かける」です</strong>（追加費用なし。依頼文は私が作ります）</li>
+</ol>
+<hr>
+<p class="meta">
+この資料は「見るための版」であり、<strong>状態は「案（未承認）」</strong>です。承認をいただいた時点で <code>DECISIONS.md</code> に記帳します。<br>
+作成：2026-08-28 ／ 合同会社R.Y.S ／ 新規事業探索
+</p>
+</main>
+</div>
+</body>
+</html>

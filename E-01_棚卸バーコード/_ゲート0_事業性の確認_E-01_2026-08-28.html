@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ゲート0 事業性の確認 E-01 棚卸バーコードスキャン</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1d22; --mut:#5b6270; --line:#dfe3ea; --soft:#f5f7fa;
+  --acc:#1f5fa8; --dai:#0f6b45; --daibg:#e3f4ec; --chu:#8a5a00; --chubg:#fdf1dc;
+  --sho:#8b2f2f; --shobg:#fbe9e9; --ok:#0f6b45; --okbg:#e3f4ec; --ng:#7a2f2f; --ngbg:#f6e7e7;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",system-ui,sans-serif;
+ line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums;}
+main{min-width:0}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;max-width:1280px;margin:0 auto;padding:24px 20px 80px;}
+nav{position:sticky;top:16px;align-self:start;border-right:1px solid var(--line);padding-right:12px;}
+nav a{display:block;padding:5px 0;color:var(--fg);text-decoration:none;font-size:13.5px;border-bottom:1px solid transparent;}
+nav a:hover{color:var(--acc);border-bottom-color:var(--line)}
+h1{font-size:24px;margin:0 0 4px;line-height:1.4}
+h2{font-size:19px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+.note{background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--acc);padding:12px 14px;margin:14px 0;font-size:14px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+thead th{background:var(--soft);position:sticky;top:0;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:after{content:"";}
+tbody tr:hover{background:var(--soft)}
+td.c{text-align:center;white-space:nowrap}
+td.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+.bdg{display:inline-block;min-width:1.7em;text-align:center;padding:1px 7px;border-radius:3px;font-size:12.5px;font-weight:700}
+.b-dai{background:var(--daibg);color:var(--dai)}
+.b-chu{background:var(--chubg);color:var(--chu)}
+.b-sho{background:var(--shobg);color:var(--sho)}
+.b-num{background:var(--soft);color:var(--fg)}
+.st{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;font-weight:700;white-space:nowrap}
+.st.nokoru{background:var(--okbg);color:var(--ok)}
+.st.otosu{background:var(--ngbg);color:var(--ng)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0;font-size:13.5px}
+.ctrl label{color:var(--mut)}
+select,input[type=search]{font:inherit;font-size:13.5px;padding:4px 7px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.card h3{margin:0 0 4px;font-size:16px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card .cid{font-size:12.5px}
+.card .meta{color:var(--mut);font-size:12.5px;margin:0 0 8px}
+#tbl{min-width:1000px}
+#tbl td:nth-child(2){min-width:210px}
+#tbl td:nth-child(3){min-width:150px}
+table.kv{min-width:520px}
+table.layers th:first-child,table.layers td:first-child{white-space:nowrap}
+table.kv th{width:190px;background:var(--soft);font-weight:600;white-space:nowrap}
+.hyw{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
+.hy{display:flex;gap:6px;align-items:center}
+.hyl{color:var(--mut)}
+ul.src{margin:6px 0 14px;padding-left:20px;font-size:13.5px}
+ul.src li{margin:2px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.kpi div{border:1px solid var(--line);border-radius:6px;padding:8px 14px;background:var(--soft);font-size:13px}
+.kpi b{display:block;font-size:20px;line-height:1.3}
+footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px}
+@media (max-width:860px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:12px}
+ nav{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 8px;
+   display:flex;flex-wrap:wrap;gap:4px 14px}
+}
+@media print{
+ nav,.ctrl{display:none}
+ .wrap{grid-template-columns:minmax(0,1fr);max-width:none;padding:0}
+ .card{break-inside:avoid}
+ body{font-size:10.5pt}
+}
+
+.mut{color:var(--mut);font-size:12.5px}
+.verdict{border:2px solid var(--ng);background:var(--ngbg);border-radius:6px;padding:16px 18px;margin:18px 0}
+.verdict h3{margin:0 0 6px;font-size:18px;color:var(--ng)}
+.ok{color:var(--ok)} .ng{color:var(--ng)} .chu{color:var(--chu)}
+td.hit{background:var(--ngbg);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<nav>
+<a href="#s0">結論</a>
+<a href="#s1">1. 判定表（調査前に固定）</a>
+<a href="#s2">2. 問1 客はいま何で足りているか</a>
+<a href="#s3">3. 問2 既に持っている機能</a>
+<a href="#s4">4. 問3 母数の引き算</a>
+<a href="#s5">5. 問4 5年後に増えるか減るか</a>
+<a href="#s6">6. 問5 死ぬ条件3つ</a>
+<a href="#s7">7. 問6 うちを選ぶ理由</a>
+<a href="#s8">8. 判定</a>
+<a href="#s9">9. ★今回の見落としの型（C-03とは別）</a>
+<a href="#s10">10. 次にやること</a>
+<a href="#s11">11. 出典</a>
+</nav>
+<main>
+
+<h1>ゲート0　事業性の確認<br><span style="font-size:19px;font-weight:400">E-01 棚卸バーコードスキャン→CSV書き出し</span></h1>
+<p class="lead">作成日 2026-08-28　／　合同会社R.Y.S　／　decision-gate スキル ゲート0　／　要件定義の前に通す関門</p>
+
+<h2 id="s0">結論</h2>
+<div class="verdict">
+<h3>この案も、ゲート0を通りません。要件定義には進まないことを提案します。</h3>
+<p style="margin:8px 0 0"><strong>止める条件7つのうち3つが該当し、うち条件3は「死ぬ条件3つが全部すでに起きている」という状態でした。C-03より厳しい結果です。</strong></p>
+<ul style="margin:6px 0 0">
+<li><strong>条件2に該当</strong>　<strong>Airレジがスマホでのバーコード棚卸を完全無料で提供しています。</strong>公式が「Airレジのアプリは全て無料にて利用できます」と明記。棚卸明細のCSVダウンロードもできます</li>
+<li><strong>条件3に該当</strong>　死ぬ条件を3つ書いたところ、<strong>3つとも既に起きていました</strong></li>
+<li><strong>条件6bに該当</strong>　POSを使う小売は、レジに無料で付いてくるため<strong>そもそも棚卸ツールを別に探しません</strong></li>
+</ul>
+<p style="margin:10px 0 0"><strong>さらに、人手の側も埋まっていました。</strong>棚卸代行のエイジスは<strong>東証スタンダード上場（4659）・2023年3月期の連結売上高約260億円・棚卸業界国内シェアNo.1</strong>を自称し、<strong>薬局向けの「調剤棚卸」まで専用サービスとして持っています</strong>（基本料20,000円＋1件60円〜）。</p>
+</div>
+<div class="note"><strong>母数は問題ありませんでした。</strong>卸売業348,889事業所＋小売業880,031事業所＝<strong>約123万事業所</strong>（令和3年 経済センサス）。条件4には当たりません。<strong>止めた理由は競合構造だけです。</strong></div>
+
+<h2 id="s1">1. 判定表（★調査を始める前に固定したもの）</h2>
+<p>C-03と同じく、何も調べていない状態でこの表を確定させ、<span class="mono">E-01_棚卸バーコード/HANTEI_HYO.md</span> に保存してから調査を始めました。<strong>C-03の教訓（上位カテゴリを見落とした）は「調べ方の重点」としてだけ書き足し、判定基準そのものは動かしていません。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>対応する問い</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="c nowrap">問4</td><td class="hit">△ 減る方向だが母数が巨大（<a href="#s5">5節</a>）</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td class="c nowrap">問1②・問2</td><td class="hit">✕ <strong>該当</strong></td></tr>
+<tr><td class="c">3</td><td>死ぬ条件の3つのうち、1つでも既に起きている</td><td class="c nowrap">問5</td><td class="hit">✕ <strong>該当（3つ中3つ）</strong></td></tr>
+<tr><td class="c">4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標に届かない</td><td class="c nowrap">問3</td><td class="ok c">○ 該当せず</td></tr>
+<tr><td class="c">5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td class="c nowrap">問1</td><td class="ok c">○ 5つとも埋まった</td></tr>
+<tr><td class="c">6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td class="c nowrap">問6②</td><td>○ 書けるが弱い（<a href="#s7">7節</a>）</td></tr>
+<tr><td class="c">6b</td><td>顧客がそもそも2つを並べて比べない（相手に無料同梱で探されない）</td><td class="c nowrap">問6③</td><td class="hit">✕ <strong>該当</strong></td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td class="c nowrap">問6③</td><td>― 既にやられているため論点以前</td></tr>
+</tbody></table></div>
+
+<h2 id="s2">2. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p>探し先5つは全部埋まりました。<strong>C-03の失敗を踏まえ、②上位カテゴリと⑤人手を最優先で調べました。その2つが、そのまま結論になりました。</strong></p>
+
+<h3>★探し先② 上位カテゴリ（在庫管理システム・POS・卸／薬局の基幹システム）</h3>
+<div class="tw"><table>
+<thead><tr><th>製品</th><th>スマホで読めるか</th><th>棚卸機能の位置づけ</th><th>CSV</th></tr></thead>
+<tbody>
+<tr><td class="hit"><strong>Airレジ</strong></td><td class="c">○ iPhoneカメラで読取</td><td class="hit"><strong>完全無料</strong><br><span class="mut">公式マガジンが「Airレジのアプリは全て無料にて利用できます」と明記</span></td><td class="c">○ 棚卸明細CSVをDL可</td></tr>
+<tr><td><strong>zaico</strong></td><td class="c">○ アプリでスキャン</td><td>最安の有料「スターター」月8,980円から<strong>標準搭載</strong>（無料プランには無し）</td><td class="c">【未確認】</td></tr>
+<tr><td><strong>スマレジ</strong></td><td class="c">○ 商品カメラ読取</td><td>スタンダード以上の有料プラン<br><span class="mut">利用者の声「更に課金しないと棚卸機能が使えない」</span></td><td class="c">○ CSV棚卸入力</td></tr>
+<tr><td>ロジクラ</td><td class="c">○</td><td>最安「Lite」月12,800円〜。無料プランなし</td><td class="c">【未確認】</td></tr>
+<tr><td>ユビレジ</td><td class="c">○ 専用アプリ StockScan</td><td>【未確認】</td><td class="c">【未確認】</td></tr>
+<tr><td>アラジンオフィス（卸）</td><td class="c ng">×<br><span class="mut">ハンディ端末前提</span></td><td>ハンディで読取り、原票記入とPC入力の手間を省く</td><td class="c">【未確認】</td></tr>
+<tr><td>SMILE（大塚商会）</td><td class="c ng">×<br><span class="mut">RFID／ハンディ</span></td><td>Smile棚卸</td><td class="c">【未確認】</td></tr>
+<tr><td><strong>薬局の基幹系</strong><br><span class="mut">ODSS（鍋林）／ミザル（東邦薬品）／Pharmy</span></td><td class="c ng">×<br><span class="mut">専用ハンディ</span></td><td>3製品ともハンディスキャナー連携で棚卸に対応。ミザルは発注端末でJAN／YJコード読取</td><td class="c">【未確認】</td></tr>
+<tr><td>弥生販売・商奉行</td><td class="c">―</td><td>本体は非搭載。<strong>外部ベンダーのハンディ連動システムが別売り</strong>で提供</td><td class="c">外部側で連携</td></tr>
+</tbody></table></div>
+<div class="note"><strong>Airレジの存在が決定的です。</strong>小売店にとってレジは必需品で、Airレジは初期費用も月額もかからない代表格です。そこにスマホでのバーコード棚卸とCSV出力が<strong>追加費用ゼロ</strong>で入っています。この状態で「棚卸ツールを別に探す」理由がありません。<br>
+また、<strong>卸・部品商・薬局はスマホではなく専用ハンディ端末で既に解決済み</strong>でした。ここは「スマホで安く」という切り口が効きうる唯一の隙間ですが、業界の実務がハンディで固まっているため、端末を捨てさせる説得が必要になります。</div>
+
+<h3>★探し先⑤ 人手（棚卸代行）</h3>
+<div class="tw"><table class="kv">
+<tr><th>会社</th><td><strong>株式会社エイジス（AJIS）</strong>。1978年設立、<strong>日本初の棚卸代行会社</strong></td></tr>
+<tr><th>上場</th><td class="ng"><strong>東証スタンダード市場に上場（証券コード4659）</strong></td></tr>
+<tr><th>規模</th><td>2023年3月期 連結売上高 <strong>約260億円</strong></td></tr>
+<tr><th>シェア</th><td>「棚卸業界国内シェアNo.1」と自称。47都道府県対応、3,000社以上の取引実績</td></tr>
+<tr><th>料金</th><td>基本料金＋従量制。<strong>調剤棚卸は基本料20,000円＋1件60円〜</strong>（条件により変動）</td></tr>
+<tr><th class="ng">★薬局向け</th><td class="ng"><strong>「調剤棚卸」として薬局専用サービスを確立済み。</strong>専用機器でJAN／YJコードを読取り、従業員が対応する場合と比べ「約5〜10倍の生産性」を訴求</td></tr>
+</table></div>
+<p><strong>ツールを買うのではなく人に頼む、という選択肢が上場企業によって固められています。</strong>特に薬局は、この案が狙う業種のひとつでしたが、そこに専用サービスが既にあります。</p>
+
+<h3>探し先① 同じカテゴリの製品（棚卸専用アプリ）</h3>
+<div class="tw"><table>
+<thead><tr><th>アプリ名</th><th>評価／レビュー</th><th>最終更新</th><th>価格</th></tr></thead>
+<tbody>
+<tr><td>棚卸メール</td><td class="c">★4.30／800件</td><td class="c chu">2022年3月5日<br><span class="mut">停止</span></td><td>無料</td></tr>
+<tr><td>バーコードde実棚</td><td class="c">★3.9／13件</td><td class="c chu">2022年6月28日<br><span class="mut">停止</span></td><td>無料＋550円／6か月</td></tr>
+<tr><td class="hit"><strong>バーコードカウント</strong></td><td class="c">―</td><td class="c hit"><strong>2026年4月14日</strong><br><span class="mut">現役・最も活発</span></td><td><strong>無料</strong>（1日7回までCSV作成）＋プレミアム</td></tr>
+<tr><td class="hit"><strong>棚卸くん</strong></td><td class="c">―</td><td class="c hit"><strong>2025年8月28日</strong><br><span class="mut">現役</span></td><td>約10ドル（買い切り）</td></tr>
+<tr><td class="hit"><strong>QR棚卸 バージョン2</strong></td><td class="c">新規のため評価不足</td><td class="c hit">新規リリース</td><td><strong>無料</strong></td></tr>
+</tbody></table></div>
+<div class="note"><strong>ここがカタログの判断を崩しました。</strong>第1弾では「棚卸メールが★4.30・800件のレビューを積み上げたまま4年半更新停止＝空いている」と読みました。<strong>しかし同じ機能の後継アプリが、現に出続けていました。</strong>バーコードカウントは2026年4月に更新され、無料でCSV出力ができます。<strong>1つのアプリが止まっただけで、カテゴリが空いたわけではありませんでした。</strong></div>
+
+<h3>探し先③ 下位・単機能の無料ツール／探し先④ 汎用ツール</h3>
+<div class="tw"><table>
+<thead><tr><th>ツール</th><th>状況</th></tr></thead>
+<tbody>
+<tr><td>無料の棚卸アプリ</td><td>上記のとおり現役で複数存在（無料またはワンコイン）</td></tr>
+<tr><td>kintone用バーコードプラグイン</td><td>「バーコードでPi!」（ITFit）、パレットテクノロジーズの<strong>無料</strong>プラグインなど複数</td></tr>
+<tr><td>AppSheet＋Googleスプレッドシート</td><td>スマホ内蔵のバーコードスキャン列で在庫アプリを自作する解説記事が多数。<strong>2026年7月3日公開の記事もあり、現在進行形で普及中</strong></td></tr>
+</tbody></table></div>
+
+<h2 id="s3">3. 問2　競合が「既に持っている機能」を、先に全部書いた</h2>
+<p><strong>「スマホでバーコードを読んで棚卸できる」と一次資料で確認できた製品は次のとおりです。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>区分</th><th>製品</th></tr></thead>
+<tbody>
+<tr><td>上位カテゴリ（POS・在庫SaaS）</td><td><strong>Airレジ（完全無料）</strong>、zaico、スマレジ、ロジクラ、ユビレジ</td></tr>
+<tr><td>専用アプリ</td><td>棚卸メール（停止）、バーコードde実棚（停止）、<strong>バーコードカウント（現役・無料）</strong>、棚卸くん（現役）、QR棚卸バージョン2（新規・無料）</td></tr>
+<tr><td>汎用の自作</td><td>AppSheet、kintone＋バーコードプラグイン（無料あり）</td></tr>
+<tr><td>ハンディ端末前提<br><span class="mut">※スマホではないが同じ課題を解決済み</span></td><td>アラジンオフィス、SMILE、薬局のODSS／ミザル／Pharmy、キーエンス系「棚人」、デンソーウェーブ</td></tr>
+<tr><td>人手</td><td><strong>エイジス（東証スタンダード上場）</strong>ほか代行業者</td></tr>
+</tbody></table></div>
+<p><strong>調べたが機能の有無を確認できなかった製品：</strong>POS+（ポスタス）、Orange Operation、カシオのハンディ端末＋ソフト。この3つについては「持っていない」と断定していません。</p>
+
+<h2 id="s4">4. 問3　母数の引き算</h2>
+<div class="tw"><table>
+<thead><tr><th>段</th><th>数字</th><th>根拠の性質</th></tr></thead>
+<tbody>
+<tr><td>① 卸売業＋小売業の事業所数（令和3年）</td><td class="num"><strong>1,228,920事業所</strong><br><span class="mut">卸売業 348,889／小売業 880,031</span></td><td class="ok">公的統計（経済センサス）</td></tr>
+<tr><td>② うち在庫を持ち、実地棚卸が発生する層</td><td class="chu">取れなかった<br><span class="mut">飲食・サービス業態を除く必要があるが、内訳が取れない</span></td><td>未確認</td></tr>
+<tr><td>③ うちPOS・在庫SaaSを入れていない層</td><td class="chu">取れなかった</td><td>未確認</td></tr>
+</tbody></table></div>
+<p><strong>条件4の判定：該当しません。</strong>①だけで123万事業所あり、仮に半分を除いても60万事業所規模です。シェア1%＝6,000社は、単価が月1,000円でも年7,200万円に相当します。<strong>母数の小ささでこの案が死ぬことはありません。</strong>問題は母数ではなく、そこに既に無料の選択肢が届いていることです。</p>
+
+<h2 id="s5">5. 問4　この客は5年後、増えるか減るか</h2>
+<p>小売業の事業所数は長期的に減少傾向にありますが、<strong>母数が123万と巨大なため、減少しても客がいなくなることはありません。</strong>条件1は「該当」と断定しません。</p>
+<div class="note"><strong>ただし方向としては逆風です。</strong>減っているのは小規模店で、残るのはチェーン化した店舗です。チェーンはPOSを入れ、あるいはエイジスに外注します。<strong>つまり「POSを持たない小規模店」という、この案が狙う層が細っていく方向です。</strong>C-03と同じ構図でした。</div>
+
+<h2 id="s6">6. 問5　この案が死ぬ条件を3つ書き、その場で確認した</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>「〜が起きたら、この案は成立しない」</th><th>いま起きているか</th></tr></thead>
+<tbody>
+<tr><td class="c">死因1</td><td>POS・在庫管理SaaSが、スマホでのバーコード棚卸を標準搭載したら成立しない</td><td class="hit">✕ <strong>既に起きている</strong><br><strong>Airレジは完全無料。</strong>zaicoは最安の有料プランから標準搭載、スマレジも対応</td></tr>
+<tr><td class="c">死因2</td><td>無料または低額の棚卸アプリが現役で存在したら成立しない</td><td class="hit">✕ <strong>既に起きている</strong><br>バーコードカウント（2026年4月更新・無料）、棚卸くん（2025年8月更新）、QR棚卸バージョン2（新規・無料）</td></tr>
+<tr><td class="c">死因3</td><td>棚卸代行が安く定着していたら成立しない</td><td class="hit">✕ <strong>既に起きている</strong><br>エイジスが東証スタンダード上場・売上260億円・シェアNo.1。薬局向け専用サービスまで確立</td></tr>
+</tbody></table></div>
+<p><strong>3つとも既に起きていました。</strong>C-03は3つ中2つでしたので、それより厳しい結果です。</p>
+
+<h2 id="s7">7. 問6　うちを選ぶ理由は何か</h2>
+<h3>① 並べられるか</h3>
+<p><strong>並べられます。既に並べられています。</strong>この機能はPOS・在庫管理SaaSに1つの機能として完全に収まる大きさで、実際にAirレジ・zaico・スマレジが収めています。</p>
+
+<h3>② うちを選ぶ理由</h3>
+<div class="tw"><table>
+<thead><tr><th>選ばれうる理由</th><th>評価</th></tr></thead>
+<tbody>
+<tr><td>読取精度で勝つ（新型iPhoneで読めない等の不満に応える）</td><td class="chu">第1弾で見つけた不満はすべて<strong>更新停止した1つのアプリ</strong>に対するもの。現役アプリやAirレジに同じ不満があるかは<strong>確認できませんでした</strong></td></tr>
+<tr><td>重複送信を防ぐ作り込みで勝つ</td><td class="chu">同上。<strong>不満の裏が取れていません</strong></td></tr>
+<tr><td>POSを入れていない卸・部品商・薬局に、ハンディ端末なしで提供する</td><td class="chu">唯一の隙間。ただし<strong>業界の実務がハンディで固まっており、端末を捨てさせる説得が要る</strong></td></tr>
+<tr><td>価格で勝つ</td><td class="ng"><strong>不可能。</strong>Airレジも現役アプリも無料</td></tr>
+</tbody></table></div>
+<p>理由を1つも書けないわけではないため<strong>条件6そのものには該当しません。</strong>ただし、勝ち筋として挙げた「読取精度」「重複送信」は、<strong>4年半前に更新が止まったアプリへの不満が根拠</strong>であり、現役の競合に同じ弱点があるかを確認できていません。<strong>根拠として弱すぎます。</strong></p>
+
+<h3>③ ★顧客はそもそも2つを並べて比べてくれるか</h3>
+<div class="verdict" style="border-color:var(--chu);background:var(--chubg)">
+<h3 style="color:var(--chu)">POSを使う小売は、比べてくれません。条件6bに該当します。</h3>
+<p style="margin:8px 0 0">小売店にとってレジは必需品で、Airレジは代表的な無料POSです。そこにスマホでのバーコード棚卸とCSV出力が<strong>追加費用ゼロ</strong>で付いてきます。<strong>「棚卸アプリを探そう」という行動自体が発生しません。</strong></p>
+<p style="margin:8px 0 0">POSを持たない層は探しますが、そこで見つかるのは<strong>無料の現役アプリ</strong>です。有料で無料に勝つ必要があります。</p>
+</div>
+
+<h2 id="s8">8. 判定</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>判定</th><th>根拠</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="hit c">△</td><td>小売の事業所は減少方向だが母数が巨大。断定しない</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリが機能を内包</td><td class="hit c">✕ <strong>該当</strong></td><td><strong>Airレジが完全無料で提供。</strong>zaico標準搭載・スマレジ・ロジクラ・ユビレジ</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件が既に起きている</td><td class="hit c">✕ <strong>該当</strong></td><td><strong>3つ中3つが既発生</strong></td></tr>
+<tr><td class="c">4</td><td>母数×単価×1%が目標に届かない</td><td class="c ok">○ 該当せず</td><td>卸＋小売で約123万事業所</td></tr>
+<tr><td class="c">5</td><td>探し先に埋まっていないものがある</td><td class="c ok">○ 該当せず</td><td>5つとも埋めた</td></tr>
+<tr><td class="c">6</td><td>選ぶ理由を1つも書けない</td><td class="c ok">○ 該当せず</td><td>書けるが根拠が弱い</td></tr>
+<tr><td class="c">6b</td><td>そもそも並べて比べられない</td><td class="hit c">✕ <strong>該当</strong></td><td>Airレジに無料同梱で探されない</td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今やっていない」だけ</td><td class="c">―</td><td>既にやられているため論点以前</td></tr>
+</tbody></table></div>
+
+<h2 id="s9">9. ★今回の見落としの型は、C-03とは別のものでした</h2>
+<div class="tw"><table>
+<thead><tr><th>案</th><th>カタログでの判断</th><th>実際</th><th>見落としの型</th></tr></thead>
+<tbody>
+<tr><td>C-03<br>古物台帳</td><td>「専用SaaSの固有名詞が薄い＝空いている」</td><td>リユース向けPOSが無料同梱していた</td><td><strong>上位カテゴリを見ていなかった</strong></td></tr>
+<tr><td>E-01<br>棚卸バーコード</td><td>「★4.30・800件を積み上げたアプリが4年半更新停止＝空いている」</td><td>同じ機能の後継アプリが現に出続けていた。さらにAirレジが無料同梱</td><td class="hit"><strong>1つのアプリの停止を、カテゴリ全体の空きと読んだ</strong></td></tr>
+</tbody></table></div>
+<p><strong>2件とも、上位カテゴリ（POS）に無料で同梱されていたという共通点があります。</strong>D-028では「上位カテゴリが内包していることを理由にゲート0で落ちる案が3件に達したら、カタログの再点検か評価軸の改訂を再提案する」と決めました。<strong>これで2件目です。</strong></p>
+<div class="note"><strong>あわせて、レビューの読み方についても1つ分かりました。</strong>「更新が止まったアプリにレビューが積み上がっている」は、<strong>それ単体では空きの証拠になりません。</strong>同じカテゴリの新しいアプリが出ていないかを必ず確認する必要があります。今回、App StoreとGoogle Playを両方見て初めて、現役の後継が見つかりました。</div>
+
+<h2 id="s10">10. 次にやること（坂野様に決めていただきたいこと）</h2>
+<p><strong>Claudeの推奨：この案も止める。</strong>狭めた形（卸・部品商・薬局にハンディ端末なしで提供する）は唯一の隙間ですが、業界の実務がハンディで固まっており、しかも薬局はエイジスの調剤棚卸が押さえています。</p>
+<div class="tw"><table>
+<thead><tr><th>案</th><th>やること</th></tr></thead>
+<tbody>
+<tr><td><strong>案1（推奨）</strong></td><td><strong>候補の選び方を変えて、次の案へ進む。</strong>カタログの「大」の数の順ではなく、<strong>「そのPOS・基幹システムが無料で同梱していない領域」から選ぶ。</strong>具体的には、5節で「看板が空いている可能性」とした7件のうち、<strong>そもそも業種特化のPOSが存在しない領域</strong>＝A-03（建設の安全書類）・B-02（協力会社コンプラ期限台帳）・C-02（産廃マニフェスト）・C-04（警備業の法定備付簿冊）あたり</td></tr>
+<tr><td>案2</td><td>D-028の見直しトリガーを前倒しし、<strong>いまカタログの再点検をする</strong>（2件目だが、2件とも同じ型だったため）</td></tr>
+<tr><td>案3</td><td>カタログの並び順どおり、次の候補（K-03 価格自動改定など）へ進む</td></tr>
+</tbody></table></div>
+<p><strong>案1を推奨します。</strong>2件続けて「POSに無料同梱」で落ちました。<strong>POSが存在する業種を避けるだけで、同じ失敗を繰り返さずに済みます。</strong>再点検（案2）まではしなくても、選び方を変えるだけで効果があります。</p>
+
+<h2 id="s11">11. 出典</h2>
+<p class="lead">2026-08-28 に確認したものです。</p>
+<h3>上位カテゴリ（この案を止めた根拠）</h3>
+<ul class="src">
+<li><a href="https://faq.airregi.jp/hc/ja/articles/15264451856409" target="_blank" rel="noopener">★Airレジ 棚卸しに関するFAQ（iPhoneカメラでバーコード読取・棚卸明細CSV）</a></li>
+<li><a href="https://airregi.jp/magazine/guide/605/" target="_blank" rel="noopener">★Airレジ 在庫管理ガイド（アプリは全て無料と明記）</a></li>
+<li><a href="https://www.zaico.co.jp/plans/" target="_blank" rel="noopener">zaico 料金プラン（スターター月8,980円〜）</a></li>
+<li><a href="https://support.zaico.co.jp/hc/ja/articles/41412617462937--%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E6%A3%9A%E5%8D%B8" target="_blank" rel="noopener">zaico モバイル棚卸</a></li>
+<li><a href="https://www.zaico.co.jp/2026/04/23/release_patent/" target="_blank" rel="noopener">zaico AI写真棚卸で特許取得（2026年4月13日）</a></li>
+<li><a href="https://prtimes.jp/main/html/rd/p/000000095.000038326.html" target="_blank" rel="noopener">zaico 動画でAI棚卸 ベータ公開（2026年3月3日）</a></li>
+<li><a href="https://help.smaregi.jp/hc/ja/articles/360045059173" target="_blank" rel="noopener">スマレジ アプリで行なう棚卸入力</a></li>
+<li><a href="https://store.cloudil.jp/smaregi-review/" target="_blank" rel="noopener">スマレジ 利用者の口コミ（課金しないと棚卸機能が使えない）</a></li>
+<li><a href="https://logikura.jp/plan/" target="_blank" rel="noopener">ロジクラ 料金（Lite 月12,800円〜）</a></li>
+<li><a href="https://apps.apple.com/jp/app/id602677181" target="_blank" rel="noopener">ユビレジ 在庫管理（StockScan）</a></li>
+<li><a href="https://aladdin-office.com/zaiko/handy/" target="_blank" rel="noopener">アラジンオフィス ハンディ連携（卸）</a></li>
+<li><a href="https://www.aspicjapan.org/asu/article/39001" target="_blank" rel="noopener">薬局の在庫管理システム比較（ODSS／ミザル／Pharmy）</a></li>
+<li><a href="https://handyterminal.jp/handyterminal/" target="_blank" rel="noopener">弥生販売・商奉行向けハンディ連動システム（外部ベンダー）</a></li>
+</ul>
+<h3>人手（棚卸代行）</h3>
+<ul class="src">
+<li><a href="https://service.ajis.jp/service/inventory/compounding.html" target="_blank" rel="noopener">★エイジス 調剤棚卸サービス（基本料20,000円＋1件60円〜・シェアNo.1）</a></li>
+<li><a href="https://www.ajis.jp/wp-content/uploads/2021/11/f1775ca55ec2f5fbfcbeadb159fec2c8.pdf" target="_blank" rel="noopener">エイジス 棚卸サービス案内（基本料金＋従量制）</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%82%A4%E3%82%B8%E3%82%B9_(%E4%BC%81%E6%A5%AD)" target="_blank" rel="noopener">エイジス（東証スタンダード 4659・売上約260億円）</a></li>
+</ul>
+<h3>同カテゴリ・単機能アプリ</h3>
+<ul class="src">
+<li><a href="https://apps.apple.com/jp/app/id1459728517" target="_blank" rel="noopener">棚卸メール（★4.30／800件・2022年3月更新停止）</a></li>
+<li><a href="https://apps.apple.com/jp/app/id1509177299" target="_blank" rel="noopener">バーコードde実棚（2022年6月更新停止）</a></li>
+<li><a href="https://play.google.com/store/apps/details?id=jp.yukiei.zaikoapp&amp;hl=ja" target="_blank" rel="noopener">★バーコードカウント（2026年4月14日更新・無料でCSV出力）</a></li>
+<li><a href="https://play.google.com/store/apps/details?id=jp.co.istechno.istinventory" target="_blank" rel="noopener">棚卸くん（2025年8月28日更新）</a></li>
+<li><a href="https://apps.apple.com/jp/app/id6759327161" target="_blank" rel="noopener">QR棚卸 バージョン2（新規・無料）</a></li>
+</ul>
+<h3>汎用・自作／母数</h3>
+<ul class="src">
+<li><a href="https://www.stat.go.jp/data/e-census/2021/kekka/pdf/oroshikouri_outline.pdf" target="_blank" rel="noopener">★令和3年 経済センサス 卸売業348,889／小売業880,031事業所</a></li>
+<li><a href="https://www.palette-tech.com/barcodescan-plugin/" target="_blank" rel="noopener">kintone用 無料バーコードスキャンプラグイン</a></li>
+<li><a href="https://dx-ai.seed.or.jp/2026/07/03/appsheet-inventory-management-app-nocode/" target="_blank" rel="noopener">AppSheetでノーコード在庫管理アプリ（2026年7月3日公開）</a></li>
+<li><a href="https://kitato.com/products/tanaoroshi" target="_blank" rel="noopener">棚人（キーエンス系ハンディ向け棚卸ソフト）</a></li>
+</ul>
+
+<footer>
+ゲート0 事業性の確認 ／ E-01 棚卸バーコードスキャン→CSV書き出し ／ 作成日 2026-08-28 ／ 合同会社R.Y.S<br>
+判定：<strong>止める（要件定義に進まない）</strong>。止める条件7つのうち3つが該当（条件2・条件3・条件6b）。<strong>死ぬ条件は3つ中3つが既発生</strong><br>
+判定表の固定：<span class="mono">E-01_棚卸バーコード/HANTEI_HYO.md</span>（調査着手前に確定）　／　決定の正本：<span class="mono">DECISIONS.md</span>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

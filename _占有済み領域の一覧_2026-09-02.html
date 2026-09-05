@@ -1,0 +1,194 @@
+<title>占有済み領域の一覧</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--muted:#5a5a5a;--line:#d8d8d8;--panel:#f6f6f4;--accent:#1f4e79;--warn:#8a3b00;--ok:#1f5c2e;--thbg:#ececea;--stop:#a11}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171a;--fg:#e8e8e6;--muted:#a9a9a5;--line:#3a3d42;--panel:#1e2126;--accent:#8ab4e8;--warn:#e0a56a;--ok:#8fce9c;--thbg:#262a30;--stop:#e8888a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums}
+.wrap{display:flex;align-items:flex-start;max-width:1220px;margin:0 auto}
+nav{position:sticky;top:0;flex:0 0 230px;padding:24px 14px;border-right:1px solid var(--line);max-height:100vh;overflow:auto;font-size:13px}
+nav h2{font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+nav a{display:block;color:var(--fg);text-decoration:none;padding:4px 6px;border-radius:4px}
+nav a:hover{background:var(--panel);color:var(--accent)}
+main{flex:1 1 auto;padding:24px 28px 80px;min-width:0}
+h1{font-size:23px;line-height:1.5;margin:0 0 6px;border-bottom:2px solid var(--accent);padding-bottom:10px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:5px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px;color:var(--accent)}
+p{margin:10px 0}
+.meta{color:var(--muted);font-size:13px;margin:0 0 20px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0}
+.box.warn{border-left:5px solid var(--warn)}
+.box.ok{border-left:5px solid var(--ok)}
+.box.stop{border-left:5px solid var(--stop)}
+.box h3{margin-top:0}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--thbg);font-weight:600;white-space:nowrap}
+td.id{white-space:nowrap;font-weight:600;color:var(--accent);font-size:13px}
+code{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:1px 5px;font-size:13px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 12px;overflow-x:auto;font-size:13px}
+ul,ol{padding-left:1.4em;margin:10px 0}
+li{margin:4px 0}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:3px;padding:1px 6px;color:var(--muted);margin-right:4px}
+a{color:var(--accent)}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media print{nav{display:none}.wrap{display:block}main{padding:0}body{font-size:11pt}}
+@media (max-width:820px){.wrap{display:block}nav{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);flex:none;width:auto}main{padding:16px}}
+</style>
+
+<div class="wrap">
+<nav>
+<h2>目次</h2>
+<a href="#s0">この一覧について</a>
+<a href="#s1">1. 占有済みの領域</a>
+<a href="#s2">2. 各領域の詳細</a>
+<a href="#s3">3. 却下した案と理由</a>
+<a href="#s4">4. 判断軸に追加したもの</a>
+<a href="#s5">5. まだ判定していない案</a>
+<a href="#s6">6. 引き方（grep）</a>
+<a href="#s7">7. 出典</a>
+</nav>
+
+<main>
+<h1>占有済み領域の一覧<br><span style="font-size:16px;font-weight:normal;color:var(--muted)">— 調べた結果「誰がいて、どこまで埋まっているか」が分かった分野</span></h1>
+<p class="meta">作成日：2026-09-02（同日 訂正あり・§4参照） ／ 合同会社R.Y.S<br>
+<strong>正本は `C:\dev\_infra\LOG\2026-09.md`（記録の本体）です。</strong>この資料は見るための版で、食い違いが生じた場合は正本を正とします。</p>
+
+<div class="box ok" id="s0">
+<h3>この一覧の目的</h3>
+<p>却下した案について「なぜ却下したか」だけを残すと、<strong>後日また同じ分野を一から調べ直すことになります。</strong>そこで「その分野に誰がいて、どこまで埋まっているか」も一緒に残します。</p>
+<p>今後この種の記録には、LOG の【どういうときに】欄の先頭に <code>【占有済み】</code> というマーカーを付けます。<code>grep "【占有済み】"</code> で一覧を引けます（§6）。</p>
+</div>
+
+<h2 id="s1">1. 占有済みの領域（一覧）</h2>
+<div class="tw">
+<table>
+<tr><th>領域</th><th>主な占有者</th><th>埋まり方</th><th>LOG</th></tr>
+<tr><td><strong>企業クチコミ・会社評価</strong><br>（就活・転職）</td><td>OpenWork（東証グロース5139）／ライトハウス（エン・ジャパン）／転職会議（リブセンス）</td><td><strong>上場3社の本業。</strong>加えて求人サイトに無料同梱</td><td class="id">R-0250〜0254<br>R-0260</td></tr>
+<tr><td><strong>個人間の応援・投げ銭</strong><br>（クリエイター支援）</td><td>OFUSE／pixivFANBOX／Fantia／Ci-en／Enty／Patreon／Buy Me a Coffee</td><td><strong>専用サービス＋大手の無料同梱＋規制</strong>の三重</td><td class="id">R-0261</td></tr>
+<tr><td><strong>ニッチSNS（ぬい活）</strong><br><strong>趣味特化型SNS</strong></td><td>ぬい日和／ふわもこSNS／ぬいとも。趣味SNS最大手＝YAMAP</td><td>個別ジャンルは埋まりつつある。<strong>より重いのは「規模が出ても黒字化しない」こと</strong></td><td class="id">R-0262</td></tr>
+<tr><td><strong>Robloxでの制作</strong><br><strong>UGCプラットフォーム運営</strong></td><td>Roblox／Rec Room ほか</td><td>制作側＝中央値が極端に低い。運営側＝<strong>黒字化が構造的に困難</strong></td><td class="id">R-0226〜0228</td></tr>
+<tr><td><strong>Steam・スマホでの<br>自作ゲーム販売</strong></td><td>年間20,282本の新作（2025年Steam）</td><td><strong>供給過多。</strong>レビュー1,000件超（売上15万ドル相当）到達は<strong>2.99%</strong></td><td class="id">R-0229〜0234</td></tr>
+<tr><td><strong>ヒット作の<br>そっくりさん戦略</strong></td><td>パルワールド等</td><td><strong>個人規模ではない</strong>（開発費10億円・40人・約3年）。加えて特許訴訟のリスク</td><td class="id">R-0235／0237／0243</td></tr>
+<tr><td><strong>HR・組織サーベイ</strong><br><span class="tag">未調査</span></td><td>wevox／モチベーションクラウド／ラフールサーベイ／Geppo／ミキワメ／ミツカリ<strong>（名前を挙げただけ）</strong></td><td><strong>【未確認】</strong>規模・価格・機能は調べていない</td><td class="id">R-0263</td></tr>
+</table>
+</div>
+
+<h2 id="s2">2. 各領域の詳細</h2>
+
+<h3>2-1　企業クチコミ・会社評価（就活・転職）</h3>
+<div class="tw">
+<table>
+<tr><th>層</th><th>いるプレイヤー</th></tr>
+<tr><td>専用サービス</td><td><strong>OpenWork</strong>（オープンワーク株式会社・東証グロース5139）／<strong>ライトハウス</strong>（エン・ジャパン）／<strong>転職会議</strong>（リブセンス）／キャリコネ／Glassdoor</td></tr>
+<tr><td>就活向け</td><td>就活会議／ONE CAREER／みん就（みんなの就職活動日記）</td></tr>
+<tr><td><strong>上位カテゴリ（内包）</strong></td><td><strong>リクナビ／マイナビ／doda／Indeed／LinkedIn</strong>　＝求人と一体でクチコミを提供</td></tr>
+<tr><td>汎用</td><td>X（旧Twitter）の裏アカ／5ch／Google Mapsの企業クチコミ／退職エントリ</td></tr>
+<tr><td>人手</td><td>OB・OG訪問（ビズリーチ・キャンパス／Matcher）／リファラル／転職エージェント</td></tr>
+</table>
+</div>
+<p><strong>OpenWorkの実数（2025年9月末）：</strong>社員クチコミ<strong>2,000万件</strong>／累計会員<strong>約753万人</strong>／掲載企業<strong>約7万9,000社</strong>／東証プライム上場企業の<strong>95%以上</strong>をカバー。閲覧は<strong>「自分が投稿すれば他人のクチコミが読める」</strong>ため実質無料。</p>
+<p><strong>人間関係も既に評価済み：</strong>8つの評価スコアに「<u>風通しの良さ</u>」「<u>社員の相互尊重</u>」を含む。</p>
+<div class="box stop">
+<p><strong>残っている空白は「部署・チーム単位」だけ。</strong>ただし<u>部署が小さいほど投稿者が特定される</u>ため匿名性が崩れ、誰も書かなくなる。運営の工夫では解けない構造的な理由。</p>
+</div>
+
+<h3>2-2　個人間の応援・投げ銭・クリエイター支援</h3>
+<div class="tw">
+<table>
+<tr><th>層</th><th>いるプレイヤー</th></tr>
+<tr><td>専用サービス</td><td>OFUSE／pixivFANBOX／Fantia／Ci-en／Enty／Patreon／Buy Me a Coffee／Kampa!／codoc</td></tr>
+<tr><td><strong>大手に無料同梱</strong></td><td><strong>YouTube</strong>（スーパーチャット・メンバーシップ）／<strong>Twitch</strong>／<strong>TikTok</strong>（ギフト）／<strong>note</strong>（サポート）／<strong>X</strong>（投げ銭）／ニコニコ</td></tr>
+<tr><td>汎用</td><td>PayPay送金／Kyash／銀行振込／Amazonギフト券／Amazonほしい物リスト</td></tr>
+<tr><td><strong>撤退事例</strong></td><td><strong>polca</strong>（CAMPFIRE運営・2017年8月開始→<strong>2020年10月1日終了</strong>。公表理由「収益性などを検討した結果」）</td></tr>
+</table>
+</div>
+<div class="box stop">
+<p><strong>加えて規制でも塞がれている。</strong>Apple規約 3.2.1(vii) は個人間贈与のIAP免除条件を「<u>100%が受取人に渡ること</u>」としており、事業者が手数料を取れない。第三者へお金を渡す仕組みは資金決済法の「為替取引」に該当しうる。</p>
+</div>
+
+<h3>2-3　ニッチSNS（ぬい活）・趣味特化型SNS</h3>
+<ul>
+<li><strong>ぬい活は既に3サービス</strong>：ぬい日和（2026-06-17公開・約4万人）／ふわもこSNS／ぬいとも</li>
+<li><strong>作れることは障壁でない</strong>：ぬい日和は<u>個人1名が約1か月・Claude Codeで開発</u>。競争は「最初の1,000人を集められるか」に移っている</li>
+<li><strong>規模が出ても黒字化しない</strong>：YAMAPはDL460万・第11期売上19.74億円で<strong>純損失4億1,890万円</strong>。SNS機能そのものは稼がず、EC・保険・広告・自治体向けの5本柱で稼いでいる</li>
+</ul>
+
+<h3>2-4〜2-6　ゲーム関連（既にLOGに記録済み）</h3>
+<p>Roblox／UGCプラットフォーム運営／Steam・スマホでの自作ゲーム販売／そっくりさん戦略については、LOG の R-0226〜R-0243 に詳細を記録済みです。要点のみ：</p>
+<ul>
+<li><strong>Roblox制作側</strong>：分配率70%は現金の70%ではない。開発者310万人に対し稼げているのは極一部（R-0226・R-0227）</li>
+<li><strong>UGCプラットフォーム運営側</strong>：Rec Roomは累計1.5億人・2.94億ドル調達でも黒字化していない（R-0228）</li>
+<li><strong>Steam</strong>：2025年に20,282本発売、レビュー1,000件超（売上15万ドル相当）到達は<strong>608本＝2.99%</strong>（R-0230）</li>
+<li><strong>そっくりさん</strong>：パルワールドは開発費10億円・最終40人・約3年。個人規模の話ではない（R-0235）</li>
+</ul>
+
+<h2 id="s3">3. 却下した案と理由</h2>
+<div class="tw">
+<table>
+<tr><th>案</th><th>判断</th><th>理由</th><th>LOG</th></tr>
+<tr><td>会社の内情を可視化するプラットフォーム（原案）</td><td>進まない</td><td>上場3社が本業として占有。人間関係も評価済み。閲覧は実質無料。コールドスタートが構造的に解けない</td><td class="id">R-0254</td></tr>
+<tr><td><strong>H-01 企業側に回るB2B</strong><br>（配属実態の開示を企業に売る）</td><td><strong>却下</strong></td><td>①<strong>企業側（人事部）で内製化できる領域だから</strong>　②OpenWorkという大きな先行者がいるから<br><span class="tag">訂正</span>当初「営業マンパワー」を理由としたのは誤り（R-0258は無効）</td><td class="id">R-0265</td></tr>
+<tr><td><strong>就活・転職・配属まわりの領域 全体</strong><br>（原案・H-01・H-02・H-03すべて）</td><td><strong>却下</strong></td><td>①OpenWorkという大きな先行者　②企業向けにしても人事部が内製化できる。<strong>この領域は追わない</strong></td><td class="id">R-0266</td></tr>
+<tr><td>第三者を応援するアプリ</td><td>保留（推奨は進まない）</td><td>Apple規約と資金決済法が収益化を塞ぐ。polcaの撤退事例</td><td class="id">R-0234系</td></tr>
+<tr><td>応援としてモノを贈る型（設計C）</td><td>却下</td><td>金額が大きくなる／贈る側が「結局モノか」と感じる／応援の動機とズレる</td><td class="id">R-0233</td></tr>
+</table>
+</div>
+
+<h2 id="s4">4. 判断軸まわり（2026-09-02）</h2>
+<div class="box stop">
+<h3>【撤回】「営業が主な稼働になる事業はやらない」は無効</h3>
+<p>一度この軸を記録しましたが、<strong>坂野様のご指摘により撤回しました。</strong>理由は「<u>営業も雇えばよい</u>」。既存の「作業が増えれば雇えばよい（稼働の非線形性は重視しない）」と同じ扱いです。</p>
+<p><strong>したがって、営業が発生する事業も候補から外れません。</strong>法人課金（タイアップ・公式アカウント掲載料・サンプリング・法人向けSaaS）も選定対象のままです。ニッチSNSの収益モデルも、法人課金を本命に置いたままで構いません。<span class="tag">LOG</span>R-0257は無効／R-0264を正とする</p>
+</div>
+<div class="box ok">
+<h3>【追加】顧客が自分で内製化できてしまうものは、営業をかけても売れない</h3>
+<p>H-01の却下で決め手になった観点です。<strong>特に人事・総務まわりの仕組みは、社内の担当者が自分で作れる範囲が広い。</strong></p>
+<p><strong>ゲート0の問6に足す観点：</strong>「<u>なぜ顧客は自分で作らず、うちから買うのか</u>」を1行で書けるか。書けなければ、機能の良し悪し以前に受注に至りません。<span class="tag">LOG</span>R-0267</p>
+</div>
+
+<h2 id="s5">5. まだ判定していない案（生きている）</h2>
+<div class="tw">
+<table>
+<tr><th>案</th><th>状態</th></tr>
+<tr><td><strong>ニッチSNS案カタログ52件</strong>（型A モノのコレクション25／型B 記録の道具13／型C 場6／型D 職人マッチング4／型E 職業業界4）</td><td>選定待ち。ゲート0未実施。<strong>収益は法人課金（タイアップ・掲載料・サンプリング）を本命に置いたままでよい</strong>（営業ありでOKのため）</td></tr>
+<tr><td><s>H-02　短期就業体験の仲介</s></td><td><strong>却下</strong>（就活・転職領域全体を追わないため）</td></tr>
+<tr><td><s>H-03　企業クチコミを業界・地域に極端に絞る</s></td><td><strong>却下</strong>（同上）</td></tr>
+<tr><td>ゲーム制作（趣味＋収益化の枠として）</td><td>未承認。時間・お金・撤退条件の3上限を先に決める案</td></tr>
+<tr><td>SaaS探索の条件 最終版（承認6項目）</td><td>回答待ち</td></tr>
+<tr><td>事業案カタログ v1（105件・AI×物理実体）</td><td>選定待ち</td></tr>
+</table>
+</div>
+
+<h2 id="s6">6. 引き方（grep）</h2>
+<p>この一覧を開かなくても、必要な行だけをその場で引けます。</p>
+<pre>grep -h "【占有済み】" "$HOME/mnt/dev/_infra/LOG/"*.md</pre>
+<p>領域を絞るとき：</p>
+<pre>grep -h "【占有済み】" "$HOME/mnt/dev/_infra/LOG/"*.md | grep -i "SNS"</pre>
+<p>却下した案を探すとき：</p>
+<pre>grep -hi "却下" "$HOME/mnt/dev/_infra/LOG/"*.md</pre>
+
+<h2 id="s7">7. 出典</h2>
+<ul>
+<li>オープンワーク「社員クチコミが2,000万件を突破」 <a href="https://www.openwork.co.jp/press/2025100201">https://www.openwork.co.jp/press/2025100201</a> ／ <a href="https://kyodonewsprwire.jp/release/202509306237">共同通信PRワイヤー版（会員数・掲載社数）</a></li>
+<li>ITmedia NEWS「ぬい日和 開発秘話」 <a href="https://www.itmedia.co.jp/news/article/2608/03/2000000358/">https://www.itmedia.co.jp/news/article/2608/03/2000000358/</a></li>
+<li>YAMAP「第10期、第11期決算公告によせて」 <a href="https://note.yamap.com/n/nc125b0d53ed7">https://note.yamap.com/n/nc125b0d53ed7</a></li>
+<li>CAMPFIRE「polca サービス提供終了のお知らせ」 <a href="https://campfire.co.jp/press/2020/01/27/polca-close/">https://campfire.co.jp/press/2020/01/27/polca-close/</a></li>
+<li>Apple「App Store Review Guidelines」 <a href="https://developer.apple.com/app-store/review/guidelines/">https://developer.apple.com/app-store/review/guidelines/</a></li>
+<li>ゲーム関連の出典は LOG R-0226〜R-0243 の各行に記載</li>
+</ul>
+<div class="box warn">
+<p><strong>【未確認】</strong></p>
+<ul>
+<li><strong>HR・組織サーベイ領域（2-1の表の最下行）は、社名を挙げただけで一切調べていません。</strong>再検討するときはここから調べ直してください。</li>
+<li>オープンワーク／エン・ジャパン／リブセンスの売上・収益構造は確認できていません（IRサイトの取得に失敗）。「上場企業が運営している」という事実だけを根拠にしています。</li>
+<li>「部署単位のクチコミサービスは存在しない」は、本文に挙げた8サービスを調べた範囲での話で、網羅的な調査ではありません。</li>
+</ul>
+</div>
+
+<footer>
+正本：`C:\dev\_infra\LOG\2026-09.md`（記録の本体・全件）／索引：`C:\dev\_infra\LOG\INDEX.md`<br>
+この資料は「見るための版」です。食い違いが生じた場合は正本を正とします。 ／ 作成：Claude（Cowork）／ 2026-09-02
+</footer>
+</main>
+</div>

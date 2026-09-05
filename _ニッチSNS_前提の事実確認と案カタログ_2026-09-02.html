@@ -1,0 +1,328 @@
+<title>ニッチSNS 前提の事実確認と案カタログ v1</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5a5a5a; --line:#d8d8d8;
+  --panel:#f6f6f4; --accent:#1f4e79; --warn:#8a3b00; --ok:#1f5c2e;
+  --thbg:#ececea;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15171a; --fg:#e8e8e6; --muted:#a9a9a5; --line:#3a3d42;
+    --panel:#1e2126; --accent:#8ab4e8; --warn:#e0a56a; --ok:#8fce9c;
+    --thbg:#262a30;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+ line-height:1.75; font-size:15px; font-variant-numeric:tabular-nums;}
+.wrap{display:flex; align-items:flex-start; max-width:1240px; margin:0 auto;}
+nav{position:sticky; top:0; flex:0 0 250px; padding:24px 16px; border-right:1px solid var(--line);
+ max-height:100vh; overflow:auto; font-size:13px;}
+nav h2{font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px;}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:4px 6px; border-radius:4px;}
+nav a:hover{background:var(--panel); color:var(--accent);}
+main{flex:1 1 auto; padding:24px 28px 80px; min-width:0;}
+h1{font-size:23px; line-height:1.5; margin:0 0 6px; border-bottom:2px solid var(--accent); padding-bottom:10px;}
+h2{font-size:19px; margin:38px 0 12px; padding-left:10px; border-left:5px solid var(--accent);}
+h3{font-size:16px; margin:24px 0 8px; color:var(--accent);}
+p{margin:10px 0;}
+.meta{color:var(--muted); font-size:13px; margin:0 0 20px;}
+.box{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin:16px 0;}
+.box.warn{border-left:5px solid var(--warn);}
+.box.ok{border-left:5px solid var(--ok);}
+.box h3{margin-top:0;}
+.tw{overflow-x:auto; border:1px solid var(--line); border-radius:6px; margin:14px 0;}
+table{border-collapse:collapse; width:100%; min-width:620px; font-size:14px;}
+th,td{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+th{background:var(--thbg); font-weight:600; white-space:nowrap;}
+td.id{white-space:nowrap; font-weight:600; color:var(--accent);}
+ul,ol{padding-left:1.4em; margin:10px 0;}
+li{margin:4px 0;}
+.tag{display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:3px;
+ padding:1px 6px; color:var(--muted); margin-right:4px;}
+.q{font-weight:600;}
+a{color:var(--accent);}
+footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted);}
+@media print{ nav{display:none} .wrap{display:block} main{padding:0} body{font-size:11pt} }
+@media (max-width:820px){ .wrap{display:block} nav{position:static; max-height:none; border-right:0; border-bottom:1px solid var(--line); flex:none; width:auto} main{padding:16px} }
+</style>
+
+<div class="wrap">
+<nav>
+<h2>目次</h2>
+<a href="#s0">0. 結論（先に3行）</a>
+<a href="#s1">1. ご認識の検証</a>
+<a href="#s2">2. 事実：ぬい日和</a>
+<a href="#s3">3. 事実：ニッチSNSは黒字化しない</a>
+<a href="#s4">4. 死因は2つだけ</a>
+<a href="#s5">5. 設計原則（案の作り方）</a>
+<a href="#s6">6. 案カタログ 型A（52件中25件）</a>
+<a href="#s7">6. 案カタログ 型B</a>
+<a href="#s8">6. 案カタログ 型C</a>
+<a href="#s9">6. 案カタログ 型D</a>
+<a href="#s10">6. 案カタログ 型E</a>
+<a href="#s11">7. 選ぶときの見方</a>
+<a href="#s12">8. 次にやること</a>
+<a href="#s13">9. 出典</a>
+</nav>
+
+<main>
+<h1>ニッチSNS（コミュニティ）参入の検討<br>前提の事実確認と案カタログ v1</h1>
+<p class="meta">作成日：2026-09-02 ／ 状態：<strong>案（未承認・ゲート0未実施）</strong> ／ 合同会社R.Y.S<br>
+この資料は正本ではありません。案を1つ選んだあと、その案について decision-gate スキルの「ゲート0（6つの問い）」を通します。</p>
+
+<h2 id="s0">0. 結論（先に3行）</h2>
+<div class="box ok">
+<ol>
+<li><strong>「SNSは乗り換えないから参入好機」という見立ては、半分は正しく、半分は逆です。</strong>乗り換えないのは<u>既存SNSの強み</u>であって、新規SNSにとっては「来てもらえない」という逆風そのものです。</li>
+<li><strong>ニッチSNSは「作れるか」ではなく「最初の1,000人が集まるか」「集まった後に金になるか」で決まります。</strong>作る難易度はAIでほぼゼロになりました（ぬい日和は個人が約1か月・Claude Codeで開発）。だからこそ、開発力は差別化になりません。</li>
+<li><strong>SNS単体で月50万円は、現実的な確率が低い。</strong>収益はSNSの外（モノ・道具課金・場）に置く設計にしないと成立しません。国内最大級の趣味SNSであるYAMAPですら、DL数460万・売上約19.7億円で<u>純損失4.19億円</u>です。</li>
+</ol>
+</div>
+
+<h2 id="s1">1. ご認識の検証（事実とリスクを分けて）</h2>
+
+<h3>1-1「デジタル商品はAIで誰でも作れるので、最終的に淘汰される」</h3>
+<p><span class="tag">部分的に正しい</span>正確に言い直すと、<strong>淘汰されるのは「作れること」を売りにした商品</strong>です。制作コストが下がるので、コンテンツ・システムそれ自体の希少性は消えます。この部分のご認識は妥当です。</p>
+<p>ただし<strong>「デジタル商品＝全部ダメ」ではありません</strong>。AIで複製できないものが2つ残ります。</p>
+<ul>
+<li><strong>集まっている人（ユーザーの蓄積）</strong> … 同じアプリを作れても、そこにいる4万人は作れません。</li>
+<li><strong>溜まっているデータ</strong> … 過去の記録・写真・履歴。乗り換えると消えるので、これが唯一の乗り換え障壁になります。</li>
+</ul>
+<p>SNSに目を付けられたのは、この2つを狙っているという意味で<strong>筋は通っています</strong>。</p>
+
+<h3>1-2「SNSから別のSNSに乗り換える人は少ないから、SNSはやる価値がある」</h3>
+<div class="box warn">
+<p><strong>ここが一番危険な前提です。</strong>この命題は、あなたが後発である以上、<u>不利な側にしか働きません</u>。</p>
+<p>「乗り換えない」＝「X・Instagramを使っている人は、あなたのSNSに移ってこない」ということです。あなたが将来手にする守りは、いま参入するときの壁とまったく同じ形をしています。</p>
+<p>実際、ぬい日和が伸びた経路は<strong>「X・Instagramでの拡散」</strong>でした（後述）。つまり新規SNSは、既存SNSを<u>集客チャネルとして借りて</u>立ち上がります。既存SNSの外に出る話ではありません。</p>
+</div>
+<p>ただし<strong>「だからやめるべき」ではありません</strong>。正しい読み替えは次のとおりです。</p>
+<ul>
+<li>✕「乗り換えないから、SNSは参入する価値がある」</li>
+<li>○「乗り換えないから、<strong>いま既存SNSで満たされていない人</strong>を、<strong>既存SNS経由で連れてくる</strong>しかない」</li>
+</ul>
+
+<h2 id="s2">2. 事実：ぬい日和（ご覧になったアプリ）</h2>
+<p>まずアプリ名の確認です。「ぬいびおり」は<strong>「ぬい日和（ぬいびより）」</strong>と思われます。よく似た先行アプリに「ふわもこSNS」「ぬいとも」もあり、この領域はすでに複数存在します。</p>
+<div class="tw">
+<table>
+<tr><th>項目</th><th>事実</th></tr>
+<tr><td>公開日</td><td>2026年6月17日（iOS）</td></tr>
+<tr><td>開発期間</td><td>約1か月</td></tr>
+<tr><td>開発体制</td><td>個人開発1名（Shin氏）</td></tr>
+<tr><td>開発手段</td><td>Anthropic の Claude Code を使用。イメージ図は GPT Image 2.0</td></tr>
+<tr><td>需要検証</td><td>着想当日にAIで完成イメージ図を作り、X・Instagramで事前登録を募集。1日で30〜40件集まったため開発着手</td></tr>
+<tr><td>伸び方</td><td>1,500ユーザー到達後、2〜3日で3万ユーザー。2026年7月29日時点で約4万人</td></tr>
+<tr><td>拡散の起点</td><td>ユーザー自身による紹介投稿（＝既存SNS上の口コミ）</td></tr>
+<tr><td>収益化</td><td>基本無料＋<strong>月額300円の「応援プラン」</strong>（サポーター向け・任意）</td></tr>
+<tr><td>設計思想</td><td>いいね数・フォロワー数を競わせない「やさしいSNS」</td></tr>
+</table>
+</div>
+<div class="box warn">
+<h3>この事例から読み取るべき、都合の悪い事実</h3>
+<ol>
+<li><strong>4万人いても、収益は月額300円の任意課金のみです。</strong>仮に課金率を（一般的な無料アプリの水準として高めの）5%と置いても 2,000人×300円＝月60万円、Apple手数料15〜30%を引いて月42〜51万円。<span class="tag">推計</span>課金率1%なら月8〜12万円です。<strong>実際の課金率は公表されておらず【未確認】</strong>ですが、「応援プラン」という名前自体が、機能で課金させる設計になっていないことを示しています。</li>
+<li><strong>約1か月で作れています。</strong>つまり<u>開発力はもう参入障壁ではありません</u>。あなたが同じものを作れるのと同様に、他の誰かもすぐ作れます（実際、ふわもこSNS・ぬいともが先行していました）。</li>
+<li><strong>勝敗を分けたのは開発ではなく「着想当日の事前登録テスト」です。</strong>絵を1枚作ってSNSで募集し、1日で30〜40件。ここが本体です。</li>
+</ol>
+</div>
+
+<h2 id="s3">3. 事実：ニッチSNSは「規模が出ても」黒字化しない</h2>
+<p>国内の趣味特化型SNSで最も成功している部類のYAMAP（登山）の実数です。</p>
+<div class="tw">
+<table>
+<tr><th>期</th><th>売上高</th><th>純損益</th><th>アプリDL数</th></tr>
+<tr><td>第10期</td><td>15億6,100万円（前期比＋28%）</td><td><strong>△4億4,393万円</strong></td><td>400万（2023年10月）</td></tr>
+<tr><td>第11期</td><td>19億7,400万円（前期比＋26.3%）</td><td><strong>△4億1,890万円</strong></td><td>460万（2024年9月）</td></tr>
+</table>
+</div>
+<p>YAMAP社自身は、この時期を将来の成長に向けた「かがむ」局面（意図的な先行投資）と説明しています。売上の伸びは<strong>プレミアム会員（課金）とYAMAP STORE（EC＝物販）</strong>によるものとされています。</p>
+<div class="box">
+<p><strong>読み取り：</strong>460万DLという、個人・小規模事業者がまず届かない規模に達しても、SNS機能そのものは黒字を生んでいません。<u>稼いでいるのは「物販」と「有料の道具（地図機能）」</u>です。</p>
+<p>あなたの目標は「月50万円が5年10年続くこと」であり、資金調達して赤字を掘る事業ではありません。<strong>したがって、SNSを収益源にする設計は最初から採ってはいけません。</strong>SNSは集客装置として置き、収益は別の場所に置く必要があります。</p>
+</div>
+
+<h2 id="s4">4. ニッチSNSが死ぬ理由は、2つしかない</h2>
+<div class="tw">
+<table>
+<tr><th>#</th><th>死因</th><th>中身</th><th>潰し方</th></tr>
+<tr><td class="id">死因1</td><td>コールドスタート</td><td>誰もいないSNSには誰も投稿しない。投稿がないから人が来ない。最初の1,000人が集まらず終わる。国内のニッチSNSの大半がここで消える</td><td><strong>「1人で使っても価値がある道具」から始める</strong>（後述）</td></tr>
+<tr><td class="id">死因2</td><td>金にならない</td><td>ニッチはエンゲージメントは高いが母数が小さい。広告は成立せず（PV単価×母数が足りない）、課金は「応援」止まりになる</td><td><strong>収益をSNSの外に置く</strong>（モノ・道具課金・場）</td></tr>
+</table>
+</div>
+<p>逆に言えば、<strong>この2つに答えを持っている案だけが、検討に値します。</strong>面白いかどうかではありません。</p>
+
+<h2 id="s5">5. 設計原則（案を作るときの型）</h2>
+
+<h3>原則1：まず「一人で使える道具」を作り、SNSは後から生やす</h3>
+<p>ヤマレコもYAMAPも、出発点は「<strong>登山の記録を残すツール</strong>」でした。1人で使っても完結するので、ユーザーが0人でも成立します。人が溜まった後に、記録が自然と共有され、SNSになりました。</p>
+<p>一方、最初から「投稿して交流するSNS」として作ると、ユーザー0人の日は価値も0です。<strong>これがコールドスタートの正体です。</strong></p>
+<div class="box">
+<p><strong>判定に使う一文：</strong>「このアプリを、ユーザーが自分ひとりしかいない状態で1か月使い続ける理由があるか？」<br>
+書けないなら、その案は死因1で死にます。</p>
+</div>
+
+<h3>原則2：収益の置き場所を、案を出す時点で決めておく</h3>
+<div class="tw">
+<table>
+<tr><th>置き場所</th><th>中身</th><th>あなたとの相性</th></tr>
+<tr><td>① モノ（EC・二次流通）</td><td>その趣味の消耗品・パーツ・中古品を自社で売る</td><td><strong>最良。</strong>物販・仕入れ・在庫の実務がすでにある。寝かせ転売の知見も効く</td></tr>
+<tr><td>② 道具課金（サブスク）</td><td>記録・管理の便利機能を有料化（YAMAPの地図型）</td><td>良。マイクロSaaSの検討経験が活きる</td></tr>
+<tr><td>③ 場（オフライン）</td><td>即売会・走行会・撮影会の参加費、出展枠</td><td>可。ただし現場稼働が発生する</td></tr>
+<tr><td>④ 送客手数料</td><td>職人・業者に依頼を流して手数料</td><td>可。ただし決済とトラブル対応の責任が乗る</td></tr>
+<tr><td>⑤ 広告</td><td>純広告・アフィリエイト</td><td><strong>不可。</strong>ニッチでは母数が足りない。これしか書けない案は落とす</td></tr>
+</table>
+</div>
+
+<h3>原則3：自分が当事者である領域を優先する</h3>
+<p>ぬい日和の決定打は「妻が当事者だった」ことです。最初の30人を集められるかは、その界隈に自分が居るかどうかでほぼ決まります。<br>
+ご趣味・ご関心（<strong>水上バイク／車／機械式時計／香り</strong>）は、その意味で他の案より初速で有利です。</p>
+
+<h2 id="s6">6. 案カタログ（全52件・絞り込みなし）</h2>
+<p>ご方針どおり<strong>絞り込みはしていません</strong>。「絶対に無理」なものだけ外し、それ以外は残しています。<br>
+各案には <strong>「一人で使う理由」</strong>（死因1への答え）と <strong>「収益の置き場所」</strong>（死因2への答え）を必ず書いています。</p>
+
+<h3>型A：モノのコレクション／カスタム系（収益＝①モノ）</h3>
+<p>写真が自然に発生し、消耗品・パーツが継続的に売れる領域。あなたの物販と最も接続しやすい型です。</p>
+<div class="tw">
+<table>
+<tr><th>#</th><th>領域</th><th>一人で使う理由（道具として）</th><th>収益の置き場所</th></tr>
+<tr><td class="id">A-01</td><td>ミニ四駆・改造カスタム</td><td>セッティング（ローラー径・重量・電池）を記録し、コースタイムと紐づける</td><td>パーツ・ベアリング・電池のEC、限定パーツの二次流通</td></tr>
+<tr><td class="id">A-02</td><td>万年筆とインク</td><td>インクの色見本（試し書き）を紙・ペン別に自分用の帳面として蓄積</td><td>インク・紙のEC、廃番インクの二次流通</td></tr>
+<tr><td class="id">A-03</td><td>自作キーボード</td><td>ビルドログ（軸・キーキャップ・打鍵音）を構成表として保存</td><td>キーキャップ・スイッチのEC、遊休パーツの個人間売買</td></tr>
+<tr><td class="id">A-04</td><td>盆栽・観葉植物の樹形</td><td>同じ角度で撮り続けて経年変化を並べる（成長タイムライン）</td><td>用土・鉢・肥料のEC、株の個人間取引</td></tr>
+<tr><td class="id">A-05</td><td>アクアリウム（レイアウト水槽）</td><td>レイアウト変更の履歴と、水質・水温を並べて記録</td><td>ソイル・肥料・照明のEC</td></tr>
+<tr><td class="id">A-06</td><td>香水・ルームフレグランス</td><td>手持ちの香りを香調（トップ／ミドル／ラスト）で分類し、残量と使用日を記録</td><td>分割販売（デカント）、廃番品の二次流通、サンプルの定期便</td></tr>
+<tr><td class="id">A-07</td><td>機械式腕時計</td><td>日差（精度）の記録、オーバーホール履歴、ベルト交換の履歴管理</td><td>ベルト・工具のEC、OH業者への送客</td></tr>
+<tr><td class="id">A-08</td><td>レゴMOC（オリジナル作品）</td><td>使用パーツ表を作品ごとに保存（再現用の設計図）</td><td>バラパーツの販売、絶版セットの二次流通</td></tr>
+<tr><td class="id">A-09</td><td>プラモデルの塗装レシピ</td><td>「この色は何と何を何：何で混ぜたか」を作品写真とセットで残す</td><td>塗料・ツールのEC</td></tr>
+<tr><td class="id">A-10</td><td>ドールカスタム（球体関節・オビツ等）</td><td>カスタム前後の記録、衣装・アイの組み合わせ管理</td><td>アイ・ウィッグ・衣装のEC、作家への製作依頼の仲介</td></tr>
+<tr><td class="id">A-11</td><td>推し活の痛バ・祭壇</td><td>手持ちグッズの在庫管理（重複・不足の可視化）</td><td>缶バッジカバー・チェーン等の資材EC　<span class="tag">要注意</span>著作物の写真の扱い・二次流通の規約に法務確認が必要</td></tr>
+<tr><td class="id">A-12</td><td>刺繍・編み物の図案</td><td>使用糸・針・ゲージを作品と紐づけて保存（再現できる作業記録）</td><td>糸・キットのEC、図案のデジタル販売</td></tr>
+<tr><td class="id">A-13</td><td>レザークラフト</td><td>型紙・革の種類・厚み・染料の記録</td><td>革・金具のEC、端切れの二次流通</td></tr>
+<tr><td class="id">A-14</td><td>陶芸（釉薬と窯変）</td><td>釉薬の調合と焼成温度を、焼き上がり写真と対で残す</td><td>釉薬・道具のEC、窯のシェア仲介</td></tr>
+<tr><td class="id">A-15</td><td>EDC・ナイフ・ポケットダンプ</td><td>持ち歩き装備の構成と総重量を管理</td><td>ギアのEC　<span class="tag">要注意</span>刃物の販売・郵送は銃刀法／各社規約の確認が必須</td></tr>
+<tr><td class="id">A-16</td><td>自転車カスタム（ミニベロ・ピスト）</td><td>パーツ構成表と重量、交換時期の管理</td><td>パーツEC、中古フレームの二次流通</td></tr>
+<tr><td class="id">A-17</td><td>旧車・絶版バイクのレストア</td><td>作業日誌（部品番号・入手先・費用）を車両ごとに蓄積</td><td>絶版部品の二次流通（＝寝かせ転売と発想が同じ）、工房への送客</td></tr>
+<tr><td class="id">A-18</td><td>ラジコン（ドリフト・クローラー）</td><td>セッティングシートの保存と走行動画の紐づけ</td><td>パーツ・バッテリーのEC</td></tr>
+<tr><td class="id">A-19</td><td>鉱物・化石標本</td><td>産地・入手日・購入価格つきの標本台帳</td><td>標本のEC・委託販売、ミネラルショーの出展枠</td></tr>
+<tr><td class="id">A-20</td><td>御朱印・寺社めぐり</td><td>参拝記録を地図と日付で自動整理（デジタル御朱印帳）</td><td>御朱印帳・保護カバーのEC　<span class="tag">要注意</span>御朱印の転売は寺社が明確に忌避。二次流通機能は載せない前提</td></tr>
+<tr><td class="id">A-21</td><td>ヴィンテージ食器・北欧食器</td><td>窯印（バックスタンプ）から品番を特定して台帳化</td><td>食器の二次流通、真贋・品番の鑑定支援</td></tr>
+<tr><td class="id">A-22</td><td>スニーカーのカスタム・修理</td><td>ソール張替え・塗装の前後記録と費用管理</td><td>補修材のEC、リペア業者への送客</td></tr>
+<tr><td class="id">A-23</td><td>自作ルアー・タックル</td><td>自作ルアーの寸法・重量と、実際の釣果を紐づける</td><td>ブランク・フック・塗料のEC</td></tr>
+<tr><td class="id">A-24</td><td>オールドレンズの作例</td><td>レンズ／マウントアダプタの組み合わせと作例を、自分用の資料として蓄積</td><td>アダプタ・レンズの二次流通</td></tr>
+<tr><td class="id">A-25</td><td>カプセルトイ・食玩</td><td>シリーズ単位のコンプリート状況（所持／重複／不足）の管理</td><td>重複品の交換仲介、資材EC　<span class="tag">要注意</span>くじ関係は不可の方針に抵触しないか要確認</td></tr>
+</table>
+</div>
+
+<h3 id="s7">型B：記録の道具が本体（収益＝②道具課金）</h3>
+<p>SNSは「おまけ」。有料の便利機能で課金する型。YAMAPの地図課金と同じ構造です。</p>
+<div class="tw">
+<table>
+<tr><th>#</th><th>領域</th><th>一人で使う理由（道具として）</th><th>有料にできる機能の例</th></tr>
+<tr><td class="id">B-01</td><td>多肉・サボテンの管理</td><td>株ごとの水やり間隔と成長写真の自動並べ</td><td>株数の上限解放、季節ごとの水やり通知、写真の長期保存</td></tr>
+<tr><td class="id">B-02</td><td>アクアリウムの水質ログ</td><td>水換え・添加剤・水質の記録とグラフ</td><td>複数水槽の管理、異常の検知通知</td></tr>
+<tr><td class="id">B-03</td><td>香水の使用ログ</td><td>ボトルの残量、開封日、使った日と場面の記録</td><td>本数の上限解放、劣化（使用期限）の警告</td></tr>
+<tr><td class="id">B-04</td><td>腕時計の精度・整備履歴</td><td>日差の自動計算、OH時期の管理、保証書の保管</td><td>本数の上限解放、資産評価額の追跡</td></tr>
+<tr><td class="id">B-05</td><td>積みプラ（未組立在庫）の管理</td><td>買った・積んだ・作ったの三段管理と消化率</td><td>在庫点数の上限解放、購入額の集計</td></tr>
+<tr><td class="id">B-06</td><td>ボードゲームの対戦記録</td><td>誰とどのゲームを何回・勝率の記録</td><td>所持数の上限解放、集計レポート</td></tr>
+<tr><td class="id">B-07</td><td>自作PCの構成・温度ログ</td><td>パーツ構成表、購入日、保証期限の管理</td><td>複数台の管理、値下がり追跡</td></tr>
+<tr><td class="id">B-08</td><td>多頭飼いのペット記録</td><td>体重・投薬・通院の個体別記録</td><td>頭数の上限解放、共有アカウント（家族）</td></tr>
+<tr><td class="id">B-09</td><td>コーヒーの抽出レシピ</td><td>豆・挽き目・湯温・時間と味の記録</td><td>レシピ数の上限解放、豆の在庫管理</td></tr>
+<tr><td class="id">B-10</td><td>日本酒・ワインのテイスティング</td><td>飲んだ銘柄と評価、写真、購入店の記録</td><td>本数の上限解放、セラー在庫の管理</td></tr>
+<tr><td class="id">B-11</td><td>パワーリフティング等の挙上記録</td><td>種目別の重量推移と自己ベスト管理</td><td>プログラム作成、期間比較</td></tr>
+<tr><td class="id">B-12</td><td>家庭菜園の作付け計画</td><td>区画ごとの作付けと連作障害の管理</td><td>区画数の上限解放、年次の繰り返し計画</td></tr>
+<tr><td class="id">B-13</td><td>車・バイクの整備履歴</td><td>部品交換の日付・走行距離・費用の記録</td><td>複数台管理、車検・保険の期限通知</td></tr>
+</table>
+</div>
+
+<h3 id="s8">型C：場・オフライン（収益＝③場）</h3>
+<div class="tw">
+<table>
+<tr><th>#</th><th>領域</th><th>一人で使う理由</th><th>収益の置き場所</th></tr>
+<tr><td class="id">C-01</td><td>ハンドメイド即売会の出展者</td><td>出展履歴・売上・搬入物のチェックリスト管理</td><td>自社主催イベントの出展料、什器・什器レンタル</td></tr>
+<tr><td class="id">C-02</td><td>サーキット走行会・ジムカーナ</td><td>走行ごとのタイムとセッティングの記録</td><td>走行会の主催・参加費、パーツEC</td></tr>
+<tr><td class="id">C-03</td><td>工場夜景・廃墟の撮影スポット</td><td>撮影地点・時間帯・機材の自分用メモ</td><td>撮影ツアーの主催　<span class="tag">要注意</span>私有地・立入禁止の扱いは法務確認が必須</td></tr>
+<tr><td class="id">C-04</td><td>湯めぐり（日帰り温泉）</td><td>入湯記録・泉質・料金のスタンプ帳</td><td>提携湯めぐりパスの販売、送客手数料</td></tr>
+<tr><td class="id">C-05</td><td>キャンプ場のサイト実測</td><td>サイトの寸法・地面・電源位置を自分用に記録</td><td>ギアEC、区画予約の送客</td></tr>
+<tr><td class="id">C-06</td><td>水上バイク（PWC）の出艇・係留</td><td>出艇場所・料金・海況・整備履歴の記録</td><td>中古艇・パーツの二次流通、保険・整備業者への送客　<span class="tag">当事者</span>ご自身が当事者の領域</td></tr>
+</table>
+</div>
+
+<h3 id="s9">型D：職人・業者マッチング（収益＝④送客手数料）</h3>
+<div class="tw">
+<table>
+<tr><th>#</th><th>領域</th><th>一人で使う理由</th><th>収益の置き場所</th></tr>
+<tr><td class="id">D-01</td><td>リペア職人（時計・革・金継ぎ）</td><td>職人側＝施工事例の実績台帳／依頼者側＝修理履歴</td><td>依頼の送客手数料、職人の掲載料</td></tr>
+<tr><td class="id">D-02</td><td>塗装・板金・レストア工房</td><td>施工前後の記録と見積の保存</td><td>送客手数料、部材EC</td></tr>
+<tr><td class="id">D-03</td><td>個人輸入・海外買付の代行者</td><td>買付履歴・関税・送料の記録</td><td>送客手数料　<span class="tag">要注意</span>資金決済法・古物営業法の確認が必須</td></tr>
+<tr><td class="id">D-04</td><td>ハンドメイド作家への製作依頼</td><td>作家＝制作記録／依頼者＝発注履歴</td><td>成約手数料、資材EC</td></tr>
+</table>
+</div>
+
+<h3 id="s10">型E：職業・業界コミュニティ（収益＝法人課金・求人）</h3>
+<p>母数は小さいが単価が高く、月50万円に最短距離で届く可能性がある型です。</p>
+<div class="tw">
+<table>
+<tr><th>#</th><th>領域</th><th>一人で使う理由</th><th>収益の置き場所</th></tr>
+<tr><td class="id">E-01</td><td>町工場の職人・加工屋</td><td>加工事例（材質・公差・設備）の実績台帳</td><td>相見積の送客手数料、掲載料、求人</td></tr>
+<tr><td class="id">E-02</td><td>軽貨物・物流ドライバー</td><td>日々の配達件数・売上・経費の記録</td><td>求人・案件紹介の手数料　<span class="tag">接続</span>既存のルート作成アプリ（Snowcar）と客層が同一</td></tr>
+<tr><td class="id">E-03</td><td>個人経営の古着屋・セレクトショップ店主</td><td>仕入れ・在庫・回転率の記録</td><td>仕入れ卸への送客、店舗間の在庫融通、卸の掲載料</td></tr>
+<tr><td class="id">E-04</td><td>移動販売・キッチンカー事業者</td><td>出店場所・売上・許可証の期限管理</td><td>出店場所の紹介手数料、保健所書類の作成支援</td></tr>
+</table>
+</div>
+
+<h2 id="s11">7. 選ぶときの見方（Claudeからの推奨）</h2>
+<div class="box">
+<p><strong>推奨：型A（モノ）または型E（業界）から選ぶ</strong></p>
+<ul>
+<li><strong>型A</strong>は、あなたの本業（仕入れ・在庫・発送・二次流通）がそのまま収益源になります。SNSは「その商品を欲しい人が集まっている場所」を自分で持つという意味になり、集客コストが下がります。<u>寝かせ転売との相性も良い</u>（A-17 絶版部品、A-19 標本、A-06 廃番香水など、いずれも「寝かせて上がる」性質を持ちます）。</li>
+<li><strong>型E</strong>は母数が小さくても客単価が高いため、月50万円という目標に対して必要ユーザー数が最も少なくて済みます。</li>
+<li><strong>型B単独は非推奨</strong>：道具課金だけで月50万円（例：月500円×1,000人）を個人向けで集めるのは、集客の観点で最も難しい部類です。型Aの補助機能として置くのが現実的です。</li>
+</ul>
+</div>
+<div class="box warn">
+<p><strong>ただし、これはClaudeの推奨であって決定ではありません。</strong>ご方針どおり、面白いと感じた案を自由に選んでいただき、選ばれた案についてだけ検証を進めます。</p>
+</div>
+
+<h2 id="s12">8. 次にやること</h2>
+<ol>
+<li><strong>この52件の中から、深掘りしたい案を選んでいただく</strong>（複数可。まず1〜3件を推奨）</li>
+<li>選ばれた案について、<strong>ゲート0（6つの問い）</strong>を実施します。特にこの領域では次の3つが要点になります。
+ <ul>
+ <li>問1：<u>すでに同じSNS・アプリが存在しないか</u>（ぬい活領域には少なくとも3つ先行がありました）</li>
+ <li>問3：<u>その趣味の国内人口を引き算し</u>、収益の置き場所に掛けて月50万円に届くか</li>
+ <li>問6：<u>X・Instagramに無料で同梱されている状態ではないか</u>（＝わざわざ専用アプリを探す動機があるか）</li>
+ </ul>
+</li>
+<li>ゲート0を通ったら、<strong>ぬい日和と同じ「絵1枚＋事前登録テスト」</strong>を先に実施します（開発前。費用ほぼ0円、期間1週間）。ここで登録が集まらない案は、作っても同じ結果になります。</li>
+<li>この資料の結論について、<strong>Geminiクロスレビュー</strong>を実施するかどうかをご判断ください（cross-review スキル。重要度「高」に該当します）。</li>
+</ol>
+
+<h2 id="s13">9. 出典</h2>
+<ul>
+<li>ITmedia NEWS「妻との雑談で生まれたぬい活SNSに4万人 いいねもフォロワー数も競わないのになぜ人気 『ぬい日和』開発秘話」 <a href="https://www.itmedia.co.jp/news/article/2608/03/2000000358/">https://www.itmedia.co.jp/news/article/2608/03/2000000358/</a></li>
+<li>ぬい日和 公式サイト <a href="https://www.nuibiyori.com/">https://www.nuibiyori.com/</a></li>
+<li>ぬい日和 App Store <a href="https://apps.apple.com/jp/app/%E3%81%AC%E3%81%84%E6%97%A5%E5%92%8C/id6774039809">https://apps.apple.com/jp/app/ぬい日和/id6774039809</a></li>
+<li>ふわもこSNS（先行アプリ）公式 <a href="https://fuwamoko.app/">https://fuwamoko.app/</a> ／ ぬいとも <a href="https://nuitomo.app/">https://nuitomo.app/</a></li>
+<li>YAMAP「YAMAPの現在地点とこれから 〜 第10期、第11期決算公告によせて 〜」 <a href="https://note.yamap.com/n/nc125b0d53ed7">https://note.yamap.com/n/nc125b0d53ed7</a></li>
+<li>ITmedia ビジネスオンライン「登山人口は減っているのに、登山アプリ『YAMAP』が成長するワケ」 <a href="https://www.itmedia.co.jp/business/articles/2212/09/news031.html">https://www.itmedia.co.jp/business/articles/2212/09/news031.html</a></li>
+</ul>
+<div class="box warn">
+<p><strong>【未確認】として明示しておく事項</strong></p>
+<ul>
+<li>ぬい日和の「応援プラン」の実際の課金率・月商は非公表。本資料の月商は<u>推計</u>であり、事実ではありません。</li>
+<li>YAMAPの売上のうち、プレミアム課金／EC／保険／広告の内訳比率は公表されておらず未確認です。</li>
+<li>各案の「国内の該当人口」はまだ一切調べていません。ゲート0の問3で実施します。</li>
+<li>法務上の注意を付した案（A-11／A-15／A-20／A-25／C-03／D-03）は、legal-crosscheck スキルによる確認が別途必要です。現時点でClaudeは可否を判断していません。</li>
+</ul>
+</div>
+
+<footer>
+本資料は「見るための版」です。案が確定した段階で、正本は各システムフォルダの <code>DECISIONS.md</code> ／ <code>ZENTEI.md</code> になります。食い違いが生じた場合は正本を正とします。<br>
+作成：Claude（Cowork） ／ 2026-09-02 ／ 状態：案・未承認
+</footer>
+</main>
+</div>

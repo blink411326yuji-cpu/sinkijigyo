@@ -1,0 +1,209 @@
+<title>ゲート0 会社の内情プラットフォーム</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--muted:#5a5a5a;--line:#d8d8d8;--panel:#f6f6f4;--accent:#1f4e79;--warn:#8a3b00;--ok:#1f5c2e;--thbg:#ececea;--stop:#a11}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171a;--fg:#e8e8e6;--muted:#a9a9a5;--line:#3a3d42;--panel:#1e2126;--accent:#8ab4e8;--warn:#e0a56a;--ok:#8fce9c;--thbg:#262a30;--stop:#e8888a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums}
+.wrap{display:flex;align-items:flex-start;max-width:1180px;margin:0 auto}
+nav{position:sticky;top:0;flex:0 0 235px;padding:24px 14px;border-right:1px solid var(--line);max-height:100vh;overflow:auto;font-size:13px}
+nav h2{font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+nav a{display:block;color:var(--fg);text-decoration:none;padding:4px 6px;border-radius:4px}
+nav a:hover{background:var(--panel);color:var(--accent)}
+main{flex:1 1 auto;padding:24px 28px 80px;min-width:0}
+h1{font-size:23px;line-height:1.5;margin:0 0 6px;border-bottom:2px solid var(--accent);padding-bottom:10px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:5px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px;color:var(--accent)}
+p{margin:10px 0}
+.meta{color:var(--muted);font-size:13px;margin:0 0 20px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0}
+.box.warn{border-left:5px solid var(--warn)}
+.box.ok{border-left:5px solid var(--ok)}
+.box.stop{border-left:5px solid var(--stop)}
+.box h3{margin-top:0}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:660px;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--thbg);font-weight:600;white-space:nowrap}
+td.id{white-space:nowrap;font-weight:600;color:var(--accent)}
+td.hit{color:var(--stop);font-weight:600;white-space:nowrap}
+td.ng{color:var(--ok);white-space:nowrap}
+ul,ol{padding-left:1.4em;margin:10px 0}
+li{margin:4px 0}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:3px;padding:1px 6px;color:var(--muted);margin-right:4px}
+a{color:var(--accent)}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media print{nav{display:none}.wrap{display:block}main{padding:0}body{font-size:11pt}}
+@media (max-width:820px){.wrap{display:block}nav{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);flex:none;width:auto}main{padding:16px}}
+</style>
+
+<div class="wrap">
+<nav>
+<h2>目次</h2>
+<a href="#s0">0. 判定</a>
+<a href="#sh">判定表（先に固定）</a>
+<a href="#s1">問1 いま何で足りているか</a>
+<a href="#s2">問2 競合が既に持つ機能</a>
+<a href="#s3">問3 母数</a>
+<a href="#s4">問4 5年後の増減</a>
+<a href="#s5">問5 死ぬ条件3つ</a>
+<a href="#s6">問6 うちを選ぶ理由</a>
+<a href="#s7">ご懸念への回答</a>
+<a href="#s8">本当の空白と、なぜ空いているか</a>
+<a href="#s9">残る3つの道</a>
+<a href="#s10">出典・未確認</a>
+</nav>
+
+<main>
+<h1>ゲート0：会社の内情（人間関係・部署の雰囲気）を<br>可視化するプラットフォーム</h1>
+<p class="meta">作成日：2026-09-02 ／ 状態：<strong>ゲート0 実施済み・未承認</strong> ／ 合同会社R.Y.S<br>
+案の要旨：会社がどういう会社かを評価するアプリ。就活生・転職者が中身を見たいなら課金する形。入社前には分からない人間関係・部署の雰囲気を可視化する。</p>
+
+<h2 id="s0">0. 判定</h2>
+<div class="box stop">
+<p><strong>判定：進まない</strong>（止める条件のうち #2・#5・#6b に該当）</p>
+<ol>
+<li><strong>この案は、すでに東証上場企業3社が本業として運営しています。</strong>OpenWork（オープンワーク株式会社・東証グロース5139）は<u>社員クチコミ2,000万件・累計会員753万人・掲載企業約7.9万社・東証プライム上場企業の95%以上をカバー</u>。ほかにエン・ジャパンの「ライトハウス」、リブセンスの「転職会議」があります。</li>
+<li><strong>「人間関係・風通し」はすでに評価項目に入っています。</strong>OpenWorkの8つの評価スコアには「<u>風通しの良さ</u>」「<u>社員の相互尊重</u>」が含まれ、同社自身が「人材の長期育成」と「風通しの良さ」が他項目に最も影響すると分析しています。<strong>問題意識は正しいのですが、その問題意識でこの領域に入った先行者が既にいます。</strong></li>
+<li><strong>課金モデルも先回りされています。</strong>OpenWorkは「<u>自分がクチコミを投稿すれば他人のクチコミを閲覧できる</u>」仕組みで、実質無料で読めます。有料で読ませる新規サービスは、この無料の選択肢と比較されます。</li>
+</ol>
+<p><strong>ただし、坂野様の着眼点そのものは死んでいません。</strong>既存が埋めていない穴は「会社単位ではなく<u>部署・チーム単位</u>」です。ここが空いている理由も構造的に説明できます（§8）。そのうえで残る道を3つ挙げます（§9）。</p>
+</div>
+
+<h2 id="sh">判定表（調べる前に固定した基準）</h2>
+<div class="tw">
+<table>
+<tr><th>#</th><th>止める条件</th><th>結果</th></tr>
+<tr><td class="id">1</td><td>主客が5年後に減る</td><td class="ng">該当しない</td></tr>
+<tr><td class="id">2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td class="hit">★該当</td></tr>
+<tr><td class="id">3</td><td>死ぬ条件3つのうち1つでも既に起きている</td><td class="hit">★該当（3つとも起きている）</td></tr>
+<tr><td class="id">4</td><td>引き算後の母数 × 単価 × シェア1% が収益目標に届かない</td><td class="ng">該当しない（母数は十分）</td></tr>
+<tr><td class="id">5</td><td>問1の5つの探し先のうち埋まっていないものがある</td><td class="ng">該当しない（5つとも埋めた）</td></tr>
+<tr><td class="id">6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td class="hit">★該当</td></tr>
+<tr><td class="id">6b</td><td>顧客がそもそも2つを並べて比べない（無料で同梱されていて探されない）</td><td class="hit">★該当</td></tr>
+<tr><td class="id">7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td class="hit">★該当</td></tr>
+</table>
+</div>
+
+<h2 id="s1">問1　この客は、いま同じ目的を何で達成しているか（5つの探し先）</h2>
+<p>目的＝「<strong>入社前に、その会社の中身（特に人間関係）を知りたい</strong>」</p>
+<div class="tw">
+<table>
+<tr><th>#</th><th>探し先</th><th>実在するもの</th><th>料金</th><th>この案の機能を持つか</th></tr>
+<tr><td class="id">1</td><td>同じカテゴリの製品</td><td><strong>OpenWork</strong>（オープンワーク・東証グロース5139）／<strong>ライトハウス</strong>（エン・ジャパン）／<strong>転職会議</strong>（リブセンス）／キャリコネ／Glassdoor</td><td>基本無料（投稿と引き換えに閲覧）＋有料オプション</td><td class="hit">完全に持っている</td></tr>
+<tr><td class="id">2</td><td><strong>上位カテゴリの製品</strong><br>（この案を一部として内包する大きいサービス）</td><td><strong>リクナビ／マイナビ／doda／Indeed／LinkedIn</strong>。就活側は<strong>ONE CAREER／就活会議／みん就</strong></td><td>求職者は無料</td><td class="hit"><strong>持っている。しかも求人と一体で提供している</strong></td></tr>
+<tr><td class="id">3</td><td>下位・単機能のツール</td><td>OB訪問アプリ（ビズリーチ・キャンパス／Matcher）、企業の採用note、社員インタビュー記事</td><td>無料</td><td>一部持っている（生の声に近い）</td></tr>
+<tr><td class="id">4</td><td>汎用ツール</td><td><strong>X（旧Twitter）の検索・裏アカ</strong>、5ch、Yahoo!知恵袋、Google Mapsの企業クチコミ、YouTubeの退職エントリ動画</td><td>無料</td><td class="hit"><strong>持っている。しかも最も生々しい</strong></td></tr>
+<tr><td class="id">5</td><td>人手</td><td><strong>OB・OG訪問、リファラル（知人の紹介）、大学キャリアセンター、転職エージェントの内部情報</strong></td><td>無料</td><td class="hit"><strong>持っている。しかも「人間関係」に関しては最も精度が高い</strong></td></tr>
+</table>
+</div>
+<div class="box warn">
+<p><strong>②の欄が最も重い。</strong>求職者は「クチコミサイトを探す」のではなく「転職サイトを開く」。そのサイトの中にクチコミが同梱されています。ゲート0の考え方では、これが最も多い死因です。</p>
+</div>
+
+<h2 id="s2">問2　競合が「既に持っている機能」を先に全部書く</h2>
+<p>OpenWorkの実数（2025年9月末時点・同社発表）：</p>
+<div class="tw">
+<table>
+<tr><th>項目</th><th>数字</th></tr>
+<tr><td>社員クチコミ</td><td><strong>2,000万件突破</strong>（8つの評価スコア＋8カテゴリのクチコミ＋残業時間・有休消化率の合計）</td></tr>
+<tr><td>累計会員数</td><td><strong>約753万人</strong></td></tr>
+<tr><td>掲載企業数</td><td><strong>約7万9,000社</strong>（東証プライム上場企業の95%以上）</td></tr>
+<tr><td>閲覧の仕組み</td><td><strong>自分がクチコミを投稿すれば、他人のクチコミを閲覧できる</strong></td></tr>
+<tr><td>評価スコア</td><td>8項目。<strong>「風通しの良さ」「社員の相互尊重」を含む</strong>＝人間関係は既に評価対象</td></tr>
+</table>
+</div>
+<p><strong>この案がやろうとしていた「人間関係の可視化」は、既に実装済みです。</strong>しかも運営はエン・ジャパン（東証プライム）、リブセンス（東証グロース）、オープンワーク（東証グロース）という上場3社。資金勝負にならない領域を選ぶという選定軸①に、真っ向から反します。</p>
+
+<h2 id="s3">問3　母数</h2>
+<p><span class="tag">未確認</span>就活生（大学等の卒業者）と転職者を合わせた母数は、明らかに数百万人規模です。<strong>母数はこの案を落とす理由になりません。</strong>そのため今回は統計の引き算を実施していません（落とす根拠が別のところで確定したため）。必要になれば文部科学省「学校基本調査」と総務省「労働力調査」から算出します。</p>
+
+<h2 id="s4">問4　この客は5年後、増えるか減るか</h2>
+<p>減りません。<span class="tag">未確認</span>転職市場は拡大傾向とされ、「配属ガチャ」「早期離職」への関心も高まっています。<strong>ここも落とす理由になりません。</strong></p>
+<div class="box warn">
+<p><strong>注意：</strong>市場が伸びていることは、参入してよい理由ではありません。伸びている市場には既に上場企業が3社入っています。ゲート0が見るのは「市場があるか」ではなく「<u>その市場でうちが選ばれるか</u>」です。</p>
+</div>
+
+<h2 id="s5">問5　この案が死ぬ条件3つと、既に起きているか</h2>
+<div class="tw">
+<table>
+<tr><th>#</th><th>死ぬ条件</th><th>現状</th></tr>
+<tr><td class="id">死因1</td><td>大手のクチコミサイトが「人間関係・風通し」を既に評価項目に持っていたら成立しない</td><td class="hit">★<strong>既に起きている</strong>（OpenWork 8項目に「風通しの良さ」「社員の相互尊重」）</td></tr>
+<tr><td class="id">死因2</td><td>クチコミが無料で読める仕組みが既にあったら、有料で読ませるモデルは成立しない</td><td class="hit">★<strong>既に起きている</strong>（投稿と引き換えに閲覧できる）</td></tr>
+<tr><td class="id">死因3</td><td>ゼロから数万社分のクチコミを集められなければ成立しない（コールドスタート）</td><td class="hit">★<strong>構造的に起きる</strong>。クチコミを書けるのは現・元社員だけ。OpenWorkは2,000万件を十数年かけて蓄積した</td></tr>
+</table>
+</div>
+<p><strong>3つとも該当しました。</strong>判定表の条件3に当たります。</p>
+
+<h2 id="s6">問6　真似されたあと、顧客がうちを選ぶ理由は残るか</h2>
+<h3>① 並べられるか</h3>
+<p><strong>並べられます。</strong>むしろ相手が先に持っています。「会社の中身を知りたい」という機能は、リクナビ・doda・Indeedのような<u>求人の基盤を持つ会社</u>の製品に、1機能として完全に収まります。実際すでに収まっています。</p>
+<h3>② うちを選ぶ理由</h3>
+<p>使いやすさ・価格・導入の速さのどれでも構いません。しかし<strong>「無料で2,000万件読めるOpenWork」に対して、「有料でクチコミ0件から始まる新サービス」を選ぶ理由が、現時点で1つも書けません。</strong>判定表の条件6に当たります。</p>
+<h3>③ そもそも2つを並べて比べてくれるか</h3>
+<div class="box stop">
+<p><strong>比べてもらえません。</strong>求職者は転職サイト・就活サイトを開き、そこに同梱されたクチコミを読みます。「専用のクチコミアプリを別に探す」という行動を取るのは、既に OpenWork という名前を知っている層だけです。<br>
+<strong>使いやすさで勝つ戦略は、比較の土俵に上がって初めて成立します。</strong>判定表の条件6b に当たります。</p>
+</div>
+
+<h2 id="s7">ご懸念への回答：「誰が転職組か区別できない」</h2>
+<div class="box ok">
+<p><strong>この点は、実は障害になりません。</strong>既存サービスが既に解いています。</p>
+<p>OpenWorkの仕組みは「<strong>自分が勤務先のクチコミを投稿すれば、他人のクチコミを閲覧できる</strong>」です。投稿できるのは現・元社員だけなので、<u>投稿という行為そのものが「社員である」証明になり、同時に閲覧権の対価にもなっています。</u>「誰が転職組か」を区別する必要がありません。</p>
+<p><strong>坂野様がご心配された点は、この事業の弱点ではありませんでした。</strong>実際の弱点は §5・§6 のほうです。</p>
+</div>
+
+<h2 id="s8">本当の空白と、なぜ空いているのか</h2>
+<p>坂野様の問題意識には、既存が埋めていない部分が1つあります。</p>
+<div class="box">
+<p><strong>既存のクチコミは全部「会社単位」であって、「部署・チーム単位」ではない。</strong></p>
+<p>実際に働く上で効くのは、会社の平均値ではなく<u>配属される部署の直属の上司と同僚</u>です。「配属ガチャ」という言葉が定着していることが、この不足を裏付けています。調べた範囲では、<strong>部署単位のクチコミを提供している日本のサービスは見つかりませんでした</strong>（調べた対象：OpenWork／ライトハウス／転職会議／キャリコネ／就活会議／ONE CAREER／みん就／Glassdoor）。</p>
+</div>
+<div class="box stop">
+<h3>ただし、なぜ空いているのかが説明できてしまいます</h3>
+<p><strong>部署が小さいほど、投稿者が特定されるからです。</strong>20人の部署で「上司が高圧的」と書けば、書いたのが誰かは容易に絞り込めます。匿名性が崩れると誰も書かなくなり、書かれないのでクチコミが集まらず、サービスが成立しません。<u>これは運営の工夫では解けない構造的な理由です。</u></p>
+<p>回避策と、その代償：</p>
+<ul>
+<li><strong>一定件数（例：5件）集まるまで公開しない</strong> → 大企業の大きな部署しか成立せず、母数が激減する</li>
+<li><strong>退職者限定・数年の時間差で公開</strong> → 情報が古くなり、「今の上司」を知りたいという目的を満たさない</li>
+<li><strong>定量指標だけにする</strong>（部署別の残業時間・離職率） → 特定されにくいが、<u>肝心の人間関係は測れない</u></li>
+</ul>
+<p>したがって「空白がある」ことは、この案を通す理由になりません。<strong>空いている理由のほうが強いためです。</strong></p>
+</div>
+
+<h2 id="s9">それでも残る3つの道（いずれも別案として起票）</h2>
+<p>ご方針どおり、絶対に無理なもの以外は落としません。以下は「クチコミサイト」とは別の事業として成立しうる形です。<strong>いずれも未調査で、ゲート0は通していません。</strong></p>
+<div class="tw">
+<table>
+<tr><th>#</th><th>案</th><th>中身</th><th>収益</th><th>先に確認すべきこと</th></tr>
+<tr><td class="id">H-01</td><td><strong>企業側に回る（B2B）</strong></td><td>「入社前に中身が見えない」を<u>企業の課題</u>として解く。内定辞退・早期離職を減らすため、配属予定部署の実態を内定者に開示する仕組みを企業に売る</td><td>企業からの月額（法人課金）</td><td>競合＝wevox／モチベーションクラウド／ミキワメ／ミツカリ。<strong>「配属」に絞った製品があるかどうか</strong></td></tr>
+<tr><td class="id">H-02</td><td><strong>体験で解く</strong></td><td>読むのではなく実際に半日〜数日その部署で働いてみる短期就業の仲介。「入ってみないと分からない」を文字ではなく体験で埋める</td><td>企業からの成約手数料</td><td><strong>職業安定法（有料職業紹介の許可）と労働者派遣法の判定が先。</strong>許可取得に時間がかかる場合はご方針の上限を超える</td></tr>
+<tr><td class="id">H-03</td><td><strong>特定業界に極端に絞る</strong></td><td>全業種ではなく、既存クチコミサイトのカバーが薄い領域（中小・地方・特定職種）に限定する</td><td>企業の掲載料＋求人</td><td><strong>カバーが薄い＝母数も薄い可能性が高い。</strong>「なぜ薄いのか」を先に説明できるか</td></tr>
+</table>
+</div>
+<p><strong>Claudeの推奨は H-01 です。</strong>理由は、前回の収益モデルの整理と同じ結論に着地するためです。<u>母数の小さい領域では、ユーザーから薄く取るより、法人から厚く取るほうが目標額に届きます。</u>また、クチコミサイトが背負う名誉毀損・削除請求・発信者情報開示への対応（1人法人には重い）を、B2B型なら避けられます。</p>
+
+<h2 id="s10">出典・未確認事項</h2>
+<ul>
+<li>オープンワーク株式会社「OpenWork社員クチコミが2,000万件を突破しました」（2025-10-02） <a href="https://www.openwork.co.jp/press/2025100201">https://www.openwork.co.jp/press/2025100201</a></li>
+<li>共同通信PRワイヤー（同プレスリリース。会員約753万人・掲載企業約7万9,000社・東証プライム95%以上・投稿と引き換えの閲覧） <a href="https://kyodonewsprwire.jp/release/202509306237">https://kyodonewsprwire.jp/release/202509306237</a></li>
+<li>OpenWork「社員クチコミについて」 <a href="https://www.openwork.jp/guide/company_answer">https://www.openwork.jp/guide/company_answer</a></li>
+<li>OpenWork公式X（8つの評価スコアのうち「人材の長期育成」「風通しの良さ」が他項目に与える影響が大きい） <a href="https://x.com/OpenWork_JP/status/1693578693975953452">https://x.com/OpenWork_JP/status/1693578693975953452</a></li>
+<li>総務省「インターネット上の違法・有害情報に対する対応（情報流通プラットフォーム対処法）」 <a href="https://www.soumu.go.jp/main_sosiki/joho_tsusin/d_syohi/ihoyugai.html">https://www.soumu.go.jp/main_sosiki/joho_tsusin/d_syohi/ihoyugai.html</a></li>
+</ul>
+<div class="box warn">
+<p><strong>【未確認】として明示する事項</strong></p>
+<ul>
+<li>オープンワーク株式会社・エン・ジャパン・リブセンスの<strong>売上や収益構造は確認できていません</strong>（IRサイトの取得に失敗）。「上場企業が運営している」という事実だけを根拠にしています。</li>
+<li><strong>就活生・転職者の母数は統計で確認していません。</strong>落とす根拠が別のところで確定したため実施していません。</li>
+<li><strong>「部署単位のクチコミサービスは存在しない」は、上記8サービスを調べた範囲での話です。</strong>網羅的な調査ではありません。</li>
+<li>クチコミサイトを運営する場合の法的責任（名誉毀損、発信者情報開示請求、削除請求への対応義務、情報流通プラットフォーム対処法の適用範囲）は<strong>本資料では判定していません。</strong>H-01〜H-03 を進める場合は legal-crosscheck スキルで別途確認が必要です。本資料の法令の記述は法的助言ではありません。</li>
+<li>H-01〜H-03 は<strong>いずれもゲート0を通していません。</strong>選ばれた案について別途実施します。</li>
+</ul>
+</div>
+
+<footer>
+本資料は「見るための版」です。判定が確定した段階で、正本は <code>C:\dev\_新規事業探索\DECISIONS.md</code> になります。食い違いが生じた場合は正本を正とします。<br>
+作成：Claude（Cowork） ／ 2026-09-02 ／ 状態：ゲート0実施済み・未承認
+</footer>
+</main>
+</div>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>マインクラフト風ゲームをCoworkで作る：期間の見積もり</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5b5b5b; --line:#d8d8d8;
+  --accent:#1b4f8a; --accentbg:#eef4fb;
+  --ng:#8a1b1b; --ngbg:#fbeeee;
+  --ok:#1b6b3a; --okbg:#eef8f1;
+  --warn:#8a5a00; --warnbg:#fdf6e8;
+  --code:#f3f3f3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161719; --fg:#e9e9ea; --muted:#a8a8ab; --line:#3a3c40;
+    --accent:#7fb2ea; --accentbg:#1d2733;
+    --ng:#f08a8a; --ngbg:#33201f;
+    --ok:#7fd3a0; --okbg:#1c2b22;
+    --warn:#e8bf6a; --warnbg:#2e2718;
+    --code:#22242a;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+body{
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.85; font-size:16px; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto}
+nav{
+  position:sticky; top:0; align-self:flex-start; flex:0 0 258px;
+  max-height:100vh; overflow-y:auto; padding:24px 14px 40px; border-right:1px solid var(--line);
+  font-size:13.5px; line-height:1.7;
+}
+nav h2{font-size:13px; color:var(--muted); margin:0 0 10px; letter-spacing:.08em}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:3px 6px; border-radius:4px}
+nav a:hover{background:var(--accentbg); color:var(--accent)}
+nav .sub{padding-left:16px; font-size:12.5px; color:var(--muted)}
+main{flex:1 1 auto; min-width:0; padding:24px 28px 90px}
+h1{font-size:24px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:20px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:6px solid var(--accent); background:var(--accentbg)}
+h3{font-size:17px; margin:28px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px}
+h4{font-size:15px; margin:20px 0 6px; color:var(--accent)}
+p{margin:10px 0}
+ul,ol{margin:10px 0; padding-left:1.5em}
+li{margin:5px 0}
+.meta{color:var(--muted); font-size:13.5px; margin-bottom:22px}
+.tblwrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:600px}
+th,td{border-bottom:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accentbg); color:var(--accent); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tfoot td{background:var(--code); font-weight:700}
+.box{border:1px solid var(--line); border-left:6px solid var(--accent); background:var(--accentbg); padding:14px 16px; margin:18px 0; border-radius:0 6px 6px 0}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0; color:inherit}
+.tag{display:inline-block; font-size:12px; padding:1px 8px; border-radius:10px; border:1px solid currentColor; margin-right:6px; white-space:nowrap}
+.t-ng{color:var(--ng)} .t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-info{color:var(--accent)}
+.big{font-size:19px; font-weight:700; color:var(--accent)}
+.note{font-size:13.5px; color:var(--muted)}
+code{background:var(--code); padding:1px 5px; border-radius:3px; font-size:13.5px}
+.src{font-size:13.5px}
+.src li{margin:7px 0; word-break:break-word}
+a{color:var(--accent)}
+hr{border:none; border-top:1px solid var(--line); margin:34px 0}
+.kpi{display:flex; flex-wrap:wrap; gap:12px; margin:16px 0}
+.kpi div{flex:1 1 200px; border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:var(--code)}
+.kpi .n{font-size:22px; font-weight:700; color:var(--accent); display:block; line-height:1.3}
+.kpi .l{font-size:13px; color:var(--muted)}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt}
+  h2{background:none}
+}
+@media (max-width:820px){
+  .wrap{display:block} nav{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); flex:none} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h2>目次</h2>
+  <a href="#s0">0. 結論（先に）</a>
+  <a href="#s1">1. 「マイクラ風」は5段階ある</a>
+  <a href="#s2">2. 実例の期間（本家・ソロ開発）</a>
+  <a href="#s3">3. ★ゼロから作らない</a>
+  <a href="#s4">4. ボクセルの難所</a>
+  <a href="#s5">5. Coworkでできること／できないこと</a>
+  <a href="#s6">6. AI支援の実測データ</a>
+  <a href="#s7">7. 見積もり（前提つき）</a>
+  <a href="#s8">8. 費用</a>
+  <a href="#s9">9. 推奨</a>
+  <a href="#s10">10. 次にやること</a>
+  <a href="#s11">11. 出典</a>
+</nav>
+<main>
+
+<h1>マインクラフト風ゲームを Claude（Cowork）で作る：期間の見積もり</h1>
+<p class="meta">
+作成日：2026年9月2日　／　作成：Claude（Cowork）　／　対象：合同会社R.Y.S<br>
+前提：坂野様が Cowork で開発。プログラミング初心者だが、Coworkでのシステム開発経験あり。3Dを希望<br>
+状態：<strong>未承認（判断材料）</strong>
+</p>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0">0. 結論（先に）</h2>
+
+<div class="box">
+<h4>「どこまで作るか」で、期間が10倍以上変わります</h4>
+<div class="tblwrap"><table>
+<thead><tr><th>どこまで</th><th>週10時間なら</th><th>週20時間なら</th></tr></thead>
+<tbody>
+<tr><td><strong>①ブロックを置ける・壊せる</strong>（自分で触って「動いた」と思える）</td><td class="t-ok"><strong>2〜4週間</strong></td><td class="t-ok"><strong>1〜2週間</strong></td></tr>
+<tr><td><strong>②地形生成＋保存＋インベントリ＋クラフト</strong>（マイクラの骨格）</td><td>＋3〜5か月</td><td>＋2〜3か月</td></tr>
+<tr><td><strong>③敵・体力・昼夜・音・UI</strong>（1人用ゲームとして遊べる）</td><td>＋4〜7か月</td><td>＋2〜4か月</td></tr>
+<tr><td><strong>④マルチプレイ</strong>（友達と同じ世界に入れる）</td><td class="t-ng">＋6〜12か月</td><td class="t-ng">＋4〜8か月</td></tr>
+<tr><td><strong>⑤売り物の品質</strong>（見た目・最適化・バグ取り・ストア対応）</td><td class="t-ng">＋8〜14か月</td><td class="t-ng">＋5〜9か月</td></tr>
+</tbody>
+<tfoot>
+<tr><td>①〜③＋⑤（<strong>1人用ゲームとして売る</strong>）</td><td><strong>約1年半〜2年半</strong></td><td><strong>約10か月〜1年半</strong></td></tr>
+<tr><td>①〜⑤（<strong>マルチプレイ込みで売る</strong>）</td><td class="t-ng"><strong>約2年〜3年半</strong></td><td class="t-ng"><strong>約1年半〜2年</strong></td></tr>
+</tfoot>
+</table></div>
+<p class="note">※既製のボクセルエンジン（後述）を使う前提。ゼロから自作する場合は、上に<strong>さらに半年〜1年</strong>が乗ります。</p>
+</div>
+
+<div class="box ok">
+<h4>いちばんお伝えしたいこと</h4>
+<p class="big">①（2〜4週間）だけは、間違いなく到達できます。そしてそこまでは、やる価値があります。</p>
+<p>「自分がAIと組んで3Dゲームを作れるのか」という、いちばん大きな不確実性が、<strong>2〜4週間・費用ほぼゼロで消えます。</strong>
+無理だと分かればそこで止められますし、いけそうだと分かれば、そこから先を考えればよい話です。</p>
+</div>
+
+<div class="box warn">
+<h4>逆に、正直に申し上げること</h4>
+<p><strong>④マルチプレイは、初心者がAIと組んでも相当に厳しい領域です。</strong>
+「友達と一緒に遊べる」はマイクラの魅力の中心ですが、ここは<strong>難易度が他の段階と桁違い</strong>です（理由は<a href="#s4">4章</a>）。<br>
+最初の目標からは外すことを強くお勧めします。</p>
+</div>
+
+<hr>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1">1. 「マインクラフトのようなゲーム」は5段階あります</h2>
+<p>「マイクラ風」と一言で言っても、中身はまったく違うものが5段階あります。ここを分けないと見積もりができません。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>段階</th><th>できること</th><th>技術的に何をするか</th><th>難易度</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>①</strong></td>
+<td>小さい世界でブロックを置ける・壊せる。歩ける</td>
+<td>ブロックの配置データを持ち、見えている面だけを描く。マウスで狙った位置を計算する</td>
+<td class="t-ok">低</td>
+</tr>
+<tr>
+<td><strong>②</strong></td>
+<td>世界が無限に広がる。閉じても続きから遊べる。物を持てる・作れる</td>
+<td>地形の自動生成、チャンク（区画）の読み込み／破棄、セーブデータ、アイテム管理、レシピ</td>
+<td class="t-warn">中</td>
+</tr>
+<tr>
+<td><strong>③</strong></td>
+<td>敵が出る。体力が減る。昼夜がある。音が鳴る。メニューが使える</td>
+<td>敵のAIと経路探索、当たり判定、光の伝播、サウンド、UI一式</td>
+<td class="t-warn">中〜高</td>
+</tr>
+<tr>
+<td><strong>④</strong></td>
+<td>友達と同じ世界に入って一緒に遊べる</td>
+<td class="t-ng"><strong>サーバー、通信同期、遅延の補正、チート対策、サーバー費用と運用</strong></td>
+<td class="t-ng"><strong>高</strong></td>
+</tr>
+<tr>
+<td><strong>⑤</strong></td>
+<td>他人が買って、文句を言わずに遊べる</td>
+<td class="t-ng"><strong>フレームレート最適化、メモリ管理、多様なPCでの動作確認、バグ取り、絵と音の質、ローカライズ、ストア審査</strong></td>
+<td class="t-ng"><strong>高（そして最も軽視される）</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2">2. 実例：本家と、ソロ開発者はどれだけかかったか</h2>
+
+<h3>2-1. マインクラフト本家</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>時期</th><th>できごと</th></tr></thead>
+<tbody>
+<tr><td>2009年5月</td><td>Markus "Notch" Persson が個人プロジェクトとして開発開始</td></tr>
+<tr><td class="t-ok"><strong>2009年5月13日</strong></td><td class="t-ok"><strong>最初の動画「Cave game tech test」を公開＝数日でプロトタイプができている</strong></td></tr>
+<tr><td>2009年12月23日</td><td>Indev（無限ワールドの実験開始）</td></tr>
+<tr><td>2010年</td><td>売上が日給を超えたため本業を辞め、フルタイム開発へ。<strong>Mojangを設立（＝1人ではなくなる）</strong></td></tr>
+<tr><td>2010年6月30日</td><td>Alpha</td></tr>
+<tr><td>2010年12月20日</td><td>Beta</td></tr>
+<tr><td class="t-warn"><strong>2011年11月18日</strong></td><td class="t-warn"><strong>正式版 1.0.0 リリース＝開始から約2年6か月</strong></td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>この歴史が示していること</h4>
+<p><strong>「①ブロックを置ける」は数日でできました。</strong>そこから<strong>正式版まで2年6か月かかり、途中で会社を作って人を増やしています。</strong><br>
+つまり<strong>時間の大半は①ではなく、②〜⑤に使われています。</strong>そして坂野様が想像されている「マインクラフトのようなゲーム」は、おそらく2011年の正式版のことであって、2009年5月13日の動画のことではありません。</p>
+</div>
+
+<h3>2-2. 現代のソロ開発者の実例</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>タイトル</th><th>体制</th><th>期間</th></tr></thead>
+<tbody>
+<tr><td><strong>Lay of the Land</strong>（マイクラ風ボクセルゲーム）</td><td><strong>1人</strong></td><td class="t-ng">2021年9月に進捗公開開始 → <strong>2025年4月8日 Steam発売＝約3年7か月</strong></td></tr>
+<tr><td>ボクセルサバイバル（No Man's Sky × Minecraft型）</td><td>1人</td><td class="t-ng"><strong>5年</strong>（Kickstarterで資金調達）</td></tr>
+</tbody>
+</table></div>
+<p class="note">※どちらもAI登場前・登場初期の開発です。AIで短縮される部分はありますが、<strong>後述のとおり、時間を食う部分ほどAIが効きにくい</strong>という問題があります。</p>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3">3. ★ゼロから作らない（ここが最大の時間短縮です）</h2>
+
+<p>マインクラフト風ゲームの土台（ボクセルエンジン）は、<strong>既に無料で公開されているものがあります。</strong>
+これを使うかどうかで、期間が半年〜1年変わります。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>選択肢</th><th>ライセンス</th><th>商用販売</th><th>何が済んでいるか</th><th>評価</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Godot ＋ Voxel Tools</strong><br><span class="note">（Zylann/godot_voxel）</span></td>
+<td><strong>MIT</strong></td>
+<td class="t-ok"><strong>可能</strong>（著作権表記とライセンス全文の同梱が条件）</td>
+<td class="t-ok"><strong>ブロック地形／滑らかな地形、手続き生成、チャンクのストリーミング、当たり判定、経路探索用メッシュ、マルチプレイ対応の土台</strong></td>
+<td class="t-ok"><strong>◎ 推奨</strong></td>
+</tr>
+<tr>
+<td>Luanti（旧Minetest）</td>
+<td>LGPLv2.1</td>
+<td class="t-warn">可能だが条件付き</td>
+<td>マイクラ相当の完成したエンジン。Luaでゲームを作る</td>
+<td class="t-warn">△ <strong>エンジンを改変したらソース公開義務。クレジット表示も必要</strong></td>
+</tr>
+<tr>
+<td>Unity ＋ 有料ボクセルアセット</td>
+<td>アセットごと</td>
+<td class="t-ok">可能</td>
+<td>製品による</td>
+<td class="t-warn">△ 日本語情報は多いが、アセットの品質にばらつきがある</td>
+</tr>
+<tr>
+<td>ゼロから自作（OpenGL等）</td>
+<td>——</td>
+<td>可能</td>
+<td class="t-ng">何もない</td>
+<td class="t-ng">✕ <strong>初心者＋AIでは非推奨。半年〜1年余分にかかる</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box ok">
+<h4>推奨：Godot ＋ Voxel Tools（MITライセンス）</h4>
+<ul>
+<li><strong>MITライセンスなので、商用販売できます。</strong>条件は著作権表記（2016-2024 Marc Gilleron）とライセンス全文の同梱だけです</li>
+<li>ブロック地形・地形の自動生成・チャンクの読み込み／破棄・当たり判定が<strong>すでに実装済み</strong>です。これは前述の②の大半にあたります</li>
+<li>すぐ動く<strong>デモプロジェクト</strong>（Zylann/voxelgame）が公開されています。<strong>①はこれを動かして改造するところから始められます</strong></li>
+<li>導入は、Voxel Tools入りのGodotのビルド済み版をダウンロードするだけ（自分でビルドする必要はありません）</li>
+</ul>
+<p class="note">※ゲームとして書き出す（exe化する）際には、対応するエクスポートテンプレートが必要です。Windows／Linux／macOS／iOS／Android は提供されています。</p>
+</div>
+
+<div class="box warn">
+<h4>Luantiを「そのまま売る」のは勧めません</h4>
+<p>LGPLv2.1のため、<strong>エンジン本体に変更を加えたら、その変更部分のソースコードを公開する義務</strong>が生じます。
+また「About」タブにLuantiのクレジットを残す必要があります。<br>
+公式ドキュメント自身が「これは法的アドバイスではない」と明記しており、商用配布前に弁護士への相談を推奨しています。<strong>坂野様の状況（バンダイの件が未解決）を考えると、条件付きライセンスは避けるべきです。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4">4. ボクセルゲームの難所（なぜ時間がかかるのか）</h2>
+<p>「ブロックを積むだけ」に見えて、実際に時間を食うのは次の5つです。<strong>すべて「動くようになった後」に発生します。</strong></p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>難所</th><th>何が起きるか</th><th>AIで解決できるか</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td><td><strong>描画性能</strong></td>
+<td>ブロックが数万個になると、そのまま描くとカクカクになる。見えている面だけを賢くまとめて描く工夫が要る</td>
+<td class="t-warn">△ <strong>Voxel Tools が対応済み。自作なら大変</strong></td>
+</tr>
+<tr>
+<td>2</td><td><strong>チャンク（区画）管理</strong></td>
+<td>世界全部をメモリに載せられないので、近くだけ読み込んで遠くを捨てる。<strong>区画の境目でバグが出やすい</strong>（継ぎ目・落下・地形のズレ）</td>
+<td class="t-warn">△ <strong>Voxel Tools が対応済み</strong></td>
+</tr>
+<tr>
+<td>3</td><td><strong>光の伝播</strong></td>
+<td>洞窟を掘ると暗くなり、穴を開けると光が差し込む——この計算が重く、区画の境目で継ぎ目が出やすい</td>
+<td class="t-ng">✕ <strong>自前で作り込む部分。ここは詰まりやすい</strong></td>
+</tr>
+<tr>
+<td>4</td><td><strong>セーブとロード</strong></td>
+<td>広大な世界の変更点だけを保存する。<strong>壊れると全部消える</strong>ので、慎重に作る必要がある</td>
+<td class="t-warn">△ <strong>Voxel Tools が土台を提供</strong></td>
+</tr>
+<tr>
+<td>5</td><td class="t-ng"><strong>マルチプレイ同期</strong></td>
+<td class="t-ng">2人が同時に同じブロックを壊したらどうなるか。通信の遅れをどう隠すか。悪意あるユーザーの改ざんをどう防ぐか。<strong>これは「機能」ではなく「別のゲームを作り直す」に近い作業</strong></td>
+<td class="t-ng"><strong>✕ 最も難しい。初心者＋AIでは現実的でない</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>なぜマルチプレイだけ別格なのか</h4>
+<p>1人用ゲームでは、間違いはすぐ画面に出ます。<strong>マルチプレイの不具合は「たまに」「特定の通信状況で」しか出ません。</strong>
+再現できないバグは、AIに説明することもできません。<br>
+加えて<strong>サーバーの用意と月額費用、24時間の運用</strong>が発生します（パルワールドはサーバー代が月7,000万円と報じられました。規模は違いますが、構造は同じです）。</p>
+<p><strong>結論：最初のバージョンでは、マルチプレイを入れないでください。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5">5. Coworkでできること・できないこと（正直に）</h2>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>内容</th><th>備考</th></tr></thead>
+<tbody>
+<tr><td class="t-ok"><strong>できる</strong></td><td>コードを書く・直す</td><td>ここは強い。段階①②の大半はこれで進みます</td></tr>
+<tr><td class="t-ok"><strong>できる</strong></td><td>エラーメッセージから原因を特定する</td><td>坂野様がエラー文を貼り戻せば対応できます</td></tr>
+<tr><td class="t-ok"><strong>できる</strong></td><td>設計・データ構造の相談、仕組みの説明</td><td>初心者向けの説明もできます</td></tr>
+<tr><td class="t-ok"><strong>できる</strong></td><td>クラウド側でのテスト実行・ビルド確認</td><td>cloud-verify の仕組みで、坂野様のPCを使わずに合否を出せます</td></tr>
+<tr><td class="t-ng"><strong>できない</strong></td><td class="t-ng"><strong>ゲームを実際に遊ぶこと</strong></td><td class="t-ng"><strong>これが最大の制約。</strong>「動くか」は分かっても「気持ちいいか」は分かりません</td></tr>
+<tr><td class="t-ng"><strong>できない</strong></td><td class="t-ng"><strong>フレームレート（カクつき）を体感すること</strong></td><td class="t-ng">坂野様が実行して「重い」「この場面で落ちる」を報告する必要があります</td></tr>
+<tr><td class="t-ng"><strong>できない</strong></td><td class="t-ng"><strong>面白いかどうかの判断</strong></td><td class="t-ng">ここは坂野様にしかできません</td></tr>
+<tr><td class="t-warn"><strong>苦手</strong></td><td>性能の最適化</td><td>実測の数値（プロファイラの結果）がないと、推測で直すことになります</td></tr>
+<tr><td class="t-warn"><strong>苦手</strong></td><td>「たまにしか出ない」バグ</td><td>再現手順が特定できないと、Claudeも手が出ません</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>初心者であることが、どこで効いてくるか</h4>
+<p><strong>Claudeが書いたコードにバグがあったとき、坂野様はそれを読んで見つけることができません。</strong>
+そのため、進め方はこうなります。</p>
+<p style="text-align:center; font-family:monospace; background:var(--code); padding:10px; border-radius:6px">
+Claudeがコードを出す → 坂野様が動かす → 症状を言葉で説明する → Claudeが直す → もう一度動かす
+</p>
+<p><strong>この往復が、開発時間の大半を占めます。</strong>症状の説明が的確なほど、往復は減ります。
+逆に「なんかおかしい」だけだと、往復が5回にも10回にもなります。<br>
+<strong>ここは、坂野様がCowork開発で既に経験されている部分です。</strong>一般的な初心者より有利な点です。</p>
+</div>
+
+<div class="box">
+<h4>コードの規模について</h4>
+<p>ボクセルゲームは、Voxel Toolsを使っても<strong>自分のコードが数千〜1万数千行</strong>になります。
+Coworkの1セッションで扱える量には限りがあるため、<strong>「地形」「インベントリ」「敵」のように機能ごとにセッションを分ける</strong>運用が必要です。
+これは cost-guard スキルの方針とも一致します。</p>
+</div>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6">6. AI支援の実測データ（都合のいい話だけ書きません）</h2>
+
+<div class="box warn">
+<h4>「AIを使えば速くなる」は、条件によっては成り立ちません</h4>
+<p>METR（AI評価の研究機関）が2025年に行ったランダム化比較試験の結果です。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>対象</td><td>経験豊富なオープンソース開発者16名（平均2万2,000スター超・100万行超のリポジトリに複数年貢献）</td></tr>
+<tr><td>課題</td><td>実際のバグ修正・機能追加・リファクタリング246件（平均約2時間）</td></tr>
+<tr><td>方法</td><td>ランダムに「AI使用可」「AI使用不可」に割り当て</td></tr>
+<tr><td><strong>結果</strong></td><td class="t-ng"><strong>AI使用時のほうが19%遅かった</strong></td></tr>
+<tr><td><strong>主観との差</strong></td><td class="t-ng"><strong>開発者は事前に「24%速くなる」と予想し、実施後も「20%速くなった」と信じていた</strong></td></tr>
+</tbody>
+</table></div>
+</div>
+
+<div class="box ok">
+<h4>ただし、この研究は坂野様のケースには当てはまりません</h4>
+<p><strong>研究者自身が、結論が成立しない条件を明記しています。</strong>そこには次が含まれます。</p>
+<ul>
+<li><strong>初心者開発者</strong></li>
+<li><strong>不慣れなコードベース</strong></li>
+</ul>
+<p>坂野様は<strong>まさにこの両方</strong>です。この研究が示したのは「<strong>自分が隅々まで知っているコードを、熟練者が直す</strong>」場面でAIが足を引っ張るということで、
+<strong>「初心者がゼロから新しいものを作る」場面では、AIの効果は大きい</strong>と考えられます。</p>
+<p>ただし、この研究から持ち帰るべき教訓が1つあります。<strong>「速くなった感覚」は当てになりません。</strong>
+だから見積もりは感覚ではなく、<strong>段階ごとの期限を先に決めて実測する</strong>形にすべきです（<a href="#s9">9章</a>）。</p>
+</div>
+
+<hr>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7">7. 見積もり（前提を明記します）</h2>
+
+<h4>前提</h4>
+<ul>
+<li>Godot ＋ Voxel Tools（MIT）を使う。ゼロから自作はしない</li>
+<li>開発は坂野様1人。Claude（Cowork）で進める</li>
+<li>プログラミング初心者だが、Cowork開発の往復には慣れている</li>
+<li>絵・音は素材集または簡素な自作（本家のような手描きの作り込みはしない）</li>
+<li><strong>マルチプレイは入れない</strong></li>
+</ul>
+
+<div class="tblwrap"><table>
+<thead><tr><th>段階</th><th>やること</th><th>週10時間</th><th>週20時間</th><th>AIの効き</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>①</strong></td>
+<td>Godot＋Voxel Toolsを導入し、デモを動かす。ブロックを置ける・壊せる・歩ける状態にする</td>
+<td class="t-ok"><strong>2〜4週間</strong></td><td class="t-ok"><strong>1〜2週間</strong></td><td class="t-ok">◎ 大きく効く</td>
+</tr>
+<tr>
+<td><strong>②</strong></td>
+<td>地形の自動生成を調整。セーブ／ロード。インベントリ。クラフトのレシピ</td>
+<td>3〜5か月</td><td>2〜3か月</td><td class="t-ok">◎ 効く</td>
+</tr>
+<tr>
+<td><strong>③</strong></td>
+<td>敵とAI。体力と戦闘。昼夜と光。音。メニューとUI一式</td>
+<td>4〜7か月</td><td>2〜4か月</td><td class="t-warn">◯ 効くが、調整の往復が増える</td>
+</tr>
+<tr>
+<td><strong>⑤</strong></td>
+<td>最適化（カクつき取り）、バグ取り、他のPCでの動作確認、ストアページ、体験版、対応言語</td>
+<td class="t-ng">8〜14か月</td><td class="t-ng">5〜9か月</td><td class="t-ng"><strong>△ ここが最も効きにくい</strong></td>
+</tr>
+</tbody>
+<tfoot>
+<tr><td colspan="2"><strong>合計（1人用ゲームとして売れる状態まで）</strong></td><td><strong>約1年半〜2年半</strong></td><td><strong>約10か月〜1年半</strong></td><td>——</td></tr>
+</tfoot>
+</table></div>
+
+<div class="box warn">
+<h4>この見積もりで、いちばん注意していただきたい点</h4>
+<p><strong>段階⑤が、全体の3〜4割を占めています。</strong>そしてここは<strong>AIが最も効きにくい部分</strong>です。<br>
+理由は<a href="#s5">5章</a>のとおりで、最適化とバグ取りは「実際に動かして数値を測る」ことが必須だからです。Claudeはそれができません。</p>
+<p><strong>そして初心者が最も見落とすのが、この⑤です。</strong>「③まで終わったから、あと少し」と感じたところから、実際にはまだ半分近く残っています。
+インディー開発では<strong>「見積もりは倍になる」</strong>のが経験則で、本家マインクラフトも当初の想定を大きく超えています。</p>
+</div>
+
+<div class="box ok">
+<h4>比較のために</h4>
+<div class="kpi">
+  <div><span class="n">2年6か月</span><span class="l">マインクラフト本家（途中で会社設立・人員増）</span></div>
+  <div><span class="n">3年7か月</span><span class="l">Lay of the Land（ソロ・AI以前）</span></div>
+  <div><span class="n">約1年〜2年半</span><span class="l">本見積もり（既製エンジン＋AI・マルチなし）</span></div>
+</div>
+<p><strong>AIと既製エンジンで、確かに短縮されます。ただし「桁」は変わりません。</strong>数週間や数か月で終わる話ではない、というのが正直なところです。</p>
+</div>
+
+<hr>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8">8. 費用</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>費用</th></tr></thead>
+<tbody>
+<tr><td>Godot エンジン</td><td class="t-ok">0円（完全無料・ロイヤリティなし）</td></tr>
+<tr><td>Voxel Tools</td><td class="t-ok">0円（MITライセンス）</td></tr>
+<tr><td>PC</td><td>手持ちで開始可。ただし3Dの編集はメモリ32GB・GPU搭載が快適</td></tr>
+<tr><td>絵・音の素材</td><td>0〜数万円</td></tr>
+<tr><td>Steam登録</td><td>$100（約15,000円）／本。売上$1,000到達後に回収</td></tr>
+<tr><td class="t-warn"><strong>Coworkのトークン消費</strong></td><td class="t-warn"><strong>ここが実質的な最大コスト。</strong>1〜2年の開発をCoworkで回すと、既存業務のシステム開発とは桁の違う消費になります<span class="tag t-warn">未確認</span></td></tr>
+</tbody>
+</table></div>
+<p class="note"><strong>【未確認】</strong>トークン消費の具体的な金額は、作り方・往復回数によって大きく変わるため試算できません。ただし<strong>「お金はかからない」と考えるのは正確ではない</strong>点だけ、お伝えしておきます。cost-guard スキルの方針（セッション分割・文脈の最小化）を最初から適用することを推奨します。</p>
+
+<hr>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9">9. 推奨</h2>
+
+<div class="box ok">
+<h4>推奨：<strong>まず段階①だけをやる。期限は4週間。それ以外は今決めない</strong></h4>
+<p><strong>理由</strong></p>
+<ol>
+<li><strong>いちばん大きな不確実性が、いちばん安く消えます。</strong>「自分がAIと組んで3Dゲームを作れるのか」は、4週間・費用ほぼゼロで答えが出ます。ここが無理なら、②以降を考える意味がありません</li>
+<li><strong>②以降の見積もりは、①をやってみないと精度が出ません。</strong>坂野様とClaudeの往復が1回何分で回るのかは、実際にやってみるまで分かりません。①が終わった時点で、②以降の見積もりを引き直せます</li>
+<li><strong>METRの研究が示したとおり、「速くなった感覚」は当てになりません。</strong>だから感覚ではなく、<strong>4週間という期限を先に切って、到達できたかどうかを実測</strong>します</li>
+</ol>
+</div>
+
+<h4>段階①の完了条件（先に決めておくもの）</h4>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>これができたら①は完了</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Godot（Voxel Tools入り）がPCで起動する</td></tr>
+<tr><td>2</td><td>デモの世界を歩き回れる</td></tr>
+<tr><td>3</td><td>ブロックを壊せる</td></tr>
+<tr><td>4</td><td>ブロックを置ける</td></tr>
+<tr><td>5</td><td>ブロックの種類を1つ、自分で追加できた（色や見た目を変えられた）</td></tr>
+<tr><td>6</td><td>exe（実行ファイル）として書き出して、Godotを起動せずに遊べる</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>4週間で6項目に届かなかった場合</h4>
+<p><strong>そこで止めることをお勧めします。</strong>①で詰まるということは、②〜⑤（①より確実に難しい）には到達できないという意味だからです。<br>
+その場合でも失うのは4週間と数千円で、<strong>「自分にはこの道は向いていない」という答えが手に入ります。</strong>これは無駄ではありません。</p>
+</div>
+
+<div class="box">
+<h4>あわせて申し上げておくこと</h4>
+<p>前回の資料でお伝えしたとおり、<strong>「長く売れ続ける型」という観点では、マイクラ風（サンドボックス）はヒット率27.4%と最強のジャンルです。</strong>
+判断としては筋が通っています。<br>
+ただし<strong>同時に、最も制作が重いジャンル</strong>でもあります。ローグライトを推奨したのは、この「重さ」を避けるためでした。
+<strong>マイクラ風を選ぶなら、期間が1年〜2年半になることを承知のうえで選ぶ、ということになります。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 10 ============ -->
+<h2 id="s10">10. 次にやること（承認待ち）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>選択肢</th><th>Claudeがやること</th></tr></thead>
+<tbody>
+<tr><td>①</td><td><strong>推奨</strong>：段階①（4週間）をやる</td><td>Godot＋Voxel Toolsの導入手順書をHTMLで出す（貼り付け用の手順つき）。そのまま開発に入る</td></tr>
+<tr><td>②</td><td>期間が長すぎるので、ローグライトに戻す</td><td>前回推奨した3Dローグライトの段階1の手順書を出す</td></tr>
+<tr><td>③</td><td>期間・費用の上限を先に決めたい</td><td>時間・お金・撤退条件の3つを一緒に決める（前回ご提案した枠）</td></tr>
+<tr><td>④</td><td>ゲームは一旦置き、SaaS探索に戻る</td><td>止まっている承認6項目を再提示する</td></tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<p><strong>①を選ばれた場合、Claudeが実際に手を動かせる範囲</strong>：コードの作成・修正、設計、エラーの原因特定、クラウド側でのビルド確認まで。<br>
+<strong>坂野様にお願いすることになる範囲</strong>：Godotの起動と操作、ゲームを実際に遊んでの確認、症状の報告。<br>
+auto-execution スキルの方針どおり、Claudeがやれることは全部Claudeがやります。</p>
+</div>
+
+<hr>
+
+<!-- ============ 11 ============ -->
+<h2 id="s11">11. 出典</h2>
+
+<h4>開発期間の実例</h4>
+<ul class="src">
+<li>Wikipedia「Development of Minecraft: Java Edition」（2009年5月開始／5月13日 Cave game tech test／2009年12月23日 Indev／2010年6月30日 Alpha／2010年12月20日 Beta／<strong>2011年11月18日 正式版1.0.0</strong>／Mojang設立の経緯）<br>https://en.wikipedia.org/wiki/Development_of_Minecraft:_Java_Edition</li>
+<li>PCGamesN「Minecraft enjoyers, this spectacular-looking voxel game from a solo dev should probably be on your radar」（『Lay of the Land』：ソロ開発、2021年9月に進捗公開開始、2025年4月8日Steam発売）<br>https://www.pcgamesn.com/lay-of-the-land/minecraft-like-game-steam-release-date</li>
+<li>GamesRadar+「Sandbox RPG dev spends 5 years combining No Man's Sky with Minecraft…」（ソロで5年）<br>https://www.gamesradar.com/games/survival/sandbox-rpg-dev-spends-5-years-combining-no-mans-sky-with-minecraft-in-voxel-survival-game-where-the-world-is-a-planet-in-a-solar-system-with-seamless-space-travel-smashes-kickstarter-goal-in-3-hours/</li>
+<li>Steam Page Analyzer「How Long Does It Take to Make an Indie Game?」（小規模6〜18か月、中規模2〜4年、「見積もりは倍になる」）<br>https://www.steampageanalyzer.com/blog/how-long-does-it-take-to-make-an-indie-game</li>
+</ul>
+
+<h4>ボクセルエンジンとライセンス</h4>
+<ul class="src">
+<li>Zylann/godot_voxel LICENSE.md（<strong>MITライセンス</strong>。商用利用可。著作権表記 2016-2024 Marc Gilleron とライセンス全文の同梱が条件）<br>https://github.com/Zylann/godot_voxel/blob/master/LICENSE.md</li>
+<li>Voxel Tools documentation「Getting Voxel Tools」（提供機能：ブロック地形／滑らかな地形、手続き生成、ストリーミング、インスタンシング、マルチプレイ対応、ナビゲーション、レイキャスト。Module版はビルド済み配布あり。書き出しにはエクスポートテンプレートが必要）<br>https://voxel-tools.readthedocs.io/en/latest/getting_the_module/</li>
+<li>Luanti Documentation「Distributing Games Outside ContentDB」（<strong>LGPLv2.1</strong>。エンジン改変時はソース公開義務。Aboutタブのクレジット保持が必要。「法的アドバイスではない」と明記）<br>https://docs.luanti.org/for-creators/distributing-games-outside-contentdb/</li>
+<li>Rosebud AI Lab「Best Voxel Game Engines in 2026」（Godot+Voxel Tools／Luanti／Unity／Noa／Hytopia の比較）<br>https://lab.rosebud.ai/blog/best-voxel-game-engines-2026</li>
+</ul>
+
+<h4>AI支援の生産性</h4>
+<ul class="src">
+<li>METR「Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity」（<strong>経験者16名・246課題・AI使用時19%遅い／主観は20%速いと誤認。研究の適用外条件として「初心者開発者」「不慣れなコードベース」を明記</strong>）<br>https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/</li>
+</ul>
+
+<h4>この資料の限界（必ずお読みください）</h4>
+<div class="box warn">
+<ul>
+<li><strong>【推計】</strong>7章の期間見積もりは、公開されている実例（本家2年6か月、Lay of the Land 3年7か月）と、既製エンジン使用・AI支援による短縮を織り込んだ<strong>Claudeの推計</strong>です。<strong>実測データではありません</strong></li>
+<li><strong>【未確認】</strong>Coworkでボクセルゲームを開発した実例のデータは、公開情報として確認できませんでした。<strong>AI支援で実際にどれだけ短縮されるかの実測値は存在しません</strong></li>
+<li><strong>【未確認】</strong>トークン消費の金額</li>
+<li><strong>【未確認】</strong>Voxel Tools が Godot のどのバージョンまで追随し続けるか（個人メンテナンスのオープンソースであるため、更新が止まるリスクがあります）</li>
+<li>ライセンスの解釈（MIT・LGPL）は<strong>法的助言ではありません。</strong>実際に販売する段階では弁護士への確認を推奨します</li>
+<li>この資料の賞味期限は<strong>約1年（2027年9月まで）</strong>とお考えください</li>
+</ul>
+</div>
+
+<p class="note" style="margin-top:40px; border-top:1px solid var(--line); padding-top:16px">
+この資料は「見るための版」です。<br>
+関連：<code>_ゲート0_自作ゲーム販売の事業性_2026-09-02.html</code>／<code>_ゲーム制作_長く売れる型の選び方と前回の訂正_2026-09-02.html</code>／<code>_ゲーム_そっくりさん戦略の実像と法的リスク_2026-09-02.html</code>
+</p>
+
+</main>
+</div>
+</body>
+</html>

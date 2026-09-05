@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲームの「そっくりさん」戦略：実像と法的リスク【Gemini未確認】</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5b5b5b; --line:#d8d8d8;
+  --accent:#1b4f8a; --accentbg:#eef4fb;
+  --ng:#8a1b1b; --ngbg:#fbeeee;
+  --ok:#1b6b3a; --okbg:#eef8f1;
+  --warn:#8a5a00; --warnbg:#fdf6e8;
+  --code:#f3f3f3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161719; --fg:#e9e9ea; --muted:#a8a8ab; --line:#3a3c40;
+    --accent:#7fb2ea; --accentbg:#1d2733;
+    --ng:#f08a8a; --ngbg:#33201f;
+    --ok:#7fd3a0; --okbg:#1c2b22;
+    --warn:#e8bf6a; --warnbg:#2e2718;
+    --code:#22242a;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+body{
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.85; font-size:16px; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto}
+nav{
+  position:sticky; top:0; align-self:flex-start; flex:0 0 262px;
+  max-height:100vh; overflow-y:auto; padding:24px 14px 40px; border-right:1px solid var(--line);
+  font-size:13.5px; line-height:1.7;
+}
+nav h2{font-size:13px; color:var(--muted); margin:0 0 10px; letter-spacing:.08em}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:3px 6px; border-radius:4px}
+nav a:hover{background:var(--accentbg); color:var(--accent)}
+nav .sub{padding-left:16px; font-size:12.5px; color:var(--muted)}
+main{flex:1 1 auto; min-width:0; padding:24px 28px 90px}
+h1{font-size:23px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:20px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:6px solid var(--accent); background:var(--accentbg)}
+h3{font-size:17px; margin:28px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px}
+h4{font-size:15px; margin:20px 0 6px; color:var(--accent)}
+p{margin:10px 0}
+ul,ol{margin:10px 0; padding-left:1.5em}
+li{margin:5px 0}
+.meta{color:var(--muted); font-size:13.5px; margin-bottom:22px}
+.tblwrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:560px}
+th,td{border-bottom:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accentbg); color:var(--accent); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.box{border:1px solid var(--line); border-left:6px solid var(--accent); background:var(--accentbg); padding:14px 16px; margin:18px 0; border-radius:0 6px 6px 0}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0; color:inherit}
+.tag{display:inline-block; font-size:12px; padding:1px 8px; border-radius:10px; border:1px solid currentColor; margin-right:6px; white-space:nowrap}
+.t-ng{color:var(--ng)} .t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-info{color:var(--accent)}
+.big{font-size:19px; font-weight:700; color:var(--accent)}
+.note{font-size:13.5px; color:var(--muted)}
+code{background:var(--code); padding:1px 5px; border-radius:3px; font-size:13.5px}
+.src{font-size:13.5px}
+.src li{margin:7px 0; word-break:break-word}
+a{color:var(--accent)}
+hr{border:none; border-top:1px solid var(--line); margin:34px 0}
+.kpi{display:flex; flex-wrap:wrap; gap:12px; margin:16px 0}
+.kpi div{flex:1 1 190px; border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:var(--code)}
+.kpi .n{font-size:22px; font-weight:700; color:var(--accent); display:block; line-height:1.3}
+.kpi .l{font-size:13px; color:var(--muted)}
+.unconf{display:inline-block; background:var(--warnbg); color:var(--warn); border:1px solid var(--warn); border-radius:4px; padding:2px 10px; font-size:13px; font-weight:700}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt}
+  h2{background:none}
+}
+@media (max-width:820px){
+  .wrap{display:block} nav{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); flex:none} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h2>目次</h2>
+  <a href="#s0">0. 先に申し上げること</a>
+  <a href="#s1">1. ★過去の方針との矛盾</a>
+  <a href="#s2">2. パルワールドの実像</a>
+  <a href="#s3">3. LumenTaleの実像</a>
+  <a href="#s4">4. 法律の整理</a>
+  <a class="sub" href="#h1">著作権では守れない</a>
+  <a class="sub" href="#h2">★分割出願という罠</a>
+  <a class="sub" href="#h3">訴訟の現状</a>
+  <a href="#s5">5. 危険度の3段階</a>
+  <a href="#s6">6. では何ができるか</a>
+  <a href="#s7">7. 推奨と、やらない方がいいこと</a>
+  <a href="#s8">8. Gemini依頼文</a>
+  <a href="#s9">9. 次にやること</a>
+  <a href="#s10">10. 出典</a>
+</nav>
+<main>
+
+<h1>ゲームの「そっくりさん」戦略：実像と法的リスク<br><span style="font-size:16px; font-weight:normal">パルワールド／LumenTale／マインクラフト系クローンの検証</span></h1>
+<p class="meta">
+作成日：2026年9月2日　／　作成：Claude（Cowork）　／　対象：合同会社R.Y.S<br>
+状態：<strong>未承認（判断材料）</strong>　／　<span class="unconf">【Gemini未確認】</span>　法律に関する記述はGeminiクロスチェック前です<br>
+関連：<code>_ゲート0_Roblox事業性の確認</code>／<code>_ゲート0_自作ゲーム販売の事業性</code>／<code>_ゲーム制作_長く売れる型の選び方と前回の訂正</code>（いずれも2026-09-02）
+</p>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0">0. 先に申し上げること</h2>
+
+<div class="box ng">
+<h4>① 「そっくりさんで儲けた人」の実像は、想像とかなり違います</h4>
+<div class="kpi">
+  <div><span class="n">10億円</span><span class="l">パルワールドの開発費</span></div>
+  <div><span class="n">40人</span><span class="l">最終的な開発人数（＋外注多数）</span></div>
+  <div><span class="n">3年</span><span class="l">発表から発売までの期間</span></div>
+  <div><span class="n">180万件</span><span class="l">発売時のSteamウィッシュリスト数</span></div>
+</div>
+<p><strong>最初は4人で作ろうとして、CEO自身が「ひどい」「リリースできる状態にはほど遠かった」と述べて失敗しています。</strong>
+そこから10億円と40人を投じ直して完成させたのがパルワールドです。<br>
+また、発売時のウィッシュリスト180万件は、<strong>前回お伝えした「発売時の実質的な足切りライン7,000件」の約257倍</strong>です。</p>
+</div>
+
+<div class="box ng">
+<h4>② そして、いま裁判が続いています。まだ終わっていません</h4>
+<p>2024年9月18日、任天堂と株式会社ポケモンが東京地方裁判所にポケットペアを提訴。
+<strong>2026年10月1日に証拠調べ、11月9日に裁判所が心証を示す予定で、本日時点で係争中です。</strong>
+ポケットペアは訴訟後、<strong>ボールを投げて捕獲する仕様と、パルに乗って滑空する仕様を、アップデートで削除・変更しています。</strong></p>
+</div>
+
+<div class="box warn">
+<h4>③ そして、いちばんお伝えしなければならないこと</h4>
+<p class="big">この案は、坂野様ご自身が定めた方針と正面から矛盾しています。</p>
+<p>詳細は次章に書きます。<strong>decision-gate スキルの決まりでは、過去の有効な決定と矛盾する提案を、矛盾を指摘せずに進めることが禁止されています。</strong>
+そのため、ここで一度止めてご確認をお願いします。</p>
+</div>
+
+<hr>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1">1. ★過去の方針との矛盾</h2>
+
+<div class="tblwrap"><table>
+<thead><tr><th>いつ</th><th>坂野様が決めたこと・起きたこと</th></tr></thead>
+<tbody>
+<tr>
+<td>新規事業の商材選定時</td>
+<td><strong>「商材選定の条件として、著作権の問題を回避できること」を自ら条件に挙げている</strong></td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>株式会社バンダイ・株式会社BANDAI SPIRITS 法務・知的財産部から、BASE経由で通知書を受領</td>
+</tr>
+<tr>
+<td>2026-08-22</td>
+<td><strong>BASEがショップ全体を一時非公開に。</strong>根拠条項・再開条件・完了時期は示されていない</td>
+</tr>
+<tr>
+<td>現在</td>
+<td>非公開のまま。有料プランの月額は発生し続け、入金済みの顧客から「本当に届くのか」という問い合わせが多数来ている</td>
+</tr>
+<tr>
+<td>方針</td>
+<td><strong>「権利者と争う意図はない。最優先はショップの公開再開と既受注の履行」</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>つまり、こういう状況です</h4>
+<p><strong>知的財産の問題で事業が止まっている最中に、任天堂とマイクロソフトという、世界で最も知的財産の権利行使に積極的な2社を相手に、そっくりさんを作る案を検討されています。</strong></p>
+<p>バンダイの件は<strong>商品画像とロゴの使用・段ボールの扱い</strong>という、比較的是正しやすい話でした（実際、画像差し替えなどで対応されています）。
+一方、ゲームのクローンは<strong>製品そのものが争点</strong>になるため、「直して終わり」にはなりません。パルワールドは実際に<strong>ゲームの中核仕様を削除</strong>させられています。</p>
+<p><strong>この矛盾について、坂野様のご判断をお願いします。</strong>「条件を変更する」というご判断であれば、それはそれで有効です。ただし<strong>Claudeが黙って進めてよい話ではありません。</strong></p>
+</div>
+
+<p class="note">※作業フォルダの <code>DECISIONS.md</code>（決定台帳）は、現在このセッションからPCのフォルダが接続されていないため<strong>読み取れていません</strong>。上記は記憶している方針との照合であり、台帳との正式な照合は未実施です。台帳を接続していただければ、正式に照合します。</p>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2">2. パルワールドの実像（数字）</h2>
+
+<h3>2-1. 作った会社と人</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>実際</th></tr></thead>
+<tbody>
+<tr><td>会社</td><td>株式会社ポケットペア（2015年設立）。パルワールドは<strong>3作目以降</strong>で、前作に『Craftopia』『Overdungeon』がある</td></tr>
+<tr><td>CEO</td><td>溝部拓郎氏。<strong>pixivのエンジニア → JPモルガン証券 → STORYS.JP共同創業 → 2014年にコインチェック共同創業 → 2015年ポケットペア設立</strong></td></tr>
+<tr><td>開発の立ち上がり</td><td>2021年6月に発表。当初は<strong>3〜4人</strong>。CEO曰く、その時点のものは「ひどい」「リリースできる状態にはほど遠かった」</td></tr>
+<tr><td>チームの推移</td><td>1年後 約10人 → 2年目 20〜30人 → 3年目 さらに10〜20人追加。<strong>アート担当が最大の割合</strong></td></tr>
+<tr><td><strong>最終的な開発費</strong></td><td class="t-ng"><strong>10億円</strong>（CEOがnoteで公表）</td></tr>
+<tr><td>最終的な人数</td><td class="t-ng"><strong>40人を新規雇用＋外注多数</strong></td></tr>
+<tr><td>期間</td><td>発表（2021年6月）から早期アクセス（2024年1月19日）まで<strong>約3年</strong>。当初は1年の見込みだった</td></tr>
+</tbody>
+</table></div>
+
+<h3>2-2. 売れた数字</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>数字</th></tr></thead>
+<tbody>
+<tr><td>発売時のSteamウィッシュリスト</td><td class="t-warn"><strong>180万件</strong>（1月15日時点で140万件）</td></tr>
+<tr><td>発売初日</td><td>200万本</td></tr>
+<tr><td>2024年2月時点のプレイヤー</td><td>2,500万人</td></tr>
+<tr><td>2か月の推計売上</td><td>約692億円</td></tr>
+<tr><td>ランニングコスト</td><td>サーバー代が月約7,000万円と報じられた</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>ここから読み取るべきこと</h4>
+<p><strong>マーケティングについて、CEO本人は「個別の施策が決め手ではなかった」と述べています。</strong>
+つまり<strong>180万件のウィッシュリストは、宣伝の巧拙ではなく「ポケモン風の世界で銃を撃つ」というコンセプトそのものが持っていた話題性から生まれた</strong>ということです。</p>
+<p><strong>これは坂野様にとって重要な意味を持ちます。</strong>
+そっくりさん戦略の本質は「安く作れる」ことではなく、<strong>「炎上に近い話題性で、宣伝費ゼロで巨大な注目を集める」</strong>ことです。
+そして<strong>その注目を受け止めるだけの完成度を、10億円と40人で用意していた</strong>から成立しました。
+話題性だけあって中身が伴わなければ、集まった180万人が全員アンチになるだけです。</p>
+</div>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3">3. LumenTale の実像</h2>
+<p>「なんとかテイル」は、おそらく <strong>『LumenTale: Memories of Trey』</strong>のことと思われます。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>開発</td><td>Beehive Studios</td></tr>
+<tr><td><strong>パブリッシャー</strong></td><td class="t-warn"><strong>Team17</strong>（『Worms』『Overcooked』などで知られる、英国の大手インディーパブリッシャー）</td></tr>
+<tr><td>発売</td><td>2026年5月27日</td></tr>
+<tr><td>プラットフォーム</td><td>Steam、Nintendo Switch</td></tr>
+<tr><td>内容</td><td>「アニモン」と呼ばれる生き物を、ヨーヨー型の捕獲装置「ホロケン」で集めるRPG。約140種・13属性。1対1と4対4のバトル、オンラインランク戦、交換機能</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>ここでも同じ構図です</h4>
+<p><strong>個人が1人で作ってヒットさせた話ではありません。</strong>
+Team17という大手パブリッシャーが付いており、前回お伝えした「パブリッシャーの審査を通ると成功率が跳ね上がる」の実例そのものです。
+そして<strong>Nintendo Switchで出ています</strong>——つまり<strong>任天堂自身の審査を通っています。</strong>これは「ポケモン風だが、任天堂が問題視しなかった」ということでもあります。</p>
+<p class="note">※LumenTaleの売上・販売本数は、現時点で公表データを確認できませんでした。<span class="tag t-warn">未確認</span></p>
+</div>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4">4. 法律の整理 <span class="unconf">【Gemini未確認】</span></h2>
+
+<h3 id="h1">4-1. ゲームのルール・システムは、著作権では守られません</h3>
+<p>日本の著作権法が保護するのは「<strong>思想又は感情を創作的に表現したもの</strong>」（著作権法2条1項1号）です。
+ここから<strong>アイデアと表現を分ける考え方（アイデア・表現二分論）</strong>が導かれ、次のようになります。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>内容</th><th>著作権で守られるか</th></tr></thead>
+<tbody>
+<tr><td>アイデア（＝ルール・仕組み）</td><td>「生き物を捕まえて仲間にし、戦わせる」「ブロックを積んで世界を作る」</td><td class="t-ok"><strong>守られない＝真似してよい</strong></td></tr>
+<tr><td>表現</td><td>キャラクターの絵、音楽、テキスト、ロゴ、具体的な画面デザイン</td><td class="t-ng"><strong>守られる＝真似すると侵害</strong></td></tr>
+</tbody>
+</table></div>
+
+<p><strong>つまり「ポケモンのようなゲームを作る」こと自体は、著作権法上は禁止されていません。</strong>
+実際、任天堂と株式会社ポケモンは<strong>著作権では訴えていません。特許で訴えています。</strong>
+これは非常に示唆的で、<strong>両社の弁護士が「著作権では勝てない／筋が悪い」と判断した可能性が高い</strong>ことを意味します。</p>
+
+<h3 id="h2">4-2. ★しかし特許があります。そして「分割出願」という罠があります</h3>
+<p><strong>ここが本資料でいちばん重要な部分です。</strong></p>
+<div class="tblwrap"><table>
+<thead><tr><th>特許番号</th><th>出願日</th><th>登録日</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>特許7493117号</td><td>2024年2月26日</td><td>2024年5月22日</td><td>捕獲アイテムの照準・命中判定</td></tr>
+<tr><td>特許7545191号</td><td>2024年7月30日</td><td>2024年8月27日</td><td>捕獲アイテム／戦闘キャラの2モード選択</td></tr>
+<tr><td>特許7528390号</td><td>2024年3月5日</td><td>2024年7月26日</td><td>搭乗キャラへの搭乗仕様</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>日付をよく見てください</h4>
+<p><strong>パルワールドの早期アクセス開始は 2024年1月19日です。</strong><br>
+3件の特許は、<strong>すべてその後（2024年2月〜7月）に出願され、登録されています。</strong><br>
+ただし、いずれも<strong>2021年12月22日の原出願にさかのぼる「分割出願」</strong>です。</p>
+<p class="big" style="margin-top:12px">つまり、大企業は「古い親出願」を持っておき、あなたのゲームが世に出てから、それに合わせた特許を新しく切り出して権利化できます。</p>
+<p><strong>これが意味するのは、次のことです。</strong></p>
+<ul>
+<li><strong>発売前にどれだけ特許調査をしても、この形の攻撃は回避できません。</strong>その時点では、その特許はまだ存在しないからです</li>
+<li>権利化にかかる時間も短い（例：2024年2月26日出願 → 5月22日登録＝約3か月）</li>
+<li><strong>「調べてから作れば安全」という考え方が、この分野では成立しません</strong></li>
+</ul>
+</div>
+
+<h3 id="h3">4-3. 訴訟の現状（2026年9月2日時点）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>提訴日</td><td>2024年9月18日</td></tr>
+<tr><td>裁判所</td><td>東京地方裁判所</td></tr>
+<tr><td>原告</td><td>任天堂株式会社、株式会社ポケモン</td></tr>
+<tr><td>被告</td><td>株式会社ポケットペア</td></tr>
+<tr><td>請求</td><td>各500万円（合計1,000万円）＋遅延損害金の<strong>一部請求</strong>、および差止</td></tr>
+<tr><td><strong>被告の対応</strong></td><td class="t-warn"><strong>v0.3.11（2024年11月）でボールを投げて召喚する仕様を削除。v0.5.5（2025年5月）で滑空をパルからグライダー装備に変更</strong>。「予防措置」と説明</td></tr>
+<tr><td>2025年11月</td><td>原告が請求範囲を「仕様変更前の旧バージョン」に限定</td></tr>
+<tr><td>2026年10月1日</td><td>証拠調べ期日</td></tr>
+<tr><td>2026年11月9日</td><td>裁判所が心証を示す予定</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>請求額1,000万円を「安い」と見てはいけません</h4>
+<ul>
+<li><strong>「一部請求」です。</strong>本訴で勝訴が見えた段階で請求を拡張することが一般的です</li>
+<li><strong>本当のダメージは損害賠償ではなく「差止」と「仕様変更」です。</strong>ポケットペアは<strong>ゲームの中核仕様を削除させられました</strong>。売れている商品の心臓部を止められる、ということです</li>
+<li><strong>そして訴訟は2年経っても終わっていません。</strong>ポケットペアはこの2年、弁護士費用と経営リソースを払い続けています</li>
+<li>ポケットペアには<strong>692億円という原資</strong>がありました。これがなければ、争うこと自体ができません</li>
+</ul>
+</div>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5">5. 危険度の3段階 <span class="unconf">【Gemini未確認】</span></h2>
+<p>「そっくりさん」と一言で言っても、法的な危険度はまったく違います。3段階に分けて整理します。</p>
+
+<div class="tblwrap"><table>
+<thead><tr><th>段階</th><th>何をするか</th><th>関係する法律</th><th>危険度</th></tr></thead>
+<tbody>
+<tr>
+<td class="t-ok"><strong>① ジャンルを踏襲する</strong></td>
+<td>既に確立したジャンルの遊び方を使う。<br>例：「ローグライトで武器が自動で撃たれる」「デッキを組んでポーカーの役を作る」</td>
+<td>著作権の保護外（アイデア）</td>
+<td class="t-ok"><strong>低。ゲーム業界のすべてがこれで成り立っている</strong></td>
+</tr>
+<tr>
+<td class="t-warn"><strong>② 特定の1作品の仕組みを、そのまま持ってくる</strong></td>
+<td>例：「ボールを投げて生き物を捕獲する」「特定の育成・進化の仕組みをそのまま再現する」</td>
+<td class="t-warn"><strong>特許法</strong>（著作権では止まらない）</td>
+<td class="t-warn"><strong>中〜高。事前調査では防げない（分割出願）</strong></td>
+</tr>
+<tr>
+<td class="t-ng"><strong>③ 見た目・キャラ・名前を似せる</strong></td>
+<td>キャラのデザイン、ロゴ、世界観、名称を寄せる</td>
+<td class="t-ng"><strong>著作権法・商標法・不正競争防止法</strong></td>
+<td class="t-ng"><strong>高。最も明確に違法になりうる</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>パルワールドはどこにいたか</h4>
+<p><strong>②を踏み、③に見えた</strong>——というのが実態です。<br>
+訴えられたのは②（特許）でした。③（著作権）では訴えられていません。
+つまり<strong>「見た目が似ている」だけでは、少なくとも任天堂の弁護士は勝負にならないと判断した</strong>ということです。</p>
+<p><strong>そして坂野様が「これを参考にしたい」と思われる部分は、おそらく③の効果（＝話題性）です。</strong>
+しかし③は法的に最も危険で、しかも<strong>③をやると②でも刺されます</strong>（目立つから調べられる）。</p>
+</div>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6">6. では、何ができるか</h2>
+
+<div class="box ok">
+<h4>結論：①（ジャンルの踏襲）は、むしろ推奨されるやり方です</h4>
+<p><strong>ゲーム業界では、ヒット作の仕組みを踏襲した作品群がジャンルを形成するのが普通です。</strong>
+前回ご提案したローグライトも、まさにこの構造でできています。</p>
+</div>
+
+<div class="tblwrap"><table>
+<thead><tr><th>元になった作品</th><th>生まれたジャンル</th><th>追随者の状況</th></tr></thead>
+<tbody>
+<tr><td><strong>Vampire Survivors</strong>（2022）</td><td>「サバイバー系」<br>敵の群れが押し寄せ、武器が自動で撃たれる</td><td class="t-ok"><strong>数十本の追随作がSteamで販売中。訴訟は起きていない</strong></td></tr>
+<tr><td><strong>Balatro</strong>（2024）</td><td>「デッキ構築ローグライト」</td><td class="t-ok">追随作が多数。開発元は個人</td></tr>
+<tr><td>Slay the Spire（2017）</td><td>カードバトル型ローグライト</td><td class="t-ok">Balatro含め多数が派生</td></tr>
+<tr><td>Minecraft（2009）</td><td>サンドボックス・クラフト</td><td class="t-warn">Terraria、Craftopia等が派生。<strong>マイクロソフトがクローンを訴えた例は確認できず</strong><span class="tag t-warn">未確認</span></td></tr>
+<tr><td><strong>ポケモン</strong>（1996）</td><td>モンスター収集RPG</td><td class="t-ng"><strong>パルワールドが特許で提訴されている。追随のコストが最も高いジャンル</strong></td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>差がどこから来るか</h4>
+<p><strong>ジャンルの元祖が誰かで、リスクが桁違いに変わります。</strong></p>
+<ul>
+<li><strong>元祖が個人・小規模スタジオ</strong>（Vampire Survivors、Balatro、Slay the Spire）→ 特許を持っておらず、訴える体力も動機もない。<strong>実際に訴訟は起きていない</strong></li>
+<li><strong>元祖が任天堂・ポケモン</strong>→ 特許ポートフォリオを持ち、分割出願で後から権利化でき、訴訟の体力が無限にある</li>
+</ul>
+<p><strong>つまり「そっくりさんを作る」こと自体が危険なのではなく、「誰のそっくりさんを作るか」で決まります。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7">7. 推奨と、やらない方がいいこと</h2>
+
+<div class="box ok">
+<h4>推奨：<strong>元祖が個人・小規模スタジオのジャンルを踏襲する</strong></h4>
+<p>前回ご提案した<strong>ローグライト</strong>は、この条件を満たします。</p>
+<ul>
+<li>元祖（Vampire Survivors／Balatro）はいずれも個人・少人数スタジオで、<strong>特許を保有していない</strong></li>
+<li>すでに数十本の追随作が販売されており、<strong>業界の共通言語になっている</strong></li>
+<li>「①ジャンルの踏襲」に留まるため、著作権法上の問題が生じにくい</li>
+<li>そして<strong>前回の「パッチで足すだけで延命できる」という条件も満たします</strong></li>
+</ul>
+<p><strong>やるべきこと：</strong>キャラの絵・名前・ロゴ・世界観は<strong>完全に自作</strong>にする（＝③に踏み込まない）。ここさえ守れば、リスクは実務上かなり下がります。</p>
+</div>
+
+<div class="box ng">
+<h4>やらない方がいいこと（はっきり申し上げます）</h4>
+<ol>
+<li><strong>ポケモンのそっくりさん。</strong>任天堂は分割出願で後から権利化できます。<strong>事前調査で回避できません。</strong>そして争うには数億円規模の体力が要ります</li>
+<li><strong>マインクラフトのそっくりさん。</strong>権利者はマイクロソフトです。訴訟の実例は確認できませんでしたが、<strong>相手の体力という意味では任天堂と同格です</strong></li>
+<li><strong>見た目・キャラ・名前を寄せること。</strong>これが最も明確に違法になりうる領域で、しかも<strong>坂野様が現在バンダイの件で経験されている「画像の使い方」の問題と、法的には同じ系統です</strong></li>
+<li><strong>「話題性で宣伝費ゼロ」を狙うこと。</strong>パルワールドの180万ウィッシュリストは、<strong>10億円で作った中身が伴っていたから成立しました。</strong>中身のないものが同じことをやると、注目がそのまま反発に変わります（前回お伝えした Codex Mortis の「AI slop」批判と同じ構造です）</li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8">8. Geminiへのクロスチェック依頼文</h2>
+<p>本資料の法律に関する記述は、<strong>legal-crosscheck スキルの決まりにより、確定前にGeminiへのクロスチェックが必要です。</strong>
+下記をそのままGeminiに貼り付け、回答をClaudeに貼り戻してください。<strong>貼り戻していただくまで、法的判断には【Gemini未確認】が付いた状態です。</strong></p>
+
+<div style="background:var(--code); border:1px solid var(--line); border-radius:6px; padding:16px; font-size:14px; white-space:pre-wrap; line-height:1.7; overflow-x:auto">あなたは日本法に精通した第三者レビュアーです。以下の判断内容を、中立・是々非々の姿勢でレビューしてください。欠点を無理に探す必要はありません。問題がない観点は「観点Nは指摘なし」と明言してください。存在しない問題を作り出さないでください。同意・称賛・要約・全文の書き直しは不要です。指摘だけを出してください。
+
+【重要】あなたの回答は「法律・制度上の事実」と「実務上のリスク・所感」を必ず分けて記述してください。両者を混ぜて「合法だがリスクが高いので違法」といった論理の飛躍をしないでください。
+
+【前提となる立場】
+・日本の合同会社（法人）／主たる事業：物販（転売・長期保有後の販売）
+・照会者は法律の専門家ではありません
+・本件は自社の事業判断のための調査であり、他人の法律事件の相談ではありません
+・現在、別件で大手玩具メーカーの法務・知的財産部から通知を受け、販売プラットフォーム側がショップを一時非公開にしている状況にあります（争う意図はなく、早期の是正・再開を最優先しています）
+
+【今回確定しようとしていること】
+既存の人気ゲーム（例：モンスター収集RPG、サンドボックス・クラフト）と「同じジャンル・同じ遊びの仕組み」を持つ新作ゲームを、日本の法人が自社で開発し、Steam等で世界に有償配信することの法的可否と、リスクを下げる具体的な線引き。
+
+【Claudeの結論（レビュー対象）】
+1. 著作権法が保護するのは「思想又は感情を創作的に表現したもの」（著作権法2条1項1号）であり、アイデアと表現を分ける考え方（アイデア・表現二分論）から、ゲームのルール・システムそのものはアイデアに当たり著作権では保護されない。したがって「同じジャンル・同じ仕組みのゲームを作ること」自体は著作権法上禁止されていない。
+2. 一方、ゲームのシステムは特許法で保護されうる。実例として、任天堂株式会社および株式会社ポケモンが2024年9月18日、東京地方裁判所において株式会社ポケットペア（『パルワールド』）を特許権侵害で提訴した。対象は特許7493117号（捕獲アイテムの照準・命中判定）、特許7545191号（捕獲アイテム／戦闘キャラの2モード選択）、特許7528390号（搭乗キャラへの搭乗仕様）の3件。請求は各500万円（合計1,000万円）＋遅延損害金の一部請求および差止。
+3. この3件はいずれも2021年12月22日の原出願にさかのぼる分割出願であり、出願日は2024年2月26日・同7月30日・同3月5日と、『パルワールド』の早期アクセス開始（2024年1月19日）より後である。したがって、発売前に特許調査を行っても、この形（原出願を保持しておき、他社製品の登場後に分割出願で権利化する）による権利行使は事前には回避できない。
+4. 被告は訴訟後、v0.3.11（2024年11月）で捕獲アイテムを投げて召喚する仕様を削除し、v0.5.5（2025年5月）で滑空の仕様を変更した。原告は2025年11月に請求範囲を仕様変更前の旧バージョンに限定した。訴訟は2026年9月時点で係属中である。
+5. 以上から、リスクの線引きは次の3段階になる。
+   ①ジャンル・遊びの仕組みの踏襲＝著作権の保護外。危険度は低い
+   ②特定作品の具体的な操作・処理の仕組みをそのまま再現＝特許法の問題。事前調査では防ぎきれない
+   ③キャラクターの絵・ロゴ・名称・世界観を似せる＝著作権法・商標法・不正競争防止法の問題。危険度が最も高い
+6. 実務上の推奨として、元祖が個人・小規模スタジオであるジャンル（例：Vampire Survivors 型のローグライト）を踏襲し、絵・名称・ロゴ・世界観をすべて自作にすれば、①に留まるためリスクを実務上大きく下げられる。
+
+【前提・制約】
+・開発者は日本の合同会社1社。プログラミング初心者の代表者1名が、生成AIを用いて開発する想定
+・販売先はSteam（全世界）、将来的にスマートフォンのアプリストアも検討
+・購入者は消費者（B2C）。国内向けに限定せず越境販売となる
+・訴訟になった場合に争える資金力はない（前提が崩れる場合＝資金調達ができた場合は結論が変わりうる）
+・前提が崩れた場合は結論が変わる
+
+【Claudeが確認できていない点（未確認）】
+・上記の特許番号・出願日・登録日は、二次情報（弁理士事務所およびゲームメディアの解説記事）に基づくもので、特許庁のJ-PlatPatで原典照合していない
+・日本の裁判例で「ゲームのルール・システムは著作権で保護されない」と判示したものの具体的な事件名・裁判所・判決年月日を、原典で確認できていない
+・不正競争防止法のどの号（周知表示混同惹起／著名表示冒用／商品形態模倣）が、ゲームソフトの模倣に適用されうるかを条文で確認できていない
+・米国法（著作権法・特許法）その他の外国法における取扱い。Steamは全世界配信のため各国法が問題になりうるが、日本法の知識では判断できない
+・マイクロソフト／Mojangが『マインクラフト』のクローンに対して法的措置を取った実例の有無
+
+【やらないこと（検討範囲外）】
+・既存作品のキャラクター画像・音楽・テキストをそのまま流用すること（明確に侵害であり検討しない）
+・既存作品の商標（タイトル名・ロゴ）を使用すること（同上）
+・二次創作・同人としての頒布（有償の商用配信のみを検討対象とする）
+
+【レビュー観点】
+1. 適用法令の特定漏れ（本件に適用されるのに挙がっていない法律・政令・省令・条例）
+2. 条文・要件の当てはめの誤り（条文番号の誤り、要件の読み違い、例外規定の見落とし）
+3. 情報の鮮度（直近の法改正・施行日・経過措置・通達の変更を反映しているか）
+4. 許認可・届出・登録の要否（要る場合は根拠条文と所管官庁）
+5. 表示義務・書面交付義務の漏れ（記載必須事項の欠落）
+6. 契約・規約の条項としての有効性（消費者契約法・定型約款の観点で無効になりうる条項）
+7. 税務上の取扱い（課税区分、インボイス、帳簿・請求書の保存要件）
+8. 罰則・行政処分・民事上の責任の有無と程度
+9. より安全な代替案（やり方を変える／範囲を狭める／専門家確認が必須な論点の切り分け）
+10. 上記【未確認】に挙げた5点について、あなたが原典で確認できる情報があれば提示してください（特許番号、裁判例の事件名と判決年月日、不正競争防止法の該当条項）
+
+【重要度の定義】
+高＝判断を誤らせる致命的な問題（違法・無効・許認可欠如・罰則・課税漏れに直結）
+中＝問題だが後から回復可能
+低＝軽微・体裁上の問題
+
+【出力形式】必ず下記の表形式のみで出力してください。
+
+| No | 重要度(高/中/低) | 確信度(高/中/低) | 区分(事実/リスク) | 該当箇所 | 指摘内容 | 根拠(法令名・条文番号・URL) | 推奨修正 |
+
+・「根拠」には必ず法令名と条文番号、または省庁の公式FAQ・ガイドラインのURLを書いてください。書けない指摘は根拠欄の冒頭に【未確認】と明記してください。
+・推測が混じる指摘は確信度を「低」としてください。推測を事実として書かないでください。
+・法改正により内容が変わっている可能性がある箇所は、確認した時点（年月）を明記してください。
+・表の最後に、「弁護士・弁理士・税理士など専門家への確認が必須と考える論点」があれば3行以内で列挙してください。無ければ「なし」と書いてください。</div>
+
+<p class="note" style="margin-top:12px"><strong>マスキングした項目：</strong>会社名（→「日本の合同会社」）、法人番号、バンダイ・BANDAI SPIRITSの社名（→「大手玩具メーカー」）、BASEの社名（→「販売プラットフォーム」）、ショップ名・URL・連絡先。<br>
+マスキングによって判断の意味が変わる箇所はありません（法人格の別と、係争中である事実は残しています）。</p>
+
+<hr>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9">9. 次にやること（承認待ち）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>選択肢</th><th>Claudeがやること</th></tr></thead>
+<tbody>
+<tr><td>①</td><td><strong>推奨</strong>：クローン戦略は採らず、①（ジャンルの踏襲＋絵と名前は完全自作）で進める</td><td>前回提案した「時間・お金・撤退条件の3上限」を決め、段階1（動くものを2〜4週間で作る）の手順書を出す</td></tr>
+<tr><td>②</td><td>上記8章の依頼文をGeminiに貼り、回答を持ち帰る</td><td>回答を1件ずつ一次情報（J-PlatPat、e-Gov法令検索）で事実確認し、対応表を出す</td></tr>
+<tr><td>③</td><td>それでもクローン寄りの案を検討したい</td><td><strong>先に1章の矛盾（著作権を回避する方針／バンダイの件が未解決）について、方針を変更するかどうかのご判断をいただきます。</strong>判断後、専用のゲート0を実施します</td></tr>
+<tr><td>④</td><td>ゲームは一旦置き、SaaS探索に戻る</td><td>止まっている承認6項目を再提示する</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>Claudeも弁護士ではありません</h4>
+<p>本資料もGeminiの回答も、<strong>専門家の見解ではありません。</strong>
+2つのAIの意見が一致しても、それは正しさの証明になりません。<br>
+特に<strong>「実際に他社製品と似たゲームを商用配信してよいか」の最終判断は、弁護士または弁理士への確認を強く推奨します。</strong>
+バンダイの件が未解決であることを考えると、なおさらです。</p>
+</div>
+
+<hr>
+
+<!-- ============ 10 ============ -->
+<h2 id="s10">10. 出典</h2>
+
+<h4>パルワールド（実像）</h4>
+<ul class="src">
+<li>Forbes JAPAN「『パルワールド』誕生秘話、2カ月で692億円売れた驚異のインディーゲーム」（発売2024年1月19日、初日200万本、2024年2月時点2,500万人、2か月692億円、溝部拓郎氏の経歴）<br>https://forbesjapan.com/articles/detail/73453</li>
+<li>AUTOMATON「『パルワールド』開発者インタビュー」（発売時ウィッシュリスト180万件／1月15日時点140万件、2021年6月発表、チームの推移3〜4人→10人→20〜30人→さらに10〜20人、当初1年の見込み）<br>https://automaton-media.com/articles/interviewsjp/20240119-279536/</li>
+<li>gamecolumn.jp（溝部拓郎氏のnote投稿を紹介）「最初は4人で制作していたものの完成できず、10億円の予算と40人で作り上げた」<br>https://gamecolumn.jp/blog-entry-95024.html</li>
+<li>ビジネスジャーナル「巨額利益のパルワールド『サーバー代が月7千万円』より重大な経営リスク」<br>https://biz-journal.jp/company/post_373663.html</li>
+</ul>
+
+<h4>訴訟（法的事実）<span class="unconf">【Gemini未確認】</span></h4>
+<ul class="src">
+<li>弁理士法人シアラシア「パルワールド正式版リリース直前！ 任天堂・ポケモン vs ポケットペア特許訴訟はいま、どうなっているのか【2026年7月最新版】」（提訴日2024年9月18日、東京地裁、特許7493117号・7545191号・7528390号、各500万円計1,000万円の一部請求、2021年12月22日原出願の分割出願、2026年10月1日証拠調べ・11月9日心証開示予定）<br>https://siarasia.jp/patent/2638/</li>
+<li>AUTOMATON「任天堂・株ポケの『パルワールド』訴訟、対象が『旧バージョンに限定された』との報道」（2025年11月に請求範囲を限定、v0.3.11・v0.5.5の仕様変更内容）<br>https://automaton-media.com/articles/newsjp/20260612-449496/</li>
+<li>IP FELLOWS 特許商標事務所「【2026年7月更新】パルワールド訴訟はどうなった？」<br>https://ip-fellows.jp/patent-article/business-patent6/</li>
+</ul>
+
+<h4>著作権とゲームのルール<span class="unconf">【Gemini未確認】</span></h4>
+<ul class="src">
+<li>ミレニア弁理士法人「ゲームのルールは著作権で守られる？」（著作権法は「思想または感情を創作的に表現したもの」を保護／ルール等のアイデアは保護外／商標・特許・意匠・不正競争防止法による代替保護）<br>https://www.millenniapat.com/archives/53610</li>
+<li>KAI-YOU Premium「ゲームシステムは著作権で守られない？ クリエイターなら知っておきたい『特許』を弁護士が解説」<br>https://premium.kai-you.net/article/600</li>
+</ul>
+
+<h4>LumenTale</h4>
+<ul class="src">
+<li>電ファミニコゲーマー「『LumenTale: Memories of Trey』が5月27日にリリース。『アニモン』を集めて仲間にしていくRPG」（開発 Beehive Studios、パブリッシャー Team17、Steam／Nintendo Switch、アニモン約140種・13属性）<br>https://news.denfaminicogamer.jp/news/260526k</li>
+</ul>
+
+<h4>この資料の限界（必ずお読みください）</h4>
+<div class="box warn">
+<ul>
+<li><strong><span class="unconf">【Gemini未確認】</span></strong>本資料の法律に関する記述は、すべてGeminiクロスチェック前です。<strong>「確定」として扱わないでください</strong></li>
+<li><strong>【未確認】</strong>特許番号・出願日・登録日は、弁理士事務所およびゲームメディアの解説記事（二次情報）に基づきます。<strong>特許庁のJ-PlatPatで原典照合していません</strong></li>
+<li><strong>【未確認】</strong>「ゲームのルールは著作権で保護されない」を判示した日本の裁判例の、具体的な事件名・裁判所・判決年月日を原典確認できていません</li>
+<li><strong>【未確認】</strong>マイクロソフト／Mojangがマインクラフトのクローンに法的措置を取った実例の有無</li>
+<li><strong>【未確認】</strong>LumenTaleの売上・販売本数</li>
+<li><strong>【未確認】</strong>米国その他の外国法における取扱い。Steamは全世界配信のため各国法が問題になりえます</li>
+<li>訴訟は係属中であり、<strong>2026年10月1日・11月9日に状況が動きます。</strong>本資料の賞味期限は<strong>2026年11月9日まで</strong>とお考えください</li>
+</ul>
+</div>
+
+<p class="note" style="margin-top:40px; border-top:1px solid var(--line); padding-top:16px">
+この資料は「見るための版」です。作業フォルダの <code>DECISIONS.md</code> は本セッションから読み取れていないため、決定台帳との正式な照合は未実施です。<br>
+1章の矛盾についてご判断をいただくまで、この案は先へ進めません。
+</p>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ゲート0 事業性の確認 C-03 古物台帳クラウド</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1d22; --mut:#5b6270; --line:#dfe3ea; --soft:#f5f7fa;
+  --acc:#1f5fa8; --dai:#0f6b45; --daibg:#e3f4ec; --chu:#8a5a00; --chubg:#fdf1dc;
+  --sho:#8b2f2f; --shobg:#fbe9e9; --ok:#0f6b45; --okbg:#e3f4ec; --ng:#7a2f2f; --ngbg:#f6e7e7;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",system-ui,sans-serif;
+ line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums;}
+main{min-width:0}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;max-width:1280px;margin:0 auto;padding:24px 20px 80px;}
+nav{position:sticky;top:16px;align-self:start;border-right:1px solid var(--line);padding-right:12px;}
+nav a{display:block;padding:5px 0;color:var(--fg);text-decoration:none;font-size:13.5px;border-bottom:1px solid transparent;}
+nav a:hover{color:var(--acc);border-bottom-color:var(--line)}
+h1{font-size:24px;margin:0 0 4px;line-height:1.4}
+h2{font-size:19px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+.note{background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--acc);padding:12px 14px;margin:14px 0;font-size:14px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+thead th{background:var(--soft);position:sticky;top:0;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:after{content:"";}
+tbody tr:hover{background:var(--soft)}
+td.c{text-align:center;white-space:nowrap}
+td.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+.bdg{display:inline-block;min-width:1.7em;text-align:center;padding:1px 7px;border-radius:3px;font-size:12.5px;font-weight:700}
+.b-dai{background:var(--daibg);color:var(--dai)}
+.b-chu{background:var(--chubg);color:var(--chu)}
+.b-sho{background:var(--shobg);color:var(--sho)}
+.b-num{background:var(--soft);color:var(--fg)}
+.st{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;font-weight:700;white-space:nowrap}
+.st.nokoru{background:var(--okbg);color:var(--ok)}
+.st.otosu{background:var(--ngbg);color:var(--ng)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0;font-size:13.5px}
+.ctrl label{color:var(--mut)}
+select,input[type=search]{font:inherit;font-size:13.5px;padding:4px 7px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.card h3{margin:0 0 4px;font-size:16px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card .cid{font-size:12.5px}
+.card .meta{color:var(--mut);font-size:12.5px;margin:0 0 8px}
+#tbl{min-width:1000px}
+#tbl td:nth-child(2){min-width:210px}
+#tbl td:nth-child(3){min-width:150px}
+table.kv{min-width:520px}
+table.layers th:first-child,table.layers td:first-child{white-space:nowrap}
+table.kv th{width:190px;background:var(--soft);font-weight:600;white-space:nowrap}
+.hyw{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
+.hy{display:flex;gap:6px;align-items:center}
+.hyl{color:var(--mut)}
+ul.src{margin:6px 0 14px;padding-left:20px;font-size:13.5px}
+ul.src li{margin:2px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.kpi div{border:1px solid var(--line);border-radius:6px;padding:8px 14px;background:var(--soft);font-size:13px}
+.kpi b{display:block;font-size:20px;line-height:1.3}
+footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px}
+@media (max-width:860px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:12px}
+ nav{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 8px;
+   display:flex;flex-wrap:wrap;gap:4px 14px}
+}
+@media print{
+ nav,.ctrl{display:none}
+ .wrap{grid-template-columns:minmax(0,1fr);max-width:none;padding:0}
+ .card{break-inside:avoid}
+ body{font-size:10.5pt}
+}
+
+.mut{color:var(--mut);font-size:12.5px}
+.verdict{border:2px solid var(--ng);background:var(--ngbg);border-radius:6px;padding:16px 18px;margin:18px 0}
+.verdict h3{margin:0 0 6px;font-size:18px;color:var(--ng)}
+.ok{color:var(--ok)} .ng{color:var(--ng)} .chu{color:var(--chu)}
+td.hit{background:var(--ngbg);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<nav>
+<a href="#s0">結論</a>
+<a href="#s1">1. 判定表（調査前に固定）</a>
+<a href="#s2">2. 問1 客はいま何で足りているか</a>
+<a href="#s3">3. 問2 競合が既に持っている機能</a>
+<a href="#s4">4. 問3 母数の引き算</a>
+<a href="#s5">5. 問4 5年後に増えるか減るか</a>
+<a href="#s6">6. 問5 死ぬ条件3つ</a>
+<a href="#s7">7. 問6 うちを選ぶ理由</a>
+<a href="#s8">8. 判定</a>
+<a href="#s9">9. 法令の確認結果</a>
+<a href="#s10">10. カタログ全体への影響</a>
+<a href="#s11">11. 次にやること</a>
+<a href="#s12">12. 出典</a>
+</nav>
+<main>
+
+<h1>ゲート0　事業性の確認<br><span style="font-size:19px;font-weight:400">C-03 古物台帳クラウド</span></h1>
+<p class="lead">作成日 2026-08-28　／　合同会社R.Y.S　／　decision-gate スキル ゲート0　／　要件定義の前に通す関門</p>
+
+<h2 id="s0">結論</h2>
+<div class="verdict">
+<h3>この案は、ゲート0を通りません。要件定義には進まないことを提案します。</h3>
+<p style="margin:8px 0 0"><strong>止める条件7つのうち、3つが明確に該当し、1つが該当の可能性が高い状態です。</strong></p>
+<ul style="margin:6px 0 0">
+<li><strong>条件2に該当</strong>　リユース向けPOSが、古物台帳の機能を<strong>既に標準で持っています</strong>。RECOREは買取プラン月16,500円に<strong>追加課金なしで同梱</strong>しています</li>
+<li><strong>条件3に該当</strong>　死ぬ条件を3つ書いたところ、<strong>2つが既に起きていました</strong></li>
+<li><strong>条件6bに該当（POSを使う層について）</strong>　POS契約に無料で付いてくるため、その層は<strong>そもそも古物台帳を別に探しません</strong></li>
+<li><strong>条件4に該当する可能性が高い</strong>　実際に毎日記帳が発生する層の母数が、公的統計で追えるかぎり<strong>1万6千事業所前後</strong>にとどまります</li>
+</ul>
+<p style="margin:10px 0 0"><strong>とどめは、同じ名前・同じ機能の製品が既に無料で存在し、1,300人が使っていることです。</strong>株式会社片岡オートの「古物台帳クラウド」（2023年3月リリース・2025年4月時点で利用者約1,300人・無料）。<strong>案の名前まで同じでした。</strong></p>
+</div>
+<div class="note"><strong>これは坂野様の選択が誤っていたという話ではありません。</strong>カタログでこの案は「大」4つの最上位でした。<strong>その評価が間違っていたのです。</strong>原因と、他の案への影響は<a href="#s10">10節</a>に書きました。ゲート0はこれを見つけるための関門で、今回は機能しました。要件定義に入ってから気づけば、2か月分の作業が消えていました。</div>
+
+<h2 id="s1">1. 判定表（★調査を始める前に固定したもの）</h2>
+<p>結果に合わせて基準が動くのを防ぐため、<strong>何も調べていない状態で</strong>この表を先に確定させ、<span class="mono">C-03_古物台帳/HANTEI_HYO.md</span> に保存してから調査を始めました。</p>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>対応する問い</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="c nowrap">問4</td><td class="hit">△ 判断が割れる（<a href="#s5">5節</a>）</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td class="c nowrap">問1②・問2</td><td class="hit">✕ <strong>該当</strong></td></tr>
+<tr><td class="c">3</td><td>死ぬ条件の3つのうち、1つでも既に起きている</td><td class="c nowrap">問5</td><td class="hit">✕ <strong>該当（3つ中2つ）</strong></td></tr>
+<tr><td class="c">4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標に届かない</td><td class="c nowrap">問3</td><td class="hit">△ <strong>該当の可能性が高い</strong></td></tr>
+<tr><td class="c">5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td class="c nowrap">問1</td><td>○ 5つとも埋まった</td></tr>
+<tr><td class="c">6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td class="c nowrap">問6②</td><td>○ 書けるが弱い（<a href="#s7">7節</a>）</td></tr>
+<tr><td class="c">6b</td><td>顧客がそもそも2つを並べて比べない（相手に無料同梱で探されない）</td><td class="c nowrap">問6③</td><td class="hit">✕ <strong>該当（POSを使う層）</strong></td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td class="c nowrap">問6③</td><td>― 大手は既にやっているため、この論点以前</td></tr>
+</tbody></table></div>
+<p class="lead">収益目標の前提：年1,000万円の売上（SaaS探索の条件 確定版 §6 に合わせた）。</p>
+
+<h2 id="s2">2. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p><strong>製品カテゴリで探さず、「客が古物台帳をつけるという目的を、いま何で達成しているか」で探しました。</strong>探し先5つは全部埋まりました。</p>
+
+<h3>探し先① 同じカテゴリの製品（古物台帳の専用ソフト）</h3>
+<div class="tw"><table>
+<thead><tr><th>製品名</th><th>提供元</th><th>料金</th><th>台帳機能</th></tr></thead>
+<tbody>
+<tr><td><strong>古物台帳クラウド</strong><br><span class="mut">★この案と同じ名前</span></td><td>株式会社片岡オート<br><span class="mut">兵庫県三木市・中古トラック販売業</span></td><td><strong>無料</strong><br><span class="mut">2025年4月時点</span></td><td class="c">◎ 製品そのもの</td></tr>
+<tr><td>ネットで古物台帳記帳</td><td>トラスト行政書士事務所監修</td><td>2プラン・金額非公開</td><td class="c">◎</td></tr>
+<tr><td>古物台帳管理システム</td><td>株式会社リナーク</td><td>問い合わせ制</td><td class="c">◎ iPad受付・サイン・写真</td></tr>
+<tr><td>古物管理バイク（iOSアプリ）</td><td>個人・中小開発者</td><td>無料＋月1,800円</td><td class="c">◎ バイク特化</td></tr>
+<tr><td>mesee（β版）</td><td>mesee</td><td>【未確認】</td><td class="c">◎ 取引履歴から自動集計</td></tr>
+</tbody></table></div>
+<div class="note"><strong>片岡オートの「古物台帳クラウド」について。</strong>2023年3月15日リリース、2025年4月にスマホアプリ版からPC・タブレット対応のクラウドウェブ版へ移行。<strong>この時点で利用者は約1,300人</strong>（リユース経済新聞）。<strong>無料です。</strong>中古トラック販売業を営む会社が、自社の困りごとを解決するために作って公開したものと見られます。<br>
+つまりこの案は、<strong>名前も機能も同じ製品が、すでに3年前から無料で存在し、1,300人が使っている</strong>という状態です。</div>
+
+<h3>探し先② ★上位カテゴリの製品（リユース向けPOS・買取管理システム）</h3>
+<p><strong>ここが今回の決定打です。</strong>「大きいシステムの中に、もう入っている」が最も多い失敗原因なので、重点的に調べました。</p>
+<div class="tw"><table>
+<thead><tr><th>製品名</th><th>料金</th><th>古物台帳の扱い</th><th>確認できた事実</th></tr></thead>
+<tbody>
+<tr><td><strong>RECORE</strong><br><span class="mut">リユース向けPOS</span></td><td>買取プラン 月16,500円<br>スタンダード 月22,000円</td><td class="hit">標準搭載<br><strong>追加課金なし</strong></td><td>「買取時に古物台帳が自動で作成されるのでペーパーレスで古物台帳の管理が可能」と公式が明記</td></tr>
+<tr><td><strong>スマレジ 買取オプション</strong><br><span class="mut">開発：株式会社U-SHOP</span></td><td>月13,200円／店舗<br><span class="mut">スマレジ本体は別途</span></td><td>買取機能一式に付随</td><td>「古物台帳の検索・出力・払い出し（販売記録）ができます」。2024年5月31日リリース</td></tr>
+<tr><td><strong>タロスPOS</strong><br><span class="mut">導入1,900店舗超</span></td><td>【未確認】<br><span class="mut">オプション課金と見られる</span></td><td>デジタル台帳オプション</td><td class="hit"><strong>2026年4月1日提供開始。</strong>「古物営業法に準拠したデジタル台帳を自動作成」</td></tr>
+<tr><td>NRAクラウドシステム</td><td>会員向け・【未確認】</td><td>標準機能</td><td>全国遺品整理業協会が提供。「買取明細を作成すると、自動で古物台帳が生成される」</td></tr>
+<tr><td>買取コージ（買取CRM）</td><td>店舗数等で変動</td><td>あり</td><td>比較記事で確認</td></tr>
+<tr><td>SPIRE POS</td><td>問い合わせ制</td><td class="c">【未確認】</td><td>機能ページに古物台帳への言及を確認できず。<strong>無いとは断定していない</strong></td></tr>
+<tr><td>MOOV（富士通フロンテック）</td><td>問い合わせ制</td><td class="c">【未確認】</td><td>電子サイン機能は確認。台帳への直接の言及は確認できず</td></tr>
+</tbody></table></div>
+<div class="note"><strong>タロスシステムズの動きが、この案にとって最も重い事実です。</strong>導入1,900店舗超のPOS大手が、<strong>2026年4月1日＝わずか5か月前に</strong>古物台帳専用のオプションを新規投入し、5月には自社メディアで「紙の台帳は年間3万件でファイルボックス12箱分」「立入検査での検索に30分以上かかり警察から指導される」と訴求するコラムまで出しています。<br>
+<strong>いま、この領域に大手が投資している最中です。</strong>空いているのではなく、埋まりつつある途中でした。</div>
+
+<h3>探し先③ 下位・単機能のツール</h3>
+<p>上記①と重複します（古物管理バイクアプリ、ネットで古物台帳記帳）。加えて、<strong>複数の行政書士事務所が古物台帳のExcelテンプレートを無料で配布</strong>しています。</p>
+
+<h3>探し先④ 汎用ツール</h3>
+<div class="tw"><table>
+<thead><tr><th>ツール</th><th>料金</th><th>状況</th></tr></thead>
+<tbody>
+<tr><td>Excel・Googleスプレッドシート</td><td>無料</td><td><strong>現在の主流。</strong>法的要件を満たすかは自己責任という整理</td></tr>
+<tr><td>行政書士事務所の無料Excelテンプレート</td><td>無料</td><td>4事務所以上が配布を確認</td></tr>
+<tr><td>警視庁の法定様式</td><td>無料</td><td>別記様式第15号・第16号を画像で掲載。Excel配布は確認できず</td></tr>
+<tr><td>kintone・Airtable・Notion</td><td>―</td><td>古物台帳向けの日本語テンプレートは見当たらず【未確認】</td></tr>
+</tbody></table></div>
+
+<h3>探し先⑤ 人手</h3>
+<div class="tw"><table>
+<thead><tr><th>提供者</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>行政書士事務所（多数）</td><td>無料Excelテンプレートの配布＋記帳指導＋許可申請の代行</td></tr>
+<tr><td>東京古物商防犯連盟</td><td><strong>紙</strong>の古物台帳を会員価格で販売（デジタルではない）</td></tr>
+<tr><td>記帳代行業者</td><td>古物台帳に特化したものは見当たらず【未確認】</td></tr>
+</tbody></table></div>
+
+<h3>★公式ページを眺めるだけで終わらせない調査（3つ）の結果</h3>
+<div class="tw"><table>
+<thead><tr><th>やったこと</th><th>分かったこと</th></tr></thead>
+<tbody>
+<tr><td>競合の低評価レビュー（星1〜2）を読む</td><td class="chu"><strong>読めませんでした。</strong>ITreviewでRECORE・タロスPOSともに<strong>レビュー0件</strong>。Capterra・G2には日本の買取POSの掲載自体が無い。App Storeの古物管理バイクはレビュー1件（星5）のみ。<br><strong>この業界は主要レビューサイトが空白地帯です。</strong>顧客の生の不満を第三者サイトから拾うことは、現状できません</td></tr>
+<tr><td>更新履歴を1年分さかのぼる</td><td class="ng"><strong>決定的でした。</strong>タロスシステムズが2026年4月1日にデジタル台帳オプションを新規投入。スマレジ買取オプションは2024年5月31日リリース。RECOREは既に枯れた標準機能で直近の追加なし</td></tr>
+<tr><td>価格ページで無料同梱かを判定</td><td class="ng"><strong>RECOREは追加課金なしで同梱。</strong>リユース事業者はレジ・在庫・会員管理のためPOSの導入がほぼ必須で、その契約の中に古物台帳がタダで付いてきます</td></tr>
+</tbody></table></div>
+
+<h2 id="s3">3. 問2　競合が「既に持っている機能」を、先に全部書いたか</h2>
+<p>「無い機能」を探す前に「有る機能」を書き出しました。<strong>古物台帳の機能を既に持っていると確認できた製品は10件です。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>製品名</th><th>区分</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>RECORE</td><td>上位カテゴリ（POS）・<strong>標準搭載</strong></td></tr>
+<tr><td class="c">2</td><td>スマレジ 買取オプション</td><td>上位カテゴリ（POS）</td></tr>
+<tr><td class="c">3</td><td>タロスPOS デジタル台帳オプション</td><td>上位カテゴリ（POS）・<strong>2026年4月新規投入</strong></td></tr>
+<tr><td class="c">4</td><td>NRAクラウドシステム</td><td>上位カテゴリ（業界団体提供）</td></tr>
+<tr><td class="c">5</td><td>買取コージ（買取CRM）</td><td>上位カテゴリ</td></tr>
+<tr><td class="c">6</td><td><strong>古物台帳クラウド（片岡オート）</strong></td><td>同カテゴリ・<strong>無料・1,300人</strong></td></tr>
+<tr><td class="c">7</td><td>ネットで古物台帳記帳</td><td>同カテゴリ</td></tr>
+<tr><td class="c">8</td><td>古物台帳管理システム（リナーク）</td><td>同カテゴリ</td></tr>
+<tr><td class="c">9</td><td>古物管理バイク（iOSアプリ）</td><td>単機能</td></tr>
+<tr><td class="c">10</td><td>mesee（β版）</td><td>同カテゴリ</td></tr>
+</tbody></table></div>
+<p><strong>調べたが機能の有無を確認できなかった製品：</strong>SPIRE POS、MOOV（富士通フロンテック）。この2つについては「持っていない」と断定していません。</p>
+
+<h2 id="s4">4. 問3　母数の引き算</h2>
+<div class="tw"><table>
+<thead><tr><th>段</th><th>数字</th><th>根拠の性質</th></tr></thead>
+<tbody>
+<tr><td>① 古物商許可の総数（令和7年末）</td><td class="num"><strong>614,118件</strong></td><td class="ok">公的統計（警察庁）</td></tr>
+<tr><td>② うち実際に営業している数</td><td class="chu">取れなかった</td><td>統計が存在しない</td></tr>
+<tr><td>③ うち買取を日常的に行い、記帳が毎日発生する層</td><td class="num"><strong>約16,000事業所</strong><br><span class="mut">中古品小売業ほか4業種 4,874所＋中古自動車小売業 11,168所（令和3年・経済センサス）</span></td><td>公的統計だが<strong>代理指標</strong>。遺品整理業者は産業分類に独立区分がなく捕捉不可</td></tr>
+<tr><td>④ うちPOSを入れていない小規模層</td><td class="chu">取れなかった</td><td>統計が存在しない</td></tr>
+</tbody></table></div>
+<div class="note"><strong>①と③の差が、この案の急所です。</strong>許可は61万件あるのに、実際に毎日買取をして台帳を書く事業所は<strong>公的統計で追えるかぎり1万6千前後</strong>。差の大半は、せどり・転売の個人が許可だけ取っているケース、自動車販売業、質屋兼業などと考えられます。<strong>許可を持っていても買取取引がほとんど発生しない層は、台帳ツールの客になりません。</strong><br>
+<span class="mut">※ この「差の中身」を直接裏付ける単一の統計は確認できていません。2つの統計の性質の違いから導かれる推論です。</span></div>
+<p><strong>条件4の判定：</strong>母数16,000のうちPOS未導入層に絞ると、さらに小さくなります。仮に母数16,000でシェア1%＝160社、月3,000円なら年576万円。<strong>年1,000万円に届きません。</strong>単価を月5,000円にしても年960万円で、ぎりぎり届きません。しかも<strong>その単価は、無料の先行製品と競合する価格です。</strong>該当の可能性が高いと判断します。</p>
+
+<h2 id="s5">5. 問4　この客は5年後、増えるか減るか</h2>
+<div class="tw"><table>
+<thead><tr><th>指標</th><th>推移</th><th>方向</th></tr></thead>
+<tbody>
+<tr><td>古物商許可の件数</td><td>令和2年 395,526件 → 令和7年 <strong>614,118件</strong>（5年で約+55%）</td><td class="ok">増えている</td></tr>
+<tr><td>リユース市場の規模</td><td>2009年 1兆1,274億円 → 2024年 <strong>3兆2,628億円</strong>（15年連続拡大・2030年に約4兆円の予測）</td><td class="ok">増えている</td></tr>
+<tr><td><strong>中古品小売業の事業所数</strong><br><span class="mut">骨とう品を除く</span></td><td>2016年 5,627所 → 2021年 <strong>3,301所</strong>（約41%減）</td><td class="ng"><strong>減っている</strong></td></tr>
+</tbody></table></div>
+<div class="note"><strong>3つの数字は、方向が揃っていません。</strong>市場は拡大し、許可件数も増えている。<strong>しかし実店舗は4割減っています。</strong><br>
+市場の成長を牽引しているのは、①メルカリ等のCtoC-EC市場の拡大（2023年で2兆4,817億円）と、②ハードオフ・トレジャーファクトリー・ゲオといった大手チェーンへの集約、の2つと考えられます。<strong>どちらも、この案が狙う「POSを持たない小規模事業者」を増やす方向には働きません。</strong><br>
+一方で許可件数の増加分は、実店舗ではなくEC専業・せどり個人が中心と見られ、<strong>これは台帳の記帳がほとんど発生しない層です。</strong><br>
+<span class="mut">※ 経済センサスの分類変更の影響を排除できておらず、事業所数減少の理由を説明した公的資料も見つかりませんでした。そのため条件1は「該当」と断定せず「判断が割れる」としています。</span></div>
+
+<h2 id="s6">6. 問5　この案が死ぬ条件を3つ書き、その場で確認した</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>「〜が起きたら、この案は成立しない」</th><th>いま起きているか</th></tr></thead>
+<tbody>
+<tr><td class="c">死因1</td><td>リユース向けPOSが、古物台帳を標準機能として持ったら成立しない</td><td class="hit">✕ <strong>既に起きている</strong><br>RECOREが追加課金なしで標準搭載。スマレジ・タロス・NRAも保有</td></tr>
+<tr><td class="c">死因2</td><td>無料の古物台帳ツールが普及したら成立しない</td><td class="hit">✕ <strong>既に起きている</strong><br>片岡オートの無料製品が2023年から稼働し、1,300人が利用</td></tr>
+<tr><td class="c">死因3</td><td>古物台帳の電磁的記録が、クラウド保存では認められなかったら成立しない</td><td class="ok">○ 起きていない<br><strong>むしろ追い風。</strong>警察庁の通達がクラウド一括管理を明示的に許容（<a href="#s9">9節</a>）</td></tr>
+</tbody></table></div>
+<p><strong>3つのうち2つが、書いたその場で「既に起きている」と確認されました。条件3に該当します。</strong></p>
+
+<h2 id="s7">7. 問6　当たったあと、顧客がうちと大手を並べたとき、うちを選ぶ理由は何か</h2>
+
+<h3>① まず「並べられるか」を判定する</h3>
+<p><strong>並べられます。というより、既に並べられています。</strong>この案の機能は、リユース向けPOSに「1つの機能として」完全に収まる大きさで、実際にRECORE・スマレジ・タロス・NRAが収めています。<strong>「今は無い」を根拠にできる状態ではありません。</strong></p>
+
+<h3>② 並べられるなら、うちを選ぶ理由を書く</h3>
+<p>理由をゼロにはできませんでした。次のような道は残っています。ただし<strong>いずれも弱いと評価します。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>選ばれうる理由</th><th>評価</th></tr></thead>
+<tbody>
+<tr><td>POSまでは要らない零細事業者に、台帳だけを安く提供する</td><td class="chu">その層には<strong>無料の先行製品が既にいます。</strong>有料で無料に勝つ必要があります</td></tr>
+<tr><td>無料製品にはないサポート・データ移行の保証を付ける</td><td class="chu">成立しうるが、<strong>1人法人がサポートで差別化するのは運用負荷が重い</strong></td></tr>
+<tr><td>複数営業所の本部一元管理に特化する</td><td class="chu">警察庁が本社一括管理を認めているので筋は良いが、<strong>複数営業所を持つ規模ならPOSも導入している</strong></td></tr>
+<tr><td>使いやすさ・画面の見やすさ</td><td class="chu">正当な理由ではあるが、<strong>比較の土俵に上がれた場合に限る</strong>（→③）</td></tr>
+</tbody></table></div>
+<p>理由を1つも書けないわけではないため、<strong>条件6そのものには該当しません。</strong>しかし次の③が問題です。</p>
+
+<h3>③ ★顧客はそもそも2つを並べて比べてくれるか</h3>
+<div class="verdict" style="border-color:var(--chu);background:var(--chubg)">
+<h3 style="color:var(--chu)">POSを使う層は、比べてくれません。条件6bに該当します。</h3>
+<p style="margin:8px 0 0">リユース事業者はレジ・在庫・会員管理のためPOSの導入がほぼ必須です。そのPOS契約に古物台帳が<strong>追加料金なしで付いてきます</strong>。この状態で「古物台帳のツールを別に探そう」と考える理由がありません。<strong>画面の良し悪し以前に、見てもらえません。</strong></p>
+<p style="margin:8px 0 0">POSを使わない零細層は探しますが、その層が最初に見つけるのは<strong>無料の片岡オート製</strong>です。ここでは比較の土俵には上がれますが、<strong>相手が無料</strong>です。</p>
+</div>
+<p><strong>「空白がある」ではなく「なぜ空いているのか」を書けるかが判定基準です。</strong>今回書ける答えは、<strong>「空いていなかった」</strong>でした。第1弾のカタログが「空いている部類」と評価したのは、上位カテゴリを見ていなかったためです。</p>
+
+<h2 id="s8">8. 判定</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>判定</th><th>根拠</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="hit c">△</td><td>市場と許可件数は増、実店舗は41%減。分類変更の影響を排除できず断定しない</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリが機能を内包</td><td class="hit c">✕ <strong>該当</strong></td><td>RECORE標準搭載・スマレジ・タロス（2026年4月投入）・NRA</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件が既に起きている</td><td class="hit c">✕ <strong>該当</strong></td><td>3つ中2つが既に発生</td></tr>
+<tr><td class="c">4</td><td>母数×単価×1%が目標に届かない</td><td class="hit c">△ <strong>高い</strong></td><td>実働層は約16,000事業所。年1,000万円に届かない</td></tr>
+<tr><td class="c">5</td><td>探し先に埋まっていないものがある</td><td class="c ok">○ 該当せず</td><td>5つとも埋めた</td></tr>
+<tr><td class="c">6</td><td>選ぶ理由を1つも書けない</td><td class="c ok">○ 該当せず</td><td>書けるが弱い</td></tr>
+<tr><td class="c">6b</td><td>そもそも並べて比べられない</td><td class="hit c">✕ <strong>該当</strong></td><td>POS層は無料同梱で探さない</td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今やっていない」だけ</td><td class="c">―</td><td>既にやられているため論点以前</td></tr>
+</tbody></table></div>
+<p><strong>1つでも当たったら要件定義に進まない、という基準です。3つが明確に該当しました。</strong></p>
+
+<h2 id="s9">9. 法令の確認結果（この案にとっては追い風だった）</h2>
+<p>止める判定にはなりましたが、法令面は調べた結果<strong>問題ありませんでした。</strong>今後この領域を再検討する場合に使えるので、事実として残します。すべて e-Gov と警察庁の一次情報です。</p>
+<div class="tw"><table class="kv">
+<tr><th>記帳の義務</th><td>古物営業法 <strong>第16条</strong>。売買・交換のため古物を受け取り／引き渡したとき、その都度、①取引の年月日 ②品目及び数量 ③特徴 ④相手方の住所・氏名・職業・年齢 ⑤本人確認の措置の区分 を記録する</td></tr>
+<tr><th>記載の免除</th><td>施行規則 <strong>第18条</strong>。美術品類・時計宝飾品類・自動車・自動二輪車等<strong>以外</strong>で、対価総額が1万円未満の取引は免除（自動車等は少額でも義務あり）</td></tr>
+<tr><th>保存年数</th><td>古物営業法 <strong>第18条第1項</strong>。<strong>最終の記載をした日から3年間</strong></td></tr>
+<tr><th class="ok">★電子での記録</th><td class="ok"><strong>法律上、正面から認められています。</strong>第16条本文が「帳簿…に記載をし、<strong>又は電磁的方法により記録をしておかなければならない</strong>」と、紙と電子を並列で規定。POSシステムによる記録も、法定の記載事項を網羅していれば該当する（警察庁の解釈運用基準）</td></tr>
+<tr><th class="ok">★クラウド保存</th><td class="ok"><strong>警察庁が明示的に認めています。</strong>解釈運用基準（令和6年8月14日・警察庁丙生企発第272号）に「各営業所等において当該記録をプリントアウトすることが可能である限り、<strong>データ自体は本社や本部のコンピュータにおいて一括管理することも許容される</strong>」と明記。<br>ただし条件があり、<strong>各営業所に印刷に必要な機器を備え付け、直ちに書面に表示できる状態</strong>を常に確保する必要があります（第18条第1項）</td></tr>
+<tr><th>まとめ記帳の禁止</th><td>「その都度」とは受け取り・引き渡しのたびごとの意味で、<strong>1週間分・1か月分をまとめて記載することは許されない</strong>（同解釈運用基準）</td></tr>
+<tr><th>改ざん防止</th><td>施行規則 <strong>第19条</strong>が「国家公安委員会が定める基準を確保するよう<strong>努めなければならない</strong>」（努力義務）と規定。<strong>ただしその基準の告示そのものは特定できませんでした【未確認】</strong></td></tr>
+<tr><th>罰則</th><td>第33条第1項。不記載・虚偽記載（第2号）、保存義務違反（第1号）、毀損・亡失時の届出義務違反（第3号）いずれも<strong>6月以下の拘禁刑又は30万円以下の罰金</strong></td></tr>
+</table></div>
+<div class="note">この節の内容は法令に関わるため、<strong>確定させる前にGeminiへのクロスセカンドチェックを行う必要があります</strong>（legal-crosscheck スキル）。ただし今回は案を止める判定のため、確定させる場面がありません。<strong>この領域を再検討する場合は、そのときに必ず実施してください。</strong></div>
+
+<h2 id="s10">10. ★カタログ全体への影響（重要）</h2>
+<div class="verdict" style="border-color:var(--chu);background:var(--chubg)">
+<h3 style="color:var(--chu)">同じ穴が、カタログの他の案にも空いている可能性があります。</h3>
+<p style="margin:8px 0 0">C-03はカタログで<strong>「大」4つの最上位</strong>、参入しにくさも「空いている可能性」でした。<strong>その評価が誤っていたのです。</strong></p>
+</div>
+<p><strong>なぜ誤ったのか。</strong>カタログの C-03 の欄には、既存の競合として<strong>RECORE・スマレジ買取オプション・NRAクラウド・NV CLOUD が既に書かれていました。</strong>書かれていたのに、判定は「確立した専用SaaSの固有名詞は薄い」＝空いている、でした。</p>
+<div class="tw"><table>
+<thead><tr><th>何を見ていたか</th><th>何を見ていなかったか</th></tr></thead>
+<tbody>
+<tr><td>「古物台帳<strong>専用</strong>のSaaSがあるか」<br>→ 薄い → 空いている、と判定した</td><td class="hit">「<strong>もっと大きいシステムが、この機能を中に持っていないか</strong>」<br>→ 持っていた。しかも無料同梱で</td></tr>
+</tbody></table></div>
+<p><strong>カタログの評価軸には「上位カテゴリに内包されていないか」という観点がそもそも入っていませんでした。</strong>4項目（作れる／需要／リーチ／営業）にも、除外条件E1〜E4にも、この観点はありません。E2が近いですが、E2は「大手の標準機能に含まれ、<strong>かつ自社では同等の実装ができないと確定する場合</strong>」という厳しい条件で、実装できてしまう機能は素通りします。</p>
+<p><strong>したがって、残る77件の中に、同じ理由で過大評価されている案が他にもあると考えるべきです。</strong>特に危ないのは、<strong>業種特化のPOS・基幹システムが存在する領域</strong>の案です。<a href="#s11">11節</a>に対処案を書きました。</p>
+
+<h2 id="s11">11. 次にやること（坂野様に決めていただきたいこと）</h2>
+<h3>この案そのものについて</h3>
+<p><strong>Claudeの推奨：止める。</strong>要件定義に進まないことを提案します。狭めた形（遺品整理業者専用／出張買取専門／複数営業所の本部一元管理）も検討しましたが、いずれも「無料の先行製品」か「POSに同梱」のどちらかに当たり、構造的な逃げ道が見つかりませんでした。</p>
+<h3>カタログの他の案について（3つの案）</h3>
+<div class="tw"><table>
+<thead><tr><th>案</th><th>やること</th><th>手間</th></tr></thead>
+<tbody>
+<tr><td><strong>案A（推奨）</strong><br>危ない案だけ再点検</td><td>残る77件のうち、<strong>業種特化のPOS・基幹システムが存在する領域の案</strong>を抜き出し、「その業種のPOSが、この機能を既に持っていないか」だけを調べ直す。該当したら印を付ける（落とすかは坂野様が判断）</td><td>中</td></tr>
+<tr><td>案B<br>次の候補へ進む</td><td>C-03は止め、別の案を選んでゲート0を実施する。カタログの再点検はしない</td><td>小</td></tr>
+<tr><td>案C<br>全77件を再点検</td><td>残る77件すべてについて上位カテゴリを調べ直す</td><td>大</td></tr>
+</tbody></table></div>
+<p><strong>案Aを推奨します。</strong>C-03で分かったのは「上位カテゴリを見ていなかった」という<strong>構造的な穴</strong>なので、放置すると次に選んだ案でも同じことが起きます。ただし全件やると重いので、危ない領域に絞ります。</p>
+
+<h3>着手前チェック：この母数にどうやって届くのか</h3>
+<p class="lead">※ decision-gate の定めにより、この項目は<strong>合否の判定には使いません</strong>。事実として記録するだけです。</p>
+<div class="tw"><table>
+<thead><tr><th>経路</th><th>実際に確認できたこと</th></tr></thead>
+<tbody>
+<tr><td>行政書士経由</td><td>古物商許可の申請を行政書士に依頼する事業者が多く、<strong>複数の事務所が古物台帳のExcelテンプレートを無料配布</strong>している。接点としては有力だが、<strong>その行政書士自身が無料で配っている</strong>のが難点</td></tr>
+<tr><td>業界団体</td><td>東京古物商防犯連盟が会員に<strong>紙の</strong>台帳を販売。全国遺品整理業協会は<strong>自前のクラウド</strong>を会員提供</td></tr>
+<tr><td>検索連動型広告</td><td><strong>書けませんでした。</strong>「古物台帳」で広告を出している会社がいるかを、この環境では確認できませんでした【未確認】</td></tr>
+<tr><td>業界紙</td><td>リユース経済新聞が実在し、片岡オートの製品もここで報じられている</td></tr>
+</tbody></table></div>
+
+<h2 id="s12">12. 出典</h2>
+<p class="lead">2026-08-28 に確認したものです。</p>
+<h3>法令・行政（一次情報）</h3>
+<ul class="src">
+<li><a href="https://laws.e-gov.go.jp/document?lawid=324AC0000000108" target="_blank" rel="noopener">e-Gov 古物営業法（第16条・第18条・第33条）</a></li>
+<li><a href="https://laws.e-gov.go.jp/document?lawid=407M50400000010" target="_blank" rel="noopener">e-Gov 古物営業法施行規則（第17条・第18条・第19条）</a></li>
+<li><a href="https://www.npa.go.jp/laws/notification/seian/seiki/2024kobutsukaisyaku.pdf" target="_blank" rel="noopener">警察庁 古物営業法等の解釈運用基準について（令和6年8月14日・丙生企発第272号）★クラウド一括管理の許容</a></li>
+<li><a href="https://www.npa.go.jp/publications/statistics/safetylife/R7kobutsushichiyagaikyo.pdf" target="_blank" rel="noopener">警察庁 令和7年中における古物営業・質屋営業の概況（許可件数614,118件）</a></li>
+<li><a href="https://www.keishicho.metro.tokyo.lg.jp/tetsuzuki/kobutsu/youshiki/chobo_yoshiki.html" target="_blank" rel="noopener">警視庁 帳簿の様式（別記様式第15号・第16号）</a></li>
+<li><a href="https://www.env.go.jp/content/000321556.pdf" target="_blank" rel="noopener">環境省 令和6年度リユース市場規模調査報告書 参考資料（経済センサスの事業所数）</a></li>
+<li><a href="https://www.env.go.jp/content/000064651.pdf" target="_blank" rel="noopener">環境省 令和3年度リユース市場規模調査報告書（2016年の事業所数）</a></li>
+</ul>
+<h3>競合（上位カテゴリ＝この案を止めた根拠）</h3>
+<ul class="src">
+<li><a href="https://recore-pos.com/function/" target="_blank" rel="noopener">RECORE 機能一覧（古物台帳が自動作成と明記）</a></li>
+<li><a href="https://recore-pos.com/price/" target="_blank" rel="noopener">RECORE 料金（買取プラン月16,500円・スタンダード月22,000円）</a></li>
+<li><a href="https://prtimes.jp/main/html/rd/p/000000005.000136939.html" target="_blank" rel="noopener">★タロスシステムズ デジタル台帳オプション 2026年4月1日提供開始</a></li>
+<li><a href="https://www.talos-web.com/dol.php" target="_blank" rel="noopener">タロスPOS デジタル台帳オプション</a></li>
+<li><a href="https://news.talos-web.com/column/20260512" target="_blank" rel="noopener">タロスシステムズ 紙の台帳の課題を訴求するコラム（2026年5月12日）</a></li>
+<li><a href="https://www.u-shop.jp/kaitori-option/" target="_blank" rel="noopener">スマレジ 買取オプション（月13,200円／店舗）</a></li>
+<li><a href="https://www.u-shop.jp/20230417-2-2-2/" target="_blank" rel="noopener">スマレジ 買取オプション リリース（2024年5月31日）</a></li>
+<li><a href="https://gia-nra.jp/service/nra_cloud_05/" target="_blank" rel="noopener">NRAクラウドシステム（全国遺品整理業協会）</a></li>
+<li><a href="https://kaitori-koji.jp/guide/kobutsu-system-hikaku" target="_blank" rel="noopener">買取コージ 古物台帳システム比較</a></li>
+<li><a href="https://spirepos.com/features/secondhand/" target="_blank" rel="noopener">SPIRE POS（台帳機能は確認できず）</a></li>
+<li><a href="https://www.moov.jp/" target="_blank" rel="noopener">MOOV 富士通フロンテック（台帳機能は確認できず）</a></li>
+</ul>
+<h3>競合（同カテゴリ・無料の先行製品）</h3>
+<ul class="src">
+<li><a href="https://kobutsu-daicho.com/" target="_blank" rel="noopener">★古物台帳クラウド（株式会社片岡オート）＝この案と同名・無料</a></li>
+<li><a href="https://www.recycle-tsushin.com/news/detail_10943.php" target="_blank" rel="noopener">リユース経済新聞 古物台帳クラウドがウェブ版へ移行・利用者約1,300人（2025年4月）</a></li>
+<li><a href="https://kobutsu-kicho.com/" target="_blank" rel="noopener">ネットで古物台帳記帳（トラスト行政書士事務所監修）</a></li>
+<li><a href="https://linarq.net/works/antique/" target="_blank" rel="noopener">古物台帳管理システム（株式会社リナーク）</a></li>
+<li><a href="https://apps.apple.com/jp/app/id6754265723" target="_blank" rel="noopener">古物管理バイク（App Store・無料＋月1,800円）</a></li>
+</ul>
+<h3>汎用・人手・市場</h3>
+<ul class="src">
+<li><a href="https://note.com/kaitori_nv_cloud/n/n973f751dec7e" target="_blank" rel="noopener">note 古物台帳の電子化 3つの方法を比較</a></li>
+<li><a href="https://godojimu.com/dl/kobutsu-daicho/" target="_blank" rel="noopener">行政書士事務所による古物台帳Excelテンプレート無料配布（例）</a></li>
+<li><a href="https://toukoren.jp/membership/member/" target="_blank" rel="noopener">東京古物商防犯連盟 会員向けに紙の古物台帳を販売</a></li>
+<li><a href="https://www.recycle-tsushin.com/news/detail_11719.php" target="_blank" rel="noopener">リユース経済新聞 市場規模 3兆2,628億円（2024年・15年連続拡大）</a></li>
+<li><a href="https://www.itreview.jp/products/recore-pos/reviews" target="_blank" rel="noopener">ITreview RECORE（レビュー0件）</a></li>
+<li><a href="https://www.itreview.jp/products/talos-pos/reviews" target="_blank" rel="noopener">ITreview タロスPOS（レビュー0件）</a></li>
+<li><a href="https://toyokeizai.net/articles/-/170347" target="_blank" rel="noopener">東洋経済 メルカリに食われるリユース業界（2017年）</a></li>
+</ul>
+
+<footer>
+ゲート0 事業性の確認 ／ C-03 古物台帳クラウド ／ 作成日 2026-08-28 ／ 合同会社R.Y.S<br>
+判定：<strong>止める（要件定義に進まない）</strong>。止める条件7つのうち3つが明確に該当（条件2・条件3・条件6b）<br>
+判定表の固定：<span class="mono">C-03_古物台帳/HANTEI_HYO.md</span>（調査着手前に確定）　／　決定の正本：<span class="mono">DECISIONS.md</span>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

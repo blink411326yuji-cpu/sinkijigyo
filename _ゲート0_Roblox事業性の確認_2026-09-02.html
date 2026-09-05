@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲート0：Robloxでゲームを作って売る案／Robloxのようなサービスを運営する案</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5b5b5b; --line:#d8d8d8;
+  --accent:#1b4f8a; --accentbg:#eef4fb;
+  --ng:#8a1b1b; --ngbg:#fbeeee;
+  --ok:#1b6b3a; --okbg:#eef8f1;
+  --warn:#8a5a00; --warnbg:#fdf6e8;
+  --code:#f3f3f3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161719; --fg:#e9e9ea; --muted:#a8a8ab; --line:#3a3c40;
+    --accent:#7fb2ea; --accentbg:#1d2733;
+    --ng:#f08a8a; --ngbg:#33201f;
+    --ok:#7fd3a0; --okbg:#1c2b22;
+    --warn:#e8bf6a; --warnbg:#2e2718;
+    --code:#22242a;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+body{
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  line-height:1.85; font-size:16px; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1180px; margin:0 auto}
+nav{
+  position:sticky; top:0; align-self:flex-start; flex:0 0 250px;
+  max-height:100vh; overflow-y:auto; padding:24px 14px 40px; border-right:1px solid var(--line);
+  font-size:13.5px; line-height:1.7;
+}
+nav h2{font-size:13px; color:var(--muted); margin:0 0 10px; letter-spacing:.08em}
+nav a{display:block; color:var(--fg); text-decoration:none; padding:3px 6px; border-radius:4px}
+nav a:hover{background:var(--accentbg); color:var(--accent)}
+nav .sub{padding-left:16px; font-size:12.5px; color:var(--muted)}
+main{flex:1 1 auto; min-width:0; padding:24px 28px 90px}
+h1{font-size:24px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:20px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:6px solid var(--accent); background:var(--accentbg)}
+h3{font-size:17px; margin:28px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px}
+h4{font-size:15px; margin:20px 0 6px; color:var(--accent)}
+p{margin:10px 0}
+ul,ol{margin:10px 0; padding-left:1.5em}
+li{margin:5px 0}
+.meta{color:var(--muted); font-size:13.5px; margin-bottom:22px}
+.tblwrap{overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+th,td{border-bottom:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+th{background:var(--accentbg); color:var(--accent); font-weight:700; white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.box{border:1px solid var(--line); border-left:6px solid var(--accent); background:var(--accentbg); padding:14px 16px; margin:18px 0; border-radius:0 6px 6px 0}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0; color:inherit}
+.tag{display:inline-block; font-size:12px; padding:1px 8px; border-radius:10px; border:1px solid currentColor; margin-right:6px; white-space:nowrap}
+.t-ng{color:var(--ng)} .t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-info{color:var(--accent)}
+.calc{background:var(--code); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin:14px 0; font-size:15px}
+.calc div{margin:4px 0}
+.big{font-size:19px; font-weight:700; color:var(--accent)}
+.note{font-size:13.5px; color:var(--muted)}
+code{background:var(--code); padding:1px 5px; border-radius:3px; font-size:13.5px}
+.src{font-size:13.5px}
+.src li{margin:7px 0; word-break:break-word}
+a{color:var(--accent)}
+hr{border:none; border-top:1px solid var(--line); margin:34px 0}
+.kpi{display:flex; flex-wrap:wrap; gap:12px; margin:16px 0}
+.kpi div{flex:1 1 190px; border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:var(--code)}
+.kpi .n{font-size:22px; font-weight:700; color:var(--accent); display:block; line-height:1.3}
+.kpi .l{font-size:13px; color:var(--muted)}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block} body{font-size:11pt}
+  h2{background:none}
+}
+@media (max-width:820px){
+  .wrap{display:block} nav{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); flex:none} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h2>目次</h2>
+  <a href="#s0">0. 結論（先に）</a>
+  <a href="#s1">1. 前提の訂正（3点）</a>
+  <a href="#s2">2. お金の流れと実効取り分</a>
+  <a href="#s3">3. 判定表（調べる前に決めた基準）</a>
+  <a href="#s4">4. ゲート0 問1〜問6</a>
+  <a class="sub" href="#q1">問1 いま何で達成しているか</a>
+  <a class="sub" href="#q2">問2 競合が持っている機能</a>
+  <a class="sub" href="#q3">問3 母数の引き算</a>
+  <a class="sub" href="#q4">問4 5年後に増えるか</a>
+  <a class="sub" href="#q5">問5 死ぬ条件3つ</a>
+  <a class="sub" href="#q6">問6 うちを選ぶ理由</a>
+  <a href="#s5">5. 判定結果（案A：ゲーム制作）</a>
+  <a href="#s6">6. 案B：プラットフォーム側の判定</a>
+  <a href="#s7">7. 素人でも作れるのか</a>
+  <a href="#s8">8. 必要な環境・知識</a>
+  <a href="#s9">9. 何があって何が足りないか</a>
+  <a href="#s10">10. 選択肢4案と推奨</a>
+  <a href="#s11">11. 次にやること（承認待ち）</a>
+  <a href="#s12">12. 出典</a>
+</nav>
+<main>
+
+<h1>ゲート0：事業性の確認<br>「Robloxでゲームを作って売る」案／「Robloxのようなサービスを運営する」案</h1>
+<p class="meta">
+作成日：2026年9月2日　／　作成：Claude（Cowork）　／　対象：合同会社R.Y.S<br>
+状態：<strong>未承認（判断材料）</strong>　／　この資料は decision-gate スキルの「ゲート0」に沿って作成しています。<br>
+ゲート0は「要件定義（何を作るか）を1文字も書く前に、そもそもこの案は成立するのかを確認する」工程です。
+</p>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0">0. 結論（先に）</h2>
+
+<div class="box ng">
+<h4>案B「Robloxのようなサービスを運営する側」→ <span class="tag t-ng">進まない（却下を推奨）</span></h4>
+<p>判定表の条件1・4に該当します。理由は1行で言えます。<br>
+<strong>1億5,000万人を集め、294百万ドル（約430億円）を調達し、企業価値35億ドル（約5,100億円）まで行った同種サービス（Rec Room）が、2026年6月1日に「コストが常に収益を上回った」として閉鎖しました。</strong>
+Roblox本体ですら2024年度に9億4,060万ドル、2023年度に11億6,000万ドルの純損失を出しており、いまだ黒字化していません。
+資金勝負にならない領域を選ぶ、という坂野様の選定軸の真逆にあたります。</p>
+</div>
+
+<div class="box warn">
+<h4>案A「Robloxでゲームを作って売る側」→ <span class="tag t-warn">条件付きで進める余地あり。ただし「主たる収益の柱」としては推奨しません</span></h4>
+<p>判定表のうち条件1（客が減る）・条件2（上位カテゴリが内包）には当たりません。しかし
+<strong>収益分配の資格を得たクリエイター24,500人の年収の中央値が1,575ドル（約23万円／年）</strong>です。
+坂野様が求めている「月50万円が5年10年入り続ける」＝年600万円は、この分布では<strong>上位1,000人前後（＝上位4%）に入って初めて届く水準</strong>です。
+宝くじではありませんが、「作れば入る」性質のものでもありません。</p>
+</div>
+
+<div class="box ok">
+<h4>もし関わるなら、いちばん現実的なのは「作る側」でも「運営側」でもなく <span class="tag t-ok">法人向けのRoblox制作受託</span></h4>
+<p>日本のRobloxは、ユーザー数が2022年Q4→2024年Q4で120%成長、収益分配資格を得た日本のクリエイターが同期間で415%増と、
+<strong>「市場は伸びているが、作れる事業者がまだ少ない」</strong>状態です。すでに国内に受託会社が複数存在するため空白ではありませんが、
+これは「客が実際にお金を払う」ことが確認できている唯一の道です。詳細は<a href="#s10">10章</a>。</p>
+</div>
+
+<hr>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1">1. 前提の訂正（3点）</h2>
+<p>ご質問の中に、事実と異なる前提が3つ含まれていました。ここを正さないまま戦略を立てると、全部ずれます。</p>
+
+<h3>訂正1：Robloxで作ったゲームは「アプリとして出す」ものではありません</h3>
+<p>
+坂野様は「ゲームを作ってアプリで出したい」と書かれていますが、Robloxのゲームは
+<strong>App StoreやGoogle Playに、自分のアプリとして並ぶわけではありません。</strong><br>
+Robloxという1つのアプリの<strong>中</strong>にある部屋のひとつ、という形になります。
+YouTubeに動画を上げるのと同じ構造で、Robloxは「ゲーム版のYouTube」だと考えると正確です。
+</p>
+<div class="tblwrap"><table>
+<thead><tr><th>やりたいこと</th><th>Roblox</th><th>自分でアプリを出す（App Store等）</th></tr></thead>
+<tbody>
+<tr><td>ストアに自分の名前で並ぶか</td><td>並ばない（Robloxアプリの中）</td><td>並ぶ</td></tr>
+<tr><td>公開までの手間</td><td>ボタン1つ。審査待ちほぼなし</td><td>Apple/Googleの審査。開発者登録が必要（Apple 年99ドル／Google 初回25ドル）</td></tr>
+<tr><td>集客</td><td>Robloxのおすすめ欄に乗るかどうかが全て</td><td>自分で集客。ゼロから</td></tr>
+<tr><td>手取り</td><td>後述。実効2〜3割程度</td><td>ストア手数料15〜30%を引いた残り</td></tr>
+<tr><td>必要な技術力</td><td>低〜中</td><td>中〜高</td></tr>
+</tbody>
+</table></div>
+<p class="note">※「すぐ公開できる」というYouTubeの情報は<strong>正しい</strong>です。ただしそれは「Robloxの中に公開できる」という意味です。</p>
+
+<h3>訂正2：「AIでマインクラフトと同等のものが作れた」の正体</h3>
+<p>これはおそらく次の2つのどちらか（または両方が混ざったもの）です。<strong>どちらも「素人がマインクラフトを作って売れた」話ではありません。</strong></p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>実際に起きたこと</th><th>誤解されやすい点</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Oasis（Decart社／2024年10月）</strong><br>AIが「マインクラフトの映像を、その場で1コマずつ生成し続ける」実験。プログラムでできたゲームではなく、AIが絵を描き続けているだけ。</td>
+<td>操作はできるので「動いている」ように見えるが、<strong>保存もできず、配布もできず、商品にならない。</strong>H100という1枚数百万円のAI用GPUを動かし続けて720p／20fpsが限界。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Codex Mortis（2026年）</strong><br>個人開発者がClaudeとの対話だけで3か月かけてSteamにデモを出した実例。「バイブコーディング」と呼ばれる手法。</td>
+<td>これは<strong>本当に起きた</strong>。ただし作者はゲームエンジンを使わずに独自の技術基盤（PIXI.js・bitECS・Electron・TypeScript）を組み上げており、<strong>技術がまったくない人ではない。</strong>さらにSteamでは「AI slop（AIのゴミ）」と酷評され、購入ボイコットまで起きた。</td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>ここが今回いちばん重要です</h4>
+<p><strong>AIで「動くもの」を作る難易度は、実際に激減しました。ここは坂野様の見立てが正しいです。</strong><br>
+しかし、<strong>「動くものを作れる」と「お金が入る」の間には、まったく別の壁があります。</strong>
+Codex Mortisは動くものが3か月でできましたが、市場からは拒絶されました。
+つまり<strong>AIが下げたのは「制作のコスト」であって、「選ばれる確率」ではありません。</strong>
+むしろ全員が同じだけ安く作れるようになった結果、<strong>選ばれる確率は下がります。</strong></p>
+</div>
+
+<h3>訂正3：Roblox自身も、いま逆風の中にいます</h3>
+<div class="kpi">
+  <div><span class="n">1億3,200万人</span><span class="l">2026年Q1のDAU（1日あたり利用者）。市場予想1億4,380万人を約1,180万人下回った</span></div>
+  <div><span class="n">通期見通し下方修正</span><span class="l">ブッキング見通しを8.28〜8.55億ドル → 7.33〜7.60億ドルへ引き下げ</span></div>
+  <div><span class="n">▲9億4,060万ドル</span><span class="l">2024年度の純損失（2023年度は▲11億6,000万ドル）</span></div>
+</div>
+<p>原因はRobloxのCFOの説明によれば、<strong>年齢確認の義務化でユーザーがチャット等の機能を使えなくなり、利用時間が落ちたこと</strong>。
+CEOは<strong>アプリストアの評価低下が新規登録の減少に効いている可能性</strong>にも言及しています。
+「伸び続ける前提のプラットフォームに乗る」という話ではなくなっている、というのが2026年9月時点の事実です。</p>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2">2. お金の流れと、実際の手取り（実効取り分）</h2>
+<p>ここが収益性の核心です。「開発者の取り分70%」とよく書かれますが、<strong>これは現金の70%ではありません。</strong></p>
+
+<h4>お金は2回、目減りします</h4>
+<ol>
+<li><strong>1回目：ゲーム内販売の分配</strong>　プレイヤーが払ったRobuxのうち、開発者に入るのは<strong>70%（Robuxのまま）</strong>。</li>
+<li><strong>2回目：DevExでの現金化</strong>　そのRobuxを現金に換えるレートが、プレイヤーが買った値段よりずっと安い。</li>
+</ol>
+
+<div class="calc">
+<div class="note">■ プレイヤーがWeb版で1,000円ぶん課金した場合（1ドル=150円、$1=100 Robux で計算）</div>
+<div>プレイヤーの支払い　　　　：1,000円 ＝ 約 <strong>666 Robux</strong></div>
+<div>↓ ゲーム内販売の分配 70%</div>
+<div>開発者に入るRobux　　　　：<strong>466 Robux</strong></div>
+<div>↓ DevExで現金化（1 Robux = $0.0038）</div>
+<div>開発者の手取り　　　　　　：466 × $0.0038 = $1.77 ＝ 約 <strong>266円</strong></div>
+<div class="big" style="margin-top:10px">実効取り分 ＝ 約 26.6%</div>
+<div class="note">※ スマホアプリ経由の課金だとAppleやGoogleの取り分が先に引かれるため、Robuxの単価が上がり、この比率はさらに下がります。</div>
+</div>
+
+<div class="box">
+<h4>2026年6月8日から、条件を満たすと約1.4倍になりました</h4>
+<p>米国の<strong>年齢確認済み18歳以上</strong>のプレイヤーの支出に限り、DevExレートが $0.0038 → <strong>$0.0054</strong> に引き上げられました（42%増）。<br>
+条件：R15アバターに対応していること、「novel games（深いゲーム性と高品質なビジュアルを備えたゲーム）」であること、対象は米国のみ。<br>
+この条件が満たせた場合の実効取り分は <strong>約37.8%</strong>。逆に言えば、<strong>日本のプレイヤーからの課金はこの対象外</strong>です。</p>
+</div>
+
+<h4>換金の条件（DevEx）</h4>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>年齢</td><td>13歳以上</td></tr>
+<tr><td>最低換金額</td><td><strong>30,000 Earned Robux</strong>（＝約114ドル／約17,000円）貯まらないと1円も引き出せない</td></tr>
+<tr><td>アカウント</td><td>Robloxの認証済みメールアドレス、DevExポータル（Tipalti）のアカウント</td></tr>
+<tr><td>税務書類</td><td>日本からは <strong>Form W-8BEN</strong>（米国非居住者用）を提出</td></tr>
+<tr><td>法人で受け取れるか</td><td><strong>可能</strong>。Tipaltiは個人・法人（business entity）の両方に対応。合同会社R.Y.Sで受け取る形が取れます</td></tr>
+<tr><td>対応国</td><td>100か国以上（日本を含む。ただしRobloxは国別の一覧を公表しておらず、支払方法により差がある）<span class="tag t-warn">一部未確認</span></td></tr>
+<tr><td>手数料</td><td>支払方法により変動（PayPalで最大21ドル）＋ 為替手数料 1.9〜3%</td></tr>
+</tbody>
+</table></div>
+<p class="note"><strong>【未確認】</strong>日本の法人がDevExを受け取る際の消費税・法人税の扱いについては、税理士への確認が必要です。R.Y.Sは2027年2月1日に課税事業者となる予定のため、それまでの期間と以降で扱いが変わる可能性があります。この資料では判断していません。</p>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3">3. 判定表（★調べる前に決めた基準）</h2>
+<p class="note">decision-gate スキルの決まりに従い、調査結果に合わせて基準が動かないよう、判定基準を先に固定しています。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>これに当たったら「進まない」</th><th>対応する問い</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>主客が5年後に減る</td><td>問4</td></tr>
+<tr><td>2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td>問1②・問2</td></tr>
+<tr><td>3</td><td>死ぬ条件3つのうち、1つでも既に起きている</td><td>問5</td></tr>
+<tr><td>4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標（月50万円）に届かない</td><td>問3</td></tr>
+<tr><td>5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td>問1</td></tr>
+<tr><td>6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td>問6②</td></tr>
+<tr><td>6b</td><td>顧客がそもそも2つを並べて比べない</td><td>問6③</td></tr>
+<tr><td>7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td>問6③</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4">4. ゲート0：6つの問い（案A＝Robloxでゲームを作る側）</h2>
+
+<h3 id="q1">問1　この客は、いま同じ目的を何で達成しているか</h3>
+<p><strong>客＝Robloxで遊ぶ子ども・10代。目的＝「友達と一緒に暇をつぶす／流行っているものに乗る」。</strong></p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>探し先</th><th>実際に何があるか</th><th>この案の機能を持っているか</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>同じカテゴリ</td><td>Roblox上の<strong>670万本のエクスペリエンス（ゲーム）</strong>、310万人の開発者</td><td>持っている（完全に同じ土俵）</td></tr>
+<tr><td>2</td><td><strong>上位カテゴリ</strong></td><td>Roblox本体（プラットフォーム自身がおすすめ欄・検索・トレンドを握る）／Fortnite Creative・UEFN／Minecraft（サーバー・MOD）</td><td>プラットフォーム側が「どのゲームを見せるか」を100%決めている。<strong>ここが最大の構造的リスク</strong></td></tr>
+<tr><td>3</td><td>下位・単機能</td><td>Robloxの人気ジャンル模倣ゲーム（Tycoon系・Obby系・Simulator系）が無数に存在。テンプレートも大量に流通</td><td>持っている</td></tr>
+<tr><td>4</td><td>汎用ツール</td><td>YouTube・TikTok・Discord（＝「暇つぶし」という目的の競合はゲームだけではない）</td><td>目的を満たす</td></tr>
+<tr><td>5</td><td>人手</td><td>該当なし（消費者向けのため）</td><td>該当なし</td></tr>
+</tbody>
+</table></div>
+<p><span class="tag t-ok">5つとも埋まりました</span>→ 判定条件5には当たりません。</p>
+
+<div class="box warn">
+<h4>調べ方の補足：低評価レビュー・チェンジログ・価格改定</h4>
+<p>本来ゲート0では競合の低評価レビュー等まで見ますが、今回の「競合」は670万本のゲームであり、個別に見る意味がありません。
+代わりに<strong>プラットフォーム側（Roblox本体）のチェンジログにあたる公式発表</strong>を見たところ、次が分かりました。</p>
+<ul>
+<li>2026年7月：Robloxが<strong>モバイルで、テキストを打つだけでゲームの原型が作れる「Build」を発表</strong>（初期はニュージーランドのみ、公開は16歳以上）</li>
+<li>同時に <strong>「AIスラップ（質の低い生成コンテンツ）は、検出結果ベースの発見システムには表示されない」</strong> と明記</li>
+</ul>
+<p><strong>これは決定的です。</strong>「AIで簡単に作れる」ようになったのと同時に、<strong>Roblox側が「AIで簡単に作ったものは、おすすめ欄に出さない」と宣言している</strong>ということです。</p>
+</div>
+
+<h3 id="q2">問2　競合が「既に持っている機能」を、先に全部書いたか</h3>
+<p>今回の案には「新しい機能」が存在しません。Robloxで人気の型（Tycoon／Simulator／Obby／Horror／Roleplay）はすべて既に大量に存在します。
+<strong>この案は「機能で差をつける案」ではなく、「面白さと運の勝負に参加する案」です。</strong>ここを取り違えないことが重要です。</p>
+<p class="note">確認した具体名：Roblox公式のジャンル別ランキング上位（Steal a Brainrot、Blox Fruits 等）、および Roblox Creator Hub のマネタイズ手段8種（Creator Rewards／ゲーム内アイテム／サブスク／有料アクセス／アバターアイテム／モデル・プラグイン販売／ゲーム内広告／コマース）。</p>
+
+<h3 id="q3">問3　母数を引き算したか。その統計の内訳を読んだか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>段</th><th>数</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td>Roblox上の開発者</td><td>310万人</td><td>公開統計（2025）</td></tr>
+<tr><td>Roblox上のエクスペリエンス</td><td>670万本</td><td>公開統計（2025）</td></tr>
+<tr><td>↓ <strong>DevExの資格（30,000 Robux到達）を得た人</strong></td><td><strong>24,500人超</strong></td><td>Roblox公式・年次経済インパクトレポート（2024年12月31日時点）</td></tr>
+<tr><td>その24,500人の<strong>年収の中央値</strong></td><td><strong>1,575ドル（約23万円）／12か月</strong></td><td>同上</td></tr>
+<tr><td>上位1,000人の平均</td><td>82万ドル（2024）→ 130万ドル（2025）</td><td>同上／Game Developer</td></tr>
+<tr><td>上位100人の平均</td><td>600万ドル</td><td>同上</td></tr>
+<tr><td>上位10人の平均</td><td>3,390万ドル</td><td>同上</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>内訳を読む（★これが今回いちばん厳しい数字です）</h4>
+<p>「クリエイターに年間10億ドル以上支払われた」という数字だけを見ると巨大に見えます。しかし内訳はこうです。</p>
+<ul>
+<li><strong>310万人の開発者のうち、1円でも引き出せる資格に到達したのは24,500人＝0.8%</strong></li>
+<li>その<strong>0.8%に入った人ですら、中央値は年23万円</strong>（月あたり約2万円）</li>
+<li>年600万円（月50万円）に届くのは、<strong>およそ上位1,000〜2,000人＝全開発者の0.03〜0.06%</strong></li>
+</ul>
+<p><strong>判定条件4（母数×単価×シェア1%が目標に届くか）への回答：</strong><br>
+DevEx資格者24,500人の1%＝245位に入った場合、上位1,000人の平均（130万ドル）と中央値（1,575ドル）の間のどこかになりますが、
+分布が極端な右肩下がりのため、<strong>245位ならおそらく年収数万〜数十万ドル規模</strong>で目標には届きます。<br>
+ただしこれは「<strong>310万人中の上位245人</strong>」という意味であり、<strong>実質的な達成確率は0.008%です。</strong>
+形式上は条件4に当たりませんが、<strong>「1%のシェアを取る」という前提自体が、この市場では現実的ではありません。</strong></p>
+</div>
+
+<h3 id="q4">問4　この客は5年後、増えるか減るか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>指標</th><th>方向</th><th>根拠</th></tr></thead>
+<tbody>
+<tr><td>グローバルDAU</td><td><span class="tag t-warn">短期は減少</span></td><td>2025年Q3 平均1億5,150万人 → 2026年Q1 1億3,200万人。市場予想を1,180万人下回り、通期ガイダンスも下方修正</td></tr>
+<tr><td>減少の原因</td><td>構造的だが一時的の可能性</td><td>CFO：年齢確認の義務化でチャット等が使えなくなりエンゲージメント低下。CEO：アプリストア評価の低下</td></tr>
+<tr><td>クリエイターへの支払総額</td><td><span class="tag t-ok">増加</span></td><td>2024年3月〜2025年3月で10億ドル超、前年比+31%</td></tr>
+<tr><td>日本のDAU</td><td><span class="tag t-ok">増加</span></td><td>2022年Q4→2024年Q4で <strong>+120%</strong></td></tr>
+<tr><td>日本の収益分配資格クリエイター</td><td><span class="tag t-ok">急増</span></td><td>同期間で <strong>+415%</strong>（分配総額は +78%）</td></tr>
+<tr><td>18歳以上への軸足移動</td><td>方針転換中</td><td>2026年6月からDevExレートを18歳以上向けに42%増。「子ども向け」から「大人も含むプラットフォーム」へ移行を図っている</td></tr>
+</tbody>
+</table></div>
+<p><span class="tag t-ok">判定条件1には当たりません</span>——利用者は短期的には減っていますが、原因が安全対策という一時的なものであり、支払総額は増え続けています。ただし<strong>「安泰な伸びる市場」ではありません。</strong></p>
+<p class="note">★注意：日本の「+415%」は<strong>母数がきわめて小さいところからの増加</strong>です。Roblox社は日本のクリエイターの実数を公表していないため、この%だけで日本市場の規模を判断してはいけません。<span class="tag t-warn">未確認</span></p>
+
+<h3 id="q5">問5　この案が死ぬ条件を3つ書き、その場で確認したか</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>「〜が起きたら、この案は成立しない」</th><th>その場での確認結果</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Robloxのおすすめ欄（発見アルゴリズム）が、AIで作られたゲームを表示しない方針を取ったら成立しない</td>
+<td class="t-ng"><strong>★既に起きています。</strong>2026年7月の公式発表で「AIスラップは検出結果ベースの発見システムに表示されない」と明記済み。<br>ただし「AI製だから出さない」ではなく「質が低いものは出さない」という趣旨のため、<strong>質を担保できれば回避可能</strong>。完全に死んでいるわけではありません</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AIで誰でも作れるようになり、供給が爆発して1本あたりの取り分が薄まったら成立しない</td>
+<td class="t-warn"><strong>★進行中です。</strong>Robloxが2026年7月に「テキストからゲームを作るモバイル機能」を発表。すでに670万本ある上に、今後さらに増える方向</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Robloxが分配率やDevExレートを引き下げたら成立しない</td>
+<td class="t-ok"><strong>起きていません。</strong>むしろ2025年9月に$0.0035→$0.0038、2026年6月に条件付きで$0.0054へ引き上げ。ただし<strong>レートはRoblox社が一方的に決められる</strong>という構造は変わりません</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="tag t-warn">判定条件3：グレー</span>——死ぬ条件1が「起きている」に近い状態ですが、質で回避できる余地が残っているため、完全な却下条件とは判定しませんでした。</p>
+
+<h3 id="q6">問6　当たったあと、顧客がうちと大手を並べたとき、うちを選ぶ理由は何か</h3>
+
+<h4>① まず「並べられるか」</h4>
+<p><strong>並べられます。</strong>というより、Robloxでは<strong>最初から全員が同じ棚に並んでいます。</strong>
+プレイヤーはRobloxのおすすめ欄で、うちのゲームと、資金と人員を持つ専業スタジオのゲームを、同じ画面で見比べます。</p>
+
+<h4>② うちを選ぶ理由</h4>
+<div class="box ng">
+<p><strong>現時点では、1つも書けませんでした。</strong></p>
+<p>ゲート0の決まりでは「使いやすさ・価格・導入の速さ・サポート・特定業種への合わせ込み」でもよいことになっています。
+しかし消費者向けエンタメでは、これらのほとんどが効きません。プレイヤーが選ぶ理由は<strong>「面白そうかどうか」だけ</strong>です。<br>
+そして「面白い」は、坂野様が現時点で持っている資産（資金・法人・物販の経験・仕入れルート）からは1つも導けません。
+これは能力の問題ではなく、<strong>資産と勝ち筋が接続していない</strong>という構造の問題です。</p>
+<p><strong>→ 判定条件6に該当します。</strong></p>
+</div>
+
+<h4>③ 顧客はそもそも2つを並べて比べてくれるか</h4>
+<p>比べてくれません。より正確には、<strong>比較の土俵に上がる前に落ちます。</strong>
+Robloxのおすすめ欄は「すでに遊ばれているゲーム」を上に出す仕組みのため、
+<strong>誰にも遊ばれていない新作は、誰にも見つからず、だから誰にも遊ばれない</strong>という循環に入ります。
+これを破るには、TikTok・YouTube・Discordでの外部集客か、Roblox広告への出稿が必要です。<br>
+<strong>→ 判定条件6bにも該当します。</strong></p>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5">5. 判定結果（案A：Robloxでゲームを作って売る）</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>主客が5年後に減る</td><td class="t-ok">当たらない</td></tr>
+<tr><td>2</td><td>上位カテゴリが機能を内包している</td><td class="t-ok">当たらない（機能の話ではないため）</td></tr>
+<tr><td>3</td><td>死ぬ条件の1つが既に起きている</td><td class="t-warn">グレー（死因1がほぼ起きている）</td></tr>
+<tr><td>4</td><td>母数×単価×シェア1%が目標に届かない</td><td class="t-warn">形式上は届くが、実質確率0.008%</td></tr>
+<tr><td>5</td><td>問1の探し先に埋まっていないものがある</td><td class="t-ok">当たらない</td></tr>
+<tr><td><strong>6</strong></td><td><strong>うちを選ぶ理由を1つも書けない</strong></td><td class="t-ng"><strong>★該当</strong></td></tr>
+<tr><td><strong>6b</strong></td><td><strong>顧客がそもそも2つを並べて比べない</strong></td><td class="t-ng"><strong>★該当</strong></td></tr>
+<tr><td>7</td><td>並べられない理由が「今大手がやっていないから」しか書けない</td><td class="t-ok">当たらない</td></tr>
+</tbody>
+</table></div>
+
+<div class="box ng">
+<h4>判定：<strong>「事業（収益の柱）としては、進まない」</strong></h4>
+<p>条件6と6bに該当したため、ゲート0の決まりに従い、<strong>要件定義には進めません。</strong></p>
+<p><strong>ただし、これは「やるな」という意味ではありません。</strong>ゲート0が判定しているのは
+「<strong>これを月50万円の柱にできるか</strong>」であって、「触ってはいけないか」ではありません。
+学習・実験・受託の営業材料として作ることには、はっきりした価値があります（<a href="#s10">10章</a>で扱います）。</p>
+</div>
+
+<div class="box">
+<h4>ゲート0で防げないこと（必ずお伝えします）</h4>
+<p>ゲート0が防げるのは「調べれば分かること」だけです。次は防げません。</p>
+<ul>
+<li>坂野様が実際に作ってみたら、想定外に面白いものができるかどうか</li>
+<li>坂野様が既に持っているYouTube制作の仕組みと組み合わせたときに、集客が効くかどうか</li>
+</ul>
+<p>これらは<strong>実際に1本作って出してみる</strong>ことでしか分かりません。</p>
+</div>
+
+<h4>着手前チェック：この母数に、どうやって届くのか（★合否には使いません）</h4>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>記載</th></tr></thead>
+<tbody>
+<tr><td>知ってもらう経路</td><td>①TikTok／YouTube Shortsでのゲーム紹介動画（坂野様は既にYouTube動画の自動作成プロジェクトを進行中＝<strong>この資産は接続できる可能性がある</strong>）／②Roblox内の有料広告（Robux建て）／③Discordコミュニティ</td></tr>
+<tr><td>月に何人に届きうるか</td><td><strong>根拠が薄い。</strong>Robloxの主要ユーザーは海外の10代であり、日本語のYouTube／TikTokからの流入とはほぼ重ならないため、既存のYouTube資産がそのまま効くかは不明</td></tr>
+<tr><td>結論</td><td><strong>経路は書けたが、届く数の見積もりは書けなかった。</strong>最初のフェーズで潰すべき不確実性として記録します</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6">6. 案B：「Robloxのようなサービスを運営する側」の判定</h2>
+<p>こちらは、6問を全部埋めるまでもなく、問4と問3で止まります。</p>
+
+<h3>同種サービスの結末</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>サービス</th><th>規模</th><th>結果</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Rec Room</strong></td>
+<td>累計1億5,000万人以上のプレイヤー／6ラウンドで2億9,400万ドル（約440億円）調達／企業価値35億ドル（2021年12月シリーズF）</td>
+<td class="t-ng"><strong>2026年6月1日に閉鎖。</strong>共同創業者兼CEO：「数字が合うような方法を見つけるために長時間試みた」。会社は「コストが常に収益を上回った」と説明。一部資産はSnapが取得</td>
+</tr>
+<tr>
+<td><strong>Roblox本体</strong></td>
+<td>DAU 1億3,200万人（2026年Q1）／年商10億ドル超</td>
+<td class="t-ng"><strong>いまだ赤字。</strong>2023年度 ▲11億6,000万ドル、2024年度 ▲9億4,060万ドル、2025年度も10億ドル超の純損失</td>
+</tr>
+</tbody>
+</table></div>
+
+<h3>なぜ赤字になるのか（構造）</h3>
+<p>UGC（ユーザーが作るコンテンツ）プラットフォームは、収益の70%を作り手に配ったうえで、
+残り30%から次の全部を賄わなければなりません。</p>
+<ul>
+<li><strong>サーバー費用</strong>：世界中のプレイヤーが同時に接続する。Robloxは「インフラコスト削減が課題」と自ら述べている</li>
+<li><strong>安全対策（Trust &amp; Safety）</strong>：主要利用者が未成年のため、チャット監視・年齢確認・通報対応に膨大な人員とAIが必要。Robloxは200以上のAIパイプラインを運用</li>
+<li><strong>法規制対応</strong>：日本なら青少年保護、EUならDSA・GDPR、米国ならCOPPA。<strong>1人法人では対応不能</strong></li>
+<li><strong>ニワトリと卵</strong>：作り手がいないと遊ぶ人が来ない、遊ぶ人がいないと作り手が来ない。これを突破するには数年間の赤字投下が必須</li>
+</ul>
+
+<div class="box ng">
+<h4>判定：<strong>「進まない」（却下を推奨）</strong></h4>
+<ul>
+<li><strong>判定条件4に該当</strong>：黒字化に必要な規模が、合同会社R.Y.Sの資金力と桁が違う（440億円調達しても届かなかった実例あり）</li>
+<li><strong>坂野様の選定軸①に真正面から反する</strong>：「資金力（マネー勝負）では大手に勝てないので資金勝負にならない領域を選ぶ」</li>
+<li><strong>坂野様の選定軸②にも反する</strong>：この領域は「大手が参入しない」のではなく、<strong>大手が参入して負けている</strong>領域です</li>
+</ul>
+</div>
+
+<hr>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7">7. 素人でも作れるのか（正直な回答）</h2>
+
+<div class="tblwrap"><table>
+<thead><tr><th>やりたいこと</th><th>素人＋AIで可能か</th><th>期間の目安</th></tr></thead>
+<tbody>
+<tr><td>Robloxで「動く3Dゲーム」を1本公開する</td><td class="t-ok"><strong>できます</strong>。ここは断言できます</td><td>1〜3か月（週10時間として）</td></tr>
+<tr><td>既存の人気ジャンル（Obby・Tycoon等）の模倣を作る</td><td class="t-ok"><strong>できます</strong></td><td>2週間〜1か月</td></tr>
+<tr><td>マインクラフト同等の「独自ゲーム」を作る</td><td class="t-warn"><strong>見た目は近づけられるが、中身は別物になります</strong></td><td>——</td></tr>
+<tr><td>それが人気ランキングに入り、月50万円を継続的に生む</td><td class="t-ng"><strong>AIでは解決しません</strong></td><td>——</td></tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>「マインクラフトと同等」が難しい本当の理由</h4>
+<p>マインクラフトの本体は「見た目のブロック」ではなく、<strong>何万個ものブロックを、遅くならずに、何十人が同時に触っても壊れないように管理する仕組み</strong>です。
+ここは AI に「マインクラフトみたいなの作って」と言って出てくる部分ではなく、<strong>作った後に必ず出る「重い・落ちる・巻き戻る」を直し続ける工程</strong>です。
+そして<strong>この修正工程こそが、プログラミングの知識が要る場所</strong>です。<br>
+AIは「1回目の8割」を一瞬で作ってくれますが、<strong>残り2割の修正で、AIは同じ場所を何度も壊します。</strong>
+そのときに「AIの出した答えが正しいかどうか」を判断できないと、無限ループに入ります。これが素人が詰まる唯一にして最大の壁です。</p>
+</div>
+
+<div class="box ok">
+<h4>ただし、坂野様には有利な点があります</h4>
+<p>Coworkでのシステム開発をすでに継続されており、<strong>「AIに作らせて、動かして、直す」という往復そのものには慣れておられます。</strong>
+これは一般的な「素人」より2〜3歩前にいる状態です。Roblox StudioとLuau（Robloxの言語）は初めてでも、<strong>進め方は既に身についています。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8">8. 必要な環境・知識</h2>
+
+<h3>必要な環境（お金はほぼかかりません）</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>項目</th><th>必要なもの</th><th>費用</th></tr></thead>
+<tbody>
+<tr><td>PC</td><td>Windows 10/11。目安：<strong>メモリ16GB以上・SSD・GPU搭載（内蔵GPUでも動くが3D編集は重い）</strong>。坂野様の既存のWindows PCで、まず試すことは可能</td><td>0円（手持ちで開始可）</td></tr>
+<tr><td>ソフト</td><td><strong>Roblox Studio</strong>（公式・無料）</td><td>0円</td></tr>
+<tr><td>アカウント</td><td>Robloxアカウント＋メール認証</td><td>0円</td></tr>
+<tr><td>3Dモデル作成</td><td>Roblox Studio内蔵の機能＋<strong>Cube（Roblox公式の生成AI）</strong>でプロンプトから3Dオブジェクトを生成可能。凝るなら Blender（無料）</td><td>0円</td></tr>
+<tr><td>換金</td><td>DevEx（Tipalti）口座、Form W-8BEN</td><td>0円（送金手数料は都度）</td></tr>
+<tr><td>集客（任意）</td><td>Roblox内広告（Robux建て）、外部SNS</td><td>出すなら数万円〜</td></tr>
+</tbody>
+</table></div>
+<p><strong>初期投資はほぼゼロです。</strong>これは案Aの最大の長所です。失うのは時間だけで、お金はほとんど失いません。</p>
+
+<h3>必要な知識</h3>
+<div class="tblwrap"><table>
+<thead><tr><th>知識</th><th>どれくらい要るか</th><th>AIで代替できるか</th></tr></thead>
+<tbody>
+<tr><td><strong>Luau</strong>（Robloxのプログラミング言語。Luaの改良版）</td><td>読んで意味が分かる程度</td><td class="t-warn">書くのはAIで代替可。<strong>読めないと直せない</strong></td></tr>
+<tr><td>Roblox Studioの操作</td><td>必須</td><td class="t-ng">代替不可。自分で触って覚える（公式チュートリアルあり）</td></tr>
+<tr><td>3Dの基本（座標・当たり判定・カメラ）</td><td>感覚レベル</td><td class="t-warn">部分的に代替可</td></tr>
+<tr><td>ゲームデザイン（何が面白いか）</td><td><strong>ここが本体</strong></td><td class="t-ng"><strong>代替不可。AIは「平均的に無難なもの」しか出さない</strong></td></tr>
+<tr><td>集客・マーケティング</td><td><strong>ここが本体その2</strong></td><td class="t-ng">代替不可</td></tr>
+<tr><td>英語</td><td>あると圧倒的に有利</td><td class="t-ok">翻訳で代替可</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9">9. 坂野様に「何があって」「何が足りていないか」</h2>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>項目</th><th>この案での効き方</th></tr></thead>
+<tbody>
+<tr><td class="t-ok"><strong>ある</strong></td><td>AIに作らせて直す進め方（Cowork開発の実績）</td><td class="t-ok"><strong>強く効く。</strong>Roblox Studioへの移行は、ゼロからの学習ではなく「別の道具に持ち替える」だけ</td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>法人格（合同会社R.Y.S）</td><td class="t-ok"><strong>効く。</strong>DevExは法人受け取りに対応。また<strong>受託（案C）をやるなら法人であることが必須級</strong></td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>YouTube動画の自動作成プロジェクト</td><td class="t-warn">効く可能性はあるが、<strong>未検証。</strong>Robloxの主要ユーザーは海外の10代で、日本語動画とは客層が重ならない</td></tr>
+<tr><td class="t-ok"><strong>ある</strong></td><td>初期投資を出せる資金体力</td><td class="t-warn">この案では<strong>ほぼ不要</strong>（＝強みが活きない）</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td><strong>ゲームを面白くする設計力・目利き</strong></td><td class="t-ng"><strong>致命的。</strong>ここが勝敗の9割。AIでは埋まらない</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td><strong>Robloxのユーザー層（海外の10代）への理解</strong></td><td class="t-ng"><strong>致命的。</strong>何が流行っているかを肌で分かる人が勝つ市場。ここは調査では追いつきにくい</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td>Luau・Roblox Studioの経験</td><td class="t-warn">1〜2か月で埋まる。障害としては小さい</td></tr>
+<tr><td class="t-ng"><strong>ない</strong></td><td>英語圏コミュニティ（Discord等）への接続</td><td class="t-warn">埋められるが時間がかかる</td></tr>
+</tbody>
+</table></div>
+
+<div class="box warn">
+<h4>いちばん率直な所見</h4>
+<p>坂野様の既存の資産（法人・資金・仕入れ・物販の経験・営業）は、<strong>「B2B（会社を相手にする商売）」で強く効く形</strong>をしています。<br>
+一方この案Aは、<strong>資産がほぼ何も効かず、「海外の10代に受けるものを作るセンス」という、いま持っていない1点だけで勝負する</strong>形になっています。<br>
+これは「向いていない」という話ではなく、<strong>手持ちのカードと、この勝負で使うカードが違う</strong>という話です。</p>
+</div>
+
+<hr>
+
+<!-- ============ 10 ============ -->
+<h2 id="s10">10. 選択肢4案と、推奨</h2>
+<p class="note">preferences のとおり、複数案＋推奨を提示します。<strong>決めるのは坂野様です。</strong></p>
+
+<div class="tblwrap"><table>
+<thead><tr><th></th><th>案</th><th>内容</th><th>初期費用</th><th>月50万円到達の現実性</th><th>ゲート0判定</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Robloxでゲームを作って売る</td>
+<td>自社でゲームを制作し、ゲーム内課金＋DevExで換金</td>
+<td>ほぼ0円</td>
+<td class="t-ng">全開発者の上位0.03〜0.06%。<strong>現実性は極めて低い</strong></td>
+<td class="t-ng">進まない（条件6・6b該当）</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Robloxのようなサービスを運営する</td>
+<td>UGCプラットフォームを自社で立ち上げる</td>
+<td>数十億円〜</td>
+<td class="t-ng">440億円調達した先行企業が撤退済み</td>
+<td class="t-ng">進まない（条件4該当）</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>法人向けRoblox制作の受託</strong></td>
+<td>日本企業のブランド体験・採用・販促用のRobloxワールドを受注制作</td>
+<td>制作環境のみ（ほぼ0円）＋営業の時間</td>
+<td class="t-warn"><strong>案A・Bより桁違いに高い。</strong>1件数十万〜数百万円の受注が成立する市場が実在する</td>
+<td class="t-warn"><strong>未判定</strong>（別途ゲート0が必要）</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>触らない（他案に集中）</td>
+<td>既存の検討中案（ルート作成アプリ／海外ブランド正規販売店／SaaS探索）に資源を集中</td>
+<td>0円</td>
+<td>——</td>
+<td>——</td>
+</tr>
+</tbody>
+</table></div>
+
+<h3>推奨：<strong>案D を主軸に置き、案A を「学習・営業材料」として月10時間だけ試す</strong></h3>
+<div class="box ok">
+<p><strong>理由（3つ）</strong></p>
+<ol>
+<li><strong>案Aは事業としては通らないが、コストがほぼゼロ。</strong>失うのは時間だけで、お金は失いません。
+「Robloxで実際に1本作って公開した法人」という実績は、<strong>案C（受託）に進む場合の唯一の営業材料</strong>になります。逆に、これが無いと案Cの営業はできません。</li>
+<li><strong>案Cは有望に見えますが、まだゲート0を通していません。</strong>国内にはすでに複数の受託会社（cloudpack／Crackin／newgame／Samu-Rox Studio 等）が存在し、
+「なぜ坂野様に頼むのか」という問6が未回答です。<strong>ここを飛ばして飛びつくのは、2026年8月に凍結した案と同じ失敗になります。</strong></li>
+<li><strong>いま最優先で決着させるべきは、SaaS探索の条件（最終版）の承認6項目です。</strong>
+こちらは坂野様の資産（法人・資金・B2B営業）が効く形をしており、8月26日から回答待ちで止まっています。<strong>Robloxはこちらを止めてまでやる案ではありません。</strong></li>
+</ol>
+</div>
+
+<div class="box warn">
+<h4>もし「案Cを本気で検討したい」場合</h4>
+<p>次のセッションで <strong>案C専用のゲート0</strong> を実施します。特に問6（既存の受託会社4社に対して、なぜ坂野様が選ばれるのか）と、
+問3（日本でRobloxに予算を出す企業の実数）を埋める必要があります。
+現時点では<strong>「市場は伸びているらしい」以上のことは何も分かっていません。</strong></p>
+</div>
+
+<hr>
+
+<!-- ============ 11 ============ -->
+<h2 id="s11">11. 次にやること（承認待ち）</h2>
+<p>以下から選んでご指示ください。</p>
+<div class="tblwrap"><table>
+<thead><tr><th>#</th><th>選択肢</th><th>Claudeがやること</th></tr></thead>
+<tbody>
+<tr><td>①</td><td><strong>推奨</strong>：この判定を受け入れ、SaaS探索の承認6項目に戻る</td><td>SaaS探索の条件（最終版）の6項目を再提示し、承認を取る</td></tr>
+<tr><td>②</td><td>案C（法人向け受託）のゲート0を実施する</td><td>受託市場の競合4社の実態・料金・実績を調査し、6問を埋めて判定する</td></tr>
+<tr><td>③</td><td>案Aを学習として始める（事業扱いはしない）</td><td>Roblox Studioの導入手順と、最初の1本を作る手順書をHTMLで出す</td></tr>
+<tr><td>④</td><td>この判定をGeminiにクロスレビューさせる</td><td>cross-review スキルに従い、貼り付け用のレビュー依頼文を作成する（decision-gate の決まりでは、ゲート0の結論は重要度「高」＝レビュー推奨）</td></tr>
+</tbody>
+</table></div>
+
+<div class="box">
+<h4>記帳について</h4>
+<p>decision-gate の決まりでは、判定が「進まない」場合も <code>DECISIONS.md</code> に記帳します（同じ案を再検討するときに、同じ調査を繰り返さないため）。
+記帳先のフォルダをご指定いただければ、記帳用の内容をお出しします。</p>
+</div>
+
+<hr>
+
+<!-- ============ 12 ============ -->
+<h2 id="s12">12. 出典</h2>
+<p class="note">一次情報（Roblox公式・公式ドキュメント・IR）を優先しています。二次情報には印を付けています。</p>
+
+<h4>Roblox公式・公式ドキュメント（一次情報）</h4>
+<ul class="src">
+<li>Roblox Support「Developer Exchange – Help and Information Page」（DevExレート $0.0035／$0.0038／$0.0054）<br>https://en.help.roblox.com/hc/en-us/articles/13061189551124-Developer-Exchange-Help-and-Information-Page</li>
+<li>Roblox Creator Hub「Developer Exchange Program」（参加条件：13歳以上・30,000 Earned Robux・認証メール・W-8/W-9）<br>https://create.roblox.com/docs/production/monetization/developer-exchange</li>
+<li>Roblox Creator Hub「Earn on Roblox」（分配率：ゲーム内販売70%／マーケットプレイス30%／現地通貨最大90%、収益化手段8種）<br>https://create.roblox.com/docs/production/earn-on-roblox</li>
+<li>Roblox Support「Tax and DevEx Portal (Tipalti) Information」（法人での受け取り可、対応100か国以上、手数料）<br>https://en.help.roblox.com/hc/en-us/articles/27985018895124-Tax-and-DevEx-Portal-Tipalti-Information</li>
+<li>Roblox Newsroom（2026年4月）「Roblox Fuels Next Wave of High-Fidelity Games for Over 18 Players, Increases Qualifying DevEx Rate by 42%」（$0.0054、R15、米国18歳以上、2026年6月8日開始）<br>https://about.roblox.com/newsroom/2026/04/roblox-fuels-high-fidelity-games-over-18-players-increases-qualifying-devex-rate-42</li>
+<li>Roblox Newsroom（2026年7月）「Build Without Limits on Roblox」（モバイル制作ツールBuild、Cube、AIスラップは発見システムに表示しない、初期はニュージーランドのみ）<br>https://about.roblox.com/newsroom/2026/07/build-without-limits-on-roblox</li>
+<li>Roblox Newsroom（2025年9月）「Annual Roblox Economic Impact Report」（<strong>DevEx適格クリエイター24,500人超・中央値$1,575</strong>、上位10／100／1,000人の平均、年間支払10億ドル超）<br>https://about.roblox.com/newsroom/2025/09/roblox-annual-economic-impact-report</li>
+<li>Roblox Newsroom（2025年3月）「Introducing Roblox Cube」（生成AI Cube）<br>https://about.roblox.com/newsroom/2025/03/introducing-roblox-cube</li>
+<li>Roblox Corporation「Q1 2026 Earnings Shareholder Letter」<br>https://s27.q4cdn.com/984876518/files/doc_financials/2026/q1/Q1-2026-Earnings-Shareholder-Letter.pdf</li>
+<li>PR TIMES／Roblox Corporation「日本版 ロブロックス経済効果年次報告書」（日本DAU +120%、収益分配資格クリエイター +415%、分配総額 +78%）<br>https://prtimes.jp/main/html/rd/p/000000010.000136913.html</li>
+</ul>
+
+<h4>報道・二次情報</h4>
+<ul class="src">
+<li>Sherwood News「Roblox craters after Q1 daily active users miss estimates while management slashes full-year guidance」（DAU 1億3,200万人、ガイダンス引き下げ、CFO／CEOコメント）<br>https://sherwood.news/markets/roblox-q1-2026-earnings-report-guidance-cut-daily-active-users-miss/</li>
+<li>GeekWire「Rec Room shutting down: Once valued at $3.5B, social gaming platform finds profits elusive」（2億9,400万ドル調達、35億ドル評価、1億5,000万人、2026年6月1日閉鎖）<br>https://www.geekwire.com/2026/rec-room-shutting-down-seattles-3-5b-social-gaming-platform-says-it-cant-make-the-business-work/</li>
+<li>PYMNTS「Profitability Still Out of Reach for Gaming Giant Roblox」（FY2024 ▲9億4,060万ドル、FY2023 ▲11億6,000万ドル）<br>https://www.pymnts.com/earnings/2025/profitability-still-out-of-reach-for-gaming-giant-roblox/</li>
+<li>Game Developer「The biggest Roblox creators earned an average of $1.3M in 2025」<br>https://www.gamedeveloper.com/business/the-biggest-roblox-creators-earned-an-average-of-1-3-million-in-2025</li>
+<li>Exploding Topics「Roblox Stats」（670万エクスペリエンス、310万開発者、地域別内訳）<br>https://explodingtopics.com/blog/roblox-stats</li>
+<li>XenoSpectrum「完全AI生成ゲームの衝撃と波紋：『Codex Mortis』が突きつける『バイブコーディング』の未来と"スロップ"論争」<br>https://xenospectrum.com/codex-mortis-first-fully-ai-generated-game-vibe-coding-controversy/</li>
+<li>TechCrunch「Decart's AI simulates a real-time, playable version of Minecraft」（Oasis）<br>https://techcrunch.com/2024/10/31/decarts-ai-simulates-a-real-time-playable-version-of-minecraft</li>
+<li>Pro Game Guides「How Much Do Robux Cost?」（Robux購入価格：$4.99＝500 Robux 等）<br>https://progameguides.com/roblox/roblox-price-guide-how-much-do-robux-cost/</li>
+<li>国内Roblox制作会社（案Cの競合として確認）：cloudpack／株式会社Crackin／株式会社newgame／Samu-Rox Studio（サムライソフト）／メタバースコレクション株式会社</li>
+</ul>
+
+<h4>この資料の限界（必ずお読みください）</h4>
+<div class="box warn">
+<ul>
+<li><strong>【未確認】</strong>日本の法人がDevEx収入を受け取る際の消費税・法人税の扱い。税理士への確認が必要です</li>
+<li><strong>【未確認】</strong>日本のRobloxクリエイターの実数。Roblox社は%のみ公表しており、絶対数を出していません</li>
+<li><strong>【未確認】</strong>DevEx対応国の公式一覧。Robloxは「100か国以上」としか公表していません</li>
+<li><strong>【概算】</strong>2章の実効取り分26.6%は、Web版の購入価格（$1＝100 Robux）と1ドル150円で計算した概算です。実際は購入経路・地域・税で変動します</li>
+<li>Robloxの数値は四半期ごとに変わります。<strong>この資料の賞味期限は約3か月（2026年12月まで）</strong>とお考えください</li>
+</ul>
+</div>
+
+<p class="note" style="margin-top:40px; border-top:1px solid var(--line); padding-top:16px">
+この資料は「見るための版」です。正本となる台帳（<code>DECISIONS.md</code> 等）はまだ作成していません。<br>
+判定に「進まない」が出たため、decision-gate の決まりに従い <code>ZENTEI.md</code>（前提台帳）も作成していません（進む場合のみ作成します）。<br>
+内容に食い違いが出た場合は、記帳後の <code>DECISIONS.md</code> を正とします。
+</p>
+
+</main>
+</div>
+</body>
+</html>

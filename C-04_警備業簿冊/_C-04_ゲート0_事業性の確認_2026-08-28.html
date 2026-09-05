@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C-04 警備業の法定備付簿冊メーカー ゲート0 事業性の確認</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5a5a5a; --line:#d5d8dd; --soft:#f5f6f8;
+  --accent:#1f4e79; --ng:#a8202a; --ngbg:#fdeced; --ok:#1f6b3a; --okbg:#eaf5ee;
+  --warn:#8a5a00; --warnbg:#fdf3e0;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16181c; --fg:#e8eaed; --muted:#a8adb6; --line:#3a3f47; --soft:#1e2126;
+    --accent:#8ab4e8; --ng:#ff9098; --ngbg:#3a1d20; --ok:#7ed39a; --okbg:#17301f;
+    --warn:#f0c36b; --warnbg:#332714;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:15px; line-height:1.85; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1240px; margin:0 auto}
+nav{
+  position:sticky; top:0; width:270px; flex:0 0 270px; max-height:100vh; overflow-y:auto;
+  padding:24px 14px; border-right:1px solid var(--line); font-size:13px; line-height:1.7;
+}
+nav h2{font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px; font-weight:600}
+nav a{display:block; padding:4px 6px; color:var(--fg); text-decoration:none; border-radius:4px}
+nav a:hover{background:var(--soft); color:var(--accent)}
+main{flex:1 1 auto; min-width:0; padding:28px 30px 90px}
+h1{font-size:23px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:19px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:5px solid var(--accent); background:var(--soft)}
+h3{font-size:16px; margin:26px 0 8px; color:var(--accent)}
+h4{font-size:14px; margin:18px 0 6px}
+p{margin:.6em 0}
+.meta{color:var(--muted); font-size:13px; margin:0 0 18px}
+.tblwrap{overflow-x:auto; margin:12px 0 18px; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:520px}
+th,td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+th{background:var(--soft); font-weight:600; white-space:nowrap}
+td.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-left-width:5px; border-radius:6px; padding:12px 16px; margin:16px 0; background:var(--soft)}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0}
+.tag{display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap}
+.tag.ng{background:var(--ng); color:#fff}
+.tag.ok{background:var(--ok); color:#fff}
+.tag.warn{background:var(--warn); color:#fff}
+.tag.gray{background:var(--muted); color:var(--bg)}
+code{background:var(--soft); padding:1px 5px; border-radius:3px; font-size:.92em}
+ul,ol{margin:.5em 0; padding-left:1.5em}
+li{margin:.28em 0}
+small{color:var(--muted)}
+a{color:var(--accent)}
+.src{font-size:12.5px; line-height:1.65}
+.src li{margin:.35em 0; word-break:break-all}
+hr{border:0; border-top:1px solid var(--line); margin:34px 0}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block}
+  body{font-size:11pt; color:#000; background:#fff}
+}
+@media (max-width:860px){
+  .wrap{display:block} nav{position:static; width:auto; max-height:none; border-right:0; border-bottom:1px solid var(--line)} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<h2>もくじ</h2>
+<a href="#s0">0. 結論</a>
+<a href="#s1">1. 判定表（調査前に固定）</a>
+<a href="#s2">2. 問1 いま何で達成しているか</a>
+<a href="#s3">3. 問2 競合が既に持っている機能</a>
+<a href="#s4">4. 問3 母数の引き算</a>
+<a href="#s5">5. 問4 5年後・10年後</a>
+<a href="#s6">6. 問5 死ぬ条件3つ</a>
+<a href="#s7">7. 問6 うちを選ぶ理由</a>
+<a href="#s8">8. 法令の裏取り</a>
+<a href="#s9">9. 現場の生の声</a>
+<a href="#s10">10. 補助金の裏取り（D-025の訂正）</a>
+<a href="#s11">11. 着手前チェック（届く経路）</a>
+<a href="#s12">12. それでも進めるなら</a>
+<a href="#s13">13. 未確認のまま残った点</a>
+<a href="#s14">14. 出典</a>
+</nav>
+<main>
+<h1>C-04 警備業の法定備付簿冊メーカー<br>ゲート0：事業性の確認</h1>
+<p class="meta">
+作成日：2026-08-28 ／ 状態：<strong>判定結果（未承認）</strong> ／ 対象：新規事業探索 進め方の段階6（案の選定と個別調査）<br>
+判定基準の正本：同フォルダの <code>HANTEI_HYO.md</code>（調査着手前に固定）／ 決定の正本：<code>C:\dev\_新規事業探索\DECISIONS.md</code><br>
+この資料は「見るための版」です。記載が正本と食い違ったときは <strong>正本（.md）を正</strong> とします。
+</p>
+
+<h2 id="s0">0. 結論</h2>
+
+<div class="box ng">
+<h4>結論：この案は<strong>進めない</strong>ことを推奨します（止める条件7つのうち4つに該当）</h4>
+<ol>
+<li><strong>狙っていた「簿冊だけの単機能」は、もう空いていませんでした。</strong>警備業向けの管制・給与・請求の一元型システムに、警備員名簿・教育計画書・教育実施簿・指導計画書・指導実施簿の5点セットが<strong>すでに標準搭載</strong>されています。特に<strong>警備フォース（アトミックソフトウェア）が2026年4月21日に、まさにこの機能をリリース済み</strong>です。</li>
+<li><strong>カタログの「補助金の看板が空いている可能性」は、私の誤りでした。</strong>公式データを直接取得して数えたところ、警備業向けのツールは<strong>2026年度だけで27件が登録済み</strong>でした（D-025の訂正）。</li>
+<li><strong>需要そのものは確かに実在します。</strong>行政処分の実例が11件、生の困りごとの投稿が13件見つかりました。ただし顧客が今払っているのは「ソフト代」ではなく、<strong>協会の無料Excel様式・500円のnote記事・720円の名簿用紙</strong>です。年10万円のソフトを売る土俵に、そもそも上がれません。</li>
+</ol>
+<p style="margin-bottom:0"><strong>ただし、この案の中に1つだけ生き残っている材料があります</strong>（→ <a href="#s12">12節</a>）。捨てるか、形を変えて拾うかは坂野様のご判断です。</p>
+</div>
+
+<h2 id="s1">1. 判定表（★調査を始める前に固定したもの）</h2>
+<p>decision-gate スキルの禁止事項「判定表を、調べた後に書くこと」を避けるため、この7条件は<strong>調査に着手する前に</strong> <code>C-04_警備業簿冊\HANTEI_HYO.md</code> に固定しました。以下の「判定」欄だけを、調査後に埋めています。基準そのものは一切動かしていません。</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>止める条件</th><th>問い</th><th>判定</th><th>根拠（要点）</th></tr>
+<tr><td>1</td><td>主客が5年後に減る</td><td>問4</td><td><span class="tag ok">該当しない</span></td><td>警備業者数は11年連続で増加（2014年 9,240社 → 2025年 10,949社）</td></tr>
+<tr><td>2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td>問1②・問2</td><td><span class="tag ng">該当する</span></td><td>警備フォース・ガードエクスプレス・EasyKeiby5・警備教育Pro が法定簿冊の作成/出力を公式に明記</td></tr>
+<tr><td>3</td><td>死ぬ条件3つのうち、1つでも既に起きている</td><td>問5</td><td><span class="tag ng">該当する（3つとも）</span></td><td>①一元型への標準搭載＝起きている ②協会の無料様式配布＝起きている ③補助金の看板＝27件で埋まっている</td></tr>
+<tr><td>4</td><td>引き算後の母数 × 想定単価 × シェア1% が年1,000万円に届かない</td><td>問3</td><td><span class="tag ng">該当する（前提つき）</span></td><td>シェア1%で年1,000万円には1社あたり<strong>月8,400〜14,400円</strong>が必要。単機能簿冊ソフトの実勢は買い切り44,000円で、この単価は取れない</td></tr>
+<tr><td>5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td>問1</td><td><span class="tag ok">該当しない</span></td><td>5つすべて埋まった（<a href="#s2">2節</a>）</td></tr>
+<tr><td>6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td>問6②</td><td><span class="tag ok">該当しない</span></td><td>「10名以下・管制システム未導入の層に、簿冊だけを安く」「記入例つき」「期限アラート」は書ける</td></tr>
+<tr><td>6b</td><td>顧客がそもそも2つを並べて比べない（無料同梱で探されない）</td><td>問6③</td><td><span class="tag ng">該当する</span></td><td>顧客が探しているのは「ソフト」ではなく「様式と書き方」。協会が様式を認証なしで無料配布。比較サイトのレビューは全製品で0件</td></tr>
+<tr><td>7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td>問6③</td><td><span class="tag gray">判定不要</span></td><td>そもそも「並べられる」側（すでに1機能として収まっている）ため、条件2で決着</td></tr>
+</table>
+</div>
+
+<div class="box">
+<p style="margin:0"><strong>該当したのは 2・3・4・6b の4つ。</strong>decision-gate の判定ルールは「1つでも当たったら要件定義に進まない」です。</p>
+</div>
+
+<h2 id="s2">2. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p>「警備の簿冊ソフト」というカテゴリで探すのではなく、<strong>「法定簿冊を作る手間を減らす」という目的</strong>で5つの探し先すべてを埋めました。</p>
+
+<h3>① 同じカテゴリの製品（簿冊・教育に特化したもの）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品名</th><th>提供元</th><th>公開価格</th><th>この案の機能を持っているか</th></tr>
+<tr><td>警備員名簿2</td><td>ダンゴブラザース・ドットコム（山梨）</td><td class="num">44,000円（税込・買い切り）＋追加ライセンス22,000円</td><td><strong>持っている</strong>：警備員教育計画書／教育実施簿／教育計画一覧表／教育実施一覧表／教育時間集計表／警備員名簿／教育実施状況／労働者名簿／隊員別資格一覧表。<br><small>※指導計画書・指導実施簿は帳票一覧に記載なし。<strong>最終更新 2021/02/05（約5年半更新なし）</strong></small></td></tr>
+<tr><td>警備教育Pro（警備Proのオプション）</td><td>ビジコン・ジャパン（横浜）</td><td>非公開（見積フォームのみ）</td><td><strong>持っている</strong>：警備員名簿（写真付き印刷可）／新任・現任 教育実施簿の自動生成／教育計画書／<strong>指導計画書／指導監督実施簿／指導監督実施表</strong>／健康診断一覧表／苦情処理簿</td></tr>
+</table>
+</div>
+
+<h3>② 上位カテゴリの製品＝この案の機能を一部として内包する、もっと大きいシステム（★最重要）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品名</th><th>提供元</th><th>公開価格</th><th>法定簿冊の作成・出力</th></tr>
+<tr><td><strong>警備フォース</strong></td><td>アトミックソフトウェア（東京・品川）<br><small>2024年2月シリーズBで約15億円調達／ISO27001取得／2026年7月 導入100社突破</small></td><td class="num">月額26,000円〜</td><td><strong class="tag ng">2026-04-21 リリース済み</strong><br>「法定備付書類」を機能の独立カテゴリとして掲載。プレスリリースで対応書類として<strong>警備員名簿・教育計画書・教育実施簿・指導計画書・指導実施簿</strong>の5点を明記。「教育計画書と教育実施簿の連携」「教育実施状況が警備員名簿に自動反映」まで実装</td></tr>
+<tr><td>ガードエクスプレス</td><td>エスアイ・システム（札幌）</td><td>非公開</td><td><strong>持っている</strong>：帳票サンプルに教育計画書／教育実施簿／教育計画一覧表／教育実施一覧表／教育時間集計表／教育実施状況／警備員名簿を掲載。<br><small>※「指導計画書」「指導実施簿」はサイト内に該当なし。<strong>最新情報の最終掲載が2023.02.01＝製品発信が3年以上停止</strong></small></td></tr>
+<tr><td>EasyKeiby5</td><td>ダンゴブラザース・ドットコム</td><td class="num">272,381円（税込・買い切り）＋年間保守33,000円</td><td><strong>最も網羅的</strong>：警備員指導計画書／警備員指導実施簿／教育計画書／教育実施簿／教育計画一覧表／教育実施一覧表／教育時間集計表／警備員名簿／教育実施状況／苦情処理簿。Excel保存可。<strong>2026/03/31 ver.1.12.0 リリース＝現役</strong></td></tr>
+<tr><td>警備業管理システム</td><td>富士コンピュータ（兵庫）</td><td>非公開</td><td><strong>持っている（記載レベル）</strong>：「指導教育管理・警備員名簿作成」「指導教育のスケジュール管理」「指導教育実績の作成や履歴管理」と明記。個別帳票名は非公開</td></tr>
+<tr><td>ザ・ガードマン Ver.11</td><td>コンピュータマネジメント（福岡）</td><td>非公開</td><td><span class="tag gray">記載なし</span>「約30種の帳票を自動作成」とあるが内訳非公開＝<strong>【未確認】</strong></td></tr>
+<tr><td>プロキャス警備</td><td>PROCAN（東京）／kubell</td><td class="num">初期100,000円＋月額20,000円〜</td><td><span class="tag gray">記載なし</span></td></tr>
+<tr><td>くもかん（KUMOCAN）</td><td>straya（東京）<br><small>2025年9月 累計1億円超調達</small></td><td>非公開</td><td><span class="tag gray">記載なし</span></td></tr>
+<tr><td>KOMAINU</td><td>ジャガーノート（東京）</td><td>非公開</td><td><span class="tag gray">記載なし</span></td></tr>
+<tr><td>警備スマート管理</td><td>クリエイトシステム（群馬）</td><td class="num"><strong>無料版あり</strong>／月額4,980円〜</td><td><span class="tag gray">記載なし</span>（資格情報管理はあり）</td></tr>
+<tr><td>日報365 for 警備</td><td>オーク情報システム</td><td class="num">月額25,000円〜（10名）</td><td><span class="tag gray">記載なし</span></td></tr>
+</table>
+</div>
+<p><small>「記載なし」は公式サイトの機能一覧に書かれていなかったという事実であり、機能が<strong>無いことの証明ではありません</strong>（W01-K-007／D-020の方針に従い、断定していません）。</small></p>
+
+<h3>③ 下位・単機能のツール</h3>
+<p>単機能として存在するのは <strong>警備員名簿2（44,000円買い切り）</strong> のみで、<strong>2021年2月から更新が止まっています</strong>。「安価な単機能の簿冊ソフト」という枠は、製品は存在するが事実上メンテされていない、という状態でした。</p>
+
+<h3>④ 汎用ツール（★ここが実質の主戦場）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>手段</th><th>費用</th><th>実測で確認したこと</th></tr>
+<tr><td><strong>全国警備業協会が無料配布しているExcel様式</strong></td><td class="num"><strong>0円</strong></td><td>「教育実施簿」（.xlsx）「教育計画書」（.xls）を、<strong>会員認証なしで誰でもダウンロードできる</strong>ことをHTTPレスポンスで実測確認（2026-08-28、いずれもHTTP 200、認証リダイレクトなし）。<strong>警察庁の指導を受けて作成された様式</strong>とページに明記＝事実上の業界標準</td></tr>
+<tr><td>Excel・手書き・Word</td><td class="num">0円</td><td>知恵袋・note・ベンダーの導入事例で繰り返し確認できる、現在の圧倒的な多数派</td></tr>
+<tr><td>ノーコードDB（楽々Webデータベース等）</td><td>有償</td><td>月300名分の教育実施簿を紙で作っていた警備会社が実際に移行した事例あり（実名・実発言）</td></tr>
+</table>
+</div>
+
+<h3>⑤ 人手（外注・代行）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>手段</th><th>価格</th><th>備考</th></tr>
+<tr><td>note の有料記事（立入検査対策・作成法＋サンプルDL付き）</td><td class="num">1記事 500円〜／マガジン 2,500円</td><td><strong>帳簿の作り方そのものに市場価格がついている</strong></td></tr>
+<tr><td>全国警備業協会「警備員名簿用紙（30枚セット）A4」</td><td class="num">720円</td><td>紙の様式が有料で売られている</td></tr>
+<tr><td>協会『警備業関係基本書式記載例集』</td><td>有料（額は未取得）</td><td>知恵袋の回答で「買い求めてはいかがですか」と推奨されている＝事実上の解</td></tr>
+<tr><td>社労士の「公安委員会立入監査対策サービス」</td><td>非公開</td><td>山田社会保険労務士事務所（警備業特化）が有料メニュー化</td></tr>
+<tr><td>行政書士の備付書類整備・更新管理サポート</td><td>非公開</td><td>行政書士事務所RTS など</td></tr>
+<tr><td>日常簿冊の作成代行そのもの</td><td>—</td><td><strong>見つかりませんでした</strong>。行政書士の商品は「開業時の認定申請代行」（法定手数料23,000円＋報酬）が中心で、日常の簿冊作成は外注市場が形成されていません</td></tr>
+</table>
+</div>
+
+<div class="box warn">
+<h4>探し先5つを埋めて分かった構造</h4>
+<p style="margin-bottom:0">この市場でお金が動いているのは「<strong>様式と書き方の情報</strong>」（500円・720円・書籍・社労士）であって、「<strong>簿冊を作るソフト</strong>」ではありません。ソフトは、管制・給与・請求の一元型に<strong>ついてくるもの</strong>になっています。</p>
+</div>
+<h2 id="s3">3. 問2　競合が「既に持っている機能」を、先に全部書いたか</h2>
+<p>decision-gate の順番どおり、「無い機能」を探す前に「有る機能」を全部書き出しました。</p>
+
+<h3>法定簿冊の作成・出力を公式に明記している製品：6つ</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>警備員名簿</th><th>教育計画書</th><th>教育実施簿</th><th>指導計画書</th><th>指導実施簿</th><th>苦情処理簿</th></tr>
+<tr><td>EasyKeiby5</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+<tr><td><strong>警備フォース</strong></td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○（業務記録）</td></tr>
+<tr><td>警備教育Pro</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+<tr><td>ガードエクスプレス</td><td>○</td><td>○</td><td>○</td><td>記載なし</td><td>記載なし</td><td>記載なし</td></tr>
+<tr><td>警備員名簿2</td><td>○</td><td>○</td><td>○</td><td>記載なし</td><td>記載なし</td><td>記載なし</td></tr>
+<tr><td>富士コンピュータ 警備業管理システム</td><td>○</td><td colspan="4">「指導教育管理」として記載あり（個別帳票名は非公開）</td><td>記載なし</td></tr>
+</table>
+</div>
+
+<div class="box ng">
+<h4>この案が狙っていた「8種の法定備付簿冊をまとめて作る」機能は、既に3製品が完全に実装しています</h4>
+<p>EasyKeiby5（買い切り272,381円）、警備教育Pro（価格非公開）、そして<strong>警備フォース（月額26,000円〜の一元型に無料同梱）</strong>です。</p>
+<p style="margin-bottom:0"><strong>とくに警備フォースの2026年4月リリースは決定的です。</strong>VCから約15億円を調達済み・ISO27001取得・導入100社突破という、この市場で最も体力のある会社が、<strong>4か月前に同じ場所へ入ってきた</strong>ことになります。しかも向こうにとっては「管制・給与・請求を売るための、ついでの1機能」です。こちらはそれを主商品にして戦うことになります。</p>
+</div>
+
+<h3>チェンジログ（更新履歴）を1年分さかのぼった結果</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>更新履歴の公開</th><th>直近1年の動き</th><th>読み取れること</th></tr>
+<tr><td>警備フォース</td><td>公開・活発</td><td>2026.4.21 <strong>法定備付書類のクラウド管理をリリース</strong>／2026.6.22 SECURITY SHOW大阪 出展／2026.7.16 導入100社突破</td><td><strong>レッドオーシャン化の明確な信号</strong>。狙っていた機能が既にリリースされている</td></tr>
+<tr><td>EasyKeiby5</td><td>公開</td><td>2026/03/31 ver.1.12.0</td><td>現役でメンテされている</td></tr>
+<tr><td>警備員名簿2</td><td>公開</td><td><strong>2021/02/05 が最終</strong></td><td>単機能の枠は空席に見えるが、それは「誰も更新する価値を見出していない」からかもしれない</td></tr>
+<tr><td>ガードエクスプレス</td><td>公開だが停止</td><td>最終掲載 2023.02.01</td><td>帳票の網羅性は高いのに発信が止まっている</td></tr>
+<tr><td>KOMAINU／くもかん</td><td>PR TIMES経由</td><td>給与・チャット機能／資金調達</td><td>法定簿冊にはまだ手を付けていない</td></tr>
+</table>
+</div>
+
+<h3>低評価レビュー（星1〜3）を読んだ結果</h3>
+<div class="box warn">
+<p><strong>この領域の製品には、実質的にレビューが存在しませんでした。</strong>ITreview に製品ページがあるのはプロキャス警備のみで、それも<strong>レビュー0件</strong>。ガードエクスプレス／警備フォース／KOMAINU／くもかん／EasyKeiby5／警備Pro／警備教育Pro／警備員名簿2／日報365／警備スマート管理／ザ・ガードマン／富士コンピュータの各製品について、ITreview・BOXIL のいずれでもレビューは見つかりませんでした。</p>
+<p style="margin-bottom:0"><strong>これは「需要がない」ではなく、「この市場が比較サイト経由で買われていない」ことを示します。</strong>販売は業界紙・協会・展示会・代理店経由です。＝<strong>レビューサイトやWeb検索での差別化は効きません。</strong>これは条件6bの判定に直結します。</p>
+</div>
+
+<h2 id="s4">4. 問3　母数を引き算したか。その統計の内訳を読んだか</h2>
+<p>数字はすべて警察庁生活安全局「令和7年における警備業の概況」（2025年12月末現在）と、その付属CSVを直接取得して確認しました。</p>
+
+<h3>引き算</h3>
+<div class="tblwrap">
+<table>
+<tr><th>段</th><th>数</th><th>公的統計か推測か</th><th>引く理由</th></tr>
+<tr><td>警備業の認定業者（4条業者）総数</td><td class="num"><strong>10,949社</strong></td><td>公的統計（警察庁 2025年末）</td><td>—</td></tr>
+<tr><td>うち 警備員100人未満</td><td class="num"><strong>9,885社</strong>（90.3%）</td><td>公的統計（同上・規模別内訳を実読）</td><td>100人以上（1,064社）は既に基幹システムを導入済みと考えられる<br><small>※「導入済み」は<strong>推測</strong>。導入率の公的統計は【未確認】</small></td></tr>
+<tr><td>うち 警備員5人以下を除く</td><td class="num"><strong>6,973社</strong></td><td>公的統計から筆者が減算</td><td>5人以下（2,912社・26.6%）は指導教育責任者＝経営者本人で、無料Excelから動かないと考えられる<br><small>※これも<strong>推測</strong></small></td></tr>
+<tr><td>実際に買いうる層（10〜99人）</td><td class="num"><strong>5,800社</strong></td><td>公的統計から筆者が集計<br>（10〜19人 2,131／20〜29人 1,256／30〜49人 1,319／50〜99人 1,094）</td><td>—</td></tr>
+</table>
+</div>
+
+<h3>★統計の内訳を読んで分かったこと</h3>
+<div class="box">
+<p style="margin:0">母数の<strong>26.6%が「警備員5人以下」</strong>、<strong>37.3%が「9人以下」</strong>です。この層は、ソフトを買う層ではなく<strong>協会の無料Excel様式で足りてしまう層</strong>です。「中小の警備会社が1万社ある」という見え方と、「実際に月額を払う会社が何社あるか」は、まったく別の数字でした。</p>
+</div>
+
+<h3>条件4の計算</h3>
+<div class="tblwrap">
+<table>
+<tr><th>母数の取り方</th><th>シェア1%</th><th>年1,000万円に必要な1社あたり単価</th><th>月額換算</th><th>判定</th></tr>
+<tr><td>100人未満 9,885社</td><td class="num">99社</td><td class="num">約101,000円/年</td><td class="num">約8,400円/月</td><td><span class="tag ng">取れない</span></td></tr>
+<tr><td>10〜99人 5,800社</td><td class="num">58社</td><td class="num">約172,000円/年</td><td class="num">約14,400円/月</td><td><span class="tag ng">取れない</span></td></tr>
+</table>
+</div>
+<div class="box ng">
+<p style="margin:0"><strong>この単価は取れません。</strong>理由は競合の実勢価格です。単機能の簿冊ソフトは <strong>買い切り44,000円</strong>（警備員名簿2）。一方で<strong>月額26,000円で管制・給与・請求まで含み、簿冊が無料で付いてくる</strong>製品（警備フォース）が存在します。この間に「簿冊だけで月8,400〜14,400円」という価格帯を置く余地がありません。<br>
+<small>※シェア1%という前提自体は decision-gate の判定式に従ったものです。シェアを3%（＝174〜297社）まで取れれば月2,800〜4,800円で成立しますが、<strong>シェア3%を前提にすることは判定表の基準を後から動かすことになる</strong>ため、ここでは行いません。</small></p>
+</div>
+
+<h2 id="s5">5. 問4　この客は5年後、増えるか減るか</h2>
+<div class="box ok">
+<h4>増えます。ここは唯一、はっきり良い材料でした。</h4>
+</div>
+<div class="tblwrap">
+<table>
+<tr><th>年（各年末）</th><th>警備業者数</th><th>警備員数</th></tr>
+<tr><td>2014（H26）</td><td class="num">9,240</td><td class="num">537,285</td></tr>
+<tr><td>2016（H28）</td><td class="num">9,434</td><td class="num">543,244</td></tr>
+<tr><td>2018（H30）</td><td class="num">9,714</td><td class="num">554,517</td></tr>
+<tr><td>2020（R2）</td><td class="num">10,113</td><td class="num">588,364</td></tr>
+<tr><td>2022（R4）</td><td class="num">10,524</td><td class="num">582,114</td></tr>
+<tr><td>2023（R5）</td><td class="num">10,674</td><td class="num">584,868</td></tr>
+<tr><td>2024（R6）</td><td class="num">10,811</td><td class="num">587,848</td></tr>
+<tr><td><strong>2025（R7）</strong></td><td class="num"><strong>10,949</strong></td><td class="num"><strong>596,985</strong></td></tr>
+</table>
+</div>
+<p><strong>業者数は11年連続で増加</strong>（+1,607社／+17.2%）。警備員数も10年で+10.9%。市場規模（全警協調査・回答業者の売上高合計）は2025年で<strong>3兆5,056億円</strong>。</p>
+
+<h3>10年後を見るための材料（坂野様の方針＝5年ではなく10年で見る）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>指標</th><th>数値</th><th>年</th></tr>
+<tr><td>有効求人倍率（警備業）</td><td class="num"><strong>6.70倍</strong>（全職業1.10倍）</td><td>2025年9月</td></tr>
+<tr><td>65歳以上の労働者の割合</td><td class="num">警備業 34.3%（全職業13.6%）</td><td>2024年</td></tr>
+<tr><td>70歳以上の割合</td><td class="num">21.6%</td><td>2025年末</td></tr>
+<tr><td>政府目標：労働生産性</td><td>2029年度までに25%向上（2024年度比）</td><td>警察庁「省力化投資促進プラン ―警備業―」2025-12-22</td></tr>
+<tr><td>政府目標：法定教育へのeラーニング導入</td><td><strong>2029年度までに約1,000業者</strong>（2025年11月末 約313業者）</td><td>同上</td></tr>
+</table>
+</div>
+<div class="box warn">
+<p style="margin:0"><strong>ここは両刃です。</strong>警察庁が自ら「省力化投資促進プラン」を出し、eラーニング導入業者を3倍に増やす数値目標を掲げている＝<strong>国がこの領域のデジタル化を後押ししている</strong>。追い風であると同時に、<strong>既存ベンダーにとっても同じ追い風</strong>であり、警備フォースが今このタイミングで法定備付書類に参入したのは偶然ではないと読めます。</p>
+</div>
+<h2 id="s6">6. 問5　この案が死ぬ条件を3つ書き、その場で確認したか</h2>
+<p>decision-gate の指示どおり、死ぬ条件を書いた<strong>その場で、3つとも既に起きていないかを確認</strong>しました。</p>
+
+<div class="box ng">
+<h4>死因A：警備業向けの管制・給与の一元型システムが、法定簿冊機能を標準搭載する</h4>
+<p style="margin-bottom:0"><span class="tag ng">既に起きている</span> <strong>2026年4月21日</strong>、アトミックソフトウェア（警備フォース）が「法定備付書類のクラウド管理」をリリース。対応書類は警備員名簿・教育計画書・教育実施簿・指導計画書・指導実施簿の5点（プレスリリース原文で確認済み）。ガードエクスプレス・EasyKeiby5・警備教育Pro も以前から搭載。</p>
+</div>
+
+<div class="box ng">
+<h4>死因B：業界団体が様式・ツールを無料で配り、有償ソフトの必要性が消える</h4>
+<p style="margin-bottom:0"><span class="tag ng">既に起きている</span> 全国警備業協会が<strong>教育計画書・教育実施簿のExcel様式を、会員認証なしで一般公開</strong>（2026-08-28にHTTP 200を実測確認）。しかも<strong>警察庁の指導を受けて作成された様式</strong>とページに明記されており、事実上の業界標準です。さらに協会は eラーニング（1ID 年2,200円／加盟業者）も提供しています。<br>
+<small>※ただし、協会が配っているのは<strong>様式（空のExcel）まで</strong>で、ソフトは配っていません。ここは後述の12節で唯一の余地になります。</small></p>
+</div>
+
+<div class="box ng">
+<h4>死因C：補助金の看板が埋まり、比較の土俵に上がれない</h4>
+<p style="margin-bottom:0"><span class="tag ng">既に起きている</span> 「デジタル化・AI導入補助金2026」の登録ツールを公式データで数えたところ、<strong>警備業向けだけで27件</strong>（ツール名に「警備」を含むもの9件＋ガードエクスプレス18件）。詳細は<a href="#s10">10節</a>。</p>
+</div>
+
+<h2 id="s7">7. 問6　当たったあと、顧客がうちと大手を並べたとき、うちを選ぶ理由</h2>
+
+<h3>① 並べられるか</h3>
+<p><strong>並べられます。</strong>しかも「いずれ並べられる」ではなく、<strong>もう並べられています</strong>。この案の機能は、警備業向け一元型システムの中に<strong>1つの機能として完全に収まる大きさ</strong>であり、実際に警備フォースが2026年4月にそのとおり収めました。</p>
+
+<h3>② うちを選ぶ理由（機能の差でなくてよい）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>理由の候補</th><th>成り立つか</th><th>評価</th></tr>
+<tr><td>価格（月26,000円は要らない、簿冊だけ安く）</td><td>成り立つ</td><td>10名前後で管制システムを入れていない層には刺さる。ただし<a href="#s4">4節</a>のとおり、その安い価格では年1,000万円に届かない</td></tr>
+<tr><td>導入の速さ（設定ゼロ・その日から使える）</td><td>成り立つ</td><td>一元型は隊員・現場・単価のマスタ登録が要る。簿冊だけなら不要</td></tr>
+<tr><td>特定業務への合わせ込み（記入例つき・様式の正解を示す）</td><td>成り立つ</td><td><strong>これが最も強い。</strong>「様式の正解が存在しない」が現場の最大の困りごと（<a href="#s9">9節</a>）で、既存ソフトはどれも「空欄を埋めさせる」だけ</td></tr>
+<tr><td>期限アラート（名簿写真の3年更新・保存年限）</td><td>成り立つ</td><td>宮城県公安委員会で<strong>「名簿写真の3年更新漏れ」だけを理由に指示処分＋社名公表が2件</strong>実在する</td></tr>
+</table>
+</div>
+<p><strong>条件6（選ぶ理由を1つも書けない）には該当しません。</strong>理由は複数書けます。</p>
+
+<h3>③ ★顧客はそもそも2つを並べて比べてくれるか（条件6b）</h3>
+<div class="box ng">
+<h4>ここで落ちます。</h4>
+<p>②の理由はすべて「<strong>顧客が2つを並べて比較してくれる</strong>」ことが前提です。その前提が、次の3つの事実で崩れます。</p>
+<ol>
+<li><strong>顧客が探しているのは「ソフト」ではなく「様式と書き方」です。</strong>知恵袋で見つかった13件の投稿は、1件残らず「どう書けばいいか」「毎年作り直すのか」「署名は手書きか」であって、「良いソフトはないか」という投稿は<strong>1件も見つかりませんでした</strong>。</li>
+<li><strong>その「様式と書き方」は、協会が0円で配っています。</strong>探す動機が、ソフトへ向かう前に無料様式で満たされます。</li>
+<li><strong>比較サイトのレビューが、全製品で0件でした。</strong>この市場は比較検討されて買われていません（協会・業界紙・展示会・代理店経由）。＝Web検索やレビューサイトで見つけてもらう道が、そもそも通っていません。</li>
+</ol>
+<p style="margin-bottom:0">つまり、使いやすさや価格で勝つ以前に、<strong>比較の土俵に上げてもらえません。</strong>これは2026-08-25に凍結した案（Rabelu）と同じ死に方です。</p>
+</div>
+
+<h2 id="s8">8. 法令の裏取り（条文で確認）</h2>
+<p>ベンダーの説明ではなく、e-Gov法令検索の条文本文と警察庁の解釈運用基準通達で確認しました。<strong>この節の内容は、この案を進めなくても、他の「法定帳票もの」を考えるときの資産として残ります。</strong></p>
+
+<h3>営業所に備え付ける書類（警備業法第45条／同法施行規則第66条第1項）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>書類</th><th>根拠</th><th>保存年限</th><th>作成の頻度</th></tr>
+<tr><td>警備員名簿</td><td>規則66条1項1号</td><td><strong>退職の日から1年</strong></td><td>採用・退職・教育実施・資格取得の都度。<strong>3年以内に撮影した写真</strong>の貼付が必要</td></tr>
+<tr><td>欠格事由非該当の確認記録（誓約書添付）</td><td>規則66条1項2号</td><td>条文に記載なし</td><td>採用の都度</td></tr>
+<tr><td>護身用具の数量書面</td><td>規則66条1項3号</td><td>条文に記載なし</td><td>増減の都度</td></tr>
+<tr><td><strong>指導計画書</strong></td><td>規則66条1項4号／法22条1項</td><td><strong>実地に指導した日から2年</strong></td><td>条文に規定なし（実務では毎月）</td></tr>
+<tr><td><strong>教育計画書</strong></td><td>規則66条1項5号</td><td><strong>当該年度終了の日から2年</strong></td><td><strong>年度ごと。当該年度開始の30日前まで</strong>に備置（規則66条3項）</td></tr>
+<tr><td><strong>教育実施簿</strong></td><td>規則66条1項6号</td><td><strong>当該年度終了の日から2年</strong></td><td>年度ごと（実施の都度記録）。<strong>指導教育責任者と実施者の双方が「誤りがない旨」を付記</strong></td></tr>
+<tr><td>契約関係書類</td><td>規則66条1項7号（規則33条を引用）</td><td>条文に記載なし</td><td>契約ごと</td></tr>
+<tr><td>苦情処理記録</td><td>規則66条1項8号（法20条）</td><td>条文に記載なし</td><td>苦情の都度</td></tr>
+</table>
+</div>
+<p><strong>罰則</strong>：書類を備え付けない・必要事項を記載しない・虚偽記載は<strong>30万円以下の罰金</strong>（法58条9号）＋両罰規定（法59条）。<br>
+<strong>立入検査</strong>：法47条1項で<strong>「帳簿、書類その他の物件」が明文の検査対象</strong>。検査拒否・妨害も30万円以下の罰金（法58条7号）。</p>
+
+<h3>電子化してよいか（重要）</h3>
+<div class="box ok">
+<p style="margin:0"><strong>法令上、明文で認められています。</strong>警備業法施行規則<strong>第67条</strong>：「前条第一項に規定する書類に記載することとされている事項が、<strong>電磁的方法により記録され、必要に応じ電子計算機その他の機器を用いて直ちに表示されることができるとき</strong>は、当該記録をもつて同項に規定する書類に代えることができる。」<br>
+条文から確定できる必須要件は<strong>「見読性」だけ</strong>です。改変防止・保存性は規則68条の<strong>努力義務</strong>（「国家公安委員会が定める基準を確保するよう努めなければならない」）。<br>
+<small>【未確認】規則68条の「国家公安委員会が定める基準」の具体的な告示番号・本文は、警察庁サイト・e-Govのいずれからも特定できませんでした。実際に事業化する場合は所管（都道府県警察生活安全課）への照会が必要です。</small></p>
+</div>
+
+<h3>教育時間数（2019年の規制緩和後＝現行）</h3>
+<p><strong>令和元年内閣府令第24号</strong>（令和元年8月30日公布・同日施行）で大幅に緩和されました。</p>
+<div class="tblwrap">
+<table>
+<tr><th>区分</th><th>改正前</th><th>改正後（現行）</th></tr>
+<tr><td>新任教育</td><td>基本15時間＋業務別15時間</td><td>統合して<strong>20時間</strong>（経験により3／7／10／13時間）</td></tr>
+<tr><td>現任教育</td><td>教育期（半年）ごとに基本3時間＋業務別5時間</td><td>統合して<strong>毎年度10時間</strong>（区分により6時間）</td></tr>
+<tr><td>計画書・実施記録の単位</td><td><strong>教育期（半年）ごと</strong></td><td><strong>年度ごと</strong></td></tr>
+<tr><td>講義の方法</td><td>規定なし</td><td>「<strong>電気通信回線を使用して行うものを含む</strong>」＝eラーニングを明文で許容</td></tr>
+</table>
+</div>
+<p><small>eラーニングの4要件（規則38条2項 表 備考3号）：①本人確認 ②受講状況の確認 ③知識習得状況の確認 ④質疑応答の機会。警察庁通達（令和6年6月27日 丙生企発第240号）で「教材は初回視聴時にスキップできないこと」「自社施設外なら内蔵カメラで顔画像を撮影し営業所へ送信」等の具体的運用が示されています。</small></p>
+
+<h3>警備員指導教育責任者</h3>
+<p>法22条1項により<strong>営業所ごと・警備業務の区分ごとに専任で選任</strong>（規則39条1項）。選任しないと<strong>100万円以下の罰金</strong>（法57条5号）。その業務は規則40条で、①指導計画書の作成と実地指導・記録作成 ②教育計画書の作成と実施管理 ③教育実施簿の記載監督 ④助言 と定められています。<strong>つまりこの案の顧客は「警備会社」というより「各営業所の指導教育責任者1名」です（全国16,728営業所）。</strong></p>
+<h2 id="s9">9. 現場の生の声（需要の実在）</h2>
+<div class="box ok">
+<p style="margin:0"><strong>需要そのものは、はっきり実在します。</strong>ここは落とす材料ではなく、むしろこの案で最も強い部分でした。</p>
+</div>
+
+<h3>公安委員会の行政処分（帳簿・教育の不備が処分理由）：11件</h3>
+<div class="tblwrap">
+<table>
+<tr><th>処分日</th><th>公安委員会</th><th>処分</th><th>処分理由（原文の要点）</th></tr>
+<tr><td>令和5年12月14日</td><td>宮城</td><td>指示</td><td><strong>「警備員の名簿に3年以内に撮影した写真をはり付けていなかった」</strong></td></tr>
+<tr><td>令和6年1月15日</td><td>北海道</td><td>営業停止37日</td><td>立入検査の結果、教育義務違反、営業所備付書類に係る虚偽記載</td></tr>
+<tr><td>令和6年2月2日</td><td>静岡</td><td>指示</td><td><strong>「指導計画書、教育実施簿を備え付けていなかった」</strong></td></tr>
+<tr><td>令和6年11月5日</td><td>静岡</td><td>指示</td><td><strong>「令和6年度の教育計画書を備え付けていなかった」</strong></td></tr>
+<tr><td>令和7年1月16日</td><td>静岡</td><td>営業停止3月</td><td>名簿の記載不備、教育計画書・契約書類の不備、<strong>教育実施簿への虚偽記載</strong>ほか</td></tr>
+<tr><td>令和7年3月19日</td><td>和歌山</td><td>営業停止37日</td><td>教育を怠り、備付書類に虚偽記載（2社）</td></tr>
+<tr><td>令和7年3月27日</td><td>北海道</td><td>営業停止45日</td><td>教育義務違反、備付書類の虚偽記載</td></tr>
+<tr><td>令和7年5月15日</td><td>和歌山</td><td>営業停止10日＋指示</td><td>同上</td></tr>
+<tr><td>令和7年8月8日</td><td>静岡</td><td>営業停止1月</td><td>名簿・教育実施簿への虚偽記載、名簿の一部未作成</td></tr>
+<tr><td>令和7年10月28日</td><td>北海道</td><td>営業停止37日</td><td>教育義務違反、備付書類の虚偽記載</td></tr>
+<tr><td><strong>令和8年4月3日</strong></td><td>宮城</td><td>指示</td><td><strong>「一部の警備員の名簿に3年以内に撮影した写真をはり付けていなかった」</strong></td></tr>
+</table>
+</div>
+<p><strong>宮城の2件が示していること</strong>：帳簿の実質的な不備が一切なくても、<strong>「名簿写真の3年更新漏れ」という一点だけで、社名を公表される行政処分に至ります。</strong>期限管理の需要は本物です。</p>
+
+<h3>困りごとの型（知恵袋13件・note3件・社労士ブログ2件・導入事例3件から）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>困りごとの型</th><th>代表的な声</th></tr>
+<tr><td>1</td><td><strong>様式・記載粒度の「正解」が存在しない</strong></td><td>「書式は協会が出しています。でも、実際のところ会社ごとにバラバラです。<strong>正解がわからないまま、各社が手探りで書類を作っています</strong>」（note・2026-04-20）／「講習では<strong>実際に書類を作る演習はありません</strong>」</td></tr>
+<tr><td>2</td><td>毎月／毎年の作り直し負担</td><td>「この2つの計画書は毎年、内容を変えるものでしょうか？<strong>作成日だけ変えて使い回しとかしてはいけないものでしょうか？</strong>」（2025-03-12）</td></tr>
+<tr><td>3</td><td><strong>記録間の整合性</strong>（教育実施簿×勤務表×勤怠×賃金台帳）</td><td>社労士事務所が「教育実施簿は10時間、勤務表では当日別現場に配置」を立入検査の最重要チェック項目として警告。労基署とも二重に刺さる</td></tr>
+<tr><td>4</td><td><strong>期限管理の漏れ</strong></td><td>名簿写真の3年更新（証明写真900円が惜しい／現任教育の日に一斉撮影で回している）。<strong>→ 処分事例が実在</strong></td></tr>
+<tr><td>5</td><td>過去分が探せない／捨てられない</td><td>「1年で処分して良いのでしょうか？退職者が他社に就職して<strong>交通誘導従事証明書を発行してくださいと連絡があった時、処分しているので発行が出来ない</strong>」（2014-11-19）</td></tr>
+<tr><td>6</td><td>拠点ごとにバラバラで一元把握できない</td><td>ベンダー導入事例：「6拠点それぞれで異なる方法で書類を管理しており、<strong>書類の不備や教育の実施漏れが平均して年間10件以上発生</strong>」（2号・警備員400名）</td></tr>
+<tr><td>7</td><td>引き継ぎゼロで選任される</td><td>「<strong>4月から引継ぎ等もなく選任になったばかりで分からないことばかりです</strong>」（2021-04-24）</td></tr>
+<tr><td>8</td><td>作成そのものの工数</td><td>「8名の指導教育責任者で毎月約300名の隊員に面談形式で指導教育を実施して、教育実施簿を作成する（中略）<strong>その作業に要する時間も多大でした</strong>」（実名・業務本部長の発言。一時RPAを導入したが定着せず断念）</td></tr>
+</table>
+</div>
+
+<div class="box warn">
+<h4>ただし、この「生の声」は買う理由にならない</h4>
+<p style="margin-bottom:0">13件の投稿はすべて「<strong>どう書けばいいか</strong>」であって、「<strong>良いソフトはないか</strong>」ではありません。そして実際にお金が動いた先は、note記事500円・協会の名簿用紙720円・書式記載例集・社労士の監査対策サービスでした。<strong>「困っている」と「ソフトに月8,400円払う」の間には、まだ距離があります。</strong></p>
+</div>
+
+<h2 id="s10">10. 補助金の裏取り（★D-025の訂正）</h2>
+<div class="box ng">
+<h4>カタログ統合版の「C-04＝看板はまだ空いている可能性」は、誤りでした</h4>
+<p style="margin-bottom:0">D-025で「公式一覧は読めなかったため、ベンダー公式サイトの記載を根拠にした」と限界を明記していた箇所です。今回、公式の検索画面が読み込んでいる<strong>公開APIを直接呼び出して</strong>、実データを取得できました。</p>
+</div>
+
+<h3>2026年度の正式名称</h3>
+<p><strong>中小企業デジタル化・AI導入支援事業費補助金</strong>（通称「デジタル化・AI導入補助金2026」）。<strong>旧「IT導入補助金」</strong>。事務局はTOPPAN株式会社。</p>
+
+<h3>「警備」で登録されているITツール：9件（total=9、実測）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>ツール番号</th><th>ITツール名</th><th>提供元</th><th>標準価格</th><th>クラウド</th></tr>
+<tr><td>DL04-0068088</td><td>JBCA警備Pro</td><td>ビジコン・ジャパン</td><td class="num">1,200,000円</td><td>×</td></tr>
+<tr><td>DL06-0009121</td><td>警備業システムVer11 ザ・ガードマン</td><td>コンピュータマネジメント</td><td class="num">1,200,000円</td><td>×</td></tr>
+<tr><td>DL06-0020637</td><td>警備業向け一元管理システム（くもかん）</td><td>straya</td><td class="num">200,000円</td><td>○</td></tr>
+<tr><td>DL06-0054460</td><td>警備業システム Ver.11 ザ・ガードマン</td><td>リコージャパン（コンソーシアム）</td><td class="num">1,200,000円</td><td>×</td></tr>
+<tr><td>DL06-0069632</td><td>プロキャス（ソフトウェア）警備業界向け</td><td>kubell（コンソーシアム）</td><td class="num">1,920,000円</td><td>○</td></tr>
+<tr><td>DL07-0015011</td><td>JBCA警備Pro</td><td>富士フイルムBIジャパン（コンソーシアム）</td><td class="num">1,200,000円</td><td>×</td></tr>
+<tr><td>DL07-0023605</td><td>警備フォース_プレミアムプラン</td><td>アトミックソフトウェア</td><td class="num">528,000円</td><td>○</td></tr>
+<tr><td>DL07-0025962</td><td>警備フォース スタンダードプラン</td><td>アトミックソフトウェア</td><td class="num">432,000円</td><td>○</td></tr>
+<tr><td>DL07-0026000</td><td>警備フォース_ライトプラン</td><td>アトミックソフトウェア</td><td class="num">312,000円</td><td>○</td></tr>
+</table>
+</div>
+<p>さらにキーワード「ガード」で検索すると、<strong>ガードエクスプレス（エスアイ・システム）が18件</strong>登録されています（ライセンス数・購入／サブスク別に分割登録）。<strong>合計27件。</strong></p>
+<p>登録ツールの業務プロセスには「<strong>総務・人事・給与・教育訓練・法務・情シス・統合業務</strong>」が含まれており、<strong>教育訓練の枠は既に押さえられています。</strong></p>
+
+<h3>ベンダー側の訴求（公式サイトで確認）</h3>
+<ul>
+<li>警備フォース：「<strong>デジタル化・AI導入補助金2026認定 最大50%補助（旧: IT導入補助金）</strong>」をトップページ最上部に掲示</li>
+<li>くもかん：「IT導入補助金 2026 対象システムに決定しました！ 最大150万円」</li>
+<li>プロキャス：「プロキャスは IT導入補助金の認定ツールです！ 最大150万円お得に」</li>
+<li>ガードエクスプレス：「導入までの流れ」ページで「デジタル化・AI導入補助金2026」の利用を案内</li>
+</ul>
+
+<h3>自社が登録する側（IT導入支援事業者）になれるか</h3>
+<div class="box warn">
+<p style="margin:0"><strong>実績要件が壁です。</strong>登録要領3-1⑨に「<strong>本事業の要件を満たすソフトウェア等を提供・販売した実績を有し</strong>、ITツールを登録及び提供できること」とあり、<strong>販売実績のない新規開発は登録できません</strong>。ほかに、納税証明書（その1またはその2）・財務諸表の提出、外部審査委員会の審査、不採択なら<strong>原則として同一年度内の再申請不可</strong>、交付決定実績が0件だと年度中でも資格停止の可能性、といった条件があります。<br>
+<small>【未確認】登録手数料の有無と審査所要日数は、登録要領・ITツール登録要領・FAQを全文検索しましたが記載がありませんでした。必要なら事務局（0570-666-376）への照会が必要です。</small></p>
+</div>
+
+<h2 id="s11">11. 着手前チェック：この母数に、どうやって届くのか</h2>
+<p><small>★これは合否の判定には使いません（集客の見込みを選定条件に入れない＝決定済みの方針）。事実として書くだけです。</small></p>
+<div class="tblwrap">
+<table>
+<tr><th>経路</th><th>実在するか</th><th>月に何人に届きうるか</th></tr>
+<tr><td>Web検索（「教育実施簿 書き方」等）</td><td>実在する。知恵袋・note・個人サイトが上位を占めている</td><td><strong>根拠が薄い</strong>。検索ボリュームは未取得</td></tr>
+<tr><td>比較サイト（ITreview・BOXIL）</td><td><strong>機能していない</strong>。全製品でレビュー0件</td><td>ほぼ0</td></tr>
+<tr><td>都道府県警備業協会（47団体）</td><td>実在する。会報誌・会員向けページ・講習</td><td><strong>書けなかった</strong>。会員専用ページの中身に到達できず。また協会自身が無料様式とeラーニングを配っている＝<strong>競合でもある</strong></td></tr>
+<tr><td>展示会（SECURITY SHOW）</td><td>実在する。警備フォースが2026年6月に大阪へ出展</td><td>未取得</td></tr>
+<tr><td>既存の取引関係から辿る</td><td><strong>無い</strong>。当社は警備業界に接点を持っていない</td><td>0</td></tr>
+</table>
+</div>
+<div class="box warn">
+<p style="margin:0"><strong>経路は部分的にしか書けませんでした。</strong>とくに、この市場の主要な販売経路である「協会・業界紙・展示会・代理店」に、当社は現時点で1本も線がありません。<strong>この事実は判定には使いませんが、仮に進める場合、最初のフェーズで潰すべき死因の筆頭です。</strong></p>
+</div>
+<h2 id="s12">12. それでも進めるなら（＝案を変形させる道）</h2>
+<div class="box">
+<p>ゲート0の判定は「この形のままでは進めない」です。ただし調査の途中で、<strong>既存の全製品が手を付けていない一点</strong>が見つかりました。判断材料として残します。<strong>これはClaudeの提案であって、決定ではありません。</strong></p>
+</div>
+
+<h3>見つかった空白：「様式を埋めさせる」ではなく「正解を示す」</h3>
+<p>既存の6製品（EasyKeiby5・警備フォース・警備教育Pro・ガードエクスプレス・警備員名簿2・富士コンピュータ）は、すべて<strong>空欄のフォームを出して、ユーザーに埋めさせる</strong>作りです。一方、現場の最大の困りごとは「<strong>何を書けば正解なのか分からない</strong>」でした。</p>
+<ul>
+<li>「講習では実際に書類を作る演習はありません」（note・2026-04-20）</li>
+<li>「教育事項のイロハ別項目は調べれば分かるのですが、<strong>具体的内容のイロハ別項目や、それに伴う教育方法</strong>を確認するにはどこを調べればよいでしょうか」（知恵袋・2025-02-13。回答は個人サイトのURLを貼って「あとは各社で作ってください」のみ）</li>
+<li>この「正解」に、実際に <strong>500円／2,500円</strong> が払われている（note有料記事）</li>
+</ul>
+<p>ここは <strong>AIで埋められる空白</strong>です。業種・区分・隊員構成を入れると、教育計画書の「具体的内容」欄まで法令に沿った文面が入った状態で出てくる、という形。既存6製品のどれも、ここはやっていません（＝各社の帳票一覧に「記入例」「文面生成」に相当する記載なし）。</p>
+
+<div class="box ng">
+<h4>ただし、この変形でも次の3つは解決しません</h4>
+<ol>
+<li><strong>条件4（単価）</strong>：payされているのは500円／2,500円の単発です。年10万円のサブスクにはなりません。</li>
+<li><strong>条件6b（比較の土俵）</strong>：警備フォースが同じ機能をAIで足すのは容易です（向こうは既に帳票の器を持っている）。</li>
+<li><strong>販売経路</strong>：当社に警備業界への線が1本もありません。</li>
+</ol>
+<p style="margin-bottom:0">したがって、これは「C-04を進める理由」ではなく、<strong>「法定帳票 × AIで正解を示す」という切り口が、警備業以外の領域でも使えるかもしれない</strong>という学びとして扱うのが妥当だと考えます。C-03（古物台帳）やC-02（マニフェスト）でも同じ問いが立てられます。</p>
+</div>
+
+<h3>ゲート0で防げないこと（必ず申し添えます）</h3>
+<p>ゲート0が防げるのは「<strong>調べれば分かること</strong>」だけです。次は今回の調査では分かりません。</p>
+<ul>
+<li>その人が<strong>実際にお金を払うか</strong></li>
+<li><strong>その価格で</strong>払うか</li>
+<li><strong>導入支援なしで、自分で使えるか</strong></li>
+</ul>
+<p>したがって、今回の「進めない」という判定は<strong>「机上で分かる範囲で、既に止まる理由が4つ見つかった」</strong>という意味です。</p>
+
+<h2 id="s13">13. 未確認のまま残った点（★事実として扱わないもの）</h2>
+<div class="tblwrap">
+<table>
+<tr><th>項目</th><th>状況</th><th>判定への影響</th></tr>
+<tr><td>警備業者のシステム導入率</td><td>【未確認】公的統計なし。母数の引き算で「100人以上は導入済み」「5人以下は買わない」としたのは<strong>推測</strong></td><td>条件4の計算の前提。母数を10,949社全部にしても、必要単価は月7,600円で結論は変わらない</td></tr>
+<tr><td>ザ・ガードマン Ver.11 の帳票内訳</td><td>【未確認】「約30種の帳票」の内訳が非公開</td><td>法定簿冊を含む可能性がある。含むなら競合はさらに増える方向</td></tr>
+<tr><td>規則68条の「国家公安委員会が定める基準」</td><td>【未確認】告示番号・本文を特定できず</td><td>電子化の要件。事業化するなら所管への照会が必須</td></tr>
+<tr><td>ITツールの「登録年度」フィールド</td><td>【未確認】公式APIに該当フィールドが存在しない</td><td>27件が2026年度の検索対象であることは確実。個々の初回登録年は不明</td></tr>
+<tr><td>補助金の登録手数料・審査所要日数</td><td>【未確認】要領・FAQに記載なし</td><td>自社が支援事業者になる場合のコスト</td></tr>
+<tr><td>警備教育Pro・ガードエクスプレス・ザ・ガードマンの価格</td><td>非公開（見積制）</td><td>価格比較の精度</td></tr>
+<tr><td>X（旧Twitter）・掲示板での生の声</td><td>複数回検索したが<strong>1件も特定できなかった</strong></td><td>需要の裏付けは知恵袋・note・行政処分で足りていると判断</td></tr>
+</table>
+</div>
+
+<h2 id="s14">14. 出典</h2>
+<h3>法令・公的統計（一次情報）</h3>
+<ul class="src">
+<li>警備業法（昭和47年法律第117号） https://laws.e-gov.go.jp/law/347AC0000000117</li>
+<li>警備業法施行規則（昭和58年総理府令第1号） https://laws.e-gov.go.jp/law/358M50000002001</li>
+<li>警察庁「警備業法等の解釈運用基準について」令和6年6月27日 丙生企発第240号 https://www.npa.go.jp/laws/notification/seian/seiki/20240627hei240.pdf</li>
+<li>同 令和元年8月30日 丙生企発第23号（2019年改正時） https://www.npa.go.jp/laws/notification/seian/seiki/20190904seianki23.pdf</li>
+<li>警察庁「令和7年における警備業の概況」（2025年末現在） https://www.npa.go.jp/publications/statistics/safetylife/reiwa7keibigaikyo.pdf</li>
+<li>同 関連データCSV（規模別内訳・年齢構成を実測） https://www.npa.go.jp/publications/statistics/safetylife/reiwa7data.csv</li>
+<li>警察白書 統計2-90（長期時系列） https://www.npa.go.jp/hakusyo/r06/honbun/csv/aa2z00900.csv</li>
+<li>警察庁「省力化投資促進プラン ―警備業―」2025年12月22日 https://www.npa.go.jp/bureau/safetylife/keibigyou/shouryokuka_plan_r7.pdf</li>
+<li>神奈川県警察「警備員教育における教育の時間数、頻度及び実施可能な講義の方法等の改正について」 https://www.police.pref.kanagawa.jp/tetsuzuki/eigyokankei/keibi/mesd0096.html</li>
+</ul>
+
+<h3>競合（各社公式）</h3>
+<ul class="src">
+<li>警備フォース https://service.keibi-force.com/ ／機能 https://service.keibi-force.com/function/ ／料金 https://service.keibi-force.com/price/</li>
+<li><strong>警備フォース「法定備付書類のクラウド管理」プレスリリース（2026年4月21日）</strong> https://prtimes.jp/main/html/rd/p/000000003.000177196.html</li>
+<li>EasyKeiby5 出力帳票 https://www.dangobros.com/easykeiby5/tyohyo.htm ／価格 https://www.dangobros.com/easykeiby5/dousa.htm</li>
+<li>警備員名簿2 出力帳票 https://www.dangobros.com/ekmeibo2/tyohyo.htm ／価格 https://www.dangobros.com/ekmeibo2/dousa.htm</li>
+<li>ガードエクスプレス 帳票サンプル https://www.guardexpress.jp/contents/se_samp/ ／機能一覧 https://www.guardexpress.jp/contents/se_func/ ／最新情報 https://www.guardexpress.jp/contents/news/</li>
+<li>警備教育Pro https://www.keibi-soft.com/keibi-kyouiku.html</li>
+<li>富士コンピュータ 警備業管理システム https://fujicomp.co.jp/business/development/core-system/security.html</li>
+<li>プロキャス警備 https://pro-cas.jp/keibi/ ／ITreview（レビュー0件） https://www.itreview.jp/products/purokyasukeibi/profile</li>
+<li>くもかん https://lp.kumocan.com/ ／KOMAINU https://komainu.cloud/function/</li>
+<li>警備スマート管理 https://www.ctsys.jp/guard/ ／日報365 for 警備 https://www.oakis.co.jp/product/np365kb/</li>
+</ul>
+
+<h3>無料・安価な代替</h3>
+<ul class="src">
+<li><strong>全国警備業協会 教育実施簿（Excel・認証なしで取得可を実測）</strong> https://www.ajssa.or.jp/wp/wp-content/uploads/2022/02/e-learning.kyouikujisshibo.xlsx</li>
+<li><strong>同 教育計画書（Excel）</strong> https://www.ajssa.or.jp/wp/wp-content/uploads/2022/02/e-learning.kyouikukeikakusho.xls</li>
+<li>全警協eラーニング https://www.ajssa.or.jp/business/learning ／料金（千葉県警備業協会） https://www.chikeikyo.or.jp/n_elearning.html</li>
+<li>全国警備業協会 書籍等販売サイト（警備員名簿用紙 30枚 720円） https://shop-ajssa.com/</li>
+<li>岡山県警備業協会「警備業における法定備付書類」 https://okakeikyo.or.jp/shiryo/hoteisyorui.html</li>
+</ul>
+
+<h3>補助金</h3>
+<ul class="src">
+<li>デジタル化・AI導入補助金2026 公式 https://it-shien.smrj.go.jp/ ／ITツール検索 https://it-shien.smrj.go.jp/search/</li>
+<li>IT導入支援事業者登録要領 https://it-shien.smrj.go.jp/pdf/it2026_touroku_it_jigyosha.pdf</li>
+<li>ITツール登録要領 https://it-shien.smrj.go.jp/pdf/it2026_touroku_it_tool.pdf</li>
+<li>中小企業庁 公募要領の公開 https://www.chusho.meti.go.jp/koukai/hojyokin/kobo/2026/260310001.html</li>
+<li><small>登録ツール27件は、公式検索画面が読み込んでいる公開API <code>POST https://console.it-shien.smrj.go.jp/api/portal/search2026/tools</code> を直接呼び出して取得（2026-08-28実測）。公式サイトと同一のデータソースですが、画面上で目視確認した結果ではありません。</small></li>
+</ul>
+
+<h3>行政処分・生の声</h3>
+<ul class="src">
+<li>静岡県公安委員会 行政処分 https://www.pref.shizuoka.jp/police/about/hore/kebi.html</li>
+<li>北海道公安委員会 行政処分 https://www.police.pref.hokkaido.lg.jp/info/seian/gyousei-syobun/gyousei.html</li>
+<li>和歌山県公安委員会 行政処分 https://www.police.pref.wakayama.lg.jp/03_soudan/seian_todokede/keibiin_shobun/index.html</li>
+<li>宮城県公安委員会 行政処分（名簿写真の3年更新漏れ2件） https://www.police.pref.miyagi.jp/seian/kyoninka/gyouseisyobun/kouhyouichiran.html</li>
+<li>note「警備員指導教育責任者の正体」2026-04-20 https://note.com/physicalsecurity/n/n7d6f8f89740b</li>
+<li>note「教育計画書と実施簿の作り方（有料500円）」2025-09-07 https://note.com/deep_rose7253/n/n746deaffac19</li>
+<li>山田社会保険労務士事務所（警備業特化）「教育実施簿の正しい書き方と労務記録との整合管理」 https://ymd-sr.jp/</li>
+<li>楽々Webデータベース 導入事例（ジャパンセキュリティプロモーション） https://www.sei-info.co.jp/webdatabase/cases/jsp/</li>
+<li>Yahoo!知恵袋（引用した13件のURLは調査ログに記載。代表例）<br>
+指導実施簿の書き方 https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13242195783 ／計画書の使い回し https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q10312144045 ／具体的内容の書き方 https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11310855201</li>
+</ul>
+
+<hr>
+<p class="meta">
+この資料は「見るための版」です。<strong>正本は同フォルダの <code>HANTEI_HYO.md</code>（判定基準）と <code>C:\dev\_新規事業探索\DECISIONS.md</code>（決定）</strong>です。食い違ったときは正本を正とします。<br>
+作成：2026-08-28 ／ 合同会社R.Y.S ／ 新規事業探索 段階6
+</p>
+</main>
+</div>
+</body>
+</html>

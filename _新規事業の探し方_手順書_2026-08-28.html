@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新規事業の探し方（手順書）</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--muted:#5a5a5a;--line:#d5d8dd;--soft:#f5f6f8;--accent:#1f4e79;--ng:#a8202a;--ngbg:#fdeced;--ok:#1f6b3a;--okbg:#eaf5ee;--warn:#8a5a00;--warnbg:#fdf3e0;--key:#4b2e83;--keybg:#f1ecfa;}
+@media (prefers-color-scheme:dark){:root{--bg:#16181c;--fg:#e8eaed;--muted:#a8adb6;--line:#3a3f47;--soft:#1e2126;--accent:#8ab4e8;--ng:#ff9098;--ngbg:#3a1d20;--ok:#7ed39a;--okbg:#17301f;--warn:#f0c36b;--warnbg:#332714;--key:#c3aef0;--keybg:#241c33;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;font-size:15px;line-height:1.9;font-variant-numeric:tabular-nums;}
+.wrap{display:flex;align-items:flex-start;max-width:1220px;margin:0 auto}
+nav{position:sticky;top:0;width:275px;flex:0 0 275px;max-height:100vh;overflow-y:auto;padding:24px 14px;border-right:1px solid var(--line);font-size:13px;line-height:1.7;}
+nav h2{font-size:12px;letter-spacing:.08em;color:var(--muted);margin:0 0 10px;font-weight:600}
+nav a{display:block;padding:4px 6px;color:var(--fg);text-decoration:none;border-radius:4px}
+nav a:hover{background:var(--soft);color:var(--accent)}
+main{flex:1 1 auto;min-width:0;padding:28px 30px 90px}
+h1{font-size:24px;line-height:1.5;margin:0 0 6px;border-bottom:3px solid var(--accent);padding-bottom:12px}
+h2{font-size:19px;margin:48px 0 12px;padding:6px 0 6px 12px;border-left:5px solid var(--accent);background:var(--soft)}
+h3{font-size:16px;margin:28px 0 8px;color:var(--accent)}
+h4{font-size:14px;margin:18px 0 6px}
+p{margin:.7em 0}
+.meta{color:var(--muted);font-size:13px;margin:0 0 18px}
+.tblwrap{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}
+td.num{text-align:right;white-space:nowrap}
+.box{border:1px solid var(--line);border-left-width:5px;border-radius:6px;padding:12px 16px;margin:16px 0;background:var(--soft)}
+.box.ng{border-left-color:var(--ng);background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok);background:var(--okbg)}
+.box.warn{border-left-color:var(--warn);background:var(--warnbg)}
+.box.key{border-left-color:var(--key);background:var(--keybg)}
+.box h4{margin-top:0}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap}
+.tag.ng{background:var(--ng);color:#fff}.tag.ok{background:var(--ok);color:#fff}
+.tag.key{background:var(--key);color:#fff}.tag.gray{background:var(--muted);color:var(--bg)}
+.tag.warn{background:var(--warn);color:#fff}
+code{background:var(--soft);padding:1px 5px;border-radius:3px;font-size:.9em;word-break:break-all}
+ul,ol{margin:.5em 0;padding-left:1.5em}li{margin:.35em 0}
+small{color:var(--muted)}a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.big{font-size:17px;font-weight:600;line-height:1.7}
+.step{display:inline-block;background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;font-size:14px;font-weight:700;margin-right:6px}
+@media print{nav{display:none}main{padding:0}.wrap{display:block}body{font-size:11pt;color:#000;background:#fff}}
+@media (max-width:860px){.wrap{display:block}nav{position:static;width:auto;max-height:none;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<h2>もくじ</h2>
+<a href="#s0">0. 結論</a>
+<a href="#s1">1. 前提（決まっている条件）</a>
+<a href="#s2">2. 206件出して0件</a>
+<a href="#s3">3. 探し方の全体像</a>
+<a href="#s4">4. 段1：どこを見るか（9つ）</a>
+<a href="#s5">5. 段2：1分で落とす3つの問い</a>
+<a href="#s6">6. 段3：ゲート0</a>
+<a href="#s7">7. 段4：人力で1件やる</a>
+<a href="#s8">8. 御社ならどこから見るか</a>
+<a href="#s9">9. 最初の1回の段取り</a>
+<a href="#s10">10. この方法の弱点</a>
+<a href="#s11">11. 決めていただきたいこと</a>
+<a href="#s12">12. 出典</a>
+</nav>
+<main>
+<h1>新規事業の探し方（手順書）</h1>
+<p class="meta">
+作成日：2026-08-28 ／ 状態：<strong>案（未承認）</strong> ／ 対象：新規事業探索<br>
+ご依頼：「ECや物販に特定せず、新しく始める上での探し方を提示してほしい」<br>
+この資料の情報源は、すべて<strong>実際にページを開いて実在を確認</strong>しています（12節）。確認できなかったものは【未確認】と書いています。
+</p>
+
+<h2 id="s0">0. 結論</h2>
+<div class="box key">
+<p class="big" style="margin-top:0">探し方はこの資料に全部書きます。ただし先に1つ、申し上げておきたいことがあります。</p>
+<p><strong>いま足りていないのは、たぶん探し方ではありません。</strong></p>
+<p>これまでに事業案を <strong>105件</strong>（AI×物理実体・カタログv1）と <strong>101件</strong>（SaaS統合版）、合計 <strong>206件</strong> 出しています。そのうち5件をゲート0にかけ、4件が落ち、1件（K-03）が通りました。<strong>そして、実際に着手したものは0件です。</strong></p>
+<p><strong>案の数が足りなかったわけではありません。</strong>次に探し方を良くしても、また200件が並ぶだけかもしれない——という可能性は、正直に申し上げておきます。</p>
+<p style="margin-bottom:0">なので、この手順書には従来なかったものを1つ入れました。<strong>「段4：システムを作る前に、人力で1件だけ実際にやってみる」です。</strong>ここを必須にしないと、また同じことになります。</p>
+</div>
+
+<h2 id="s1">1. 前提（もう決まっている条件）</h2>
+<p>探し方は、条件が決まって初めて意味を持ちます。ここまでの会話で次が確定しています。<strong>違っていたら直してください。ここが違うと全部ずれます。</strong></p>
+<div class="tblwrap">
+<table>
+<tr><th>項目</th><th>決まっていること</th><th>探し方への影響</th></tr>
+<tr><td><strong>資金</strong></td><td><strong>上限1,500万円</strong>（うち自己資金1,000万円）</td><td>大型倉庫・製造・複数正社員の同時採用は最初から外す</td></tr>
+<tr><td><strong>人</strong></td><td><strong>雇えばよい。制約は坂野様ご自身の時間だけ</strong></td><td><strong>これが最大の武器。</strong>人が要る商売を候補から外さなくてよい＝多くの一人法人が降りる場所に入れる</td></tr>
+<tr><td>目標</td><td>月50万円が5年10年入り続ける形。スケール・売却は目的ではない</td><td>大きく育つ市場を探さなくてよい。<strong>小さくて長い</strong>ものを探す</td></tr>
+<tr><td>粗利率</td><td>粗利率では判断しない。回転数で見る</td><td>労働集約型を粗利率で落とさない</td></tr>
+<tr><td>許認可</td><td>取得に3か月〜半年かかるものは避けたい</td><td>建設業許可・産廃・人材派遣などは要注意（後述）</td></tr>
+<tr><td>時間軸</td><td>5年後ではなく<strong>10年後</strong>の増減で見る</td><td>いま伸びていても10年後に消える領域は避ける</td></tr>
+<tr><td>買収</td><td><strong>スモールM&Aは行わない</strong>（情報源としてのみ使う）</td><td>探し先④⑤の使い方が変わる。<strong>この方針は今も有効か、確認が要ります</strong></td></tr>
+</table>
+</div>
+
+<h2 id="s2">2. なぜ探し方を変えるのか（206件出して0件着手）</h2>
+<p>これまでの探し方は「<strong>困りごとの痕跡を探す</strong>」でした。知恵袋、クラウドソーシング、レビューサイト、アプリストア。<strong>これ自体は良い方法で、実際よく機能しました。</strong>ただ、出てきた案が全部同じ場所で死にました。</p>
+<div class="tblwrap">
+<table>
+<tr><th>案</th><th>死因</th></tr>
+<tr><td>C-03 古物台帳</td><td>RECOREが買取プラン月16,500円に<strong>追加課金なしで同梱</strong></td></tr>
+<tr><td>E-01 棚卸バーコード</td><td>Airレジが<strong>完全無料で同梱</strong></td></tr>
+<tr><td>C-04 警備業の簿冊</td><td>警備フォースが月26,000円に<strong>無料同梱</strong>（2026年4月21日）</td></tr>
+<tr><td>J-04 SNS承認フロー</td><td>Canva Businessが同梱／SocialDogが追加（2026年8月27日）</td></tr>
+<tr><td>（過去）転送事業</td><td><strong>メルカリが内製化</strong>。プラットフォームの上に乗っていた</td></tr>
+</table>
+</div>
+<div class="box ng">
+<p style="margin:0"><strong>5件とも「誰かの上に乗っていた」から死にました。</strong>ソフトなら大きい製品に同梱され、パートナー事業ならプラットフォームに内製化される。<br>
+だから今回は、探す順番を変えます。<strong>「困りごと」から探すのをやめ、「誰の上にも乗っていない場所」から探します。</strong></p>
+</div>
+
+<h2 id="s3">3. 探し方の全体像（4段）</h2>
+<p>ふるいの目を、粗いところから細かいところへ順に通します。<strong>安く落とせるものから先に落とす</strong>のが原則です。</p>
+<div class="tblwrap">
+<table>
+<tr><th>段</th><th>やること</th><th>かかる時間</th><th>ここを通る数の目安</th></tr>
+<tr><td><span class="step">1</span><strong>どこを見るか決めて、案を集める</strong></td><td>9つの探し先から、2〜3つを選んで見る（4節）</td><td>1つの探し先につき半日</td><td>30〜50件</td></tr>
+<tr><td><span class="step">2</span><strong>1分で落とす</strong></td><td>3つの問いに答えるだけ（5節）</td><td>1件1分</td><td><strong>10件まで</strong></td></tr>
+<tr><td><span class="step">3</span><strong>ゲート0にかける</strong></td><td>6つの問い＋止める条件8つ（6節）</td><td>1件1日（Claudeが実施）</td><td>2〜3件</td></tr>
+<tr><td><span class="step">4</span><strong>人力で1件やる</strong> ★新設</td><td>システムを作らず、実際に1件だけ売ってみる（7節）</td><td>2〜4週間</td><td><strong>1件</strong></td></tr>
+</table>
+</div>
+<div class="box warn">
+<p style="margin:0"><strong>段2で「10件まで」と数を切るのが、今回の大きな変更点です。</strong>これまでは100件超を並べて、そこから選ぼうとして選べませんでした。<strong>選べないのは、選択肢が多すぎるからです。</strong>10件なら1日で読めます。</p>
+</div>
+
+<h2 id="s4">4. 段1：どこを見るか（9つの探し先）</h2>
+<p>すべて<strong>無料で、いますぐ見られる</strong>ことを確認済みです。上から順に、御社の条件に合う順に並べています。</p>
+
+<h3>① 人が採れない仕事を見る　<span class="tag key">最優先</span></h3>
+<p><strong>いちばん強い探し先です。</strong>理由は、御社が「人は雇えばいい」と言える立場だからです。多くの一人法人はここで降ります。</p>
+<div class="box">
+<p><strong>見るもの</strong>：厚生労働省「一般職業紹介状況（職業安定業務統計）」の<strong>参考統計表7-1</strong>（職業別の有効求人倍率）</p>
+<p><code>https://www.mhlw.go.jp/toukei/list/114-1.html</code>（無料・登録不要。毎月更新）</p>
+<p><strong>直近の実測値（令和8年7月分・2026年8月28日公表）</strong>：全体は1.18倍ですが、職業別に見ると桁違いに開いています。</p>
+<div class="tblwrap">
+<table>
+<tr><th>職業</th><th>有効求人倍率</th></tr>
+<tr><td>建設躯体工事従事者</td><td class="num"><strong>7.94</strong></td></tr>
+<tr><td>保安職業従事者（警備など）</td><td class="num">6.54</td></tr>
+<tr><td>土木作業従事者</td><td class="num">6.49</td></tr>
+<tr><td>建築・土木・測量技術者</td><td class="num">5.46</td></tr>
+<tr><td>機械整備・修理従事者</td><td class="num">3.88</td></tr>
+<tr><td>介護サービス職業従事者</td><td class="num">3.82</td></tr>
+<tr><td><small>（参考）一般事務従事者</small></td><td class="num"><small>0.29</small></td></tr>
+</table>
+</div>
+<p style="margin-bottom:0"><strong>読み方</strong>：倍率7.94とは「1人の求職者に8件の求人がある」ということです。<strong>＝金を出しても人が採れない。</strong>ここに人を供給できる形を作れれば、単価は自然と上がります。<br>
+<strong>ただし注意</strong>：倍率が高いのは「きつい・危険・安い」からです。<strong>倍率が高いだけでは飛びつかず、必ず②とセットで見てください。</strong></p>
+</div>
+
+<h3>② 単価が上がっている仕事を見る（①と重ねる）</h3>
+<div class="box">
+<p><strong>見るもの</strong>：国土交通省「公共工事設計労務単価」</p>
+<p><code>https://www.mlit.go.jp/report/press/tochi_fudousan_kensetsugyo14_hh_000001_00337.html</code>（無料・登録不要。毎年2月頃に公表）</p>
+<p><strong>令和8年3月適用の実測値</strong>：全国全職種の加重平均 <strong>25,834円</strong>。単純平均で前年度比 <strong>+4.5%</strong>、<strong>14年連続の上昇</strong>で、初めて25,000円を超えました。47都道府県・51職種の単価が全部載っています。</p>
+<div class="tblwrap">
+<table>
+<tr><th>適用年</th><th>全国全職種平均</th><th>伸び率</th></tr>
+<tr><td>令和4年3月〜</td><td class="num">21,084円</td><td class="num">+2.5%</td></tr>
+<tr><td>令和5年3月〜</td><td class="num">22,227円</td><td class="num">+5.2%</td></tr>
+<tr><td>令和6年3月〜</td><td class="num">23,600円</td><td class="num">+5.9%</td></tr>
+<tr><td>令和7年3月〜</td><td class="num">24,852円</td><td class="num">+6.0%</td></tr>
+<tr><td><strong>令和8年3月〜</strong></td><td class="num"><strong>25,834円</strong></td><td class="num">+4.5%</td></tr>
+</table>
+</div>
+<p style="margin-bottom:0"><strong>①×②が重なるところが、いちばんおいしい場所です。</strong>人が採れず、かつ単価が上がり続けている。建設・土木がまさにそれです（躯体7.94倍＋14年連続の単価上昇）。<br>
+<small>※ただし建設業には許可の問題があります。「建設業許可」は取得に時間がかかるため、坂野様のご方針（3か月〜半年かかるものは避ける）と衝突する可能性があります。<strong>許可が要らない範囲（軽微な工事・人材の供給側・周辺サービス）で考える必要があります。これは【要確認】です。</strong></small></p>
+</div>
+
+<h3>③ 供給が消えた場所を見る（休廃業）</h3>
+<div class="box">
+<p><strong>見るもの</strong>：東京商工リサーチ／帝国データバンクの休廃業・解散調査（どちらも無料・登録不要）</p>
+<p><code>https://www.tsr-net.co.jp/data/detail/1202284_1527.html</code>（TSR・2026年1月9日公表）<br>
+<code>https://www.tdb.co.jp/report/industry/20260109-kyuhaigyo25y/</code>（TDB・同日公表）</p>
+<p><strong>実測値（2025年）</strong>：TSR <strong>67,210件</strong>（前年比+7.2%・<strong>過去最多</strong>）／TDB 67,949件。<strong>※両社は集計の定義が違うので件数も増減方向も一致しません。両方を並べて見てください。</strong></p>
+<p><strong>業種別の内訳（TSR）</strong>：サービス業他 21,961件（32.7%）／建設業 10,283件（15.3%）／小売業 7,903件（11.8%）／<strong>情報通信業は増加率トップの +15.2%</strong>。</p>
+<p><strong>やめる人の年齢（TSR）</strong>：70代 38.6%、80代以上 34.0%、<strong>60代以上で90.6%</strong>。平均74.9歳・中央値76歳。<br>
+<strong>後継者不在率（TDB・2025年）</strong>：<strong>50.1%</strong>。業種別では建設業57.3%が最高。</p>
+<p style="margin-bottom:0"><strong>読み方</strong>：廃業は「需要が消えた」のではなく「<strong>やる人がいなくなった</strong>」ケースが大半です（60代以上が90.6%）。<strong>客は残っているのに、店だけ消える。</strong>そのとき客はどこへ行ったのか——これが探すべきものです。</p>
+</div>
+
+<h3>④ 小さい商売のカタログを眺める（M&Aマッチングサイト）</h3>
+<div class="box">
+<p><strong>買うためではありません。</strong>「どんな小商売が、いくらの売上で、いくらの利益で回っているか」を実物で見るためです。教科書には載っていない情報が、無料で見られます。</p>
+<div class="tblwrap">
+<table>
+<tr><th>サイト</th><th>案件一覧URL</th><th>掲載件数<br><small>(2026-08-29表示値)</small></th><th>未登録で一覧が見られるか</th></tr>
+<tr><td>BATONZ</td><td><code>https://batonz.jp/sell_cases/</code></td><td class="num">45,033件</td><td>見られる</td></tr>
+<tr><td>TRANBI</td><td><code>https://www.tranbi.com/buy/list/</code></td><td class="num">7,574件</td><td>見られる</td></tr>
+<tr><td>Speed M&A</td><td><code>https://speed-ma.com/projects</code></td><td class="num">7,042件</td><td>見られる</td></tr>
+<tr><td><strong>M&Aクラウド</strong></td><td><code>https://macloud.jp/selling_targets</code></td><td class="num">2,156件</td><td>見られる。<strong>業種70種以上・前期売上・営業損益・純資産・エリアで絞り込める</strong></td></tr>
+</table>
+</div>
+<p style="margin-bottom:0"><strong>4サイトとも、会員登録なしで一覧が見られます</strong>（個別の詳細を見るには登録が要ります）。実例として、未ログインで「月利益数十万円・自走している飲食店／売上2,000〜3,000万円／譲渡価格400万円」といった情報まで見えました。<br>
+<strong>絞り込みが一番使いやすいのはM&Aクラウドです。</strong>「営業利益が出ていて、売上規模が小さく、自分の地域にある商売」を並べて眺めるだけで、感覚がかなり変わります。</p>
+</div>
+
+<h3>⑤ 事業承継・引継ぎ支援センター（公的機関）</h3>
+<div class="box warn">
+<p><code>https://shoukei.smrj.go.jp/</code>（中小企業基盤整備機構が運営）<br>
+<strong>全国47都道府県に設置。相談は無料・秘密厳守。</strong>「後継者人材バンク」があり、後継者不在の会社と、起業したい人を引き合わせる制度です。</p>
+<p style="margin-bottom:0"><strong>ただし2つ注意があります。</strong><br>
+① <strong>譲渡希望企業の一般公開一覧はありません。</strong>マッチングはセンター経由の非公開・個別対応です（埼玉・大阪の後継者人材バンクページで確認）。<br>
+② 都道府県によっては<strong>センター指定の創業塾の受講が原則必須</strong>だったり、連携する創業支援機関からの紹介が条件だったりします。<br>
+そして何より——<strong>これは「買う／引き継ぐ」に近い形です。坂野様は「スモールM&Aは行わない」と決めておられます。この方針が今も有効かどうかを、先に確認させてください。</strong></p>
+</div>
+<h3>⑥ 法律が変わって、やらなければならなくなったことを見る</h3>
+<div class="box">
+<p><strong>見るもの（3つとも無料・登録不要）</strong></p>
+<ul>
+<li><strong>e-Gov パブリック・コメント</strong> <code>https://public-comment.e-gov.go.jp/pcm/list</code><br>
+<small>「意見募集中」「結果公示」「過去案件」のタブがあり、<strong>キーワード・分野・所管省庁・締切間近</strong>で絞り込めます。<strong>義務化される前に、その気配が分かる場所</strong>です</small></li>
+<li><strong>e-Gov法令検索「更新法令一覧」</strong> <code>https://laws.e-gov.go.jp/update/</code><br>
+<small>更新日・法令種別で絞れて、<strong>各法令に施行日が表示されます</strong>。「いつから義務になるか」が分かります</small></li>
+<li><strong>官報</strong> <code>https://www.kanpo.go.jp/</code><br>
+<small><strong>※2025年4月1日に電子化されました。</strong>「官報の発行に関する法律」施行で、内閣府のサイト掲載をもって発行となり、<strong>閲覧は無料</strong>（直近90日分すべて、それ以降もプライバシー保護対象を除き閲覧可）。<strong>旧「インターネット版官報」（kanpo.npb.go.jp）は2025年3月31日で役割を終えています。</strong>ここは古い情報が出回っているので注意してください</small></li>
+</ul>
+<p style="margin-bottom:0"><strong>★ただし、C-04（警備業の簿冊）で得た大事な教訓があります。</strong><br>
+「法律で作る義務がある」ことと「そのためにソフトや外注に金を払う」ことは<strong>別</strong>です。警備業では、義務が確実にあり、行政処分の実例も11件あり、困っている投稿も13件見つかりました。<strong>それでも顧客が実際に払っていたのは、500円のnote記事と720円の用紙でした。</strong><br>
+<strong>この探し先を使うときは、必ず「今そこに、いくら払われているか」を先に確認してください。</strong></p>
+</div>
+
+<h3>⑦ 大手が撤退した領域を見る</h3>
+<div class="box">
+<p><strong>TDnet（東証の適時開示）</strong> <code>https://www.release.tdnet.info/inbs/I_main_00.html</code><br>
+<strong>無料・登録不要。キーワード検索ができます。</strong>ただし<strong>閲覧できるのは直近31日分のみ</strong>なので、定期的に見る必要があります。<br>
+<small>「事業譲渡」「子会社の異動」「サービス終了」で検索します。実際に2026年8月28日分の1ページ目だけで「異動」8件・「譲受」1件がヒットしました。</small></p>
+<p style="margin-bottom:0"><strong>EDINET</strong> <code>https://disclosure2.edinet-fsa.go.jp/weee0070.aspx</code>（全文検索。全期間・書類種別・業種で絞れる）<br>
+<strong>読み方</strong>：大手が「採算が合わない」と判断して手放した事業は、<strong>需要が消えたのではなく、その会社の規模に合わなかっただけ</strong>のことがあります。月50万円で10年続けばよい御社とは、そもそも採算の基準が違います。</p>
+</div>
+
+<h3>⑧ 現場へ行く（展示会）</h3>
+<div class="box">
+<p>坂野様は「展示会に行くのは大いにあり」と表明されています。ここは実際に足を運ぶ探し先です。</p>
+<ul>
+<li><strong>日本展示会協会「2026年1月-12月に開催される展示会 一覧」（PDF・無料・登録不要）</strong><br>
+<code>https://cdn.clipkit.co/tenants/897/resources/assets/000/001/402/original/2026tenjilist.pdf</code><br>
+<small>実測 <strong>809件</strong>を収録。会期・展示会名・会場・主催者・問合せ先URLが載っています。<strong>業種で絞る機能はない</strong>ので、表計算に落として自分で分類する必要があります（この作業は私が代行できます）</small></li>
+<li><strong>イベスル</strong> <code>https://s.evesul.jp/tradeshow_schedule</code>（業種等で絞り込める。約800件）</li>
+</ul>
+<p style="margin-bottom:0"><strong>★重要な注意</strong>：JETROの「世界の見本市・展示会情報（J-messe）」は<strong>2026年3月31日で提供を終了</strong>しており、現在はページが404になります。古い記事で紹介されていることが多いので、そこは無駄足になります。</p>
+</div>
+
+<h3>⑨ 自分が金を払っている外注先を見る（自社起点）</h3>
+<div class="box ok">
+<p style="margin:0"><strong>探し先の中で、いちばん確実です。</strong>やることは1つ——<strong>自社が過去1年に払った外注費の請求書を全部並べる</strong>だけです。<br>
+そこに書かれている金額は、<strong>「市場があること」の証明そのもの</strong>です。誰かが実際に金を受け取っています。推測がゼロで済む唯一の探し先です。<br>
+配送、撮影、記帳、翻訳、検品、梱包資材、システム、広告——「これ、自分でやったほうが安いのでは」と思った瞬間があるなら、そこは他の同業者も同じことを思っています。</p>
+</div>
+
+<h2 id="s5">5. 段2：1分で落とす3つの問い</h2>
+<p>集めた案を、<strong>1件1分で</strong>落とします。ここで10件まで削ってから、ゲート0に進みます。</p>
+<div class="box ng">
+<h4>問い1：これは、誰かの上に乗っていないか</h4>
+<p style="margin-bottom:0">プラットフォームのパートナー、大手製品の周辺機能、特定のモールの中だけで成立する商売——<strong>乗っているなら落とす。</strong><br>
+<small>理由：C-03・E-01・C-04・J-04・転送事業が、全部これで死にました。<strong>この1問だけで、過去の失敗5件はすべて事前に落とせていました。</strong></small></p>
+</div>
+<div class="box ng">
+<h4>問い2：1,500万円で始められるか</h4>
+<p style="margin-bottom:0">初期費用だけでなく、<strong>売上が立つまでの運転資金を含めて</strong>考えます。無理なら落とす。<br>
+<small>さらに言えば、1回目は<strong>500万円以内</strong>に収めたいところです。1,500万を1回で賭けると、外したときに次がありません。<strong>「1回賭ける金」ではなく「3回試せる金」と見ます。</strong></small></p>
+</div>
+<div class="box ng">
+<h4>問い3：坂野様が毎日そこにいないと回らないか</h4>
+<p style="margin-bottom:0">回らないなら落とす。<strong>人を雇うのは可</strong>ですが、坂野様ご自身が現場に固定される形は、目標（月50万円が10年続く）と両立しません。<br>
+<small>判定のしかた：「自分が2週間まるごと不在でも、事業が止まらないか」で見ます。</small></p>
+</div>
+
+<h2 id="s6">6. 段3：ゲート0（既にある仕組み・条件を1つ追加）</h2>
+<p>ここは既に運用中の仕組みなので、変更点だけ書きます。6つの問いに答え、止める条件に1つでも当たったら進みません。</p>
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>止める条件</th><th></th></tr>
+<tr><td>1</td><td>主客が5年後に減る</td><td>変更なし</td></tr>
+<tr><td>2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td>変更なし</td></tr>
+<tr><td>3</td><td>死ぬ条件3つのうち、1つでも既に起きている</td><td>変更なし</td></tr>
+<tr><td>4</td><td>母数 × 想定単価 × シェア1% が収益目標に届かない</td><td>変更なし</td></tr>
+<tr><td>5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td>変更なし</td></tr>
+<tr><td>6・6b・7</td><td>うちを選ぶ理由が書けない／顧客が並べて比べない／並べられない理由が「今やっていないから」だけ</td><td>変更なし</td></tr>
+<tr style="background:var(--keybg)"><td><strong>8</strong></td><td><strong>大手がこれを同梱・内製化しない構造的な理由を、1つも書けない</strong></td><td><strong>新設</strong></td></tr>
+</table>
+</div>
+<p><strong>条件8で認める「構造的な理由」は4つだけです</strong>：①人が動く部分が要る（大手はソフトに人を張らない）／②物・在庫を持つ必要がある（相手も同じ金を投じないと真似できない）／③責任・リスクを引き受ける必要がある（大手ほど社内の承認が下りない）／④相手の既存の商売と食い合う。<br>
+<strong>「今その大手はやっていない」は理由になりません。</strong>明日やるかもしれないからです。</p>
+
+<h2 id="s7">7. 段4：人力で1件やる　<span class="tag key">今回いちばん重要な追加</span></h2>
+<div class="box key">
+<p><strong>ゲート0が防げるのは「調べれば分かること」だけです。</strong>次の3つは、どれだけ調べても分かりません。</p>
+<ul>
+<li>その人が、<strong>実際にお金を払うか</strong></li>
+<li><strong>その価格で</strong>払うか</li>
+<li>導入支援なしで、<strong>自分で使えるか</strong></li>
+</ul>
+<p><strong>これは、実際に1件やってみるまで絶対に分かりません。</strong>206件出しても分かりませんでした。</p>
+<p><strong>やり方</strong></p>
+<ol>
+<li><strong>システムを作らない。</strong>ソフトは1行も書かない</li>
+<li><strong>1件だけ、実際に受注する（または断られる）。</strong>裏側は手作業でよい</li>
+<li><strong>予算の上限は50万円</strong>（1,500万円の30分の1）。ここで外しても痛くない額に固定する</li>
+<li><strong>期限は4週間。</strong>4週間で1円も動かなければ、その案は止める</li>
+</ol>
+<p style="margin-bottom:0"><strong>ここを通ったものだけ、システムを作る価値があります。</strong>そして、そこで初めてAIが本領を発揮します——<strong>「1件やってみて分かったこと」を、他社より安く速く回す道具として。</strong></p>
+</div>
+
+<h2 id="s8">8. 御社の条件だと、どこから見るのがいいか</h2>
+<p>9つ全部を見る必要はありません。条件から逆算すると、優先順位ははっきりします。</p>
+<div class="tblwrap">
+<table>
+<tr><th>順位</th><th>探し先</th><th>なぜ御社に合うか</th></tr>
+<tr><td><strong>1</strong></td><td><strong>① 人が採れない仕事 ×<br>② 単価が上がっている仕事</strong></td><td><strong>御社は「人を雇えばいい」と言える。</strong>ここで多くの一人法人が降りるので、競争相手が自然に減る。しかも数字が公的統計で毎月・毎年更新されるので、<strong>推測ゼロで探せる</strong></td></tr>
+<tr><td><strong>2</strong></td><td><strong>⑨ 自分が払っている外注先</strong></td><td>金が動いていることの証明が手元にある。<strong>調査コストがゼロ。</strong>今日すぐできる</td></tr>
+<tr><td>3</td><td>③ 休廃業 × ④ M&Aカタログ</td><td>「消えた供給」と「いくらで回っているか」を突き合わせられる。1,500万で入れる規模の商売が実物で見える</td></tr>
+<tr><td>4</td><td>⑦ 大手の撤退</td><td>情報が公開されていて調べやすい。ただし31日分しか見られないので継続が要る</td></tr>
+<tr><td>5</td><td>⑧ 展示会</td><td>価値は高いが時間がかかる。1・2と並行して仕込む</td></tr>
+<tr><td>低</td><td>⑤ 事業承継センター</td><td><strong>「買収しない」方針との整合を先に確認する必要がある</strong></td></tr>
+<tr><td>低</td><td>⑥ 法令改正</td><td>C-04で痛い目に遭った探し先。使うなら「今いくら払われているか」を先に見る</td></tr>
+</table>
+</div>
+<div class="box ok">
+<p style="margin:0"><strong>私の推奨は、1と2を同時に走らせることです。</strong><br>
+① は<strong>私が代行できます</strong>（統計を読んで、倍率と単価が両方伸びている職業を並べる）。<br>
+⑨ は<strong>坂野様にしかできません</strong>（御社の請求書は私には見えません）。<br>
+この2つは並行できるので、時間の無駄がありません。</p>
+</div>
+
+<h2 id="s9">9. 最初の1回の段取り（具体的に）</h2>
+<div class="tblwrap">
+<table>
+<tr><th>いつ</th><th>誰が</th><th>やること</th><th>できあがるもの</th></tr>
+<tr><td>1週目</td><td><strong>Claude</strong></td><td>探し先①②を実施。職業別の有効求人倍率と労務単価を突き合わせ、「人が採れず、かつ単価が上がっている」職業を全部並べる</td><td>候補の職業リスト（数字と出典つき）</td></tr>
+<tr><td>1週目</td><td><strong>坂野様</strong></td><td>探し先⑨を実施。過去1年に払った外注費を、費目と金額で書き出す（ざっくりで可）</td><td>外注費の一覧</td></tr>
+<tr><td>2週目</td><td>2人で</td><td>両方を合わせて案を出す（30〜50件）。<strong>段2の3つの問いで10件まで削る</strong></td><td>10件の候補</td></tr>
+<tr><td>3週目</td><td>坂野様</td><td>10件を読んで、<strong>2〜3件</strong>選ぶ</td><td>ゲート0にかける案</td></tr>
+<tr><td>4〜5週目</td><td>Claude</td><td>選ばれた案にゲート0（条件8つ）</td><td>判定結果</td></tr>
+<tr><td>6週目以降</td><td>坂野様</td><td><strong>通った案を、50万円・4週間の枠で1件だけ人力でやる</strong></td><td>1円でも動いたか／動かなかったか</td></tr>
+</table>
+</div>
+<p><strong>ここまでで約2か月半、使う金は50万円までです。</strong>1,500万円のうち残り1,450万円は手つかずのまま、「実際に金が動くか」が分かります。</p>
+
+<h2 id="s10">10. この方法の弱点（正直に）</h2>
+<div class="box warn">
+<h4>弱点1：①②は労働集約になる</h4>
+<p style="margin-bottom:0">人が採れない仕事に人を供給する形は、粗利率が低くなります。<strong>ただし坂野様は「粗利率では判断しない。回転数で見る」と決めておられる</strong>ので、方針とは矛盾しません。矛盾しないことと、実際にやりたいかは別なので、そこはご判断ください。</p>
+</div>
+<div class="box warn">
+<h4>弱点2：建設・土木は許可の壁がある</h4>
+<p style="margin-bottom:0">①②で最も数字が良いのは建設・土木ですが、建設業許可は取得に時間がかかります。<strong>坂野様の「3か月〜半年かかる許認可は避けたい」というご方針と衝突する可能性があります。</strong>許可が不要な範囲（軽微な工事、人材の供給側、周辺サービス）で成立するかは、<strong>まだ調べていません【未確認】</strong>。ここは案を出す前に確認すべき点です。</p>
+</div>
+<div class="box warn">
+<h4>弱点3：③④⑤は「買う・引き継ぐ」に近づく</h4>
+<p style="margin-bottom:0">坂野様は「スモールM&Aは行わない」と決めておられます。<strong>この方針が今も有効なら、③④は情報源としてのみ使い、⑤は使いません。</strong>方針が変わったのなら、選択肢はかなり広がります。<strong>ここは確認が必要です。</strong></p>
+</div>
+<div class="box ng">
+<h4>弱点4：この方法でも「決められない」問題は解決しない</h4>
+<p style="margin-bottom:0">これが一番正直に申し上げたいことです。<strong>206件出して0件着手したのは、案が悪かったからとは限りません。</strong>「まだ決めきれない」という状態そのものが原因かもしれない。<br>
+段2で10件に切り、段4で50万円・4週間の枠を切ったのは、そこへの対策です。<strong>ただし枠を切っても、決めるのは坂野様です。そこだけは私が代われません。</strong></p>
+</div>
+
+<h2 id="s11">11. 決めていただきたいこと</h2>
+<ol>
+<li><strong>この手順（4段）で進めてよいか</strong></li>
+<li><strong>「スモールM&Aは行わない」という方針は、今も有効か</strong> — ここで探し先③④⑤の使い方が変わります</li>
+<li><strong>建設・土木を候補に入れてよいか</strong> — 数字は一番良いのですが、許可の壁があります。「許可が要らない範囲で成立するか」を先に調べることもできます</li>
+<li><strong>探し先⑨（自社の外注費の書き出し）を、今週やっていただけるか</strong> — これは私にはできません。そして、たぶん一番早く答えが出ます</li>
+</ol>
+<p>1〜3が決まれば、<strong>私は今週中に探し先①②を回して、候補の職業リストを出せます。</strong></p>
+
+<h2 id="s12">12. 出典（すべて実際にページを開いて確認）</h2>
+<ul style="font-size:13px;line-height:1.7">
+<li>厚生労働省 一般職業紹介状況（職業安定業務統計） https://www.mhlw.go.jp/toukei/list/114-1.html ／令和8年7月分（2026-08-28公表） https://www.mhlw.go.jp/stf/newpage_75707.html ／参考統計表 https://www.mhlw.go.jp/content/11602000/001741200.pdf ／e-Stat https://www.e-stat.go.jp/stat-search/files?page=1&toukei=00450222&tstat=000001020327</li>
+<li>国土交通省 公共工事設計労務単価（令和8年2月17日公表・3月適用） https://www.mlit.go.jp/report/press/tochi_fudousan_kensetsugyo14_hh_000001_00337.html ／添付資料 https://www.mlit.go.jp/report/press/content/001981942.pdf</li>
+<li>東京商工リサーチ 2025年「休廃業・解散」企業動向調査 https://www.tsr-net.co.jp/data/detail/1202284_1527.html</li>
+<li>帝国データバンク 全国企業「休廃業・解散」動向調査（2025年） https://www.tdb.co.jp/report/industry/20260109-kyuhaigyo25y/ ／後継者不在率動向調査（2025年） https://www.tdb.co.jp/report/economic/20251121-successor25y/</li>
+<li>中小企業庁 M&A・事業承継の相談窓口 https://www.chusho.meti.go.jp/soudan/soudan_06.html ／事業承継・引継ぎポータル https://shoukei.smrj.go.jp/ ／センター一覧 https://shoukei.smrj.go.jp/center/</li>
+<li>M&Aクラウド https://macloud.jp/selling_targets ／TRANBI https://www.tranbi.com/buy/list/ ／BATONZ https://batonz.jp/sell_cases/ ／Speed M&A https://speed-ma.com/projects</li>
+<li>e-Gov パブリック・コメント https://public-comment.e-gov.go.jp/pcm/list ／e-Gov法令検索 更新法令一覧 https://laws.e-gov.go.jp/update/ ／官報（内閣府・2025-04-01電子化） https://www.kanpo.go.jp/ ／電子化の説明 https://www.cao.go.jp/others/soumu/kanpo/about/kanpo_about.html</li>
+<li>TDnet 適時開示情報閲覧サービス https://www.release.tdnet.info/inbs/I_main_00.html ／EDINET 全文検索 https://disclosure2.edinet-fsa.go.jp/weee0070.aspx</li>
+<li>日本展示会協会 2026年 展示会一覧PDF（809件） https://cdn.clipkit.co/tenants/897/resources/assets/000/001/402/original/2026tenjilist.pdf ／イベスル https://s.evesul.jp/tradeshow_schedule ／<strong>※JETRO J-messe は2026年3月31日で提供終了</strong> https://www.jetro.go.jp/j-messe/</li>
+<li>中小企業白書2026 第1部第1章第8節（事業承継、M&A） https://www.chusho.meti.go.jp/pamflet/hakusyo/2026/chusho/b1_1_8.html</li>
+</ul>
+<p><small><strong>【未確認】として残った点</strong>：①建設業許可が不要な範囲でこの事業が成立するか（未調査）／②BATONZの買い手側の料金体系（公表を確認できず）／③中小企業白書2026の後継者不在率の数値（本文になく付属Excel側のため未取得）／④EDINETは確認作業中にメンテナンス中で、検索画面の実挙動を最終確認できていない。</small></p>
+
+<hr>
+<p class="meta">
+この資料は「見るための版」であり、<strong>状態は「案（未承認）」</strong>です。承認をいただいた時点で <code>DECISIONS.md</code> に記帳します。<br>
+作成：2026-08-28 ／ 合同会社R.Y.S ／ 新規事業探索
+</p>
+</main>
+</div>
+</body>
+</html>

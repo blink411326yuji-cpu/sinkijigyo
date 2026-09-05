@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ゲート0 事業性の確認 K-03 価格自動改定</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1b1d22; --mut:#5b6270; --line:#dfe3ea; --soft:#f5f7fa;
+  --acc:#1f5fa8; --dai:#0f6b45; --daibg:#e3f4ec; --chu:#8a5a00; --chubg:#fdf1dc;
+  --sho:#8b2f2f; --shobg:#fbe9e9; --ok:#0f6b45; --okbg:#e3f4ec; --ng:#7a2f2f; --ngbg:#f6e7e7;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#14161a; --fg:#e6e8ec; --mut:#a2aab8; --line:#2c313a; --soft:#1b1e24;
+  --acc:#79b3ef; --dai:#7fd8ac; --daibg:#173328; --chu:#e5bd76; --chubg:#332a17;
+  --sho:#f0a0a0; --shobg:#331d1d; --ok:#7fd8ac; --okbg:#173328; --ng:#f0a0a0; --ngbg:#2e1c1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font-family:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",system-ui,sans-serif;
+ line-height:1.75;font-size:15px;font-variant-numeric:tabular-nums;}
+main{min-width:0}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;max-width:1280px;margin:0 auto;padding:24px 20px 80px;}
+nav{position:sticky;top:16px;align-self:start;border-right:1px solid var(--line);padding-right:12px;}
+nav a{display:block;padding:5px 0;color:var(--fg);text-decoration:none;font-size:13.5px;border-bottom:1px solid transparent;}
+nav a:hover{color:var(--acc);border-bottom-color:var(--line)}
+h1{font-size:24px;margin:0 0 4px;line-height:1.4}
+h2{font-size:19px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.lead{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+.note{background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--acc);padding:12px 14px;margin:14px 0;font-size:14px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+thead th{background:var(--soft);position:sticky;top:0;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:after{content:"";}
+tbody tr:hover{background:var(--soft)}
+td.c{text-align:center;white-space:nowrap}
+td.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+.bdg{display:inline-block;min-width:1.7em;text-align:center;padding:1px 7px;border-radius:3px;font-size:12.5px;font-weight:700}
+.b-dai{background:var(--daibg);color:var(--dai)}
+.b-chu{background:var(--chubg);color:var(--chu)}
+.b-sho{background:var(--shobg);color:var(--sho)}
+.b-num{background:var(--soft);color:var(--fg)}
+.st{display:inline-block;padding:1px 8px;border-radius:3px;font-size:12px;font-weight:700;white-space:nowrap}
+.st.nokoru{background:var(--okbg);color:var(--ok)}
+.st.otosu{background:var(--ngbg);color:var(--ng)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0;font-size:13.5px}
+.ctrl label{color:var(--mut)}
+select,input[type=search]{font:inherit;font-size:13.5px;padding:4px 7px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.card h3{margin:0 0 4px;font-size:16px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card .cid{font-size:12.5px}
+.card .meta{color:var(--mut);font-size:12.5px;margin:0 0 8px}
+#tbl{min-width:1000px}
+#tbl td:nth-child(2){min-width:210px}
+#tbl td:nth-child(3){min-width:150px}
+table.kv{min-width:520px}
+table.layers th:first-child,table.layers td:first-child{white-space:nowrap}
+table.kv th{width:190px;background:var(--soft);font-weight:600;white-space:nowrap}
+.hyw{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
+.hy{display:flex;gap:6px;align-items:center}
+.hyl{color:var(--mut)}
+ul.src{margin:6px 0 14px;padding-left:20px;font-size:13.5px}
+ul.src li{margin:2px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.kpi div{border:1px solid var(--line);border-radius:6px;padding:8px 14px;background:var(--soft);font-size:13px}
+.kpi b{display:block;font-size:20px;line-height:1.3}
+footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px}
+@media (max-width:860px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:12px}
+ nav{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 8px;
+   display:flex;flex-wrap:wrap;gap:4px 14px}
+}
+@media print{
+ nav,.ctrl{display:none}
+ .wrap{grid-template-columns:minmax(0,1fr);max-width:none;padding:0}
+ .card{break-inside:avoid}
+ body{font-size:10.5pt}
+}
+
+.mut{color:var(--mut);font-size:12.5px}
+.verdict{border:2px solid var(--ok);background:var(--okbg);border-radius:6px;padding:16px 18px;margin:18px 0}
+.verdict h3{margin:0 0 6px;font-size:18px;color:var(--ok)}
+.warn{border:2px solid var(--chu);background:var(--chubg);border-radius:6px;padding:14px 16px;margin:16px 0}
+.warn h3{margin:0 0 6px;font-size:17px;color:var(--chu)}
+.ok{color:var(--ok)} .ng{color:var(--ng)} .chu{color:var(--chu)}
+td.pass{background:var(--okbg)} td.hit{background:var(--ngbg);font-weight:700} td.cau{background:var(--chubg)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<nav>
+<a href="#s0">結論</a>
+<a href="#s1">1. 判定表（調査前に固定）</a>
+<a href="#s2">2. 問1 客はいま何で足りているか</a>
+<a href="#s3">3. ★純正が無料なのに有料15社が成立している</a>
+<a href="#s4">4. 問3 母数</a>
+<a href="#s5">5. 問4 5年後</a>
+<a href="#s6">6. 問5 死ぬ条件3つ</a>
+<a href="#s7">7. 問6 うちを選ぶ理由</a>
+<a href="#s8">8. 判定</a>
+<a href="#s9">9. ★通ったが、重い注意点が5つある</a>
+<a href="#s10">10. ゲート0で防げないこと</a>
+<a href="#s11">11. 次にやること</a>
+<a href="#s12">12. 出典</a>
+</nav>
+<main>
+
+<h1>ゲート0　事業性の確認<br><span style="font-size:19px;font-weight:400">K-03 Amazon・楽天の価格自動改定</span></h1>
+<p class="lead">作成日 2026-08-28　／　合同会社R.Y.S　／　decision-gate スキル ゲート0　／　要件定義の前に通す関門</p>
+
+<h2 id="s0">結論</h2>
+<div class="verdict">
+<h3>この案は、ゲート0を通ります。3件目にして初めてです。</h3>
+<p style="margin:8px 0 0"><strong>止める条件7つのうち、該当したものは1つもありませんでした。</strong></p>
+<p style="margin:8px 0 0"><strong>前2件との決定的な違いはここです。</strong>Amazonの純正機能（価格の自動設定）は<strong>無料</strong>で、C-03・E-01と同じ「無料同梱」の形に見えます。<strong>しかし、それでも有料の専用ツールが15社以上、月額380円〜43,780円という幅で現に成立していました。</strong>これは<strong>「純正では足りない」ことを顧客が行動で証明している</strong>ということです。つまり<strong>顧客は2つを並べて比べており、比較の土俵に上がれます。</strong></p>
+<p style="margin:8px 0 0">C-03（POSに無料同梱で探されない）・E-01（Airレジが無料で探されない）とは、構図が明確に違います。</p>
+</div>
+<div class="warn">
+<h3>ただし、通っただけです。重い注意点が5つあります。</h3>
+<p style="margin:6px 0 0">競合15社以上のレッドオーシャンであること、<strong>2026年1月31日からSP-APIの外部提供に年間1,400ドル（約21万5,000円）の固定費がかかること</strong>、独占禁止法上の論点が公正取引委員会に名指しされていることなど、着手前に受け止めておくべき事実があります。<a href="#s9">9節</a>にまとめました。<strong>これらを読んだうえで進むかどうかを決めてください。</strong></p>
+</div>
+
+<h2 id="s1">1. 判定表（★調査を始める前に固定したもの）</h2>
+<p>今回も、何も調べていない状態でこの表を確定させ、<span class="mono">K-03_価格自動改定/HANTEI_HYO.md</span> に保存してから調査を始めました。<strong>C-03・E-01の教訓は「調べ方の重点」としてだけ書き足し、判定基準そのものは動かしていません。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>判定</th><th>ひとこと</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="pass c">○ 該当せず</td><td>EC市場は拡大。出品者は減っていない</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td class="pass c">○ 該当せず</td><td><strong>受注管理システム3社は持っていなかった</strong>（<a href="#s2">2節</a>）</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件の3つのうち、1つでも既に起きている</td><td class="pass c">○ 該当せず</td><td>3つとも起きていない（<a href="#s6">6節</a>）</td></tr>
+<tr><td class="c">4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標に届かない</td><td class="pass c">○ 該当せず</td><td>Amazon約13万店＋楽天約5万店</td></tr>
+<tr><td class="c">5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td class="pass c">○ 該当せず</td><td>5つとも埋めた</td></tr>
+<tr><td class="c">6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td class="cau c">△ 書けるが弱い</td><td>該当はしないが、競合15社は重い（<a href="#s7">7節</a>）</td></tr>
+<tr><td class="c">6b</td><td>顧客がそもそも2つを並べて比べない</td><td class="pass c">○ 該当せず</td><td><strong>★有料15社の成立が、比べている証拠</strong></td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td class="c">―</td><td>Amazonは既にやっているため論点以前</td></tr>
+</tbody></table></div>
+
+<h2 id="s2">2. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p>探し先5つは全部埋まりました。今回は<strong>①プラットフォーム純正 → ②上位カテゴリ → ③専用ツール</strong>の順で調べています。</p>
+
+<h3>★プラットフォーム純正（最初に確認したこと）</h3>
+<div class="tw"><table>
+<thead><tr><th>プラットフォーム</th><th>機能</th><th>料金</th><th>限界として確認できたこと</th></tr></thead>
+<tbody>
+<tr><td><strong>Amazon</strong><br><span class="mut">価格の自動設定<br>Automate Pricing</span></td><td>カートボックス最安値への追随、下限価格の設定、他社サイト価格との比較、販売数ベースのルール、複数SKUへの一括適用</td><td class="hit"><strong>無料</strong><br><span class="mut">大口出品（Professional）に付帯。小口は対象外と米国公式が明記</span></td><td>・追随に<strong>30分〜1時間</strong>かかる（外部ツールは1〜5分）<br>・初期のルールが<strong>4パターンのみ</strong>で、「Prime出品者のみ追随」等の細かい条件を設定できない<br>・<strong>価格改定のたびにAmazonポイントの設定が0にリセットされる</strong>【単独ソース】<br>・セラーフォーラムに「価格の自動設定を使っているだけで出品停止になった」という投稿が複数</td></tr>
+<tr><td><strong>楽天</strong><br><span class="mut">RMS</span></td><td>CSVでの一括編集・一括更新（手動）</td><td>標準（無料）</td><td class="ok"><strong>競合の最安値に自動追随する機能は見当たりませんでした。</strong>あるのは一括変更を効率化する手動の機能だけです。<strong>つまり楽天側のほうが、外部ツールの余地が大きい可能性があります</strong></td></tr>
+</tbody></table></div>
+
+<h3>★探し先② 上位カテゴリ（受注管理・一元管理システム）</h3>
+<p><strong>C-03・E-01はここで落ちました。今回は違いました。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>製品</th><th>価格の自動追随を持っているか</th><th>確認できたこと</th></tr></thead>
+<tbody>
+<tr><td>CROSS MALL（クロスモール）</td><td class="ok c"><strong>持っていない</strong></td><td>「メイン店舗の価格変更後、他店舗へ一括反映」「一括●%OFF」という<strong>一括編集</strong>はあるが、公式ページ自身が競合価格の自動監視・追随ではないと説明</td></tr>
+<tr><td>ネクストエンジン</td><td class="ok c">見当たらない</td><td>FAQを確認したが、価格改定・自動追随の記載は見当たらなかった</td></tr>
+<tr><td>助ネコ</td><td class="ok c">見当たらない</td><td>公式の機能記事一覧を確認したが、記載は見当たらなかった</td></tr>
+<tr><td>クロスマ（Crossma）</td><td class="chu c">一部あり</td><td>Amazonの出品価格を基準に、楽天・Yahoo!・メルカリShopsへ<strong>自社の価格を同期する</strong>機能。<strong>競合最安値への追随ではない</strong></td></tr>
+<tr><td>GoQSystem／TEMPOSTAR／アシスト店長／mylogi</td><td class="c">【未確認】</td><td>robots.txt拒否や404で到達できず。<strong>「持っていない」とは断定していません</strong></td></tr>
+</tbody></table></div>
+<div class="note"><strong>ここが前2件との分かれ目です。</strong>C-03はリユース向けPOSが、E-01はAirレジが、それぞれ機能を丸ごと持っていました。<strong>今回、受注管理システム3社は持っていませんでした。</strong>持っていたのはプラットフォーム本体（Amazon純正）だけです。<br>
+そして<strong>Amazon純正は「上位カテゴリの製品」ではなく「プラットフォーム本体」です。</strong>この違いは重要で、条件2ではなく条件6b（顧客が並べて比べるか）で評価すべき論点になります。その答えが次の3節です。</div>
+
+<h3>探し先③ 専用ツール（有料）</h3>
+<div class="tw"><table>
+<thead><tr><th>製品</th><th>料金（税込・月額）</th><th>対応モール</th><th>備考</th></tr></thead>
+<tbody>
+<tr><td>Mariah</td><td class="num">380円</td><td>Amazon</td><td>業界最安値を自称</td></tr>
+<tr><td>セラースケット</td><td class="num">2,980〜5,480円<br><span class="mut">＋価格改定オプション500円</span></td><td>Amazon</td><td>主機能はアカウント停止・真贋対策。価格改定は「細かい設定ができない」との批判</td></tr>
+<tr><td>Cappy／D-plus</td><td class="num">3,980円〜</td><td>Amazon</td><td>D-plusは外注・複数担当者向け</td></tr>
+<tr><td>ウォッチベル</td><td class="num">3,980円</td><td>Amazon</td><td>自動改定ではなく手動改定の判断支援</td></tr>
+<tr><td>自価調</td><td class="num">3,240円</td><td>Amazon</td><td>PCインストール型</td></tr>
+<tr><td><strong>マカド！</strong></td><td class="num">4,980円</td><td>Amazon<br><span class="mut">他モール非対応と公式が明記</span></td><td>大口出品必須・SKU上限10万点。<strong>公式が「小口出品者・SKU10万点超・Amazon以外がメインの方には力を発揮できない」と自ら認めている</strong></td></tr>
+<tr><td>ARPAcart</td><td class="num">4,980円</td><td>Amazon</td><td>マカドと同一システムとされる</td></tr>
+<tr><td><strong>プライスター</strong></td><td class="num">5,280円</td><td>Amazon</td><td>ユーザー1万人以上と自称。商品登録工程の削減・発送代行も</td></tr>
+<tr><td>アマストリーム</td><td class="num">5,280円</td><td>Amazon</td><td>―</td></tr>
+<tr><td>ECザウルス</td><td class="num">6,468円</td><td>Amazon</td><td>「最短2分で価格改定」</td></tr>
+<tr><td>アマトピア</td><td class="num">21,780〜43,780円</td><td class="ok">Amazon・楽天・Yahoo</td><td>企業向け・紹介制</td></tr>
+<tr><td>Bizrobot</td><td>個別見積り</td><td class="ok">楽天・Amazon・Yahoo・au PAY・Qoo10</td><td>「15分ごとの競合価格収集」「AIによる価格提案」。数値の第三者検証は見当たらず</td></tr>
+<tr><td>価格改定王</td><td class="num">年9,800円</td><td>Amazon</td><td class="chu"><strong>新規申込を停止中</strong>（衰退の兆候）</td></tr>
+</tbody></table></div>
+
+<h3>探し先④ 汎用ツール／探し先⑤ 人手</h3>
+<div class="tw"><table>
+<thead><tr><th>探し先</th><th>状況</th></tr></thead>
+<tbody>
+<tr><td>汎用（Excel＋Keepa等）</td><td>Keepaは価格推移の<strong>可視化</strong>が主機能で、自動改定そのものではない。手動判断の補助。「Excel＋Keepaで手動改定している」という具体的な体験談は見つけられなかった【未確認】</td></tr>
+<tr><td>人手（代行）</td><td class="ok"><strong>「価格改定代行」「リプライシング代行」という専業サービスは見つかりませんでした</strong>（検索語を変えて2回試行）。EC運営代行の業務一覧7項目にも「価格改定」は独立項目として入っていない。<strong>E-01でエイジスに塞がれていたのとは対照的です</strong></td></tr>
+</tbody></table></div>
+
+<h2 id="s3">3. ★純正が無料なのに、有料ツールが15社以上成立している</h2>
+<p><strong>この事実がこの案を通した最大の根拠です。</strong>月額380円から43,780円まで、100倍の幅で商売が成立しています。<strong>顧客は「無料の純正」と「有料のツール」を並べて比べたうえで、有料を選んでいます。</strong></p>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>純正では足りない理由（確認できた事実）</th><th>出どころ</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td><strong>反応速度</strong>：純正は追随に30分〜1時間、外部ツールは1〜5分</td><td>dev.dynamic-pricing.tech／product-sales-creator.com</td></tr>
+<tr><td class="c">2</td><td><strong>ポイントの不具合</strong>：純正は価格改定のたびにAmazonポイントの設定がリセットされる</td><td>product-sales-creator.com<br><span class="mut">※単独ソース。裏取りできていません</span></td></tr>
+<tr><td class="c">3</td><td><strong>ルールの柔軟性</strong>：純正は初期状態で4パターンのみ。「Prime出品者のみ追随」等の細かい条件に対応できず、値下げ競争の頻度・タイミングを制御できない</td><td>sellerassistant.app</td></tr>
+<tr><td class="c">4</td><td><strong>付帯機能目当て</strong>：セラースケットはアカウント停止対策、プライスターは商品登録の工程削減（16→9工程）・発送代行など、価格改定以外が乗り換え理由になっている</td><td>sabosedo-experience.com</td></tr>
+<tr><td class="c">5</td><td><strong>楽天には純正の自動追随が無い</strong>：楽天出品者は最初から外部ツールに頼るしかない可能性</td><td>本調査</td></tr>
+</tbody></table></div>
+<div class="note"><strong>ただし、逆の声もはっきり存在します。</strong>マカド！のレビュー記事は「<strong>大量出品しないのなら、無料ツールで十分ですから</strong>」と明言しています。マカド！公式自身も、小口出品者・他モールがメインの人には「力を発揮できません」と認めています。<br>
+つまり<strong>有料ツールが刺さるのは「Amazonで大量に出品している層」に限られる</strong>ということです。この層の大きさは、この調査では測れていません。</div>
+
+<h2 id="s4">4. 問3　母数</h2>
+<div class="tw"><table>
+<thead><tr><th>段</th><th>数字</th><th>根拠の性質</th></tr></thead>
+<tbody>
+<tr><td>① Amazon（日本）の出店数</td><td class="num"><strong>約13万店</strong></td><td>業界メディアの集計。<strong>時点は【未確認】</strong>（2026年1月公開の記事）</td></tr>
+<tr><td>② 楽天市場の出店数</td><td class="num"><strong>約5万店</strong></td><td>同上</td></tr>
+<tr><td>③ うち大口出品で、大量のSKUを持ち、日々の価格改定が発生する層</td><td class="chu">取れなかった</td><td>【未確認】。ただしプライスターが「ユーザー1万人以上」と自称している数字が、有料ツールを使う層の規模感の目安になる</td></tr>
+</tbody></table></div>
+<p><strong>条件4の判定：該当しません。</strong>①＋②で約18万店。仮に③が1万〜2万規模だとしても、シェア1%＝100〜200社。月5,000円なら年600〜1,200万円で、目標に届く水準です。<strong>ただし③が測れていないため、これは目安にすぎません。</strong></p>
+
+<h2 id="s5">5. 問4　この客は5年後、増えるか減るか</h2>
+<p>EC市場は拡大が続いており、出品者数が急減する材料は見当たりませんでした。<strong>条件1は該当しません。</strong></p>
+<p>なお参考として、古物商許可は令和2年395,526件→令和7年614,118件と5年で約55%増えており（警察庁）、その増加分の中心はEC専業・せどりの個人と見られます。<strong>これはこの案の客層と重なります。</strong></p>
+
+<h2 id="s6">6. 問5　この案が死ぬ条件を3つ書き、その場で確認した</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>「〜が起きたら、この案は成立しない」</th><th>いま起きているか</th></tr></thead>
+<tbody>
+<tr><td class="c">死因1</td><td>Amazon純正が、外部ツールと同等の反応速度（数分）とルールの柔軟性を持ったら成立しない</td><td class="pass">○ <strong>起きていない</strong><br>純正は30分〜1時間、ルールは4パターン。有料15社が成立している現状がその証拠</td></tr>
+<tr><td class="c">死因2</td><td>SP-APIの外部提供にかかる固定費を、想定する契約数で回収できなくなったら成立しない</td><td class="cau">△ <strong>起きていないが、要注意</strong><br><strong>2026年1月31日から年間1,400ドル（約21万5,000円）が課される。</strong>月5,000円のツールなら年43契約で回収できる計算なので致命傷ではないが、<strong>立ち上げ初年度から確実にかかる固定費</strong></td></tr>
+<tr><td class="c">死因3</td><td>第三者提供の価格追随ツールが、独占禁止法上の問題として実際に規制されたら成立しない</td><td class="pass">○ <strong>起きていない</strong><br>公正取引委員会が理論的リスクとして指摘しているが、<strong>摘発事例は確認できなかった</strong>（<a href="#s9">9節</a>に詳述）</td></tr>
+</tbody></table></div>
+<p><strong>3つとも「既に起きている」には当たりません。条件3は該当しません。</strong>C-03は3つ中2つ、E-01は3つ中3つが起きていたので、明確に違います。</p>
+
+<h2 id="s7">7. 問6　うちを選ぶ理由は何か</h2>
+<h3>① 並べられるか</h3>
+<p><strong>並べられます。</strong>Amazonは既に純正で持っています。「今はやっていない」を根拠にできる状態ではありません。</p>
+
+<h3>② うちを選ぶ理由</h3>
+<div class="tw"><table>
+<thead><tr><th>選ばれうる理由</th><th>評価</th></tr></thead>
+<tbody>
+<tr><td class="ok"><strong>楽天に強いこと</strong>。楽天には純正の自動追随が無く、主要ツール（プライスター・マカド・ECザウルス等）は<strong>軒並みAmazon専業</strong></td><td class="cau">最も筋が良い。<strong>ただしBizrobot・アマトピア・クロスマが既に複数モール対応で先行</strong></td></tr>
+<tr><td>価格で勝つ</td><td class="ng"><strong>難しい。</strong>Mariahが月380円で既にいる</td></tr>
+<tr><td>反応速度で勝つ</td><td class="chu">ECザウルスが「最短2分」、Bizrobotが「15分ごとの収集」を謳っており、<strong>速度は既に競争されている</strong></td></tr>
+<tr><td>使いやすさ・画面の見やすさで勝つ</td><td class="chu">プライスターに「UIも使いづらい」「動線が複雑」という声があり、余地はある。<strong>ただし正確な星数を取れておらず、根拠として弱い</strong></td></tr>
+</tbody></table></div>
+<p><strong>条件6は該当しません（理由を書けます）。</strong>ただし正直に申し上げると、<strong>どれも決定打ではありません。</strong>最も筋が良いのは「楽天に強いこと」ですが、そこにも先行者がいます。</p>
+
+<h3>③ ★顧客はそもそも2つを並べて比べてくれるか</h3>
+<div class="verdict">
+<h3>比べてくれます。条件6bは該当しません。</h3>
+<p style="margin:8px 0 0"><strong>有料ツールが15社以上、月額380円〜43,780円で成立していること自体が、顧客が比較して有料を選んでいることの証拠です。</strong>「純正で足りるから探さない」という状態ではありません。</p>
+<p style="margin:8px 0 0">C-03はPOSに無料同梱されて探されず、E-01はAirレジに無料同梱されて探されませんでした。<strong>この案は、比較の土俵に上がれます。</strong></p>
+</div>
+
+<h2 id="s8">8. 判定</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>止める条件</th><th>判定</th><th>根拠</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="pass c">○</td><td>EC市場は拡大、出品者は減っていない</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリが機能を内包</td><td class="pass c">○</td><td>受注管理システム3社は持っていない。持っているのはプラットフォーム本体だけ</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件が既に起きている</td><td class="pass c">○</td><td>3つとも起きていない</td></tr>
+<tr><td class="c">4</td><td>母数×単価×1%が目標に届かない</td><td class="pass c">○</td><td>Amazon約13万店＋楽天約5万店</td></tr>
+<tr><td class="c">5</td><td>探し先に埋まっていないものがある</td><td class="pass c">○</td><td>5つとも埋めた</td></tr>
+<tr><td class="c">6</td><td>選ぶ理由を1つも書けない</td><td class="cau c">△</td><td>書けるが決定打ではない</td></tr>
+<tr><td class="c">6b</td><td>そもそも並べて比べられない</td><td class="pass c">○</td><td><strong>有料15社の成立が証拠</strong></td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今やっていない」だけ</td><td class="c">―</td><td>論点以前</td></tr>
+</tbody></table></div>
+<p><strong>該当した条件はありません。この案はゲート0を通ります。</strong></p>
+
+<h2 id="s9">9. ★通ったが、重い注意点が5つある</h2>
+<div class="warn">
+<h3>これらを読んだうえで、進むかどうかを決めてください。</h3>
+</div>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>注意点</th><th>どう効くか</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td><strong>競合15社以上のレッドオーシャン</strong><br>月380円〜43,780円の100倍の価格帯で、既に商売が成立している</td><td>「空いている領域」ではありません。<strong>既にいる相手から奪う勝負</strong>です。うちを選ぶ理由が弱い（7節）ことと合わせると、ここが最大の弱点です</td></tr>
+<tr><td class="c">2</td><td class="hit"><strong>SP-APIの有料化（2026年1月31日から）</strong><br>第三者にツールを提供する開発者に<strong>年間1,400ドル（約21万5,000円）</strong></td><td>立ち上げ初年度から確実にかかる<strong>固定費</strong>です。月5,000円なら年43契約で回収できますが、<strong>売上ゼロの期間もかかり続けます。</strong>出品者が自社アカウントで直接使う分には課金されません</td></tr>
+<tr><td class="c">3</td><td><strong>独占禁止法の論点</strong><br>公正取引委員会「アルゴリズム/AIと競争政策」（2021年3月31日）</td><td>一事業者が自分の価格だけを自動調整するのは通常問題になりません。<strong>ただし複数の競合が同一の第三者ツールを使い、互いの価格が同調することを認識・認容していると評価されると、カルテル（ハブ・アンド・スポーク型）の問題になり得る</strong>と名指しで指摘されています。<strong>摘発事例は確認できませんでした。</strong>着手するなら legal-crosscheck で確認が必要です</td></tr>
+<tr><td class="c">4</td><td><strong>客層が思ったより狭い可能性</strong></td><td>ツール提供側自身が「大量出品しないなら無料で十分」「小口出品者・他モールがメインには力を発揮できない」と認めています。<strong>刺さるのはAmazonで大量出品している層に限られ、その規模は測れていません</strong></td></tr>
+<tr><td class="c">5</td><td><strong>楽天APIの条件が確認できていない</strong></td><td>楽天RMS WEB SERVICE の公式規約ページに到達できませんでした（robots.txt拒否）。<strong>ライセンスキーの有効期限が3か月で更新が必要</strong>という情報はありますが、料金・審査・回数制限は【未確認】です。<strong>楽天に強いことがこの案の勝ち筋なので、ここが確認できないのは痛い</strong></td></tr>
+</tbody></table></div>
+
+<h2 id="s10">10. ゲート0で防げないこと（必ずお読みください）</h2>
+<div class="note">ゲート0が防ぐのは<strong>「調べれば分かること」だけ</strong>です。次の3つは、この関門を通っても分かりません。<br>
+① <strong>その人が、実際にお金を払うか</strong>　② <strong>その価格で払うか</strong>　③ <strong>導入支援なしで、自分で使えるか</strong><br>
+これはヒアリングか、無料で使ってもらうかでしか分かりません。<strong>ゲート0を通ったこの案でも、この検証は別途必要です。</strong></div>
+
+<h2 id="s11">11. 次にやること</h2>
+<h3>坂野様に決めていただきたいこと（3つ）</h3>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>決めていただきたいこと</th><th>Claudeの推奨</th></tr></thead>
+<tbody>
+<tr><td class="c">①</td><td><strong>この結論（ゲート0を通す）でよいか</strong></td><td>9節の注意点5つを読んだうえでご判断ください</td></tr>
+<tr><td class="c">②</td><td><strong>Geminiのクロスレビューを行うか</strong></td><td class="ok"><strong>推奨します。</strong>ゲート0の結論は重要度「高」にあたり、cross-review スキルの対象です。<strong>とくに独占禁止法の論点（注意点3）は、Claudeの法律知識だけで確定させるべきではありません。</strong>依頼文はClaudeが作り、坂野様が貼って回答を戻していただく形です（追加費用なし）</td></tr>
+<tr><td class="c">③</td><td><strong>楽天に寄せるか、Amazonに寄せるか</strong></td><td class="ok"><strong>楽天を推奨します。</strong>純正の自動追随が無く、主要ツールがAmazon専業だからです。ただし先行者がいるので、要件定義の前にもう一段の調査が要ります</td></tr>
+</tbody></table></div>
+
+<h3>ゲート0を通ったので、次の手順に進みます</h3>
+<div class="tw"><table>
+<thead><tr><th>順</th><th>やること</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td><strong>前提台帳 `ZENTEI.md` を作る</strong>（競合表・母数の引き算・死ぬ条件3つ。賞味期限つき）</td><td class="ok"><strong>本日作成済み</strong></td></tr>
+<tr><td class="c">2</td><td>Geminiクロスレビュー（②で「行う」を選ばれた場合）</td><td>坂野様のご判断待ち</td></tr>
+<tr><td class="c">3</td><td>requirements スキルで要件定義（YOKEN.md）を作る</td><td>未着手</td></tr>
+<tr><td class="c">4</td><td>decision-gate ゲート1（方向性レポート＋Geminiレビュー）</td><td>未着手</td></tr>
+<tr><td class="c">5</td><td>開発</td><td>未着手</td></tr>
+</tbody></table></div>
+<div class="note"><strong>前提台帳（ZENTEI.md）について。</strong>ゲート0は通った瞬間の正しさしか保証しません。1回通ったら誰も見返さない、という弱点があります。そこで<strong>壊れると案が死ぬ3つ（競合表・母数・死ぬ条件）だけを賞味期限つきで持ち</strong>、ゲート1・重要判断・フェーズ完了の3か所で、最終確認から30日以上経った行だけを調べ直します。<strong>1回10〜15分で終わる分量に保ちます。</strong></div>
+
+<h2 id="s12">12. 出典</h2>
+<p class="lead">2026-08-28 に確認したものです。</p>
+<h3>プラットフォーム純正</h3>
+<ul class="src">
+<li><a href="https://sell.amazon.com/tools/automate-pricing" target="_blank" rel="noopener">★Amazon 価格の自動設定（無料・Professionalプランに付帯）</a></li>
+<li><a href="https://dev.dynamic-pricing.tech/post/amazon-automatic-price/" target="_blank" rel="noopener">純正の追随は30分〜1時間、外部ツールは1〜5分</a></li>
+<li><a href="https://product-sales-creator.com/amazon-price-revision/" target="_blank" rel="noopener">純正はポイント設定がリセットされる（単独ソース）</a></li>
+<li><a href="https://www.sellerassistant.app/blog/free-amazon-automate-pricing-tool/" target="_blank" rel="noopener">純正は初期ルール4パターンのみ（英語）</a></li>
+<li><a href="https://next-engine.net/ec-blog/rakuten-rms-csv-registration/" target="_blank" rel="noopener">楽天RMS CSV一括更新（自動追随機能は見当たらず）</a></li>
+</ul>
+<h3>上位カテゴリ（受注管理システム）</h3>
+<ul class="src">
+<li><a href="https://cross-mall.jp/theme/theme_interior02.html" target="_blank" rel="noopener">★CROSS MALL 一括編集はあるが自動追随ではないと公式が説明</a></li>
+<li><a href="https://next-engine.net/faq/" target="_blank" rel="noopener">ネクストエンジン FAQ（価格改定の記載なし）</a></li>
+<li><a href="https://www.sukeneko.com/news-category/features/" target="_blank" rel="noopener">助ネコ 機能記事一覧（価格改定の記載なし）</a></li>
+<li><a href="https://crossma.jp/column/price-revision-automation-tools/" target="_blank" rel="noopener">クロスマ 価格改定自動化ツール比較</a></li>
+</ul>
+<h3>専用ツール</h3>
+<ul class="src">
+<li><a href="https://h9nfp.com/price-tool/" target="_blank" rel="noopener">★価格改定ツールの一覧・料金比較（15社以上）</a></li>
+<li><a href="https://makad.pw/wp/reputation/" target="_blank" rel="noopener">マカド！（月4,980円・Amazon専業・公式が不向きな層を明記）</a></li>
+<li><a href="https://ecstarslab.com/blog/pricetar-monthly-price/" target="_blank" rel="noopener">プライスター 月5,280円</a></li>
+<li><a href="https://www.sabosedo-experience.com/pricetar/1571/" target="_blank" rel="noopener">プライスター 商品登録の工程削減（16→9工程）</a></li>
+<li><a href="https://bizrobot.jp/services/price/" target="_blank" rel="noopener">Bizrobot（複数モール対応・15分ごとの競合価格収集）</a></li>
+<li><a href="https://oresedo.com/sellarsket-review/" target="_blank" rel="noopener">セラースケットの価格改定は細かい設定ができない</a></li>
+<li><a href="https://ik-01.net/affiliate/review/makad" target="_blank" rel="noopener">「大量出品しないのなら、無料ツールで十分」</a></li>
+<li><a href="https://appmatch.jp/1054877259-2/" target="_blank" rel="noopener">プライスターの低評価の声（UIが使いづらい・動線が複雑）</a></li>
+</ul>
+<h3>★API・規約・法令</h3>
+<ul class="src">
+<li><a href="https://developer-docs.amazon/sp-api/docs/price-adjustment-automation-workflows-guide" target="_blank" rel="noopener">Amazon 公式 Price Adjustment Automation Workflows Guide（自動価格変更を公式に推奨）</a></li>
+<li><a href="https://online.bci.co.jp/article/detail/4070" target="_blank" rel="noopener">★SP-APIが2026年1月31日から有料化 年間1,400ドル（外部ツール提供者が対象）</a></li>
+<li><a href="https://ec-digital-works.jp/2025/11/24/sp-api-fee/" target="_blank" rel="noopener">SP-API有料化の解説</a></li>
+<li><a href="https://ec-digital-works.jp/2025/10/24/sp-api-request/" target="_blank" rel="noopener">SP-API 開発者登録と審査</a></li>
+<li><a href="https://help.ecai.jp/%E6%A5%BD%E5%A4%A9rms%E3%81%A8%E3%81%AEapi%E9%80%A3%E6%90%BA%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">楽天RMS API ライセンスキーの有効期限は3か月</a></li>
+<li><a href="https://www.jftc.go.jp/houdou/pressrelease/2021/mar/210331_digital.html" target="_blank" rel="noopener">★公正取引委員会「アルゴリズム/AIと競争政策」（2021年3月31日）</a></li>
+<li><a href="https://www.ushijima-law.gr.jp/client-alert_seminar/client-alert/20210402/" target="_blank" rel="noopener">同報告書の解説（ハブ・アンド・スポーク型カルテルの懸念）</a></li>
+</ul>
+<h3>母数</h3>
+<ul class="src">
+<li><a href="https://ecclab.empowershop.co.jp/archives/89385" target="_blank" rel="noopener">3大ECモール比較（Amazon約13万店・楽天約5万店。時点は【未確認】）</a></li>
+</ul>
+
+<footer>
+ゲート0 事業性の確認 ／ K-03 Amazon・楽天の価格自動改定 ／ 作成日 2026-08-28 ／ 合同会社R.Y.S<br>
+判定：<strong>通る（要件定義に進んでよい）</strong>。止める条件7つのうち該当なし。<strong>ただし注意点5つ（9節）を読んだうえでご判断ください</strong><br>
+判定表の固定：<span class="mono">K-03_価格自動改定/HANTEI_HYO.md</span>（調査着手前に確定）　／　前提台帳：<span class="mono">K-03_価格自動改定/ZENTEI.md</span>　／　決定の正本：<span class="mono">DECISIONS.md</span>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

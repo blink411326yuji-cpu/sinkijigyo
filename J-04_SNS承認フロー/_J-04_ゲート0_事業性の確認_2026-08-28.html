@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J-04 代理店向けSNS投稿の承認フロー ゲート0 事業性の確認</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#5a5a5a; --line:#d5d8dd; --soft:#f5f6f8;
+  --accent:#1f4e79; --ng:#a8202a; --ngbg:#fdeced; --ok:#1f6b3a; --okbg:#eaf5ee;
+  --warn:#8a5a00; --warnbg:#fdf3e0;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16181c; --fg:#e8eaed; --muted:#a8adb6; --line:#3a3f47; --soft:#1e2126;
+    --accent:#8ab4e8; --ng:#ff9098; --ngbg:#3a1d20; --ok:#7ed39a; --okbg:#17301f;
+    --warn:#f0c36b; --warnbg:#332714;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:"Yu Gothic UI","Yu Gothic","Meiryo","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:15px; line-height:1.85; font-variant-numeric:tabular-nums;
+}
+.wrap{display:flex; align-items:flex-start; max-width:1240px; margin:0 auto}
+nav{
+  position:sticky; top:0; width:280px; flex:0 0 280px; max-height:100vh; overflow-y:auto;
+  padding:24px 14px; border-right:1px solid var(--line); font-size:13px; line-height:1.7;
+}
+nav h2{font-size:12px; letter-spacing:.08em; color:var(--muted); margin:0 0 10px; font-weight:600}
+nav a{display:block; padding:4px 6px; color:var(--fg); text-decoration:none; border-radius:4px}
+nav a:hover{background:var(--soft); color:var(--accent)}
+main{flex:1 1 auto; min-width:0; padding:28px 30px 90px}
+h1{font-size:23px; line-height:1.5; margin:0 0 6px; border-bottom:3px solid var(--accent); padding-bottom:12px}
+h2{font-size:19px; margin:44px 0 12px; padding:6px 0 6px 12px; border-left:5px solid var(--accent); background:var(--soft)}
+h3{font-size:16px; margin:26px 0 8px; color:var(--accent)}
+h4{font-size:14px; margin:18px 0 6px}
+p{margin:.6em 0}
+.meta{color:var(--muted); font-size:13px; margin:0 0 18px}
+.tblwrap{overflow-x:auto; margin:12px 0 18px; border:1px solid var(--line); border-radius:6px}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px}
+th,td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+th{background:var(--soft); font-weight:600; white-space:nowrap}
+td.num{text-align:right; white-space:nowrap}
+.box{border:1px solid var(--line); border-left-width:5px; border-radius:6px; padding:12px 16px; margin:16px 0; background:var(--soft)}
+.box.ng{border-left-color:var(--ng); background:var(--ngbg)}
+.box.ok{border-left-color:var(--ok); background:var(--okbg)}
+.box.warn{border-left-color:var(--warn); background:var(--warnbg)}
+.box h4{margin-top:0}
+.tag{display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap}
+.tag.ng{background:var(--ng); color:#fff}
+.tag.ok{background:var(--ok); color:#fff}
+.tag.warn{background:var(--warn); color:#fff}
+.tag.gray{background:var(--muted); color:var(--bg)}
+code{background:var(--soft); padding:1px 5px; border-radius:3px; font-size:.92em}
+ul,ol{margin:.5em 0; padding-left:1.5em}
+li{margin:.28em 0}
+small{color:var(--muted)}
+a{color:var(--accent)}
+.src{font-size:12.5px; line-height:1.65}
+.src li{margin:.35em 0; word-break:break-all}
+hr{border:0; border-top:1px solid var(--line); margin:34px 0}
+@media print{
+  nav{display:none} main{padding:0} .wrap{display:block}
+  body{font-size:11pt; color:#000; background:#fff}
+}
+@media (max-width:860px){
+  .wrap{display:block} nav{position:static; width:auto; max-height:none; border-right:0; border-bottom:1px solid var(--line)} main{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<h2>もくじ</h2>
+<a href="#s0">0. 結論</a>
+<a href="#s1">1. 判定表（調査前に固定）</a>
+<a href="#s2">2. 問1 いま何で達成しているか</a>
+<a href="#s3">3. 問2 競合が既に持っている機能</a>
+<a href="#s4">4. ★除外条件E1の判定</a>
+<a href="#s5">5. 問3 母数の引き算と収益</a>
+<a href="#s6">6. 問4 5年後・10年後</a>
+<a href="#s7">7. 問5 死ぬ条件3つ</a>
+<a href="#s8">8. 問6 うちを選ぶ理由</a>
+<a href="#s9">9. ★見つかった空白（LINE）</a>
+<a href="#s10">10. 補助金の裏取り</a>
+<a href="#s11">11. 着手前チェック（届く経路）</a>
+<a href="#s12">12. ★カタログ全体への影響</a>
+<a href="#s13">13. 未確認のまま残った点</a>
+<a href="#s14">14. 出典</a>
+</nav>
+<main>
+<h1>J-04 代理店向けSNS投稿の承認フロー<br>ゲート0：事業性の確認</h1>
+<p class="meta">
+作成日：2026-08-28 ／ 状態：<strong>判定結果（未承認）</strong> ／ 対象：新規事業探索 フェーズ6（案の選定と個別調査）<br>
+判定基準の正本：同フォルダの <code>HANTEI_HYO.md</code>（調査着手前に固定）／ 決定の正本：<code>C:\dev\_新規事業探索\DECISIONS.md</code><br>
+この資料は「見るための版」です。記載が正本と食い違ったときは <strong>正本（.md）を正</strong> とします。
+</p>
+
+<h2 id="s0">0. 結論</h2>
+
+<div class="box ng">
+<h4>結論：この案も<strong>進めない</strong>ことを推奨します（止める条件7つのうち2つに該当）</h4>
+<ol>
+<li><strong>最大の競合が、昨日ここに入ってきました。</strong>国内最大手級の <strong>SocialDog が 2026年8月27日に「承認ワークフロー」をリリース</strong>し、公式に「<strong>制作会社が作成した投稿内容を、クライアント側の担当者が承認してから公開できます</strong>」と、この案とまったく同じ用途を書いています（公式お知らせで確認済み）。</li>
+<li><strong>カタログで【未確認】だった除外条件E1が、確認したら該当していました。</strong>この市場には <strong>東証上場2社（ユーザーローカル 3984／コムニコの親会社ラバブルMG 9254）、累計35億円調達（カンリー）、NASDAQ上場（Sprout Social）</strong>ほか、上場・大型調達・PE傘下の競合が10社以上います。<strong>本来はカタログの第1層（除外）で落ちる案でした。</strong></li>
+<li><strong>ただしC-03・C-04とは落ち方が違います。</strong>収益（条件4）と比較の土俵（条件6b）は<strong>クリアしています</strong>。市場は成立していて、単価も取れる。問題は「空いていない」ことだけです。<strong>つまりこれはブルーオーシャンではなく、成熟したレッドオーシャンでした。</strong></li>
+</ol>
+<p style="margin-bottom:0"><strong>★あわせて重要なご報告があります。</strong>「上位カテゴリが内包」を理由にゲート0で落ちる案が、C-03・C-04・J-04で<strong>3件目</strong>になりました。これは D-028 で坂野様と決めた<strong>見直しトリガー（3件に達したらカタログの再点検か評価軸の改訂を再提案する）に、まさに該当します</strong>（→ <a href="#s12">12節</a>）。</p>
+</div>
+
+<h2 id="s1">1. 判定表（★調査を始める前に固定したもの）</h2>
+<p>この7条件は、調査に着手する前に <code>J-04_SNS承認フロー\HANTEI_HYO.md</code> に固定しました。以下の「判定」欄だけを調査後に埋めています。基準そのものは動かしていません。</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>#</th><th>止める条件</th><th>問い</th><th>判定</th><th>根拠（要点）</th></tr>
+<tr><td>1</td><td>主客が5年後に減る</td><td>問4</td><td><span class="tag ok">該当しない</span></td><td>広告業の事業所数 9,679社（2012）→11,973社（2024）。ソーシャル広告費は2025年 +18.7%</td></tr>
+<tr><td>2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td>問1②・問2</td><td><span class="tag ng">該当する</span></td><td>Canva Business（¥18,800/年/人）が予約投稿＋承認ワークフローを内包。HubSpot Enterprise、Zoho Social Premium、Teams Approvals も同様</td></tr>
+<tr><td>3</td><td>死ぬ条件3つのうち、1つでも既に起きている</td><td>問5</td><td><span class="tag ng">該当する（2つが完全に、1つが部分的に発生）</span></td><td>①国内ツールの標準搭載＝<strong>SocialDog 2026-08-27</strong>ほか5製品 ②プラットフォームの無料化＝予約投稿・複数アカウントは完全に無料化済み ③E1該当の競合＝10社以上</td></tr>
+<tr><td>4</td><td>引き算後の母数 × 想定単価 × シェア1% が年1,000万円に届かない</td><td>問3</td><td><span class="tag ok">該当しない</span></td><td>必要単価は<strong>月6,900〜18,900円</strong>。実勢（SocialDog Professional ¥9,800/月、Statusbrew Lite ¥15,000/月）の範囲内で取れる</td></tr>
+<tr><td>5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td>問1</td><td><span class="tag ok">該当しない</span></td><td>5つすべて埋めた（<a href="#s2">2節</a>）</td></tr>
+<tr><td>6</td><td>顧客がうちを選ぶ理由を1つも書けない</td><td>問6②</td><td><span class="tag ok">該当しない</span></td><td>LINE公式アカウント対応／円建て・請求書払い／日本語UI・日本語サポート</td></tr>
+<tr><td>6b</td><td>顧客がそもそも2つを並べて比べない（無料同梱で探されない）</td><td>問6③</td><td><span class="tag ok">該当しない</span></td><td>ITreviewに「SNS管理ツール」カテゴリが成立（37製品・レビュー281件）。比較検討されて買われる市場</td></tr>
+<tr><td>7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td>問6③</td><td><span class="tag gray">判定不要</span></td><td>そもそも「並べられる」側（既に1機能として収まっている）ため条件2で決着</td></tr>
+</table>
+</div>
+
+<div class="box">
+<p style="margin:0"><strong>該当したのは 2・3 の2つ。</strong>判定ルールは「1つでも当たったら要件定義に進まない」です。<br>
+<strong>ただしC-04（4つ該当）より軽い落ち方です。</strong>収益も土俵も成立しており、純粋に「競合が強すぎる」という理由だけで止まっています。</p>
+</div>
+
+<h2 id="s2">2. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p>「SNS管理ツール」というカテゴリで探すのではなく、<strong>「複数クライアントのSNS投稿を、確認を経てから間違いなく出す」という目的</strong>で5つの探し先すべてを埋めました。</p>
+
+<h3>① 同じカテゴリの製品（国内・SNS管理ツール）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品名</th><th>提供元</th><th>承認フロー</th><th>社外クライアント招待</th><th>公開価格</th></tr>
+<tr><td><strong>SocialDog</strong></td><td>株式会社SocialDog</td><td><span class="tag ng">2026-08-27 リリース</span>管理者が承認するまで公開されない。差し戻し・取り下げ・<strong>予定日時超過時の自動差し戻し</strong>・各段階のメール通知</td><td><strong>用途として公式に明記</strong>「制作会社が作成した投稿内容を、クライアント側の担当者が承認してから公開できます」</td><td class="num">Personal ¥1,980／Professional ¥9,800／Business ¥29,800（月・税別）<br><small>承認機能の対象プランは記載なし【未確認】</small></td></tr>
+<tr><td>コムニコ マーケティングスイート</td><td>株式会社コムニコ</td><td><strong>最大3段階の承認フロー</strong></td><td>記載なし（ただし「広告代理店・制作会社」向けと明示、6,000アカウント超の導入）</td><td>非公開</td></tr>
+<tr><td>Social Insight</td><td>株式会社ユーザーローカル</td><td><strong>あり</strong>「事前予約投稿と承認ワークフロー機能によって、投稿内容を責任者がチェックした上で配信可能」</td><td>記載なし</td><td>非公開</td></tr>
+<tr><td><strong>Statusbrew</strong></td><td>Statusbrew株式会社（東京都千代田区）</td><td><strong>複数段階の承認ワークフロー</strong>（Premium以上）</td><td><strong>あり</strong>「クライアントごとにワークスペースを完全に分離」「<strong>ログイン不要で内容確認</strong>」「クライアントのロゴが入ったホワイトラベルPDF」</td><td class="num">Lite ¥15,000/月〜／代理店はプロファイル単価 @¥2,000・¥15,000〜<br>Premium ¥35,000/月（15プロファイル・8ユーザー）</td></tr>
+<tr><td>Belugaスタジオ</td><td>ユニークビジョン株式会社</td><td>あり（二次情報）「ダブルチェック体制」</td><td>記載なし</td><td class="num">初期 ¥100,000＋月額要問合せ（二次情報）</td></tr>
+<tr><td>つぶやきデスク</td><td>アユダンテ株式会社</td><td><strong>2段階の承認レベル</strong>（Business／Enterprise限定）</td><td><strong>用途として明記</strong>「外部の運用代行会社がTwitter運用を行う」ケース</td><td class="num">Business ¥55,000/月／Enterprise ¥220,000/月（税込）</td></tr>
+<tr><td>Canly</td><td>株式会社カンリー</td><td>あり（二次情報）「権限設定で申請・承認フロー実装可」</td><td>記載なし</td><td>要問合せ</td></tr>
+</table>
+</div>
+
+<div class="box ng">
+<h4>この時点で、この案は既に埋まっています</h4>
+<p style="margin-bottom:0"><strong>「日本語UI・複数段階の承認・社外クライアントをログイン不要で招待・価格公開」の4つを同時に満たす製品として Statusbrew が既に存在し、代理店向け専用ページと代理店向け価格まで用意しています。</strong>そこへ 2026年8月27日、国内最大手級の SocialDog が同じ用途を掲げて参入しました。</p>
+</div>
+
+<h3>② 上位カテゴリの製品＝この案の機能を一部として内包する、もっと大きいシステム</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>予約投稿</th><th>承認フロー</th><th>価格</th><th>この案への脅威度</th></tr>
+<tr><td><strong>Canva Business</strong></td><td><strong>あり</strong>（コンテンツプランナー。Pro以上）</td><td><strong>あり</strong>（Business＝個別レビュアー指定／Enterprise＝複数承認者・グループ承認）</td><td class="num"><strong>¥18,800/年/人</strong><br>（Pro ¥11,800/年/人）</td><td><strong>最大</strong>。代理店の制作現場は既に契約している可能性が高く、顧客から見れば「追加費用ゼロで手元にある」<br><small>ただし対応SNSは FB／IG／X／LinkedIn／Pinterest／Slack／Tumblr で、<strong>TikTok・LINEに非対応</strong></small></td></tr>
+<tr><td>Adobe Express</td><td><strong>無料で月1,000投稿まで</strong>（IG／FB／X／Pinterest／LinkedIn／TikTok／YouTube）</td><td>投稿単位の承認は確認できず（Workfront連携＝エンタープライズ）</td><td class="num"><strong>無料</strong></td><td>大（予約投稿の価値をゼロにする）</td></tr>
+<tr><td>HubSpot Marketing Hub</td><td>Professional以上</td><td><strong>Enterpriseで正式提供</strong>（複数承認者、全員承認／1人承認、期限付き）</td><td class="num">Professional $800/月／<strong>Enterprise $3,600/月</strong></td><td>中（高額なので中小代理店とは競合しにくい）</td></tr>
+<tr><td>Zoho Social</td><td>Standard以上</td><td><strong>Premium以上</strong>。Agency／Agency Plusで<strong>クライアント招待・ポータル・無料クライアントログイン</strong></td><td class="num">プレミアム 月¥5,660前後（二次情報）</td><td><strong>大</strong>（安価で代理店機能まで揃う）</td></tr>
+<tr><td>Microsoft Teams（Approvals）</td><td>—</td><td><strong>あり</strong>。全Teamsユーザーに既定で有効</td><td class="num"><strong>追加費用なし</strong></td><td>中（投稿機能はないが「承認」だけなら代替できる）</td></tr>
+<tr><td>Asana</td><td>—</td><td><strong>承認タスク</strong>（承認済／変更要求／却下）＋校正。<strong>SNSカレンダーテンプレートを無料公開</strong></td><td>Advanced以上</td><td>中</td></tr>
+<tr><td>Salesforce Marketing Cloud（Social Studio）</td><td colspan="4"><strong>提供終了</strong>（Salesforce公式がリタイアを公表）</td></tr>
+</table>
+</div>
+
+<h3>③ 下位・単機能のツール（承認フロー特化・海外）</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>本社</th><th>承認の中身</th><th>価格</th><th>日本語</th><th>LINE</th></tr>
+<tr><td><strong>Gain</strong></td><td>米マイアミ</td><td>承認ワークフロー無制限・多段階。<strong>外部レビュアーを人数無制限で招待（アカウント作成不要）</strong>。監査証跡</td><td class="num">Starter $99／Agency $199／Agency Premium $399（月・年払い）</td><td>なし</td><td>非対応</td></tr>
+<tr><td><strong>Planable</strong></td><td>英ロンドン<br><small>2025年8月 SE Ranking が買収</small></td><td>None／Optional／Required、<strong>多段階はEnterpriseのみ</strong>。ユーザー数無制限（席課金なし）</td><td class="num">Basic $33／Pro $49（ワークスペース・月）</td><td>なし</td><td>非対応</td></tr>
+<tr><td><strong>Pallyy</strong><br><small>※カタログの根拠になった製品</small></td><td>豪州</td><td>approved／pending／denied の<strong>単一段階</strong>。アカウント未所持のクライアントが共有カレンダーから承認可</td><td class="num">Free／Starter $15／Pro $25／Agency $99／Scale $199（月）</td><td>なし</td><td>非対応</td></tr>
+<tr><td>Kontentino</td><td>スロバキア</td><td>Standard以上でクライアント／外部承認</td><td class="num">€49／€109／€199（月・年払い）</td><td>なし（13〜15言語に日本語なし）</td><td>非対応</td></tr>
+<tr><td>Sked Social</td><td>豪メルボルン</td><td>社内承認は年+US$500、外部承認は年+US$1,000のアドオン</td><td class="num">US$24／US$58／US$166（月）</td><td>なし</td><td>非対応</td></tr>
+<tr><td>ContentStudio／Cloud Campaign／Vista Social／Publer／Metricool／SocialBee／CoSchedule／SocialPilot／Loomly／Sendible／Agorapulse</td><td colspan="5">いずれも承認フローあり。<strong>すべて日本語UIなし・LINE非対応</strong></td></tr>
+<tr><td><strong>ContentCal</strong></td><td colspan="5"><strong>消滅</strong>。2021年12月に Adobe が買収 → <strong>2023年3月31日に単体サービス終了</strong>し Adobe Express の Content Scheduler に統合。統合後にクライアント承認ワークフローは引き継がれていない（<strong>承認フロー特化SaaSが大手に買われ、機能ごと消えた実例</strong>）</td></tr>
+</table>
+</div>
+
+<h3>④ 汎用ツール</h3>
+<div class="tblwrap">
+<table>
+<tr><th>手段</th><th>費用</th><th>実態</th></tr>
+<tr><td><strong>SNSプラットフォーム自身の無料機能</strong></td><td class="num"><strong>0円</strong></td><td>予約投稿は<strong>全主要SNSが公式・無料で提供</strong>（Meta Business Suite／X／Instagram／TikTok Video Scheduler／LINE公式アカウント／YouTube／Googleビジネスプロフィール）。複数アカウント管理・権限分けも無料（Metaビジネスポートフォリオ／TikTok Business Center／LINEは1アカウント100人まで権限管理）。<strong>ただし「投稿単位の承認ゲート」だけはプラットフォーム側に見当たらない</strong></td></tr>
+<tr><td>Googleスプレッドシート＋フォーム</td><td class="num">0円</td><td><strong>承認欄付きのSNS投稿管理テンプレートが日本語で多数、無料配布されている</strong></td></tr>
+<tr><td>Notion／monday.com／kintone／Backlog</td><td>各社の料金内</td><td>monday.com は「Social media planner」「Requests and Approvals」テンプレートを標準提供。kintone は標準の「プロセス管理」がそのまま承認ワークフローで、サイボウズ公式が「承認されたらXに自動投稿」のTipsを公開</td></tr>
+<tr><td>Slack／Chatwork／Teams</td><td>契約内</td><td>Slackワークフロービルダー（有料プラン）、Teams Approvals（追加費用なし）</td></tr>
+</table>
+</div>
+
+<h3>⑤ 人手</h3>
+<p>SNS運用代行会社そのもの（比較サイト掲載で17〜38社）。ただしこれは<strong>この案の顧客であって競合ではありません</strong>。代行会社が使うツールとして本案が入る余地はあります。</p>
+<h2 id="s3">3. 問2　競合が「既に持っている機能」を、先に全部書いたか</h2>
+
+<h3>低評価レビュー（星1〜3）を読んだ結果</h3>
+<p>C-04と違い、この市場はレビューが十分に存在しました。ITreview「SNS管理ツール」カテゴリは<strong>全37製品・レビュー総数281件</strong>、海外はG2で Loomly 1,796件、Planable 1,106件、Vista Social 1,128件、Hootsuite 7,423件です。</p>
+
+<div class="tblwrap">
+<table>
+<tr><th>不満の型</th><th>中身</th><th>該当製品</th></tr>
+<tr><td><strong>①投稿の失敗・遅延（最多）</strong></td><td>予約投稿が公開されない／エラー／最大1時間遅延</td><td>Sked Social、Pallyy、Loomly、Kontentino、Planable</td></tr>
+<tr><td>②アカウント切断・再認証地獄</td><td>トークン失効で再接続が頻繁に必要</td><td>Gain、Metricool、Vista Social、Sked Social</td></tr>
+<tr><td>③課金・値上げ・返金トラブル</td><td><strong>Loomly：年額が996%値上げされ事前告知もほとんどなし</strong>（Bending Spoons買収後、レビュアーは"predatory"と表現）。Metricool：自動更新の返金拒否。CoSchedule：返金依頼のメール無視</td><td>Loomly、Metricool、CoSchedule</td></tr>
+<tr><td>④プラットフォームのネイティブ機能に追いつかない</td><td>Instagram長尺動画・Reels設定・LinkedInのPDF投稿などに非対応</td><td>ほぼ全社に共通する構造的不満</td></tr>
+<tr><td><strong>⑦承認フロー自体への不満（本件に直結）</strong></td><td>・<strong>Kontentino：クライアントが1つでも差し戻すと承認サイクルを最初からやり直し</strong><br>・Planable／Gain：<strong>プレビューが実表示（特にInstagram・LinkedIn）と違い、承認を取った内容と公開結果がずれる</strong><br>・モバイルアプリの機能が弱く、<strong>外出先のクライアントが承認しづらい</strong></td><td>Kontentino、Planable、Gain、Publer、Sked Social</td></tr>
+<tr><td>国内勢への不満</td><td>SocialDog：<strong>プラン設計が分かりにくく頻繁に変わる</strong>、下位プランの機能が上位へ移動、SocialDog経由の投稿しか分析対象にならない<br>Hootsuite：<strong>「日本のビジネス環境では使える機能が限定的」</strong>（LINE非対応・日本語対応の弱さ）、レポートがクライアント提出用として不十分<br>buffer：FAQ・チャットサポートが英語のみ</td><td>SocialDog（3.9／55件）、Hootsuite（3.8／11件）、buffer（3.6／13件）、comnico（4.0／14件）</td></tr>
+</table>
+</div>
+<div class="box">
+<p style="margin:0"><strong>読み取れること：承認フローの「機能そのもの」への不満はほとんどありません。</strong>解約理由になっているのは、①その裏で確実に投稿されること ②クライアントに見せるプレビューの正確さ ③差し戻し後の再承認の粒度 ④スマホでの承認体験 の4点です。<strong>つまりこの市場で勝つには「承認フローを作る」のでは足りず、投稿インフラの信頼性で勝たなければなりません。</strong>これは1人法人には重い要求です。</p>
+</div>
+
+<h3>チェンジログ（更新履歴）を1年分さかのぼった結果</h3>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>直近1年の動き</th><th>読み取れること</th></tr>
+<tr><td><strong>SocialDog</strong></td><td><strong>2026/8/27 承認ワークフロー</strong>／7/1 TikTok投稿対応／6/17 レポート自動作成／5/13 キャンペーンプラス／4/8 Threads対応／2/12 YouTube分析</td><td><strong>レッドオーシャン化の決定的な信号。</strong>狙っていた機能が、この調査の前日にリリースされた</td></tr>
+<tr><td>Statusbrew</td><td>2025/10 <strong>承認ワークフローに「ステップ内の承認者全員の承認を必須にするモード」を追加</strong>／レポート機能・TikTok広告アカウント対応</td><td>承認フローを継続的に磨いている</td></tr>
+<tr><td>コムニコ</td><td>2026/7/24 <strong>AIによる投稿のコンプライアンスリスクチェック</strong>／7/8 モニタリングでAI返信案自動生成／2025/9 生成AIによる投稿文案作成</td><td>AI機能へ投資中。承認・権限まわりの更新は確認できず</td></tr>
+</table>
+</div>
+
+<h2 id="s4">4. ★除外条件E1の判定（カタログで【未確認】だった箇所）</h2>
+<p>統合版カタログでは J-04 の除外条件欄が「<strong>【未確認】SocialDog等の資本状況は未確認</strong>」となっており、D-020（未確認は落とさず残す）の方針でこの案は「残る」になっていました。今回、実際に確認しました。</p>
+
+<div class="box ng">
+<h4>E1（上場・大型調達の競合が主戦場にいる）に、はっきり該当します</h4>
+</div>
+<div class="tblwrap">
+<table>
+<tr><th>提供元</th><th>資本状況</th><th>製品</th></tr>
+<tr><td>株式会社ユーザーローカル</td><td><strong>東証上場・証券コード 3984</strong></td><td>Social Insight</td></tr>
+<tr><td>株式会社コムニコ</td><td>親会社が<strong>東証グロース上場・9254</strong>（ラバブルマーケティンググループ）</td><td>コムニコ マーケティングスイート</td></tr>
+<tr><td>株式会社カンリー</td><td><strong>シリーズC 20億円・累計35億円調達</strong>（2025-11-04。ジャフコほか）</td><td>Canly</td></tr>
+<tr><td>TDSE株式会社</td><td>東証グロース上場・7046</td><td>Quid Monitor</td></tr>
+<tr><td>GMO TECH株式会社</td><td>東証グロース上場・6026／GMOインターネットグループ</td><td>MEO Dashboard byGMO</td></tr>
+<tr><td>Sprout Social, Inc.</td><td><strong>NASDAQ上場・SPT</strong>。2023年にTagger Mediaを約1.4億ドルで買収</td><td>Sprout Social</td></tr>
+<tr><td>Sprinklr, Inc.</td><td><strong>NYSE上場・CXM</strong>。<strong>Sprinklr Japan株式会社が国内に存在</strong>し、LINEヤフーのテクノロジーパートナー、電通デジタルと業務提携</td><td>Sprinklr Modern Engagement</td></tr>
+<tr><td>Hootsuite Inc.</td><td>非上場だが<strong>累計 約2.999億ドル調達・評価額10億ドル</strong>。管理画面UIが日本語対応</td><td>Hootsuite</td></tr>
+<tr><td>Later（旧Mavrck）</td><td>Summit Partners から<strong>1.35億ドル</strong>。2025年にMavelyを2.5億ドルで買収</td><td>Later</td></tr>
+<tr><td>Emplifi Inc.</td><td>Audax Private Equity 保有、Sixth Street 出資、<strong>評価額10億ドル超</strong></td><td>Emplifi</td></tr>
+<tr><td>Meltwater N.V.</td><td>旧オスロ上場 → 2023年に Marlin Equity ＋ Altor が非公開化</td><td>Meltwater</td></tr>
+<tr><td>Sendible／Loomly</td><td>ともに <strong>Alpine Software Group（Alpine Investors）傘下の Traject</strong> が買収。Loomly はさらに<strong>Bending Spoons（伊）</strong>へ</td><td>Sendible／Loomly</td></tr>
+<tr><td>Planable</td><td><strong>2025年8月に SE Ranking が買収</strong></td><td>Planable</td></tr>
+<tr><td>Salesforce</td><td>NYSE:CRM（ただし Social Studio は提供終了）</td><td>Social Studio</td></tr>
+</table>
+</div>
+<p><strong>E1に該当しない（＝当社と同じ土俵の）競合</strong>：Statusbrew（公式に「外部資本なしの完全自己資金」と明記・日本法人あり）、SocialDog（非上場・資本金4,477万円・シードVCのみ）、Buffer（2018年に投資家を買い戻し）、Gain（ブートストラップ）、Pallyy（個人ブートストラップ）、アユダンテ、ユニークビジョン、テテマーチ。</p>
+<div class="box warn">
+<p style="margin:0"><strong>この案は、本来カタログの第1層（除外条件E1）で落ちるべき案でした。</strong>手順違反ではありません——D-020で「除外条件の該当が【未確認】の案は落とさず残す」と決めているためです。<strong>ただしそれは「選定後に必ず確認する」という前提とセットでした（D-014の前提条件）。今回それを実行した結果がこれです。</strong></p>
+</div>
+
+<h2 id="s5">5. 問3　母数の引き算と、収益の計算</h2>
+<p>数字はすべて経済センサスをe-Statから直接取得したものです（令和6年基礎調査＝2024年6月1日現在）。</p>
+
+<h3>引き算</h3>
+<div class="tblwrap">
+<table>
+<tr><th>段</th><th>数</th><th>公的統計か推測か</th><th>引く理由</th></tr>
+<tr><td>広告業（中分類73）の事業所数</td><td class="num"><strong>11,973</strong></td><td>公的統計（2024年 経済センサス基礎調査）</td><td>—</td></tr>
+<tr><td>うち 従業者1〜4人</td><td class="num">7,331（61.2%）</td><td>公的統計（規模別内訳を実読）</td><td>1人事業所だけで3,440社。ツールに月1万円以上を払う層とは考えにくい<br><small>※これは<strong>推測</strong></small></td></tr>
+<tr><td>うち 5〜99人</td><td class="num"><strong>4,391</strong></td><td>公的統計から筆者が集計<br>（5〜9人 2,036／10〜19人 1,260／20〜29人 457／30〜49人 361／50〜99人 277）</td><td>100人以上（195社）は既にコムニコ・Sprinklr等のエンタープライズ製品を導入済みと考えられる<br><small>※これも<strong>推測</strong>。導入率の公的統計は【未確認】</small></td></tr>
+</table>
+</div>
+<p><small>※「SNS運用代行」に該当する産業分類は<strong>日本標準産業分類に存在しません</strong>（細分類7311広告業の内容例示に「インターネット広告業」はあるが、SNS・ソーシャルメディアの記載なし）。したがって事業者数の公的統計は取れず、広告業で代替しています。</small></p>
+
+<h3>条件4の計算</h3>
+<div class="tblwrap">
+<table>
+<tr><th>母数の取り方</th><th>シェア1%</th><th>年1,000万円に必要な1社あたり単価</th><th>月額換算</th><th>判定</th></tr>
+<tr><td>広告業 全11,973社</td><td class="num">120社</td><td class="num">約83,000円/年</td><td class="num">約6,900円/月</td><td><span class="tag ok">取れる</span></td></tr>
+<tr><td>5〜99人 4,391社</td><td class="num">44社</td><td class="num">約227,000円/年</td><td class="num">約18,900円/月</td><td><span class="tag ok">取れる</span></td></tr>
+</table>
+</div>
+<div class="box ok">
+<p style="margin:0"><strong>この単価は取れます。</strong>実勢価格は SocialDog Professional ¥9,800/月・Business ¥29,800/月、Statusbrew Lite ¥15,000/月・Premium ¥35,000/月、つぶやきデスク Business ¥55,000/月、Zoho Social プレミアム 月¥5,660前後。<strong>月6,900〜18,900円は、この市場の実勢のど真ん中です。</strong><br>
+<strong>C-04（警備業）との決定的な違いがここです。</strong>C-04では必要単価が実勢の外にありましたが、J-04は市場として成立しています。<strong>問題は「儲からない」ことではなく「空いていない」ことだけです。</strong></p>
+</div>
+
+<h2 id="s6">6. 問4　この客は5年後・10年後、増えるか減るか</h2>
+<div class="box ok"><h4>増えます。しかも中身は「小さい事業者が増えている」＝この案のターゲット層が増えています。</h4></div>
+<div class="tblwrap">
+<table>
+<tr><th>調査年</th><th>広告業 事業所数</th><th>従業者数</th><th>うち1〜4人</th></tr>
+<tr><td>2012（H24 活動調査）</td><td class="num">9,679</td><td class="num">125,128</td><td class="num">4,761</td></tr>
+<tr><td>2016（H28 活動調査）</td><td class="num">9,282</td><td class="num">127,639</td><td class="num">4,530</td></tr>
+<tr><td>2021（R3 活動調査）</td><td class="num">10,697</td><td class="num">143,458</td><td class="num">5,722</td></tr>
+<tr><td><strong>2024（R6 基礎調査）</strong></td><td class="num"><strong>11,973</strong></td><td class="num">144,910</td><td class="num"><strong>7,331</strong></td></tr>
+</table>
+</div>
+<p><small>※2024年は「雇用者のいない個人経営の事業所を除く」ベースで、調査体系が異なるため厳密には非連続。ただし<strong>範囲がより狭い2024年の方が多い</strong>ため、増加であることは読み取れます。</small></p>
+<p><strong>★内訳を読んで分かったこと</strong>：2016→2024で1人事業所が 1,333社→<strong>3,440社（約2.6倍）</strong>。増加分はほぼ全て1〜4人層（+2,801社）で、10人以上の層は横ばい〜微減。事業所数は+11.9%なのに従業者数は+1.0%＝<strong>小規模化が進んでいます</strong>。</p>
+
+<h3>市場の伸び</h3>
+<div class="tblwrap">
+<table>
+<tr><th>指標</th><th>2024年</th><th>2025年</th><th>前年比</th></tr>
+<tr><td>総広告費（電通）</td><td class="num">7兆6,730億円</td><td class="num">8兆623億円</td><td class="num">105.1%</td></tr>
+<tr><td>インターネット広告費</td><td class="num">3兆6,517億円</td><td class="num">4兆459億円</td><td class="num">110.8%（<strong>総広告費の50.2%＝初の過半数</strong>）</td></tr>
+<tr><td><strong>ソーシャル広告</strong></td><td class="num">1兆1,008億円</td><td class="num"><strong>1兆3,067億円</strong></td><td class="num"><strong>118.7%</strong></td></tr>
+<tr><td>運用型広告</td><td class="num">2兆6,095億円</td><td class="num">2兆9,352億円</td><td class="num">112.5%（媒体費の88.7%）</td></tr>
+</table>
+</div>
+<p>ソーシャルメディアマーケティング市場（サイバー・バズ／デジタルインファクト・民間推計）は<strong>2024年 1兆2,038億円 → 2029年 2兆1,313億円（1.77倍）</strong>の予測。</p>
+<div class="box warn">
+<p style="margin:0"><strong>ただし10年後には別のリスクがあります。</strong>サイバーエージェントの調査（2025年6月・大手広告主100社）では、クリエイティブ制作における<strong>生成AI活用率54%</strong>、<strong>3年後は「人よりAIが主体になっている」と予想する回答が半数</strong>。総務省の通信利用動向調査でも、生成AIを積極利用または検討中の企業が49.7%（2024年度）。<strong>「人が作った投稿を人が承認する」という工程そのものが、10年後も同じ形で残っているとは限りません。</strong><br>
+<small>※AIが代理店の人員・業務量をどれだけ減らすかを数値で予測した公的機関・業界団体の資料は<strong>見つかりませんでした【未確認】</strong>。上記は民間調査です。</small></p>
+</div>
+<h2 id="s7">7. 問5　この案が死ぬ条件を3つ書き、その場で確認したか</h2>
+
+<div class="box ng">
+<h4>死因A：国内のSNS管理ツールが、承認フロー（特に社外クライアント承認）を標準搭載する</h4>
+<p style="margin-bottom:0"><span class="tag ng">既に起きている</span> <strong>2026年8月27日、SocialDog が「承認ワークフロー」をリリース。</strong>公式お知らせに「制作会社が作成した投稿内容を、クライアント側の担当者が承認してから公開できます」と明記（原文で確認済み）。ほかに Statusbrew（複数段階＋ログイン不要のクライアント確認＋ホワイトラベルPDF、代理店専用ページと代理店価格あり）、コムニコ（最大3段階）、Social Insight（ユーザーローカル）、Belugaスタジオ、つぶやきデスク（2段階）。<strong>合計6製品。</strong></p>
+</div>
+
+<div class="box warn">
+<h4>死因B：SNSプラットフォーム自身が、この機能を無料で提供する</h4>
+<p style="margin-bottom:0"><span class="tag warn">部分的に起きている</span> <strong>予約投稿・複数アカウント管理・複数人の権限分けは、全主要SNSが公式・無料で提供済み</strong>（Meta Business Suite、X、Instagram、TikTok Video Scheduler、LINE公式アカウント〈権限管理は1アカウント100人まで〉、YouTube、Googleビジネスプロフィール）。<strong>「投稿単位の承認ゲート」だけは、確認した範囲ではプラットフォーム側に見当たりません。</strong>ここが唯一、有料機能として残っている領域です。<br>
+<small>【未確認・要注意】「Meta Business Suite に投稿を公開前にレビュー依頼する機能が追加された」という第三者の投稿が存在しますが、<strong>Metaのヘルプセンターはログイン必須でクローラを拒否するため、公式で裏取りできませんでした</strong>。もしこれが事実なら、死因Bは完全に発生していることになります。<strong>この案を本気で検討するなら、実際のアカウントでの実機確認が必須です。</strong></small></p>
+</div>
+
+<div class="box ng">
+<h4>死因C：上場企業・大型調達済みの競合が、同じ市場を主戦場にしている（＝除外条件E1）</h4>
+<p style="margin-bottom:0"><span class="tag ng">既に起きている</span> <a href="#s4">4節</a>のとおり、上場・大型調達・PE傘下の競合が<strong>14社</strong>。うち日本市場に直接いるのが ユーザーローカル（東証3984）、コムニコ（親会社 東証グロース9254）、カンリー（累計35億円）、Sprinklr Japan（NYSE:CXM／LINEヤフーのテクノロジーパートナー／電通デジタルと業務提携）。</p>
+</div>
+
+<p><strong>3つのうち2つが完全に、1つが部分的に、既に起きています。</strong></p>
+
+<h2 id="s8">8. 問6　当たったあと、顧客がうちと大手を並べたとき、うちを選ぶ理由</h2>
+
+<h3>① 並べられるか</h3>
+<p><strong>並べられます。</strong>この案の機能は、SNS管理ツールにも、Canva／HubSpot／Zoho といった上位カテゴリにも、1機能として完全に収まる大きさです。実際にもう収まっています。</p>
+
+<h3>② うちを選ぶ理由</h3>
+<div class="tblwrap">
+<table>
+<tr><th>理由の候補</th><th>成り立つか</th><th>評価</th></tr>
+<tr><td><strong>LINE公式アカウント対応</strong></td><td>成り立つ</td><td><strong>最も強い。</strong>承認フロー系の海外14製品は<strong>すべてLINE非対応</strong>。→ <a href="#s9">9節</a></td></tr>
+<tr><td>円建て・請求書払い・日本の商習慣</td><td>成り立つ</td><td>海外20製品は日本語UI・円決済なし。ただし国内勢（SocialDog／Statusbrew／コムニコ）は当然これを満たす</td></tr>
+<tr><td>プレビューの正確さ・差し戻しの粒度・スマホでの承認体験</td><td>成り立つ</td><td>低評価レビューで実際に解約理由になっている3点。ただし<strong>実装難度が高く、1人法人には重い</strong></td></tr>
+<tr><td>価格</td><td>弱い</td><td>Zoho Social プレミアム 月¥5,660前後、Pallyy Pro $25/月、Canva Business ¥18,800/年/人 と、既に安い選択肢が揃っている</td></tr>
+</table>
+</div>
+<p><strong>条件6（選ぶ理由を1つも書けない）には該当しません。</strong></p>
+
+<h3>③ 顧客はそもそも2つを並べて比べてくれるか（条件6b）</h3>
+<div class="box ok">
+<h4>比べてくれます。ここはC-04と正反対でした。</h4>
+<ul>
+<li>ITreviewに「SNS管理ツール」というカテゴリが独立して成立している（<strong>全37製品・レビュー総数281件</strong>。SocialDog 55件、Statusbrew 25件、TweetDeck 43件）</li>
+<li>海外はさらに厚い（G2で Hootsuite 7,423件、Loomly 1,796件、Vista Social 1,128件、Planable 1,106件）</li>
+<li>「SNS管理ツール 比較」という検索行動と比較記事が大量に存在する</li>
+</ul>
+<p style="margin-bottom:0"><strong>つまり顧客は実際にツールを探し、並べて比べています。</strong>使いやすさや価格で勝つ土俵には、ちゃんと上がれます。<strong>条件6bは該当しません。</strong></p>
+</div>
+
+<h2 id="s9">9. ★調査で見つかった、本物の空白（LINE公式アカウント）</h2>
+<div class="box">
+<p>ゲート0の判定は「進めない」ですが、調査の途中で<strong>1つだけ、はっきりした空白</strong>が見つかりました。判断材料として残します。<strong>これはClaudeの提案であって、決定ではありません。</strong></p>
+</div>
+
+<h3>承認フロー系の海外製品14社は、1社もLINEに対応していない</h3>
+<p>調べた全製品：Gain／Planable／Pallyy／Kontentino／Sked Social／ContentStudio／Cloud Campaign／Loomly／Vista Social／Publer／Metricool／SocialBee／CoSchedule／SocialPilot／Sendible／Agorapulse／Hootsuite／Buffer／Sprout Social／Later — <strong>すべてLINE公式アカウント非対応</strong>。</p>
+<p>日本のSNS運用で LINE公式アカウントは主要チャネルですが、<strong>「LINEを含む複数SNS × 承認フロー」を両方持つ製品は、確認できた範囲で3つだけ</strong>でした。</p>
+<div class="tblwrap">
+<table>
+<tr><th>製品</th><th>LINE対応の中身</th><th>提供元</th><th>この空白を塞いでいるか</th></tr>
+<tr><td>Social Insight</td><td>対応SNS一覧にLINEを含む。<strong>ただし「投稿管理」機能の説明では対象SNSが「Instagram・X・Facebookページ・Threads・TikTok・LinkedIn」で、LINEが明示されていない</strong>（公式ページで確認）</td><td>ユーザーローカル（<strong>東証3984</strong>）</td><td>部分的。<strong>LINEの投稿予約＋承認まで通っているかは【未確認】</strong></td></tr>
+<tr><td>Statusbrew</td><td>LINE Messaging API 経由。Standard以上。<strong>公表機能は受信箱・返信・タグ付け・テンプレ返信といったエンゲージメント寄り</strong></td><td>Statusbrew株式会社（外部資本なし）</td><td>部分的。<strong>投稿予約・一斉配信まで含むかは【未確認】</strong></td></tr>
+<tr><td>Sprinklr</td><td><strong>最も深い。</strong>LINE Publishing（テキスト／画像／動画／音声／イメージマップ、ブロードキャスト配信、オーディエンス指定、下書き）＋<strong>投稿時に「Approval Type」を設定し承認ノートを付けられる</strong>＝承認フローがLINEに効く</td><td>Sprinklr（<strong>NYSE:CXM</strong>）／Sprinklr Japan</td><td><strong>完全に塞いでいる。</strong>ただし価格非公開のエンタープライズ商談で、中小代理店には現実的でない</td></tr>
+</table>
+</div>
+
+<div class="box warn">
+<h4>この空白は本物ですが、それでも進めない理由</h4>
+<ol>
+<li><strong>空白の理由が構造的ではありません。</strong>海外勢がLINEに対応しないのは「日本市場が小さいから」であって、<strong>国内勢（SocialDog・コムニコ・ユーザーローカル）が対応しない理由にはなりません</strong>。実際 Social Insight は既にLINEを対応SNSに挙げています。「今その大手がやっていないから」は理由にならない（decision-gate 条件7）。</li>
+<li><strong>LINE Messaging API の利用条件・審査が別の壁になります。</strong>今回そこまでは調べていません【未確認】。</li>
+<li><strong>そして SocialDog が昨日、承認フローに参入しました。</strong>次にLINE対応が来ない保証はありません。</li>
+</ol>
+<p style="margin-bottom:0">したがってこれは「J-04を進める理由」ではなく、<strong>「もし将来この領域を再検討するなら、切り口はLINEである」という記録</strong>として残すのが妥当だと考えます。</p>
+</div>
+
+<h2 id="s10">10. 補助金の裏取り（D-029の手順で実測）</h2>
+<p>統合版カタログでは J-04 の参入しにくさが「<strong>【未確認】（調べたが判定できなかった）</strong>」でした。C-04で確立した公開APIの手順で、実際に検索しました。</p>
+<div class="tblwrap">
+<table>
+<tr><th>検索語</th><th>件数</th><th>SNS運用管理ツールに該当するもの</th></tr>
+<tr><td>SNS</td><td class="num">13</td><td>SNSHUB（合同会社Kanunu ¥1,500,000）／SNSスケット フルプラン・ミディアムプラン（ティエラーク ¥1,500,000／¥1,008,000）／AppLINE SNS連動CRM（キャンプネット ¥60,000／¥36,000）。<br><small>※13件中8件は「FScompassNS」＝東芝テック等の別分野ツールで無関係</small></td></tr>
+<tr><td>ソーシャル</td><td class="num">2</td><td>ソーシャルキャスト（ストランダー ¥936,000）／ソーシャルタイガー（Advance Ways ¥2,400,000）</td></tr>
+<tr><td>Instagram</td><td class="num">2</td><td>GMOマーケティングDX Instagramダイレクトメッセージ ライト／スタンダード（GMOコマース ¥60,000／¥180,000）</td></tr>
+<tr><td>投稿</td><td class="num">0</td><td>なし</td></tr>
+<tr><td>マーケティング</td><td class="num">11</td><td>GMOマーケティングDX LINE公式アカウント ライトプラン ほか</td></tr>
+</table>
+</div>
+<div class="box warn">
+<p style="margin:0"><strong>判定：SocialDog・Statusbrew・コムニコ・Social Insight といった主要なSNS管理ツールの登録は確認できませんでした。</strong>この意味では「補助金の看板は空いている可能性がある」と言えます。<br>
+<strong>ただしこれは、この案にとって良い材料ではありません。</strong>補助金の看板が空いているのに主要ベンダーが誰も取りに行っていないのは、<strong>この市場が補助金経由で売られていない</strong>（＝月1万円前後のサブスクで、補助金申請の手間に見合わない）ことを示している可能性が高いためです。<strong>「空いている」＝「参入しやすい」ではなく、「そこに客がいない」かもしれません。</strong></p>
+</div>
+
+<h2 id="s11">11. 着手前チェック：この母数に、どうやって届くのか</h2>
+<p><small>★これは合否の判定には使いません（集客の見込みを選定条件に入れない＝決定済みの方針）。事実として書くだけです。</small></p>
+<div class="tblwrap">
+<table>
+<tr><th>経路</th><th>実在するか</th><th>月に何人に届きうるか</th></tr>
+<tr><td>比較サイト（ITreview・BOXIL・ITトレンド）</td><td><strong>機能している</strong>。SNS管理ツールカテゴリが成立（37製品・281件）</td><td><strong>根拠が薄い</strong>。ただしC-04と違い、載る価値はある</td></tr>
+<tr><td>Web検索（「SNS 管理ツール 比較」等）</td><td>実在する。比較記事が大量にある</td><td>検索ボリュームは未取得</td></tr>
+<tr><td>業界団体（JIAA 329社／JAAA 147社）</td><td>実在する</td><td><strong>書けなかった</strong>。当社に接点なし</td></tr>
+<tr><td>既存の取引関係から辿る</td><td><strong>無い</strong>。当社は広告業界に接点を持っていない</td><td>0</td></tr>
+<tr><td>補助金経由</td><td>看板は空いているが、主要ベンダーが誰も使っていない</td><td>実質0と見るべき</td></tr>
+</table>
+</div>
+<p><strong>C-04と違い、比較サイトとWeb検索という経路は実在します。</strong>ただしそこは既に37製品がひしめく場所で、<strong>広告費を払って戦う場所</strong>です。</p>
+<h2 id="s12">12. ★カタログ全体への影響（D-028の見直しトリガーに該当）</h2>
+<div class="box ng">
+<h4>「上位カテゴリが内包」を理由にゲート0で落ちる案が、3件目になりました</h4>
+<div class="tblwrap">
+<table>
+<tr><th>案</th><th>判定日</th><th>該当した条件</th><th>内包していた製品</th></tr>
+<tr><td>C-03 古物台帳クラウド</td><td>2026-08-28</td><td>2・3・6b</td><td>RECORE（買取プラン月16,500円に追加課金なしで標準搭載）、スマレジ買取オプション、タロスPOS</td></tr>
+<tr><td>C-04 警備業の法定備付簿冊</td><td>2026-08-28</td><td>2・3・4・6b</td><td>警備フォース（月26,000円に2026-04-21から無料同梱）、EasyKeiby5、警備教育Pro</td></tr>
+<tr><td><strong>J-04 代理店向けSNS投稿の承認フロー</strong></td><td>2026-08-28</td><td><strong>2・3</strong></td><td>Canva Business（¥18,800/年/人）、HubSpot Enterprise、Zoho Social Premium、Teams Approvals</td></tr>
+</table>
+</div>
+<p><strong>D-028（2026-08-28・坂野様承認）の見直しトリガーは、こう決めてありました：</strong></p>
+<p style="padding-left:1em; border-left:3px solid var(--ng); margin-left:0"><em>「ゲート0で『上位カテゴリが内包』を理由に落ちる案が、C-03を含めて3件に達したとき。そのときは並び順そのものが機能していないため、カタログの再点検か評価軸の改訂を再提案する」</em></p>
+<p style="margin-bottom:0"><strong>3件に達したので、約束どおり再提案します（→ 下記）。</strong></p>
+</div>
+
+<h3>加えて、J-04では別の穴も出ました：除外条件E1の【未確認】放置</h3>
+<p>J-04はカタログで「除外条件E1〜E4＝<strong>【未確認】SocialDog等の資本状況は未確認</strong>」のまま「残る」になっていました。D-020（未確認は落とさず残す）に従った結果なので手順違反ではありませんが、確認したら<strong>E1に該当する競合が14社</strong>でした。</p>
+<p>統合版の集計では、<strong>除外条件が【未確認】のまま「残る」になっている案が他にもあります。</strong>つまりカタログの「残る77件」には、<strong>2種類の未検証</strong>が混ざっています。</p>
+<div class="tblwrap">
+<table>
+<tr><th>穴の種類</th><th>中身</th><th>実際に起きたこと</th></tr>
+<tr><td>穴①（D-028で確認済み）</td><td>評価軸に「上位カテゴリが内包していないか」の観点がない。E2は「大手の標準機能に含まれ、<strong>かつ自社では同等の実装ができないと確定する場合</strong>」という条件のため、自社で作れてしまう機能は素通りする</td><td>C-03・C-04・J-04の<strong>3件</strong>がこれで落ちた</td></tr>
+<tr><td><strong>穴②（今回新たに判明）</strong></td><td><strong>除外条件E1（上場・大型調達の競合）が【未確認】のまま「残る」になっている案がある</strong></td><td>J-04が該当。<strong>本来は第1層で落ちる案だった</strong></td></tr>
+</table>
+</div>
+
+<h3>再提案：3つの案</h3>
+<div class="tblwrap">
+<table>
+<tr><th>案</th><th>やること</th><th>手間</th><th>メリット・デメリット</th></tr>
+<tr><td><strong>案A（推奨）</strong></td><td><strong>「残る77件」について、E1の資本状況だけを一括で確認する。</strong>各案の「既存の競合」欄に挙がっている固有名詞を機械的に拾い、上場・大型調達の有無を調べて、E1該当なら落とす。上位カテゴリの内包までは調べない</td><td>中</td><td>穴②だけを塞ぐ。穴①はゲート0が確実に検出するので、選定後に任せる。<strong>「本来落ちるはずの案を選んでしまう」時間の無駄を防げる</strong></td></tr>
+<tr><td>案B</td><td><strong>再点検しない。</strong>これまでどおり、選んだ案を1件ずつゲート0にかける</td><td>小</td><td>D-028で一度選ばれた方針。ただし<strong>C-03・C-04・J-04と3件続けて空振りしている</strong>のが実績</td></tr>
+<tr><td>案C</td><td>全77件を、E1＋上位カテゴリの両方で再点検する</td><td>大</td><td>最も確実だが、実質「カタログを作り直す」に近い手間</td></tr>
+</table>
+</div>
+<div class="box">
+<p style="margin:0"><strong>Claudeの推奨は案A</strong>です。理由は、穴①（上位カテゴリ）はゲート0が必ず検出するので後回しでよいが、<strong>穴②（E1）は「調べれば1件あたり数分で分かること」なのに、3件目でようやく発覚した</strong>ためです。E1は固有名詞を調べるだけなので機械的に処理でき、しかも<strong>該当したら即座に落とせる</strong>——ゲート0を1本まるごと回すより、はるかに安く済みます。<br>
+<strong>ただしこれは推奨であって決定ではありません。選ぶのは坂野様です。</strong></p>
+</div>
+
+<h3>ゲート0で防げないこと（必ず申し添えます）</h3>
+<p>ゲート0が防げるのは「調べれば分かること」だけです。<strong>①その人が実際にお金を払うか ②その価格で払うか ③導入支援なしで自分で使えるか</strong>は、今回の調査では分かりません。今回の「進めない」は<strong>「机上で分かる範囲で、既に止まる理由が2つ見つかった」</strong>という意味です。</p>
+
+<h2 id="s13">13. 未確認のまま残った点（★事実として扱わないもの）</h2>
+<div class="tblwrap">
+<table>
+<tr><th>項目</th><th>状況</th><th>判定への影響</th></tr>
+<tr><td><strong>Meta Business Suite の投稿レビュー機能</strong></td><td>【未確認】第三者の投稿で「追加された」とあるが、<strong>Metaヘルプセンターがログイン必須でクローラ拒否のため公式で裏取り不可</strong></td><td><strong>最重要。</strong>事実なら死因Bが完全に発生する。実機確認が必要</td></tr>
+<tr><td>SocialDogの承認ワークフローの対象プラン</td><td>【未確認】公式お知らせに記載なし</td><td>どの価格帯から競合するかが変わる</td></tr>
+<tr><td>Social Insight・Statusbrew のLINE投稿予約＋承認</td><td>【未確認】LINEは対応SNSに挙がるが、投稿管理の対象に含まれるか不明</td><td>9節の「空白」の大きさが変わる</td></tr>
+<tr><td>LINE Messaging API の利用条件・審査</td><td>【未確認】今回調べていない</td><td>LINE切り口の実現可能性</td></tr>
+<tr><td>コムニコ／Social Insight／Beluga／Canly の価格</td><td>非公開（要問い合わせ）</td><td>価格比較の精度</td></tr>
+<tr><td>SNS運用代行会社の事業者数</td><td><strong>公的統計に該当分類が存在しない</strong>（日本標準産業分類 細分類7311の内容例示にSNS・ソーシャルメディアの記載なし）</td><td>母数は広告業11,973社で代替した</td></tr>
+<tr><td>企業のソーシャルメディア活用率（公的統計）</td><td><strong>総務省 通信利用動向調査から2019年以降 項目が消滅</strong>。公的な最新値は2018年の36.0%</td><td>需要の裏付けは東京商工リサーチ（2023年・45.1%）で代替</td></tr>
+<tr><td>AIが代理店の人員・業務量に与える影響の公的予測</td><td>【未確認】存在を確認できず</td><td>10年後の見通し</td></tr>
+<tr><td>広告業のシステム導入率</td><td>【未確認】公的統計なし。母数の引き算で「1〜4人は買わない」「100人以上は導入済み」としたのは<strong>推測</strong></td><td>母数を全11,973社に取っても必要単価は月6,900円で、条件4の結論は変わらない</td></tr>
+</table>
+</div>
+
+<h2 id="s14">14. 出典</h2>
+<h3>★判定を左右した一次情報（Claudeが直接確認したもの）</h3>
+<ul class="src">
+<li><strong>SocialDog「承認ワークフロー」お知らせ（2026年8月27日）</strong> https://socialdog.jp/news/approval-workflow/</li>
+<li><strong>Social Insight 投稿管理・承認ワークフロー（ユーザーローカル）</strong> https://sns.userlocal.jp/functions/social_crm/</li>
+<li><strong>Canva デザイン承認</strong> https://www.canva.com/help/design-approval/ ／<strong>コンテンツプランナー</strong> https://www.canva.com/help/content-planner/ ／料金（日本） https://www.canva.com/ja_jp/pricing/</li>
+<li><strong>デジタル化・AI導入補助金2026 登録ツール</strong>：公式検索が読み込む公開API <code>POST https://console.it-shien.smrj.go.jp/api/portal/search2026/tools</code> を直接呼び出して実測（2026-08-28。D-029の手順）</li>
+</ul>
+
+<h3>国内競合</h3>
+<ul class="src">
+<li>SocialDog：料金 https://help.social-dog.net/ja/paid_plan/plans_upgrade/paid_plans/ ／企業情報 https://socialdog.jp/ja/about ／お知らせ一覧 https://socialdog.jp/news/</li>
+<li>Statusbrew：料金 https://statusbrew.co.jp/pricing ／代理店向け https://statusbrew.co.jp/social-media-solutions-for-agencies ／About（外部資本なしの明記） https://statusbrew.co.jp/about</li>
+<li>コムニコ マーケティングスイート https://www.comnico.jp/products/cms/jp ／料金 https://www.comnico.jp/products/cms/jp/pricing-2 ／会社概要 https://www.comnico.jp/company</li>
+<li>つぶやきデスク 承認機能 https://twdesk.com/feature/post-leader/ ／料金 https://twdesk.com/price/</li>
+<li>ITreview「SNS管理ツール」カテゴリ（37製品・281件） https://www.itreview.jp/categories/sns-management ／SocialDogレビュー https://www.itreview.jp/products/socialdog/reviews ／Hootsuiteレビュー https://www.itreview.jp/products/hootsuite/reviews</li>
+</ul>
+
+<h3>資本状況（E1判定）</h3>
+<ul class="src">
+<li>ユーザーローカル（東証3984） https://finance.yahoo.co.jp/quote/3984.T/profile</li>
+<li>ラバブルマーケティンググループ（東証グロース9254・コムニコの親会社） https://lmg.co.jp/ir/stock/</li>
+<li>カンリー シリーズC 20億円・累計35億円（2025-11-04） https://prtimes.jp/main/html/rd/p/000000441.000037205.html</li>
+<li>Sprout Social（NASDAQ:SPT）Tagger Media買収 https://investors.sproutsocial.com/news/news-details/2023/Sprout-Social-Acquires-Tagger-Media/default.aspx</li>
+<li>Sprinklr IPO（NYSE:CXM） https://www.sprinklr.com/newsroom/sprinklr-announces-closing-of-initial-public-offering/ ／Sprinklr Japan × LINEヤフー https://www.linebiz.com/jp/partner/technology/sprinklr/</li>
+<li>Hootsuite $165M調達 https://www.hootsuite.com/newsroom/press-releases/hootsuite-raises-165-million</li>
+<li>Later／Mavrck に Summit Partners $135M https://www.summitpartners.com/news/later-and-mavrck-unite-to-help-brands-and-influencers-drive-predictable-performance-through-social</li>
+<li>Traject（Alpine SG）が Sendible 買収 https://www.businesswire.com/news/home/20210309005179/en/ ／Loomly買収 https://www.businesswire.com/news/home/20210823005191/en/</li>
+<li>SE Ranking が Planable を買収（2025年8月） https://seranking.com/blog/se-ranking-acquires-planable/</li>
+<li>Emplifi（Audax保有・評価額$1B超） https://www.audaxprivateequity.com/portfolio/emplifi</li>
+<li>Meltwater 非公開化（Marlin＋Altor） https://www.meltwater.com/en/about/press-releases/mw-investment-completes-private-acquisition</li>
+<li>Salesforce Social Studio 提供終了 https://help.salesforce.com/s/articleView?id=release-notes.rn_marketing_engagement_ss_retirement.htm&language=en_US&release=252&type=5</li>
+</ul>
+
+<h3>海外の承認フロー特化製品</h3>
+<ul class="src">
+<li>Gain 料金 https://gainapp.com/pricing ／Planable 料金 https://planable.io/pricing/ ／Pallyy 料金 https://pallyy.com/pricing</li>
+<li>Pallyy MRR $74,000 の一次ソース（Indie Hackers・2023年10月3日） https://www.indiehackers.com/post/heres-how-i-ve-built-pallyy-to-74k-mrr-solo-a5d9c78766</li>
+<li>Kontentino https://kontentino.com/pricing/ ／Sked Social https://skedsocial.com/pricing ／Loomly https://www.loomly.com/pricing ／Vista Social https://vistasocial.com/pricing/</li>
+<li>ContentCal → Adobe買収 → 2023年3月終了 https://tech.eu/2021/12/09/londons-social-media-and-content-planning-platform-contentcal-to-be-acquired-by-adobe/ ／統合先 https://www.adobe.com/express/feature/content-scheduler</li>
+</ul>
+
+<h3>プラットフォーム自身の無料機能</h3>
+<ul class="src">
+<li>Meta Business Suite 投稿の作成・管理 https://www.facebook.com/business/help/942827662903020 ／アクセス許可の付与 https://ja-jp.facebook.com/business/help/2628326020772810</li>
+<li>TikTok Video Scheduler https://ads.tiktok.com/business/en-US/blog/introducing-video-scheduler-now-you-can-plan-tiktoks-in-advance ／Business Center https://ads.tiktok.com/help/article/tiktok-business-center</li>
+<li>LINE公式アカウント 権限設定 https://www.lycbiz.com/jp/manual/OfficialAccountManager/account-settings_permission/ ／下書きのテスト配信 https://www.lycbiz.com/jp/manual/OfficialAccountManager/broadcast-drafts/</li>
+<li>Instagram 日時指定の投稿 https://www.facebook.com/help/instagram/439971288310029/ ／YouTube 公開予約 https://support.google.com/youtube/answer/1270709?hl=ja ／Googleビジネスプロフィール https://support.google.com/business/answer/7342169?hl=ja</li>
+<li>Adobe Express コンテンツスケジューラー（無料） https://www.adobe.com/express/feature/content-scheduler</li>
+<li>HubSpot 公開承認のリクエスト https://knowledge.hubspot.com/social/request-approval-to-publish-a-social-media-post ／料金 https://www.hubspot.com/pricing/marketing</li>
+<li>Zoho Social 料金 https://www.zoho.com/social/pricing.html ／Microsoft Teams Approvals https://learn.microsoft.com/en-us/microsoftteams/approval-admin</li>
+</ul>
+
+<h3>公的統計・市場</h3>
+<ul class="src">
+<li>e-Stat 令和6年経済センサス‐基礎調査 第3表（産業小分類×従業者規模） https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040389323&fileKind=0</li>
+<li>e-Stat 令和3年経済センサス‐活動調査 第5-1表 https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040067878&fileKind=0</li>
+<li>総務省 令和6年経済センサス‐基礎調査 確報集計結果 https://www.soumu.go.jp/menu_news/s-news/01toukei06_01000073.html</li>
+<li>日本標準産業分類 7311 広告業 https://www.e-stat.go.jp/classifications/terms/10/04/7311</li>
+<li>電通「2025年 日本の広告費」 https://www.dentsu.co.jp/news/release/2026/0305-011003.html ／インターネット広告媒体費 詳細分析 https://www.dentsu.co.jp/news/release/2026/0305-011004.html</li>
+<li>サイバー・バズ／デジタルインファクト ソーシャルメディアマーケティング市場（2024年11月） https://www.cyberbuzz.co.jp/2024/11/post-2595.html</li>
+<li>サイバーエージェント 生成AI利用実態調査（2025年6月） https://www.cyberagent.co.jp/news/detail/id=32449</li>
+<li>東京商工リサーチ 企業のSNS運用に関するアンケート（2023年） https://www.tsr-net.co.jp/data/detail/1197920_1527.html</li>
+<li>総務省 令和7年版情報通信白書 企業におけるAI利用の現状 https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r07/html/nd112220.html</li>
+<li>JIAA 会員社数（329社） https://www.jiaa.org/jiaa/gaiyo/ ／JAAA https://www.jaaa.ne.jp/</li>
+</ul>
+
+<hr>
+<p class="meta">
+この資料は「見るための版」です。<strong>正本は同フォルダの <code>HANTEI_HYO.md</code>（判定基準）と <code>C:\dev\_新規事業探索\DECISIONS.md</code>（決定）</strong>です。食い違ったときは正本を正とします。<br>
+作成：2026-08-28 ／ 合同会社R.Y.S ／ 新規事業探索 フェーズ6
+</p>
+</main>
+</div>
+</body>
+</html>
