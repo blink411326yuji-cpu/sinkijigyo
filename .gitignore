@@ -54,3 +54,7 @@ venv/
 .next/
 .gradle/
 build/
+
+# --- Cowork 追記 2026-09-06 15:02 ---
+cloudflare/cf_token.txt
+*_token.txt
