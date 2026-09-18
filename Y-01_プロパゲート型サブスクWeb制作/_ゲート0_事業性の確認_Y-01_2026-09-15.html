@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲート0 Y-01 プロパゲート同等＋α（サブスク型Web制作・運用）の事業性 2026-09-15</title>
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#57606a;--line:#d0d7de;--head:#f6f8fa;--accent:#0969da;--ok:#1a7f37;--ng:#cf222e;--warn:#9a6700;--note:#fff8c5;--box:#f6f8fa;--mark:#ddf4ff}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#9da7b3;--line:#30363d;--head:#161b22;--accent:#58a6ff;--ok:#3fb950;--ng:#f85149;--warn:#d29922;--note:#3a2f00;--box:#161b22;--mark:#0c2d6b}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Meiryo","Hiragino Sans","Noto Sans JP",sans-serif;font-size:15px;line-height:1.75;font-variant-numeric:tabular-nums}
+.wrap{display:flex;min-height:100vh}
+nav.toc{width:290px;flex:0 0 290px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:18px 14px;background:var(--head)}
+nav.toc h2{font-size:13px;margin:0 0 8px;color:var(--muted)}
+nav.toc a{display:block;color:var(--fg);text-decoration:none;font-size:13px;padding:4px 6px;border-radius:4px}
+nav.toc a:hover{background:var(--mark)}
+main{flex:1;min-width:0;padding:28px 40px 80px;max-width:1100px}
+h1{font-size:23px;line-height:1.35;margin:0 0 6px}
+h2{font-size:20px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.meta{color:var(--muted);font-size:13px;margin-bottom:18px}
+.status{display:inline-block;padding:2px 10px;border:1px solid var(--warn);color:var(--warn);border-radius:12px;font-size:12px}
+.box{background:var(--box);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+.note{background:var(--note);border-left:4px solid var(--warn);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+.concl{border:2px solid var(--accent);border-radius:8px;padding:14px 18px;margin:14px 0}
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}
+th{background:var(--head);white-space:nowrap}
+td.c{text-align:center;white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}.warn{color:var(--warn);font-weight:700}
+small,.small{font-size:12.5px;color:var(--muted)}
+ol.src{font-size:13px;padding-left:22px}ol.src li{margin:3px 0;word-break:break-all}
+sup a{color:var(--accent);text-decoration:none;font-size:11px}
+a{color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.term{border-bottom:1px dotted var(--muted)}
+@media (max-width:900px){.wrap{display:block}nav.toc{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}main{padding:18px 16px}.grid2{grid-template-columns:1fr}}
+@media print{nav.toc{display:none}main{padding:0;max-width:none}body{font-size:12px}h2{page-break-after:avoid}.tbl{overflow:visible}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+<h2>もくじ</h2>
+<a href="#s0">0. 結論（3行）</a>
+<a href="#s1">1. 対象の定義（ご依頼のとおり）</a>
+<a href="#s2">2. プロパゲートの実像</a>
+<a href="#s3">3. 判定表（調査前に固定）</a>
+<a href="#s4">4. 問1 いま同じ目的を何で達成しているか</a>
+<a href="#s5">5. 問2 競合が既に持っている機能</a>
+<a href="#s6">6. 問3 母数の引き算</a>
+<a href="#s7">7. 問4 5年後・10年後の増減</a>
+<a href="#s8">8. 問5 死ぬ条件3つ</a>
+<a href="#s9">9. 問6 うちを選ぶ理由</a>
+<a href="#s10">10. 着手前チェック（届く経路）</a>
+<a href="#s11">11. 判定結果</a>
+<a href="#s12">12. 方向性の選択肢と推奨</a>
+<a href="#s13">13. 法務・制度のメモ（要確認）</a>
+<a href="#s14">14. ゲート0で防げないこと</a>
+<a href="#s15">15. 決めていただきたいこと</a>
+<a href="#src">出典一覧</a>
+</nav>
+<main>
+<h1>ゲート0：事業性の確認　Y-01<br>「プロパゲート同等＋α」（サブスク型Web制作・運用）</h1>
+<div class="meta">作成日：2026-09-15 ／ <span class="status">状態：判定提出・承認待ち（Geminiレビュー前）</span> ／ 合同会社R.Y.S ／ 新規事業探索<br>
+この資料は「見るための版」です。判定表の正本は同フォルダの <code>HANTEI_HYO.md</code>、前提の正本は <code>ZENTEI.md</code>、決定は <code>DECISIONS.md</code>（D-150）。食い違ったら正本を正とします。<br>
+ご依頼（2026-09-15）：「株式会社プロパゲート（2020年開始）と同等＋αのサービスを展開し、勝つまではいかなくても共存し、うちが潰れない事業を構築する方法がないか。プロパゲート含め競合調査を行い、事業と方向性を提案してほしい」</div>
+
+<h2 id="s0">0. 結論（3行）</h2>
+<div class="concl">
+<p><b>① 「プロパゲートと同じもの（サブスクHP制作）を、同じ売り方で出す」形は、ゲート0を通りません。</b>止める条件3（死ぬ条件が既に起きている）に該当します。価格の底は既に月1,100〜4,980円まで下がっており（ZIUS・ビズサイ・9DAYS）、プロパゲート自身が正社員十数名・インターン60名・「AIが8割作る」体制の<b>AIネイティブ企業</b>で、先日の資料で想定した「人件費の重い20人以上の会社」ではありません。<b>価格でも体制でも、当社が優位に立てる相手ではない</b>のが事実です。</p>
+<p><b>② ただし「共存」は規模の問題ではなく入口の問題です。</b>月50万円に必要な契約は<b>50件前後</b>（月1万円×50）で、プロパゲートの2026年目標1万社の0.5%です。プロパゲート級の集客（代表のYouTube・note・広告で反響型）を持たない当社が50件を取るには、<b>プロパゲートと12社の月額制各社が構造的に取らない層</b>に入口を置く必要があります。</p>
+<p><b>③ 取らない層は3つ見つかりました。</b>A＝地域×対面×撮影同行（全社オンライン完結）、B＝小規模EC事業者向けの「月額でEC構築＋商品撮影・登録・更新＋発送（X-01）」（プロパゲートのEC制作は49.8万円一括・運用なし）、C＝解約してもサイトが残る所有権型（プロパゲートは36か月まで非公開）。<b>Claudeの推奨はB</b>（母数が増える唯一の層・X-01と同じ入口・人が動く部分が最初から入る）。ただしBは本資料では「候補」で、<b>個別のゲート0を別途通す必要</b>があります。</p>
+</div>
+
+<h2 id="s1">1. 対象の定義（ご依頼のとおり）</h2>
+<div class="tbl"><table>
+<tr><th style="width:22%">項目</th><th>内容</th></tr>
+<tr><td>対抗先</td><td>株式会社プロパゲート（東京都渋谷区・2020年4月設立）と、その主力「サブスクWEB制作」（月額9,800円〜）を中心とする商品群</td></tr>
+<tr><td>目標</td><td>「同等＋α」を出し、勝てなくても<b>共存</b>し、<b>当社が潰れない</b>事業にする（ご発言）</td></tr>
+<tr><td>収益目標</td><td>既存方針＝月50万円が5〜10年入り続けること。判定表の条件4は「年600万円」で見る（SaaS探索の条件・確定版の年1,000万円より低いのは、ご発言の「月50万円」を文字どおり採るため）</td></tr>
+<tr><td>この資料でやること</td><td>decision-gate ゲート0（6つの問い）を「プロパゲートと同等のサブスクHP制作」に対して実施し、通らない場合は「どう変えれば共存できるか」の方向性を複数案で示す</td></tr>
+<tr><td>やらないこと</td><td>要件定義（YOKEN.md）は書かない。方向が決まった案は個別にゲート0をやり直す（本資料の判定は「原案」に対するもの）</td></tr>
+</table></div>
+
+<h2 id="s2">2. プロパゲートの実像（判明した事実）</h2>
+<div class="tbl"><table>
+<tr><th style="width:20%">項目</th><th>事実</th><th style="width:10%">出典</th></tr>
+<tr><td>会社</td><td>設立2020-04-16、資本金<b>100万円</b>、未上場、代表 松岡秀樹、渋谷区渋谷2-3-5（2025-07移転・増床）。従業員「105名」は<b>アルバイト・業務委託・インターン含む</b>。社会保険加入データ上の従業員は12人【未確認・gBizINFO】、長期インターン60名。約50%がフルリモート</td><td><a href="#r1">[1]</a><a href="#r2">[2]</a><a href="#r3">[3]</a></td></tr>
+<tr><td>成長</td><td>年商（自社採用サイト）：2020年度800万円→2021年3,000万→2022年8,000万→2023年1.3億→2024年3.3億→<b>2025年度6.7億円</b>、2026年度見込み12億円、2027年目標50億円。累計支援：2023年1,397件→2024年3,078→2025年5,135→<b>2026年8月末8,017件</b>（2026年は月300件超の純増）</td><td><a href="#r1">[1]</a><a href="#r4">[4]</a></td></tr>
+<tr><td>主力の料金</td><td>サブスクWEB制作：制作費0円、BASIC 1p 9,800円／STANDARD 2〜6p 14,800円／ADVANCE 7〜12p 19,800円（月・税別）、初期費用5,000円。<b>プランの差はページ数だけ</b>。月5回の修正、SEO内部対策、SSL、ドメイン、サーバー、分析アプリ込み。納期4〜8週間。<b>最低6か月</b>、以後いつでも解約・違約金なし。<b>36か月未満で解約→サイト非公開、36か月経過後は無償譲渡可</b></td><td><a href="#r4">[4]</a></td></tr>
+<tr><td>上位商品（利益の本体と推測）</td><td>Shopify制作 <b>49.8万円一括・月額0円・運用なし</b>／スマートSEO 1記事4,980円（AI初稿＋コンサル確認、150社突破 2024-11）／サブスクAd 月10万円（広告費別・最低4か月）／採用Ad 月15万円／AIデスク 初期100万円〜＋月29.8万円〜／集客エージェント 完全成果報酬（月200万円以上の広告主向け・不動産等）</td><td><a href="#r5">[5]</a><a href="#r6">[6]</a><a href="#r7">[7]</a></td></tr>
+<tr><td>制作体制</td><td>求人票に「<b>AIが8割作り、人が2割磨く</b>」「Claude Code／Cursor／Codex」「月100件超を受け持つAI Webディレクター」。実績サイトは旧＝Wix、新＝<b>Next.js＋Vercel</b>（自社サイトも同じ）。131ページのデザインガイドライン</td><td><a href="#r8">[8]</a><a href="#r9">[9]</a></td></tr>
+<tr><td>営業の型</td><td>法人営業は「自社集客で届いた新規問い合わせへの連絡」「原則オンライン商談」＝<b>反響型</b>。集客は代表のYouTube・note・広告。別途、中堅〜大手向け広告商材のテレアポ（業務委託2名・1日80件）。2026-08に紹介プログラム（1成約5万円）開始</td><td><a href="#r8">[8]</a><a href="#r10">[10]</a></td></tr>
+<tr><td>顧客層</td><td>制作実績32件：医療・治療院10、建設・住宅・不動産6、飲食3、士業3、教育3、製造2、美容1、採用サイト3。<b>全国分散（東京・神奈川・千葉・宮城・長野・福井・京都・大阪・福岡・長崎）</b>、個人事業主〜小規模法人。最多プランはSTANDARD（14,800円）</td><td><a href="#r11">[11]</a></td></tr>
+<tr><td>直近1年の動き</td><td>PR TIMESは2024-11-22が最後（以後なし）。自社沿革：2026-05「プロパゲートAI」（アクセス解析から月次改善提案）、2026-08「AIデスク」、2026-09「採用Ad」。2026年度目標：サブスクWEB制作1万社・SEO2,000社・Ad500社で「顧客数国内No.1」</td><td><a href="#r1">[1]</a><a href="#r12">[12]</a></td></tr>
+<tr><td>評判</td><td>顧客側の解約トラブル・営業電話の苦情はX・ブログ・電話番号検索で発見できず。競合・比較サイトの懸念点は「9,800円は1ページのみ」「解約で非公開」「36か月まで譲渡不可」「Wixベース（旧）」。社員クチコミ（転職会議3.25／71件）は夜間対応・インターン中心の体育会系との記述【未確認】</td><td><a href="#r13">[13]</a><a href="#r14">[14]</a></td></tr>
+</table></div>
+<div class="note"><b>ここが最重要の事実：</b>先日の資料（切り口8軸）は「AIネイティブの少人数企業が、人件費の重い20人以上の会社に価格で勝つ」という構図でした。<b>プロパゲートは前者です。</b>資本金100万円・正社員十数名・インターン60名・AI8割・Vercelホスティング・反響型営業。当社が価格で下に潜れる「重い相手」ではなく、むしろ<b>当社が目指す形を5年先に走っている同類</b>です。したがって、ご依頼の「同等＋α」の＋αは<b>価格ではあり得ません</b>（下には既にZIUS 1,100円・ビズサイ4,980円がいます）。</div>
+
+<h2 id="s3">3. 判定表（★調査を始める前に固定したもの）</h2>
+<p>decision-gate スキルの止める条件8つをそのまま使い、調査結果に合わせて動かしていません（正本：<code>HANTEI_HYO.md</code>）。</p>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th>止める条件</th><th style="width:14%">対応する問い</th></tr>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td>問4</td></tr>
+<tr><td class="c">2</td><td>上位カテゴリの製品が、この案の機能を既に内包している</td><td>問1②・問2</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件の3つのうち、1つでも既に起きている</td><td>問5</td></tr>
+<tr><td class="c">4</td><td>引き算後の母数 × 想定単価 × シェア1% が、収益目標（年600万円）に届かない</td><td>問3</td></tr>
+<tr><td class="c">5</td><td>問1の5つの探し先のうち、埋まっていないものがある</td><td>問1</td></tr>
+<tr><td class="c">6</td><td>顧客がうちを選ぶ理由を1つも書けない（機能の同等は中立）</td><td>問6②</td></tr>
+<tr><td class="c">6b</td><td>顧客がそもそも2つを並べて比べない（無料同梱で探されない）</td><td>問6③</td></tr>
+<tr><td class="c">7</td><td>並べられない理由が「今その大手がやっていないから」しか書けない</td><td>問6③</td></tr>
+<tr><td class="c">8</td><td>大手がこれを同梱しない構造的な理由（人が動く／物を持つ／責任を取る／食い合う）を1つも書けない（v5案で提案・未承認のため<b>参考判定</b>）</td><td>問6③</td></tr>
+</table></div>
+<p class="small">調査の重点として先に宣言したこと：①プロパゲートの「安さ」の源泉は人件費構造か集客構造か ②月額制HP各社の実数（件数・価格・契約条件）③DIY・AI生成ツールが「人が作る」を置き換えつつあるか ④解約・リース商法への不信が選ぶ理由になるか。基準は動かしていません。</p>
+
+<h2 id="s4">4. 問1　この客は、いま同じ目的を何で達成しているか</h2>
+<p>客の目的＝「店・会社の情報をネットに出し、問い合わせ・予約・購入につなげたい。自分では作れない／作りたくない」。製品カテゴリでなく目的で5つの探し先を埋めました。</p>
+
+<h3>① 同じカテゴリ（月額制でHPを作って運用する会社）</h3>
+<div class="tbl"><table>
+<tr><th>社名・サービス</th><th>月額（税別中心）</th><th>初期・制作費</th><th>最低契約</th><th>実績</th><th>会社規模</th><th>出典</th></tr>
+<tr><td><b>プロパゲート</b> サブスクWEB制作</td><td>9,800／14,800／19,800円</td><td>5,000円</td><td>6か月（36か月未満は解約で非公開）</td><td>累計8,017件</td><td>2020年・資本金100万・105名（委託含む）</td><td><a href="#r4">[4]</a></td></tr>
+<tr><td>NTTタウンページ「デジタルリード」</td><td>初年度121,000円〜／年（≒月1万円）、【未確認】14,300円〜</td><td>登録料5,500円</td><td>【未確認】2年契約・途中解約不可</td><td><b>累計50,000件超</b>（2026-03）</td><td>NTT東西系</td><td><a href="#r15">[15]</a></td></tr>
+<tr><td>ライド「ZIUS」</td><td><b>1,100円〜</b>＋サーバー等2,530円</td><td>33,000円</td><td>—</td><td><b>25,919社</b></td><td>2004年設立</td><td><a href="#r16">[16]</a></td></tr>
+<tr><td>アクセスジャパン「ビズサイ」（札幌）</td><td><b>4,980円〜</b>（税込5,478円）</td><td>0円・解約費0円</td><td>—</td><td>20,000件以上</td><td>—</td><td><a href="#r17">[17]</a></td></tr>
+<tr><td>ビジョン「ホームページ.com」（東証プライム）</td><td>非公開（見積）</td><td>165,000円→0円キャンペーン</td><td>—</td><td>累計1万社以上・年2,000社</td><td>993名・売上390億円（2025/12期）</td><td><a href="#r18">[18]</a></td></tr>
+<tr><td>ROS（沖縄・freeeホームページ制作の提携先）</td><td>9,980／10,980／12,980円</td><td>契約手数料5,000円</td><td>なし（申告1か月後）</td><td>5,000社以上</td><td>2010年・約80名</td><td><a href="#r19">[19]</a></td></tr>
+<tr><td>freee「freeeホームページ制作」</td><td>最安3,980円（年払い）</td><td>0円</td><td>—</td><td>2024-06開始</td><td>上場（freee）</td><td><a href="#r19">[19]</a></td></tr>
+<tr><td>グリヒト「9DAYS」（大阪・2024年設立）</td><td><b>1,980円〜</b></td><td>69,800／99,800／198,000円</td><td>—</td><td>2026-09-09開始</td><td>AI制作・最短9日</td><td><a href="#r20">[20]</a></td></tr>
+<tr><td>ウィズスタイル（浦安）</td><td>5,000円〜</td><td>0円</td><td>12か月</td><td>—</td><td>地域制作会社</td><td><a href="#r21">[21]</a></td></tr>
+<tr><td>ホムッペ</td><td>14,800円〜</td><td>0円</td><td>36か月〜</td><td>100社以上</td><td>—</td><td><a href="#r21">[21]</a></td></tr>
+<tr><td>ブランディングテクノロジー（東証グロース）</td><td>非公開</td><td>—</td><td>—</td><td>ストック売上比率87.2%</td><td>182名・売上47.9億円・粗利率23.3%</td><td><a href="#r22">[22]</a></td></tr>
+<tr><td>【未確認】Kurumi 9,980円〜／らくWEB 10,780円〜／Chose 7,590円〜／ZANMAI 35,200円〜／ホムペオ（鹿児島）7,900円〜</td><td colspan="5" class="small">比較記事（Web幹事 2026-07・BRISK 2026-06）の記載。一次確認していない</td><td><a href="#r21">[21]</a></td></tr>
+</table></div>
+<p><b>読み取れること：</b>月額制HPは<b>少なくとも12社</b>が現役で、上位3社だけで累計10万件近い。価格は<b>1,100円〜19,800円</b>に分布し、プロパゲートは中位。「安さ」で入る余地は既にない。</p>
+
+<h3>② 上位カテゴリ（HP作成を一部として内包する、もっと大きいもの）</h3>
+<div class="tbl"><table>
+<tr><th>製品</th><th>提供元</th><th>料金</th><th>HP機能の有無</th><th>出典</th></tr>
+<tr><td>freeeホームページ（AI）</td><td>freee</td><td>非記載（「低コスト」）</td><td><b>有</b>：基本情報入力で最短10分でAIが文章・画像・テンプレ提案（2025-11-26）</td><td><a href="#r23">[23]</a></td></tr>
+<tr><td>STORES（8サービス統合）</td><td>STORES</td><td>フリー0円／スタンダード3,300円〜</td><td><b>有</b>：ネットショップ・予約・POSと一体のサイト</td><td><a href="#r24">[24]</a></td></tr>
+<tr><td>BASE</td><td>BASE</td><td>0円（手数料3.6%+40円＋3%）／グロース16,580円〜</td><td><b>有</b>：ショップ＝サイト。累計260万ショップ</td><td><a href="#r25">[25]</a></td></tr>
+<tr><td>Square オンラインビジネス</td><td>Square</td><td>0円（決済3.6%）〜</td><td><b>有</b></td><td><a href="#r26">[26]</a></td></tr>
+<tr><td>エキテン「ホームページオプション」</td><td>GMO</td><td>正会員5,000円＋4,980円</td><td><b>有</b>：ポータル掲載に独立HPを付加</td><td><a href="#r27">[27]</a></td></tr>
+<tr><td>ホットペッパー／食べログ／Airリザーブ</td><td>リクルート／カカクコム</td><td>非公開〜月10万円／0〜11,000円</td><td><b>部分</b>：店舗ページ・予約はあるが独立HPではない</td><td><a href="#r28">[28]</a></td></tr>
+<tr><td>Googleビジネスプロフィールの無料サイト</td><td>Google</td><td>—</td><td><b>終了</b>（2024-03-01）。Wix等へ誘導</td><td><a href="#r29">[29]</a></td></tr>
+</table></div>
+
+<h3>③ 下位・単機能（DIY・AI生成）</h3>
+<div class="tbl"><table>
+<tr><th>製品</th><th>料金</th><th>規模・動き</th><th>出典</th></tr>
+<tr><td>Wix（AI Website Builder／Harmony）</td><td>Free〜、Light $17.77〜</td><td>ADIを2024-11終了→AIエージェント「Harmony」（2026-03）</td><td><a href="#r30">[30]</a></td></tr>
+<tr><td>Jimdo（KDDIウェブ）</td><td>0円〜、【未確認】990〜5,330円</td><td>日本100万サイト（2015年）</td><td><a href="#r30">[30]</a></td></tr>
+<tr><td>ペライチ</td><td>【未確認】1,628〜7,678円（無料公開枠は2025-10廃止）</td><td>40万人以上。2026-08-01 ラクスルに吸収合併</td><td><a href="#r31">[31]</a></td></tr>
+<tr><td>STUDIO</td><td>0円／590〜9,980円</td><td>ユーザー83万人・公開29万サイト（2026-02）</td><td><a href="#r32">[32]</a></td></tr>
+<tr><td>Canva（ホームページ機能）</td><td>0円／プロ11,800円／年</td><td>全プラン対象</td><td><a href="#r33">[33]</a></td></tr>
+<tr><td>Hostinger AIビルダー</td><td><b>299円／月〜</b>（通常1,499円）</td><td>AI生成</td><td><a href="#r34">[34]</a></td></tr>
+<tr><td>買い切りAI生成（リッツコンサルタント）</td><td>1,980／4,980／9,800円 買い切り</td><td>2026-08-03開始</td><td><a href="#r35">[35]</a></td></tr>
+<tr><td>BitStar AI Page</td><td>初期0円・制作費0円</td><td>AIが構成・文章・画像・アニメを自動生成、最短2週間（2026-01）</td><td><a href="#r35">[35]</a></td></tr>
+</table></div>
+
+<h3>④ 汎用ツール・⑤ 人手</h3>
+<div class="tbl"><table>
+<tr><th>手段</th><th>相場</th><th>出典</th></tr>
+<tr><td>クラウドワークス（公式相場）</td><td>HP制作（TOP＋下層2p）20万円〜、WordPress HP 10万円〜、LP 10万円〜/p</td><td><a href="#r36">[36]</a></td></tr>
+<tr><td>ランサーズ（公式）</td><td>コーポレート5〜300万円、維持費5,000〜3万円/月</td><td><a href="#r36">[36]</a></td></tr>
+<tr><td>ミツモア（一般相場）</td><td>20〜30万円が一般的、テンプレ3〜10万円、こだわり50〜100万円</td><td><a href="#r37">[37]</a></td></tr>
+<tr><td>比較サイト経由の実勢</td><td>比較ビズ：HP制作 平均予算112万円（1,135件）／Web幹事：平均82.5万円・中央値43.4万円（846件）</td><td><a href="#r38">[38]</a></td></tr>
+<tr><td>地域の制作会社（対面）</td><td>上記の一括型が中心。豊橋・東三河／大阪北区の月額制の実態は<b>未調査</b>（方向Aを選ぶ場合のゲート0で埋める）</td><td>—</td></tr>
+</table></div>
+
+<h3>調べ方3つ（公式ページだけで終わらせない）</h3>
+<div class="tbl"><table>
+<tr><th style="width:18%">方法</th><th>分かったこと</th></tr>
+<tr><td>低評価レビュー</td><td>プロパゲート固有の顧客苦情は発見できず（Googleマップは取得不可）。カテゴリ全体では<b>「HPリース商法」への不信</b>が根強い：弁護士ドットコムに相談94件（月22,000円×8年・5年リースで中途解約不可・公開できず支払いのみ継続）、奈良弁護士会が2012年に規制を求める意見書<sup><a href="#r39">[39]</a></sup>。月額制固有の不満は「解約すると消える」「所有権がない」「1ページだけ」「ページ追加が別料金」<sup><a href="#r13">[13]</a><a href="#r15">[15]</a></sup></td></tr>
+<tr><td>チェンジログ1年分</td><td>プロパゲート：2026-05 AI改善提案、2026-08 AIデスク、2026-09 採用Ad、2026-08 紹介プログラム／NTTタウンページ：AI検索対策パック／ZIUS：2026-04 SEO品質強化（料金据置）／STORES：2026-03 プラン統合／ペライチ：ラクスル合併・無料枠廃止／Wix：ADI終了→Harmony／freee：2025-11 AIホームページ／ビズサイ：告知なし。<b>方向＝「AIで作る」は全社が既に入っており、差がつくのは「その後の運用と上位商品」</b></td></tr>
+<tr><td>価格ページの変更</td><td>値上げ・値下げの動きは確認できず（ZIUS据置、ビズサイ据置）。<b>新規参入は低価格側に集中</b>（9DAYS 1,980円、Hostinger 299円、買い切り1,980円）。上位プランへ移った機能＝プロパゲートはSEO記事・広告運用・AIデスクを<b>別商品</b>にして単価を上げている（HPは入口商品）</td></tr>
+</table></div>
+
+<h2 id="s5">5. 問2　競合が「既に持っている機能」を先に全部書く</h2>
+<div class="tbl"><table>
+<tr><th style="width:30%">機能・条件</th><th>持っている会社（調べた範囲）</th></tr>
+<tr><td>制作費0円・月額制・初期数千円</td><td>プロパゲート、ビズサイ、ROS、ウィズスタイル、ホムッペ、freee、【未確認】Kurumi・らくWEB</td></tr>
+<tr><td>AIで制作（構成・文章・画像）</td><td>プロパゲート（8割AI）、9DAYS、BitStar、freeeホームページ、Wix Harmony、Hostinger、リッツ（買い切り）</td></tr>
+<tr><td>月n回の修正・更新込み</td><td>プロパゲート（月5回）、ほか各社【回数は未確認】</td></tr>
+<tr><td>SEO内部対策・SSL・ドメイン・サーバー込み</td><td>ほぼ全社</td></tr>
+<tr><td>アクセス解析からのAI改善提案</td><td>プロパゲート（2026-05）</td></tr>
+<tr><td>SEO記事代行（AI初稿＋人の確認）</td><td>プロパゲート（4,980円/記事）、ウィズスタイル（AI×SEOブログ）、バクヤスAI ほか多数</td></tr>
+<tr><td>広告運用代行（月額固定・広告費別）</td><td>プロパゲート（10万円）、Myoshin（10万円）ほか多数</td></tr>
+<tr><td>Shopify／EC構築</td><td>プロパゲート（49.8万円一括）、多数のShopifyパートナー（一括制作）</td></tr>
+<tr><td>解約後のサイト譲渡</td><td>プロパゲート（36か月後）。ビズサイ「解約費0円」だが所有権の扱いは【未確認】。ZIUS・ROSは【未確認】</td></tr>
+<tr><td>紹介パートナー制度</td><td>プロパゲート（5万円/成約）</td></tr>
+</table></div>
+<div class="box"><b>調べた範囲で「持っている会社を確認できなかった」もの</b>（＝製品名を添えられないので「無い」とは書きません。方向を選んだ後のゲート0で必ず再確認します）<br>
+・<b>対面の訪問・撮影同行</b>を月額に含む形（月額制12社はオンライン完結が中心。地域制作会社の月額プランは未調査）<br>
+・<b>月額制でEC構築＋商品撮影・登録・更新＋発送まで</b>を1社で受ける形（EC運営代行は中堅向けで月10〜30万円が中心【未確認】。小規模向けの月額型は未調査）<br>
+・<b>解約後もサイトが顧客名義で残る</b>ことを最初から約束する月額制（ROS「最低契約なし」が最も近いが所有権は未確認）</div>
+
+<h2 id="s6">6. 問3　母数を引き算したか。統計の内訳を読んだか</h2>
+<div class="tbl"><table>
+<tr><th style="width:5%">段</th><th>数字</th><th>根拠</th><th style="width:14%">公的／推測</th></tr>
+<tr><td class="c">1</td><td>中小企業 336.5万者、うち小規模企業 <b>285.3万者</b>（2021年6月）</td><td>中小企業庁（2023-12-13）</td><td>公的</td><td></td></tr>
+<tr><td class="c">2</td><td>HP開設率は<b>規模で極端に違う</b>：100人以上の企業93.3%（総務省）。小規模の公的統計は存在せず、民間調査で全体48.2%、<b>5人以下は約3割、6〜10人は約5割、51人以上は約9割</b></td><td>総務省 令和7年通信利用動向調査／アイ・モバイル2025年調査【未確認】</td><td>公的＋民間</td></tr>
+<tr><td class="c">3</td><td>HP未保有の小規模事業者 ≒ 285.3万 × 約50% ≒ <b>約140万者</b>。ただし内訳を読むと<b>未保有は5人以下に集中</b>し、持たない理由の最多は「固定の顧客・取引先しかいない」23%（＝そもそも要らない層）</td><td>同上から算出</td><td><b>推測</b></td></tr>
+<tr><td class="c">4</td><td>「月額制でHPを買う」ことが実際に起きている数＝上位各社の累計の合計 ≒ デジタルリード5万＋ZIUS2.6万＋ビズサイ2万＋ビジョン1万＋プロパゲート0.8万＋ROS0.5万 ≒ <b>約12万件</b>（累計。現存契約はこれより少ない）</td><td>各社公表値の合算</td><td>公的でない（各社自己申告）</td></tr>
+<tr><td class="c">5</td><td>条件4の計算：12万件 × 1% × 月1.2万円 × 12か月 ＝ <b>年1,728万円</b> ＞ 目標600万円。<b>目標に必要なのは月50件前後（シェア0.04%）</b></td><td>算出</td><td>推測</td></tr>
+</table></div>
+<p><b>内訳から分かる不都合な事実：</b>「HPを持っていない層」の中心は<b>5人以下の事業者</b>で、これは休廃業の中心層（資本金1,000万円未満が5割超、代表70代以上63.7%）と重なります<sup><a href="#r40">[40]</a></sup>。「未保有層を開拓する」という一般的な売り文句は、<b>最も早く消える層を主客にする</b>ことを意味します。プロパゲートの実績32件が医療・建設・士業・教育に寄っている（廃業しにくい業種）のは、この構造と整合します。</p>
+
+<h2 id="s7">7. 問4　この客は5年後・10年後、増えるか減るか</h2>
+<div class="tbl"><table>
+<tr><th style="width:28%">層</th><th>増減の根拠（数字）</th><th style="width:12%">判定</th></tr>
+<tr><td>小規模事業者（会社案内HPの主客）</td><td>2016→2021年で304.8万→285.3万（<b>年▲3.9万者・▲1.3%/年</b>）。2009→2021年で中小企業420万→336.5万。休廃業・解散2025年67,949件、後継者不在率50.1%、2025年に70歳超の経営者245万人（うち後継未定127万）<sup><a href="#r41">[41]</a><a href="#r40">[40]</a></sup></td><td class="ng">減る（確定・緩やか）</td></tr>
+<tr><td>HPを「持っているが古い／更新されない」層（乗り換え需要）</td><td>公庫調査：中小のHP・SNS導入率88.2%、課題は「維持コストが大きい」40.2%<sup><a href="#r42">[42]</a></sup>。乗り換え需要の時系列統計は無し</td><td class="warn">【未確認】</td></tr>
+<tr><td>小規模EC事業者（方向Bの主客）</td><td>物販EC市場15.2兆円（<b>+3.7%/年</b>）・EC化率9.78%（2024年）。BASEショップ数は<b>年約20万増</b>（2025-11に250万突破）<sup><a href="#r43">[43]</a><a href="#r25">[25]</a></sup></td><td class="ok">増える（確定）</td></tr>
+<tr><td>「AIで自分で作る」の普及（＝この事業の外側の力）</td><td>freee AI 10分・Wix Harmony・Hostinger 299円・買い切り1,980円が2025〜2026年に集中。ただしプロパゲートは同期間に月300件超の純増＝<b>「作ってもらいたい層」は当面残っている</b></td><td class="warn">置換は進むが未達</td></tr>
+</table></div>
+<p><b>判定：</b>会社案内HPの主客（小規模事業者）は<b>確定情報で減る</b>が、年1.3%と緩やかで、ご方針（減る理由で落とすのは確定情報のときだけ）に照らして<b>条件1は「該当・ただし緩やか」として注記付きで残す</b>。ECの主客は増える。</p>
+
+<h2 id="s8">8. 問5　この案（原案）が死ぬ条件3つと、その場での確認</h2>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th>「〜が起きたら成立しない」</th><th>既に起きているか（その場で確認）</th><th style="width:12%">判定</th></tr>
+<tr><td class="c">A</td><td>価格でプロパゲートの下に潜ろうとしたとき、<b>さらに下に既に誰かがいる</b></td><td><b>起きている。</b>ZIUS 1,100円＋2,530円、ビズサイ4,980円、9DAYS 1,980円、Hostinger 299円。しかもプロパゲート自身がAI8割・インターン中心で原価が軽い（2節）</td><td class="ng">既発生</td></tr>
+<tr><td class="c">B</td><td>プロパゲート級の<b>反響型集客</b>（代表YouTube・note・広告で年間問い合わせ1万件級）を当社が作れない</td><td>当社には現時点で無い。ただし「起きた」のではなく「まだ無い」。50件で足りる当社に1万件は不要（10節）</td><td class="warn">未発生・要設計</td></tr>
+<tr><td class="c">C</td><td><b>AIのDIYツールが「人が作る品質」に達し、店舗が自分で作るようになる</b>（作ってもらう需要が消える）</td><td>freee AI・Wix Harmony・Hostinger 299円が出揃ったが、プロパゲートは2026年も月300件超の純増。<b>まだ起きていない。</b>ただし10年で見ると最大の死因</td><td class="warn">未発生・進行中</td></tr>
+</table></div>
+<p><b>判定：</b>死ぬ条件Aが既に起きているため、<b>「価格でプロパゲートに対抗する形の原案」は条件3に該当</b>。共存の形は価格以外で作る必要があります。</p>
+
+<h2 id="s9">9. 問6　当たったあと、顧客がうちとプロパゲートを並べたとき、うちを選ぶ理由</h2>
+<h3>① 並べられるか</h3>
+<p><b>並べられます。</b>月額制HPは比較記事（Web幹事・BRISK）で12社が横並びにされており、顧客は探して比べます（条件6bは非該当）。さらに、プロパゲートは「AIが8割作る」体制なので、<b>こちらが出した機能は数週間で足されると考えるべき</b>です（実例：2026-05 AI改善提案、2026-08 AIデスク）。</p>
+<h3>② うちを選ぶ理由（構造的なもの＝相手が「やらない／やれない」形）</h3>
+<div class="tbl"><table>
+<tr><th style="width:5%">方向</th><th style="width:22%">うちを選ぶ理由</th><th>なぜプロパゲート（と月額制12社）が並べてこないか</th><th style="width:16%">切り口8軸との対応</th></tr>
+<tr><td class="c"><b>A</b></td><td><b>地域×対面×撮影同行</b>：豊橋・東三河／大阪北区に人が行き、店・料理・スタッフを撮り、その場で直す。高齢の経営者でもオンライン商談なしで完結</td><td>プロパゲートは「原則オンライン商談」・約50%フルリモート・全国分散の顧客。<b>人が現地へ行く形は、月100件を1人で回す体制と両立しない</b>（人が動く＝相手が構造的に避ける）。競合になるのは地域の一括型制作会社（初期30〜100万円）で、そこには月額で勝てる</td><td>軸C③（ローエンド）・軸F（人が動く）</td></tr>
+<tr><td class="c"><b>B</b></td><td><b>小規模EC事業者向け「月額でEC構築＋商品撮影・登録・更新＋発送（X-01）」</b>：サイトを作って終わりではなく、商品が増えるたびに撮って登録し、売れたら出荷する</td><td>プロパゲートのECは<b>49.8万円一括・月額0円・運用なし</b>＝「作って渡す」商売。商品撮影・登録・発送は<b>物と人が動く</b>ため、AI8割の制作会社は引き受けない。BASE/STORESは無料DIYだが「やってくれない」。当社はX-01（撮影〜発送代行）とSELECT.ARCHIVE（WooCommerce自社構築）の両方を持つ</td><td>軸F（人の手・物）・軸E（法人・責任）・問4で唯一「増える」層</td></tr>
+<tr><td class="c"><b>C</b></td><td><b>所有権型</b>：初月から顧客名義（ドメイン・サーバー・WordPress）で作り、解約してもサイトは消えない。「リース商法」「36か月ロック」への不信を正面から解く</td><td>プロパゲートの収益構造は<b>36か月未満は非公開＝解約抑止</b>で成り立っており、これを捨てると自社の商売と食い合う（軸C②・類型④）。ただし<b>当社側も解約が増える</b>ため、単独では弱い。A・Bに「約束」として添える形が現実的</td><td>軸C②（食い合う）</td></tr>
+<tr><td class="c"><b>D</b></td><td><b>共存の文字どおりの形＝紹介パートナー</b>：プロパゲートの紹介プログラム（1成約5万円・2026-08開始）に登録し、当社が取らない層（全国・オンライン希望）を送る</td><td>競合ではなく送客側に回る。収益は一時金で「月50万円が続く」形にはならないが、A・Bの副収入と、プロパゲートの実務を内側から知る手段になる</td><td>—</td></tr>
+</table></div>
+<p><b>判定：</b>選ぶ理由は書ける（条件6・7は非該当）。ただし<b>「同じHP制作を同じ売り方で」の原案には、価格以外の理由が1つも残らない</b>。理由が書けるのは、A・B・Cのように「人・物・所有」を足した形だけです。</p>
+
+<h2 id="s10">10. 着手前チェック：この母数にどうやって届くのか（合否には使わない）</h2>
+<div class="tbl"><table>
+<tr><th style="width:8%">方向</th><th>経路</th><th>月に届きうる人数の概算</th></tr>
+<tr><td class="c">A</td><td>Googleマップ（地域名＋「ホームページ制作」）・商工会議所（豊橋・大阪）の会員向け案内・既存取引先の紹介・チラシ持参の飛び込み（対面が売りなので営業も対面）</td><td>根拠が薄い。地域の検索ボリュームは未取得【未確認】。50件を1〜2年で積むなら月3〜5件の成約で足りる</td></tr>
+<tr><td class="c">B</td><td>X-01の見込み客（せどり・小規模EC事業者）と同じ入口、SELECT.ARCHIVEの実績を見本に、BASE/STORES/メルカリShopsからの「自社サイトを持ちたい」層、せどりコミュニティ</td><td>X-01の集客設計と共通。X-01が動けば追加費用ほぼゼロで届く。単独では【未確認】</td></tr>
+<tr><td class="c">C</td><td>「ホームページ 月額 解約」「ホームページ リース 後悔」などの検索（不信を持った層が自分で探す）・比較記事への掲載依頼</td><td>検索ボリューム未取得【未確認】。比較記事に載るには実績が要る</td></tr>
+</table></div>
+<p class="small">「経路を書けなかった」ではなく書けたが、A・Cは根拠が薄い。合否には使わず、方向性レポートと前提台帳に残し、最初のフェーズで潰す死因の候補に入れます。</p>
+
+<h2 id="s11">11. 判定結果</h2>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th>止める条件</th><th style="width:22%">原案（同じHP制作を同じ売り方で）</th><th style="width:22%">再設計案 A／B／C</th></tr>
+<tr><td class="c">1</td><td>主客が5年後に減る</td><td class="warn">該当（年▲1.3%・緩やか・注記）</td><td>A・C＝同じ／<b>B＝非該当（増える）</b></td></tr>
+<tr><td class="c">2</td><td>上位カテゴリが内包</td><td class="ok">非該当※</td><td class="ok">非該当※</td></tr>
+<tr><td class="c">3</td><td>死ぬ条件が既に起きている</td><td class="ng"><b>該当（死ぬ条件A＝価格の底は既に下）</b></td><td class="ok">非該当（価格で戦わないため）</td></tr>
+<tr><td class="c">4</td><td>母数×単価×1%が届かない</td><td class="ok">非該当（年1,728万円＞600万円）</td><td class="ok">非該当（Bは別途算出）</td></tr>
+<tr><td class="c">5</td><td>探し先に空欄がある</td><td class="ok">5つ埋めた</td><td class="warn">A＝地域の月額制／B＝小規模向けEC運用代行が<b>未調査</b>（個別ゲート0で埋める）</td></tr>
+<tr><td class="c">6</td><td>選ぶ理由を書けない</td><td class="ng"><b>該当（価格以外に無い）</b></td><td class="ok">非該当（9節②）</td></tr>
+<tr><td class="c">6b</td><td>並べて比べてもらえない</td><td class="ok">非該当（比較記事あり）</td><td class="ok">非該当</td></tr>
+<tr><td class="c">7</td><td>「今やっていないから」しか書けない</td><td class="ng">該当</td><td class="ok">非該当（人が動く・食い合う）</td></tr>
+<tr><td class="c">8（参考）</td><td>同梱しない構造的理由が無い</td><td class="ng">該当</td><td class="ok">非該当（類型①③④）</td></tr>
+</table></div>
+<p class="small">※条件2について：freeeホームページ・STORES・BASE・エキテンはHP作成機能を内包していますが、それでもプロパゲート等12社の「作ってもらう」月額制が現に成立し伸びている＝K-03と同じ「純正が無料でも有料の専業が成立している」構図。商品は「ソフト」でなく「人が作って運用するサービス」なので、内包は致命傷にならないと判定しました。ただし<b>死ぬ条件C（AIのDIYが人の品質に達する）は10年単位では最大の死因</b>で、前提台帳で監視します。</p>
+<div class="concl"><b>結論：原案＝進まない（条件3・6・7該当）。再設計案A／B／C＝ゲート0を通る見込みがあるが、本資料では「候補」の扱い。</b>選んだ方向について個別にゲート0（特に問1の未調査の探し先と問3のB用の母数）を埋め、その時点で `ZENTEI.md` を確定します。</div>
+
+<h2 id="s12">12. 方向性の選択肢と推奨</h2>
+<div class="tbl"><table>
+<tr><th style="width:11%">案</th><th style="width:30%">内容</th><th>メリット</th><th>デメリット・死因</th></tr>
+<tr><td><b>案A</b><br>地域×対面×撮影</td><td>豊橋・東三河（本店）と大阪北区で、月額制＋訪問撮影＋対面の修正。相手は地域の一括型制作会社。価格はプロパゲート並み（1〜2万円）で、差は「来る・撮る」</td><td>月額制12社が構造的にやらない。撮影は当社の現業（X-01・商品画像）と道具が共通。営業も対面で完結し広告費が少ない</td><td>主客（地域の小規模店舗）は減る層。移動に人が要り、坂野様が運転できないため社員の稼働に依存。地域内の母数が小さく50件で頭打ちの可能性【未確認】</td></tr>
+<tr><td><b>案B</b><br><span class="ok">推奨</span><br>小規模EC×X-01</td><td>小規模EC事業者（BASE/STORES/メルカリShopsから自社サイトへ、または自社ECの運用に困っている層）向けに、月額で「EC構築（WooCommerce／Shopify）＋商品撮影・登録・更新＋受注後の発送（X-01）」を1社で受ける</td><td>問4で唯一「増える」主客。プロパゲートは49.8万円一括・運用なし＝並べてこない。人と物が動くのでAI制作会社が同梱しない。X-01の入口・倉庫・撮影と共通で、X-01が動けば追加固定費がほぼ無い。SELECT.ARCHIVEで構築実績あり。IT導入補助金はEC・予約は対象（HP制作は対象外）</td><td>X-01の倉庫業の照会（中部運輸局）と同じ前提に乗る。小規模向け「EC運営代行」の競合が未調査（いつも.・Hamee等は中堅向け【未確認】）。EC事業者は廃業も速い。個別のゲート0が必須</td></tr>
+<tr><td><b>案C</b><br>所有権型</td><td>初月から顧客名義・解約しても消えない月額制。リース商法・36か月ロックへの不信を正面から解く</td><td>選ぶ理由として強く、AかBに「約束」として添えられる</td><td>単独では解約が増えて「月50万円が続く」にならない。競合が真似しやすい（プロパゲートが36か月→12か月に縮めれば消える）</td></tr>
+<tr><td><b>案D</b><br>紹介パートナー</td><td>プロパゲートの紹介プログラム（1成約5万円）に登録し、当社が取らない層を送る</td><td>共存の文字どおりの形。費用ゼロ。相手の実務・顧客層を内側から知れる</td><td>一時金で継続収入にならない。主事業にはならない</td></tr>
+<tr><td><b>案E</b><br>やらない</td><td>プロパゲート型は追わず、X-01と代理店契約に集中する</td><td>いちばん現実的。X-01は既にゲート1承認済み</td><td>今回のご依頼（共存できる形を作る）からは離れる</td></tr>
+</table></div>
+<p><b>Claudeの推奨は「案B（＋案Cを約束として添える）」、副として案D</b>です。理由は3つ：①問4で主客が増える唯一の方向であること ②プロパゲートが「作って渡す」商売であり、「撮る・登録する・出荷する」を月額に含めた瞬間に並べてこられないこと ③X-01と同じ入口・同じ場所・同じ人員で回せるため、月50万円の目標に「2本目の柱」としてではなく「X-01の上乗せ」として届く見込みがあること。<b>ただし案BはX-01の倉庫業の照会結果に依存し、小規模向けEC運営代行の競合が未調査</b>なので、選ばれた場合は個別ゲート0（問1⑤層・問3・問5をB用に書き直す）を必ず通します。</p>
+<div class="grid2">
+<div class="box"><b>反論1：案Bは「新規事業」ではなくX-01の機能追加ではないか</b><br>半分そうです。ただしX-01の顧客は「発送を任せたい人」で、案Bの顧客は「売る場所（自社EC）から作ってほしい人」。入口が違うので別の案として扱う価値はあります。逆に言えば、<b>X-01が倉庫業の照会で止まると案Bも止まります</b>。</div>
+<div class="box"><b>反論2：撮影・登録・発送は「時間の切り売り」そのものではないか</b><br>その通りで、人が動きます。先日の資料の決めていただきたいこと②（境界＝ご自身の時間か、人件費が乗る事業そのものか）の答えで、案A・Bの成否が決まります。</div>
+<div class="box"><b>反論3：プロパゲートがEC運用まで足してきたら</b><br>「AIが8割作る」体制で撮影・発送を足すには、倉庫と人が要ります。足すなら外部委託になり、当社と同じ原価になります。<b>並べてこないのではなく、並べても同じ原価になる</b>、が正確な言い方です。</div>
+<div class="box"><b>反論4：小規模EC事業者は廃業も速い</b><br>事実です（BASEは累計260万ショップですが稼働数は公表されていません）。案Bの個別ゲート0で「月商いくら以上の層」に主客を絞る必要があります。</div>
+</div>
+
+<h2 id="s13">13. 法務・制度のメモ（★確定前に legal-crosscheck で Gemini にも確認）</h2>
+<div class="tbl"><table>
+<tr><th style="width:24%">論点</th><th>現時点の整理</th><th style="width:12%">状態</th></tr>
+<tr><td>電気通信事業法（届出の要否）</td><td>顧客のサイトを当社契約のサーバーでホスティングする形が「電気通信事業」に当たり届出が要るかは、総務省「電気通信事業参入マニュアル（追補版）」で確認が必要。当社名義でなく<b>顧客名義のサーバー（案C）</b>にすれば論点自体が消える可能性</td><td class="warn">【未確認】</td></tr>
+<tr><td>外部送信規律（電気通信事業法27条の12）</td><td>アクセス解析等を入れたサイトは利用者への通知・公表が必要（2023-06施行）。制作物に組み込む定型対応で足りる見込み</td><td class="warn">【未確認】</td></tr>
+<tr><td>特定商取引法</td><td>事業者向け（BtoB）は適用除外。ただし個人事業主への訪問販売（案A）は「営業のため」の契約かで争いになり得る＝契約書に事業者限定条項</td><td class="warn">【未確認】</td></tr>
+<tr><td>景品表示法</td><td>「制作費0円」と表示しつつ初期費用を取る形は、初期費用を同じ画面で明示する。プロパゲートも「別途5,000円」を併記</td><td>定型対応</td></tr>
+<tr><td>リース商法との区別</td><td>役務のリース化・長期契約・中途解約不可は苦情の中心（弁護士ドットコム94件）。<b>最低契約期間を短く（6か月以下）、解約でサイトが消えない設計</b>が、法務と「選ぶ理由」の両方に効く</td><td>設計方針</td></tr>
+<tr><td>補助金</td><td>持続化補助金：ウェブサイト関連費は単独申請不可・上限30万円（第20回）／デジタル化・AI導入補助金2026：<b>会社案内型HP制作は対象外、EC・予約・CRM等の業務機能は対象</b>＝案Bに有利<sup><a href="#r44">[44]</a></sup></td><td>確認済み</td></tr>
+<tr><td>倉庫業法（案Bのみ）</td><td>X-01と同じ論点。中部運輸局への再照会（D-149）の結果に従う</td><td class="warn">照会中</td></tr>
+</table></div>
+
+<h2 id="s14">14. ゲート0で防げないこと</h2>
+<p>ここで分かるのは机上のことだけです。<b>案A・Bの客が実際に月額を払うか、その価格で払うか、撮影・登録を任せることに価値を感じるか</b>は、人力で1件やって初めて分かります。推奨の検証：案Bなら、システムを作らず、SELECT.ARCHIVEの経験と手元の撮影道具で<b>1社だけ月額で受けてみる</b>（4週間・費用ほぼゼロ）。案Aなら、豊橋の知り合いの店1軒に対面で提案して反応を見る。</p>
+
+<h2 id="s15">15. 決めていただきたいこと</h2>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th style="width:40%">論点</th><th>選択肢（★＝Claude推奨）</th></tr>
+<tr><td class="c">1</td><td>原案（同じHP制作を同じ売り方で）の判定「進まない」を受け入れるか</td><td>★受け入れる ／ 受け入れない（理由をお聞かせください）</td></tr>
+<tr><td class="c">2</td><td>共存の方向</td><td>★案B（小規模EC×X-01、案Cを約束として添える） ／ 案A（地域×対面） ／ 案C単独 ／ 案D（紹介パートナー） ／ 案E（追わない） ／ 複数</td></tr>
+<tr><td class="c">3</td><td>「時間の切り売り」の境界（前回の②と同じ）</td><td>㋐ ご自身の時間を使わなければよい→A・Bが成立 ／ ㋑ 人件費が乗る事業を避けたい→A・Bは閉じ、C・D・Eだけ残る</td></tr>
+<tr><td class="c">4</td><td>選んだ方向の個別ゲート0（未調査の探し先・母数・死ぬ条件の書き直し）を進めるか</td><td>★進める ／ 先にGeminiクロスレビュー（本資料の判定に対して） ／ 保留</td></tr>
+<tr><td class="c">5</td><td>プロパゲートの紹介プログラムへの登録（案D）を、A/Bと並行して行うか</td><td>行う ／ ★行わない（先方の実務を知る目的なら、まず「顧客として」1件サブスクHPを契約して内側を見る方が確実。月9,800円×6か月）</td></tr>
+</table></div>
+<p class="small">記録：判定結果は <code>DECISIONS.md</code> に D-150（種別：提案・承認待ち）として記帳しました。判定表 <code>HANTEI_HYO.md</code>、前提台帳 <code>ZENTEI.md</code>（原案用・方向が決まったら書き直す）を同フォルダに置いています。横断LOG（<code>C:\dev\_infra\LOG</code>）は未接続のため未記録です。</p>
+
+<h2 id="src">出典一覧</h2>
+<ol class="src">
+<li id="r1">プロパゲート 会社概要・沿革 https://www.propagateinc.com/company ／ 採用サイト（年商推移・目標）https://www.propagateinc.com/recruit/company</li>
+<li id="r2">アラームボックス（資本金100万円・登記住所履歴）https://alarmbox.jp/companyinfo/entities/1011001133489 ／ マイナビ転職（従業員105名＝業務委託・インターン含む）https://tenshoku.mynavi.jp/company/416480/</li>
+<li id="r3">【未確認】gBizINFO（社会保険加入データ上の従業員12人）https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1011001133489 ／ Wantedly（メンバー約120名・50%フルリモート）https://sg.wantedly.com/companies/propagate ／ in-fra（長期インターン60名）https://www.in-fra.jp/long-internships/22564</li>
+<li id="r4">プロパゲート サブスクWEB制作（料金・契約条件・累計推移）https://www.propagateinc.com/web-design ／ FAQ https://www.propagateinc.com/faq</li>
+<li id="r5">プロパゲート Shopify制作（49.8万円一括）https://www.propagateinc.com/shopify-design ／ スマートSEO https://www.propagateinc.com/smart-seo</li>
+<li id="r6">プロパゲート サブスクAd https://www.propagateinc.com/subscription-ad ／ 採用Ad https://www.propagateinc.com/saiyo-ad ／ AIデスク https://www.propagateinc.com/ai-desk</li>
+<li id="r7">集客エージェント（完全成果報酬・月200万円以上の広告主向け）https://www.shukyaku-agent.com/</li>
+<li id="r8">プロパゲート 求人票：AI Webディレクター（AIが8割）https://www.propagateinc.com/recruit/jobs/ai-web-director-full-time ／ 法人営業（反響型・オンライン商談）https://www.propagateinc.com/recruit/jobs/consulting-sales-full-time ／ テレフォンアポインター（業務委託）https://www.propagateinc.com/recruit/jobs/telephone-appointment-outbound-contract ／ 募集一覧 https://www.propagateinc.com/recruit/jobs</li>
+<li id="r9">制作実績サイトのHTML・HTTPヘッダ（旧＝Wix generator、新＝Next.js／Vercel）2026-09-15確認。実績一覧 https://www.propagateinc.com/works</li>
+<li id="r10">プロパゲート 紹介プログラム（1成約5万円・2026-08-12）https://www.propagateinc.com/partner-program</li>
+<li id="r11">プロパゲート 制作実績（32件の業種・地域）https://www.propagateinc.com/works</li>
+<li id="r12">PR TIMES プロパゲート配信一覧（最終2024-11-22）https://prtimes.jp/main/html/searchrlp/company_id/63744 ／ Wantedly記事（2025-10-09）https://sg.wantedly.com/companies/propagate/post_articles/1014598</li>
+<li id="r13">【未確認・競合発信】FCマーケティング（2025-08-28）https://fc-marke.co.jp/propagate-hp/ ／ reasonable-hp.com（2026-08-06）https://www.reasonable-hp.com/column/propagate-reviews-and-cautions/ ／ プロパゲート自社ブログ「解約前に必読」https://www.propagateinc.com/post/hp-subscription-homepage-cancellation</li>
+<li id="r14">【未確認】転職会議（3.25／71件）https://jobtalk.jp/companies/10222208 ／ jpnumber（03-6824-7712 コメント0件）https://www.jpnumber.com/numberinfo_03_6824_7712.html</li>
+<li id="r15">NTTタウンページ デジタルリード（累計50,000件・2026-03）https://www.ntttp-dlead.com/ ／ 料金告知 https://www.ntttp-dlead.com/news/service-news/homepage-seisaku-2month-muryou.html ／ 【未確認】比較記事 https://mun.co.jp/company/ntttownpage-hikaku/</li>
+<li id="r16">ライド ZIUS 料金 https://zius.speever.jp/plan/ ／ 会社（25,919社）https://zius.speever.jp/company/</li>
+<li id="r17">アクセスジャパン ビズサイ（4,980円〜・20,000件以上）https://www.webdeki.com/ ／ お知らせ https://www.webdeki.com/news/</li>
+<li id="r18">ビジョン ホームページ.com https://homepage296.com/ ／ 2025年12月期決算短信 https://finance-frontend-pc-dist.west.edge.storage-yahoo.jp/disclosure/20260213/20260212557339.pdf ／ 会社データ https://www.vision-net.co.jp/en/company/com_data.html</li>
+<li id="r19">ROS株式会社 https://r-os.com/ ／ freeeホームページ制作（2024-06-12・ROS提携・最安3,980円）https://corp.freee.co.jp/news/20240612_homepage.html</li>
+<li id="r20">グリヒト 9DAYS（@Press 2026-09-09）https://www.atpress.ne.jp/news/626175</li>
+<li id="r21">ウィズスタイル https://withstyle-web.com/ ／ ホムッペ https://hommpe.com/ ／ 【未確認】Web幹事 月額制まとめ（2026-07-08）https://web-kanji.com/posts/homepage-subscription ／ BRISK（2026-06-23）https://b-risk.jp/blog/2026/06/subscription-homepage-companies/ ／ ホムペオ https://hompeo.com/</li>
+<li id="r22">ブランディングテクノロジー 2026年3月期決算説明資料（2026-05-12）https://global-assets.irdirect.jp/pdf/tdnet/batch/140120260512525094.pdf ／ 会社概要 https://www.branding-t.co.jp/company/summary/</li>
+<li id="r23">freee「freeeホームページ」AI（2025-11-26）https://corp.freee.co.jp/news/20251126freee_hp.html</li>
+<li id="r24">STORES プラン統合（2026-03-24）https://www.st.inc/news/2026-03-26-plan-update</li>
+<li id="r25">BASE U（料金・累計260万ショップ、2026-07-15）https://baseu.jp/6685 ／ BASE 250万ショップ突破（2025-11-27）https://prtimes.jp/main/html/rd/p/000000271.000030814.html</li>
+<li id="r26">Square オンラインビジネス 日本提供開始（2020-10-15）https://squareup.com/jp/ja/press/square-online-arrives-japan</li>
+<li id="r27">エキテン 料金（正会員・ホームページオプション）https://owner.ekiten.jp/free-basicplan01/</li>
+<li id="r28">ホットペッパービューティー掲載 https://beauty.hotpepper.jp/doc/keisai/keisai.html ／ 食べログ店舗会員 https://owner.tabelog.com/home/registration/ ／ Airリザーブ料金 https://airregi.jp/reserve/cost/</li>
+<li id="r29">Googleビジネスプロフィール 無料ウェブサイト終了（2024-03-01）https://support.google.com/business/answer/14368911?hl=ja</li>
+<li id="r30">Wix プラン https://www.wix.com/plans ／ AI Website Builder https://www.wix.com/ai-website-builder ／ Jimdo（100万サイト・2015）https://www.kddi-webcommunications.co.jp/news/press/20151008.html</li>
+<li id="r31">ペライチ ラクスルへ吸収合併（2026-07-06）https://peraichi.com/news/press_2026_0706 ／ 利用者40万人 https://lp.raksul.com/peraichi-introduce/</li>
+<li id="r32">STUDIO 料金 https://studio.design/ja/pricing ／ ユーザー83万人（2026-02-13）https://prtimes.jp/main/html/rd/p/000000065.000025503.html</li>
+<li id="r33">Canva 料金 https://www.canva.com/ja_jp/pricing/</li>
+<li id="r34">Hostinger AIビルダー（日本）https://www.hostinger.com/jp/website-builder</li>
+<li id="r35">リッツコンサルタント 買い切りAI（2026-08-03）https://www.value-press.com/pressrelease/378452 ／ BitStar AI Page（2026-01-13）https://prtimes.jp/main/html/rd/p/000000465.000015232.html</li>
+<li id="r36">クラウドワークス 発注相場 https://crowdworks.jp/pages/guides/employer/pricing ／ ランサーズ https://www.lancers.jp/c/website/website-cost/13159/</li>
+<li id="r37">ミツモア HP制作相場 https://meetsmore.com/t/website-development</li>
+<li id="r38">比較ビズ HP制作案件分析（2023-01-30）https://prtimes.jp/main/html/rd/p/000000002.000100813.html ／ Web幹事 平均費用（2024-05-30）https://prtimes.jp/main/html/rd/p/000000034.000016988.html</li>
+<li id="r39">弁護士ドットコム「ホームページ リース」相談一覧 https://www.bengo4.com/c_18/bbs/%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8+%E3%83%AA%E3%83%BC%E3%82%B9/ ／ 奈良弁護士会 意見書（2012-05-11）https://www.naben.or.jp/ikensho/545/</li>
+<li id="r40">帝国データバンク 休廃業・解散動向（2026-01-09）https://www.tdb.co.jp/report/industry/20260109-kyuhaigyo25y/ ／ 後継者不在率（2025-11-21）https://www.tdb.co.jp/report/economic/20251121-successor25y/</li>
+<li id="r41">中小企業庁「中小企業・小規模事業者の数（2021年6月時点）」https://www.chusho.meti.go.jp/koukai/chousa/chu_kigyocnt/2023/231213chukigyocnt.html ／ 経営者高齢化の推計（2019-11-07）https://www.chusho.meti.go.jp/koukai/kenkyukai/hikitugigl/2019/191107hikitugigl03_1.pdf ／ 総務省 令和7年通信利用動向調査（企業編）https://www.soumu.go.jp/johotsusintokei/statistics/pdf/HR202500_002.pdf ／ 【未確認】アイ・モバイル HP開設率48.2% https://wepage.com/blog/article/23/index.html</li>
+<li id="r42">日本政策金融公庫 デジタル化調査（2025-05-21）https://www.jfc.go.jp/n/findings/pdf/tokubetu_250521.pdf ／ 同（2024）https://www.jfc.go.jp/n/findings/pdf/tyousa_gttupou_2412.pdf</li>
+<li id="r43">経済産業省 令和6年度電子商取引に関する市場調査（2025-08-26）https://www.meti.go.jp/press/2025/08/20250826005/20250826005.html</li>
+<li id="r44">小規模事業者持続化補助金 第20回公募要領 https://r6.jizokukahojokin.info/doc/r6_koubover8_ip20.pdf ／ デジタル化・AI導入補助金2026 ITツール登録要領（HP制作は対象外）https://it-shien.smrj.go.jp/pdf/it2026_touroku_it_tool.pdf</li>
+</ol>
+<p class="small">作成：2026-09-15 ／ 合同会社R.Y.S ／ 新規事業探索。状態＝判定提出・承認待ち（Geminiレビュー前）。決定の正本は DECISIONS.md（D-150）。</p>
+</main>
+</div>
+</body>
+</html>

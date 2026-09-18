@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新規事業の切り口「AI×少人数の価格優位」の検証と探し方（案）2026-09-15</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1f2328; --muted:#57606a; --line:#d0d7de; --head:#f6f8fa;
+  --accent:#0969da; --ok:#1a7f37; --ng:#cf222e; --warn:#9a6700; --note:#fff8c5; --box:#f6f8fa; --mark:#ddf4ff;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0d1117; --fg:#e6edf3; --muted:#9da7b3; --line:#30363d; --head:#161b22;
+    --accent:#58a6ff; --ok:#3fb950; --ng:#f85149; --warn:#d29922; --note:#3a2f00; --box:#161b22; --mark:#0c2d6b; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Yu Gothic UI","Meiryo","Hiragino Sans","Noto Sans JP",sans-serif;font-size:15px;line-height:1.75;font-variant-numeric:tabular-nums}
+.wrap{display:flex;min-height:100vh}
+nav.toc{width:280px;flex:0 0 280px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:18px 14px;background:var(--head)}
+nav.toc h2{font-size:13px;margin:0 0 8px;color:var(--muted)}
+nav.toc a{display:block;color:var(--fg);text-decoration:none;font-size:13px;padding:4px 6px;border-radius:4px}
+nav.toc a:hover{background:var(--mark)}
+main{flex:1;min-width:0;padding:28px 40px 80px;max-width:1080px}
+h1{font-size:24px;line-height:1.35;margin:0 0 6px}
+h2{font-size:20px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;margin:26px 0 8px}
+p{margin:8px 0}
+.meta{color:var(--muted);font-size:13px;margin-bottom:18px}
+.status{display:inline-block;padding:2px 10px;border:1px solid var(--warn);color:var(--warn);border-radius:12px;font-size:12px}
+.box{background:var(--box);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px 0}
+.note{background:var(--note);border-left:4px solid var(--warn);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+.concl{border:2px solid var(--accent);border-radius:8px;padding:14px 18px;margin:14px 0}
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}
+th{background:var(--head);white-space:nowrap}
+td.c{text-align:center;white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.tag{display:inline-block;font-size:11px;padding:0 6px;border:1px solid var(--line);border-radius:10px;color:var(--muted);margin-left:4px;white-space:nowrap}
+.term{border-bottom:1px dotted var(--muted)}
+small,.small{font-size:12.5px;color:var(--muted)}
+ol.src{font-size:13px;padding-left:22px}
+ol.src li{margin:3px 0;word-break:break-all}
+sup a{color:var(--accent);text-decoration:none;font-size:11px}
+a{color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:900px){.wrap{display:block}nav.toc{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}main{padding:18px 16px}.grid2{grid-template-columns:1fr}}
+@media print{nav.toc{display:none}main{padding:0;max-width:none}body{font-size:12px}h2{page-break-after:avoid}.tbl{overflow:visible}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+<h2>もくじ</h2>
+<a href="#s0">0. 結論（3行）</a>
+<a href="#s1">1. ご仮説をそのまま整理する</a>
+<a href="#s2">2. 事実確認：成り立つところ</a>
+<a href="#s3">3. 事実確認：成り立たないところ</a>
+<a href="#s4">4. 整理：仮説はどこで効き、どこで効かないか</a>
+<a href="#s5">5. 提案：8つの切り口（判断軸）</a>
+<a href="#s6">6. どこから探すか（母集団）</a>
+<a href="#s7">7. 候補領域の見取り図（例示・絞り込みなし）</a>
+<a href="#s8">8. これまでの探し方との関係</a>
+<a href="#s9">9. この提案への反論（自分で書く）</a>
+<a href="#s10">10. 選択肢と推奨</a>
+<a href="#s11">11. 決めていただきたいこと</a>
+<a href="#src">出典一覧</a>
+</nav>
+<main>
+<h1>新規事業の切り口「AI×少人数の価格優位」<br>— ご仮説の検証と、そこから導く探し方（案）</h1>
+<div class="meta">作成日：2026-09-15 ／ <span class="status">状態：案（未承認・Geminiレビュー前）</span> ／ 対象：新規事業探索 ／ 合同会社R.Y.S<br>
+この資料は「見るための版」です。承認された内容は <code>DECISIONS.md</code> に記帳し、記載が食い違ったときは正本（DECISIONS.md）を正とします。<br>
+きっかけ：坂野様のご発言（2026-09-15）「AIでプログラミングやEC構築を代替できる今、従業員3人以下の当社と、従業員20人以上で人件費の高い会社が価格競争になれば、うちは勝てるのではないか。この切り口で新規事業を考えたい」</div>
+
+<h2 id="s0">0. 結論（3行）</h2>
+<div class="concl">
+<p><b>① ご仮説は「人件費で価格が決まるサービス（受託・代行・制作・運用）」では、一次情報で裏付けられます。</b>相手の価格の3〜5割が人件費で、価格が選定理由の首位で、AI前提で工程を組み直した新興が従来の1/3〜1/10の価格を現に出しています。</p>
+<p><b>② 同じ仮説は「SaaS（ソフトを売る形）」では成り立ちません。</b>SaaS大手の費用は人件費ではなく顧客獲得費（freeeは売上の53%）で、追加1社の原価はほぼゼロ。そこでの価格競争は広告費の勝負（＝資金勝負）になり、坂野様の選定軸①に反します。</p>
+<p><b>③ 価格優位は「20人以上の会社」に対しては効きますが、「自分以外の1〜3人AI企業・フリーランス」に対しては効きません。</b>だから切り口は「安さ」ではなく、「安さで相手を崩したあと、底値でも利益が残る形（法人であること・責任・人の手）を最初から組み込む」ことになります。</p>
+</div>
+
+<h2 id="s1">1. ご仮説をそのまま整理する</h2>
+<p>推測を足さず、ご発言を条件に分解します。</p>
+<div class="tbl"><table>
+<tr><th style="width:8%">#</th><th style="width:42%">ご仮説の要素</th><th>この資料での扱い</th></tr>
+<tr><td class="c">H1</td><td>AIでプログラミング・EC構築などの作業を代替できる</td><td>2-3節で「どの程度」代替できているかを実測値で確認</td></tr>
+<tr><td class="c">H2</td><td>従業員20人以上の会社は人件費が高く、価格競争になれば当社（3人以下）が勝てる</td><td>2-1・2-2節で「相手の価格の中の人件費」と「相手が人件費を減らせるか」を確認</td></tr>
+<tr><td class="c">H3</td><td>後発なので広告で認知を取る必要はある</td><td>5節・軸Gで「価格で選ぶ客にどう届くか」として扱う</td></tr>
+<tr><td class="c">H4</td><td>人件費の割合が小さくなった大規模サービスには入れないかもしれない</td><td>3-1節で確認。<b>結論：その通りで、SaaSはまさにそれ</b></td></tr>
+<tr><td class="c">H5</td><td>H4を除けば参入余地がある。その切り口で新規事業を考えたい</td><td>5節以降が本体</td></tr>
+</table></div>
+
+<h2 id="s2">2. 事実確認：成り立つところ</h2>
+
+<h3>2-1　相手の価格の3〜5割は人件費である（H2の前半）</h3>
+<p>中小企業庁「中小企業実態基本調査」令和7年確報（令和6年度決算・法人企業）の統計表から、<span class="term">人件費率</span>（＝売上原価の労務費＋販管費の人件費 ÷ 売上高）を算出しました<sup><a href="#r4">[4]</a></sup>。</p>
+<div class="tbl"><table>
+<tr><th>業種</th><th>人件費率（全規模）</th><th>5人以下</th><th>6〜20人</th><th>21〜50人</th><th>51人以上</th></tr>
+<tr><td>サービス業（他に分類されないもの）＝BPO・代行など</td><td class="c"><b>44.8%</b></td><td class="c">30.2%</td><td class="c">32.2%</td><td class="c"><b>42.7%</b></td><td class="c"><b>53.8%</b></td></tr>
+<tr><td>学術研究、専門・技術サービス業（デザイン・広告・士業など）</td><td class="c"><b>32.5%</b></td><td class="c">27.7%</td><td class="c">35.0%</td><td class="c">35.4%</td><td class="c">33.2%</td></tr>
+<tr><td>情報通信業（受託開発・Web制作など）</td><td class="c"><b>31.2%</b></td><td class="c">27.3%</td><td class="c">31.5%</td><td class="c"><b>34.6%</b></td><td class="c">30.8%</td></tr>
+<tr><td>製造業</td><td class="c">19.4%</td><td class="c">18.3%</td><td class="c">22.7%</td><td class="c">20.8%</td><td class="c">18.6%</td></tr>
+<tr><td>卸売業（＝当社の現業に近い）</td><td class="c">6.0%</td><td class="c">4.7%</td><td class="c">6.5%</td><td class="c">5.3%</td><td class="c">6.8%</td></tr>
+<tr><td>全産業</td><td class="c">15.9%</td><td colspan="4" class="small">※比率は統計表の金額から当方が算出</td></tr>
+</table></div>
+<p><b>読み取れること：</b>サービス業と情報通信業では、<b>規模が大きいほど人件費率が高い</b>（サービス業は21〜50人で42.7%、51人以上で53.8%）。「従業員20人以上の会社は人件費が重い」というご認識は、この2業種については統計と一致します。逆に卸売業では6%しかなく、人件費で勝負する余地はありません。</p>
+<p>業界団体の調査も同じ方向です。JISA（情報サービス産業協会）の2024年調査では、小企業（平均102人）の人件費率39.04%・外注費率27.88%・営業利益率8.01%<sup><a href="#r5">[5]</a></sup>。<b>人件費＋外注費で売上の3分の2</b>が「人の作業代」です。</p>
+
+<h3>2-2　相手はその人件費を簡単には減らせない（H2の後半）</h3>
+<div class="tbl"><table>
+<tr><th style="width:26%">事実</th><th>内容</th><th style="width:12%">出典</th></tr>
+<tr><td>解雇には法律上の制約がある</td><td>労働契約法第16条「解雇は、客観的に合理的な理由を欠き、社会通念上相当であると認められない場合は、その権利を濫用したものとして、無効とする」。整理解雇（人員削減目的の解雇）は判例上、①人員削減の必要性 ②解雇回避努力 ③人選の合理性 ④手続の妥当性の4要素で判断される（東洋酸素事件・東京高判昭54.10.29 ほか）</td><td><a href="#r1">[1]</a><a href="#r2">[2]</a></td></tr>
+<tr><td class="warn">ただし日本が特別に厳しいわけではない</td><td>OECDの雇用保護指標（0〜6、高いほど厳格）で日本の正規雇用の個別解雇は2.10、OECD平均は2.16。<b>主要国の平均並み</b>で、「日本では絶対に人を減らせない」とは言えない</td><td><a href="#r3">[3]</a></td></tr>
+<tr><td>実際に減らしているのは大企業</td><td>2025年度の上場企業の早期・希望退職募集は46社・20,781人（前年度比約2.5倍）、うち黒字企業が69.5%。ただしこれは上場企業約4,000社のうちの46社であり、<b>割増退職金を払える会社</b>の話</td><td><a href="#r13">[13]</a></td></tr>
+<tr><td>中小は「減らす」より「採らない」</td><td>TSRの生成AIアンケート（6,327社）で、5年以内に早期・希望退職を想定する企業は3.6%。AI活用企業が検討しているのは配置転換28.9%・採用抑制16.1%で、<b>いま抱えている人件費が短期で消えるわけではない</b></td><td><a href="#r14">[14]</a></td></tr>
+<tr><td>既存顧客がいるほど値下げしにくい</td><td>Amazonは2000年に顧客ごとに違う価格を試して抗議を受け、全員に最低価格を適用して返金した（公式声明）。マーケティング研究でも「新規客だけへの割引は、既存客が知ると持続不能」と示されている。<b>既存客を多く抱える中堅ほど、新規客向けに値下げすると既存客全員に波及する</b></td><td><a href="#r34">[34]</a><a href="#r35">[35]</a></td></tr>
+<tr><td>大手はローエンドを自ら手放す</td><td>クリステンセンの破壊的イノベーション論：既存企業は利益率の低い下位市場（例：一貫製鉄所にとって粗利7%の鉄筋）を、喜んで新規参入者に譲る。<b>「安い小口の仕事」は、相手が追いかけてこない</b>ことが理論的に説明されている</td><td><a href="#r37">[37]</a></td></tr>
+<tr><td>航空業界の実例</td><td>国交省資料：ユニットコストはライアンエア3.9円 vs ルフトハンザ10.7円（2011年）。米大手がLCC対抗子会社を作ったが、労働コスト削減が進まず失敗した（学術論文）。<b>「組織が重い相手は、同じ土俵に降りてこられない」</b>の実証</td><td><a href="#r38">[38]</a><a href="#r39">[39]</a></td></tr>
+</table></div>
+<p><b>結論：</b>相手が人件費を減らすには、時間（1〜2年）と金（割増退職金）と、既存客への説明が要ります。<b>恒久的な壁ではないが、数年の時間差は取れる</b>、というのが事実に基づく言い方です。</p>
+
+<h3>2-3　価格は選定理由の首位である</h3>
+<p>東京商工会議所の調査（中小企業1,218社、2024年10〜11月）で、ITベンダー選定時に重視する点の首位は<b>「導入コスト」58.0%</b>（次点「業務フローの正確な把握」57.6%、「アフターフォロー」54.5%）<sup><a href="#r15">[15]</a></sup>。Web制作会社の選定では「見積金額が他社より安い会社を選んだ」41.5%、「高くても安心できる規模の会社」40.7%と拮抗<sup><a href="#r16">[16]</a></sup>【未確認：民間1社・n=118】。<b>価格で選ぶ客は半分近くいる</b>一方、<b>「安心（規模・実績）」で選ぶ客も同じだけいる</b>ことを覚えておく必要があります（軸Eの根拠）。</p>
+
+<h3>2-4　AI前提で組み直した新興は、従来の1/3〜1/10の価格を現に出している（H1）</h3>
+<div class="tbl"><table>
+<tr><th>領域</th><th>事例</th><th>価格／従来との比較</th><th>出典</th></tr>
+<tr><td>法務（契約レビュー）</td><td>Covenant（米・弁護士6名）</td><td>LP契約レビュー1文書900ドル、<b>従来より90%安い</b>（IBA記事の記載。同社一次資料は未確認）</td><td><a href="#r25">[25]</a></td></tr>
+<tr><td>法務（債権回収）</td><td>Garfield.Law（英・2025年5月にSRAが認可した初のAI法律事務所）</td><td>督促状1通2ポンド</td><td><a href="#r26">[26]</a></td></tr>
+<tr><td>動画制作</td><td>プルークス（JCOMグループ）</td><td>ライト60万円/本。従来「数百万円・約3か月」に対し費用・期間とも<b>約1/6</b>（自社発表）</td><td><a href="#r20">[20]</a></td></tr>
+<tr><td>Web制作</td><td>ビジョン（東証プライム）</td><td>AIハイブリッドで初稿ライティング10P「30〜50万円→10〜25万円」、デザイン案「15〜30万円→5〜15万円」（自社試算）</td><td><a href="#r19">[19]</a></td></tr>
+<tr><td>Web制作</td><td>グリヒト「9DAYS」</td><td>1ページ69,800円〜、最短9日</td><td><a href="#r24">[24]</a></td></tr>
+<tr><td>経理代行</td><td>OKAWA「まるごとAI経理」</td><td>請求書受領〜記帳〜振込〜月次レポートで<b>月額12,800円〜</b></td><td><a href="#r21">[21]</a></td></tr>
+<tr><td>電話応対</td><td>Legal AI「AIコールセンター」</td><td>24時間AI電話応対 月額1万円＋従量</td><td><a href="#r22">[22]</a></td></tr>
+<tr><td>広告運用代行</td><td>Myoshin「アドサポ10」（2025年4月設立・資本金500万円）</td><td>月額10万円固定。業界標準「広告費の20%手数料」との比較を明示</td><td><a href="#r23">[23]</a></td></tr>
+<tr><td>カスタマーサポート</td><td>米BPO vs AI（ベンダー資料）</td><td>人手：解決1件4〜6ドル → AI：0.25〜0.99ドル【ベンダー発信・未確認】</td><td><a href="#r27">[27]</a></td></tr>
+</table></div>
+<div class="note"><b>ここで大事な区別：</b>既存企業が生成AIを「足した」場合の削減率は、パナソニックコネクトで総労働時間の3.4%<sup><a href="#r10">[10]</a></sup>、パーソル総研の調査で利用者平均16.7%（しかも実際に労働時間が減ったのは4人に1人）<sup><a href="#r11">[11]</a></sup>、マクロミル調査で平均16%<sup><a href="#r12">[12]</a></sup>です。<br>
+一方、上の表の新興は<b>AI前提で工程そのものを組み直している</b>ので1/3〜1/10になっています。<b>「AIで全部代替」は既存企業には起きていないが、ゼロから組む側には起こせる</b>。この非対称こそが、ご仮説の本体です。ただし「1/6」「90%安い」は当事者の自己申告で、第三者の実測ではありません。</div>
+
+<h2 id="s3">3. 事実確認：成り立たないところ</h2>
+
+<h3>3-1　SaaS（ソフトを売る形）では、相手の費用は人件費ではない（H4）</h3>
+<div class="tbl"><table>
+<tr><th>会社（直近通期）</th><th>売上総利益率</th><th>顧客獲得費（S&amp;M）÷売上</th><th>広告宣伝費÷売上</th><th>出典</th></tr>
+<tr><td>freee（2025年6月期）</td><td class="c">82.2%</td><td class="c"><b>53.3%</b></td><td class="c">—</td><td><a href="#r6">[6]</a></td></tr>
+<tr><td>Sansan（2026年5月期）</td><td class="c">87.9%</td><td class="c"><b>39.4%</b></td><td class="c">12.6%</td><td><a href="#r7">[7]</a></td></tr>
+<tr><td>ラクス（2026年3月期）</td><td class="c">75.3%</td><td class="c">—</td><td class="c">15.4%</td><td><a href="#r8">[8]</a></td></tr>
+</table></div>
+<p><span class="term">限界費用</span>（＝顧客を1社増やしたときに増える費用）がほぼゼロなので、SaaS大手は必要なら価格をいくらでも下げられます。実際に Google Workspace は2025年1月にGemini（月32ドルのアドオン）を全プランに<b>追加料金なしで同梱</b>し<sup><a href="#r41">[41]</a></sup>、freeeは業務委託管理の無料プラン、マネーフォワードは「1年間実質0円」を出しています。<b>SaaSでの価格競争は、製作費ではなく広告費（顧客獲得費）の勝負</b>であり、これは坂野様の選定軸①「資金勝負になる領域は選ばない」に反します。<b>H4のご認識は正しく、しかも該当するのは「大規模SaaS」だけでなくSaaS全般です。</b></p>
+
+<h3>3-2　価格優位は「他の少人数AI企業・フリーランス」には効かない（底抜け）</h3>
+<div class="tbl"><table>
+<tr><th>事実</th><th>内容</th><th>出典</th></tr>
+<tr><td>翻訳</td><td>翻訳会社44社調査（2024年末）：受注単価「下がった」27%、受注減の原因に機械翻訳を挙げた社が17社中13社。翻訳者への支払単価「下がっている」20%（前年9%）</td><td><a href="#r28">[28]</a></td></tr>
+<tr><td>クラウドソーシング（米）</td><td>Upwork案件500万件：ChatGPT公開後にライティング案件▲33%、翻訳▲19%、カスタマーサービス▲16%。翻訳は時給も20%超下落</td><td><a href="#r29">[29]</a></td></tr>
+<tr><td>クラウドソーシング（日本）</td><td>クラウドワークス2025年9月期は純損失▲2.57億円、会社資料に「AIによるワーカー需要の変化」と明記。ライターの証言「1文字0.5円のような低単価案件自体が消えた」</td><td><a href="#r30">[30]</a></td></tr>
+<tr><td>イラスト</td><td>日本イラストレーション協会調査（2025年12月）：AI普及を理由とした単価引き下げ圧力・仕事量減少を報告</td><td><a href="#r42">[42]</a></td></tr>
+<tr><td>投資家側の反論</td><td>「サービスはソフトにならない」：AI能力が誰でも使えるようになると価格圧力が生じ、利幅が残るのは<b>責任を引き受ける層だけ</b>（Better Tomorrow Ventures）</td><td><a href="#r31">[31]</a></td></tr>
+</table></div>
+<p><b>意味：</b>AIで安くできる仕事は、<b>自分以外の全員も安くできる</b>。相手（20人以上の会社）を価格で崩したあとに待っているのは、フリーランスと他の1〜3人企業との価格競争で、そこでは人件費の差がありません。価格は新しい底（AI前提の原価）まで落ちます。<b>したがって「安さ」だけを商品にすると、勝ったあとに儲からない。</b></p>
+
+<h3>3-3　資本のある大手は追随してくる</h3>
+<p>2-4節の表にあるとおり、ビジョン（東証プライム）・プルークス（JCOM）は自らAI価格に降りてきています。ベルシステム24は「2026年に応対完全自動化・人手5割減」と報じられ<sup><a href="#r32">[32]</a></sup>【見出しのみ・本文未確認】、翻訳センターは機械翻訳の活用で粗利率47.7%を計画<sup><a href="#r33">[33]</a></sup>。<b>「追随できない」のは、資本と組織を持つ大手ではなく、20〜300人規模で固定人件費を抱え、工程を組み直す余力のない中堅</b>です。ご仮説の「20人以上」は、上限を切る必要があります（11節）。</p>
+<p>ただし、価格で勝ち続けられる期間は短くありません。米国でサウスウエストとデルタのコスト差が1.0円まで縮まる「同質化」には20年以上かかっています<sup><a href="#r38">[38]</a></sup>。「月50万円が5〜10年入り続ける」というご目標に対しては、数年の窓は取れると見るのが妥当です（ただし航空とサービス業で速度は異なる【推測】）。</p>
+
+<h2 id="s4">4. 整理：仮説はどこで効き、どこで効かないか</h2>
+<div class="tbl"><table>
+<tr><th style="width:22%">商品の形</th><th>相手の価格の中身</th><th>AI×少人数の価格優位</th><th>理由</th></tr>
+<tr><td><b>SaaS・ソフトの機能</b></td><td>顧客獲得費（広告・営業人員）が中心。追加1社の原価≒0</td><td class="ng">効かない</td><td>相手はいつでも無料同梱・値下げできる。競争は広告費勝負になる。これまでのゲート0で4件が同梱で死んだ構造と同じ</td></tr>
+<tr><td><b>人件費で価格が決まるサービス</b><br><small>受託開発・制作・翻訳・記帳・運用代行・BPO・CS</small></td><td>人件費30〜54%＋外注費16〜28%</td><td class="ok">効く</td><td>相手の価格の下限＝相手の人件費。AI前提で組み直せば1/3〜1/10。相手は固定人件費・既存客の価格一貫性・ローエンド軽視で降りてこられない</td></tr>
+<tr><td><b>物を売る（当社の現業）</b></td><td>仕入原価が中心。人件費は6%</td><td class="ng">効かない</td><td>人件費を削っても価格に6%しか効かない</td></tr>
+<tr><td><b>人が動く・場所・責任を伴うサービス</b><br><small>X-01（撮影〜発送代行）はここ</small></td><td>人件費＋場所代＋責任</td><td class="warn">部分的に効く</td><td>事務・判断・連絡の部分はAIで消えるが、手を動かす部分は残る。ただし残る部分こそが底抜けを防ぐ（3-2節）</td></tr>
+</table></div>
+<p><b>つまり、ご仮説が最も効くのは「これまで探していなかった帯」＝人件費で価格が決まるサービス業です。</b>SaaS探索（確定版・2026-08-28）で4件が無料同梱に殺されたのは、この表の1行目を探していたからです。</p>
+
+<h2 id="s5">5. 提案：8つの切り口（判断軸）</h2>
+<p>ご要望どおり、具体案より「軸」を厚くします。各軸は「案を落とす」ためではなく、<b>案を見るときの問い</b>です（落としてよいのは「絶対に無理」なものだけ、というご方針を維持）。案出しの段階で収益計算は行いません（KAIZEN K-002）。</p>
+
+<div class="tbl"><table>
+<tr><th style="width:5%">軸</th><th style="width:22%">問い</th><th>何を見るか・どう調べるか</th><th style="width:22%">根拠</th></tr>
+<tr><td class="c"><b>A</b></td><td><b>相手の価格の何割が人件費か</b></td><td>その業種の売上高人件費率を統計で引く。<b>目安：30%以上で候補、外注費を足して50%以上なら本命</b>。SaaS・物販は対象外。中小企業実態基本調査の産業中分類表（情報サービス39.6%／技術サービス40.5%／その他の事業サービス41.0%／職業紹介・派遣65.6%）で機械的に引ける</td><td>2-1節 <a href="#r4">[4]</a><a href="#r5">[5]</a></td></tr>
+<tr><td class="c"><b>B</b></td><td><b>価格で比較されて買われているか</b></td><td>相見積もり・比較サイト（比較ビズ・アイミツ・ミツモア・発注ナビ・Web幹事）にカテゴリとして存在し、公開相場があるか。公開価格が存在しない市場（例：ACP手数料は4社とも非公開）では価格競争自体が起きにくい</td><td>2-3節 <a href="#r15">[15]</a><a href="#r17">[17]</a><a href="#r18">[18]</a></td></tr>
+<tr><td class="c"><b>C</b></td><td><b>相手が値下げで追随できない構造があるか</b></td><td>次の4つのうち2つ以上を書けるか：①相手の人件費が固定（正社員中心・20〜300人）②相手に既存客が多く、新規だけ値下げできない ③その仕事が相手にとってローエンド（小口・低利益）④相手のグループに資本のある親会社がいない。<b>「今その会社がやっていないから」は理由にならない</b>（ゲート0の条件7と同じ）</td><td>2-2節 <a href="#r34">[34]</a><a href="#r37">[37]</a><a href="#r39">[39]</a></td></tr>
+<tr><td class="c"><b>D</b></td><td><b>工程のうち何がAIで消え、何が残るか</b></td><td>その仕事を工程に分解し、「AIで消える／人が判断する／人が手を動かす／責任を負う」の4つに色分けする。<b>「全部AI」と書いた案は疑う</b>（既存企業の実測は3〜17%。ゼロから組んでも1/3〜1/10が上限の実例）。残る工程が明確な案ほど、3-2節の底抜けに強い</td><td>2-4節 <a href="#r10">[10]</a><a href="#r11">[11]</a></td></tr>
+<tr><td class="c"><b>E</b></td><td><b>「法人であること」が要る仕事か</b></td><td>フリーランスや他の1人企業と同じ土俵に立たないために、発注側が法人を求める要素があるか：契約書・請求書（当社は2027-02-01から課税事業者＝インボイス発行可）・秘密保持・損害賠償の引受け・複数人での継続対応・一定以上の量。発注側の不安は「スキルが分からない」47.7%「信頼できるか判断できない」44.1%</td><td>2-3節 <a href="#r40">[40]</a></td></tr>
+<tr><td class="c"><b>F</b></td><td><b>底値になっても利益が残る部分を最初から入れているか</b></td><td>「安さ」を看板にしつつ、価格に<b>責任（納期保証・成果保証・不備の引取り）／人の手／場所</b>のどれかを含める。これは v5（未承認）の「同梱されない4つの形」の類型①③と同じもの。X-01が「人の手・場所・責任」で通ったのと同じ理由</td><td>3-2節 <a href="#r31">[31]</a></td></tr>
+<tr><td class="c"><b>G</b></td><td><b>価格で選ぶ客に、後発が広告で届くか</b></td><td>価格で選ぶ客は「格安」「相場」「比較」で検索し、比較サイトに来る。<b>これは後発に有利</b>（客の側が探してくれる）。比較サイトへの掲載・検索広告で届く経路を1つ以上書けるか。※合否には使わない（集客の見込みは選定条件に入れない＝決定済み方針）</td><td>H3 <a href="#r15">[15]</a><a href="#r17">[17]</a></td></tr>
+<tr><td class="c"><b>H</b></td><td><b>相手が追随するまでの窓は何年か</b></td><td>その業界で既に「AI価格」を出している大手がいるか（いれば窓は短い：Web制作＝ビジョン、動画＝プルークス、CS＝ベル24）。いなければ、相手が人を減らすのに要する年数（1〜2年＋割増退職金）が窓。<b>10年後に相手の人件費が消えている業種は、10年後の増減で見る既存方針と同じ扱い</b></td><td>3-3節 <a href="#r13">[13]</a><a href="#r38">[38]</a></td></tr>
+</table></div>
+
+<div class="box"><b>8軸の使い方（案）</b><br>
+・A・Bは<b>統計と比較サイトで機械的に引ける</b>ので、母集団を作る段階（6節）で使う<br>
+・C〜Hは<b>案ごとに書く</b>。書けない軸があっても落とさず、「書けなかった」と記録して残す（ご方針：落とすのは絶対に無理なものだけ）<br>
+・ゲート0（6つの問い）は従来どおり、坂野様が選んだ案にだけ掛ける。8軸はゲート0の<b>前</b>の「案を見る目」であって、ゲート0の代わりではない</div>
+
+<h2 id="s6">6. どこから探すか（母集団）</h2>
+<p>「人件費で価格が決まり、価格で比較されて買われている仕事」の実物カタログは、次の場所にあります。</p>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th style="width:30%">探し先</th><th>何が取れるか</th><th style="width:18%">軸</th></tr>
+<tr><td class="c">1</td><td><b>比較サイトのカテゴリ一覧</b>（比較ビズ・アイミツ・ミツモア・発注ナビ・Web幹事）</td><td>「価格で比較されて発注されている業務」の一覧そのもの。比較ビズはHP制作（平均予算112万円）・EC制作（223万円）・動画制作・顧問税理士・確定申告の案件分析を公表。Web幹事はHP制作846件で平均82.5万円・中央値43.4万円</td><td>B・G</td></tr>
+<tr><td class="c">2</td><td><b>中小企業実態基本調査の産業中分類表</b></td><td>人件費率・外注費率の高い業種を上から並べる（職業紹介・派遣65.6%／その他の事業サービス41.0%／技術サービス40.5%／情報サービス39.6%／専門サービス38.0%）</td><td>A</td></tr>
+<tr><td class="c">3</td><td><b>PR TIMES等で「AI×代行／制作／運用」「従来の1/N」を掲げた新興</b></td><td>先行者の観測（＝その領域で価格破壊が始まっている証拠）と、その領域にまだ誰もいないかの確認。2-4節の表はこの方法で集めた</td><td>H</td></tr>
+<tr><td class="c">4</td><td><b>上場・中堅サービス会社の有価証券報告書</b>（人件費率・従業員数・顧客数）</td><td>「相手」の姿を実数で取る。軸Cの①②④を埋める材料</td><td>C</td></tr>
+<tr><td class="c">5</td><td><b>求人サイトで「〇〇代行 スタッフ募集」「〇〇制作 未経験可」が継続して出ている領域</b></td><td>人を雇い続けている＝人件費で回っている仕事。v5でも挙げた探し先</td><td>A・D</td></tr>
+<tr><td class="c">6</td><td><b>M&amp;Aマッチングサイトの「受託・代行」案件</b>（既存方針：買収せず情報源として使う）</td><td>小さいのに続いている受託商売の実物。売上・従業員数・利益率が載っている</td><td>A・C</td></tr>
+<tr><td class="c">7</td><td><b>クラウドソーシングで単価が崩れたカテゴリ</b>（ライティング・翻訳・CS）</td><td>「底抜け済み」の領域＝<b>避けるべき場所</b>を先に知る。ここに入るなら軸E・Fが必須</td><td>F</td></tr>
+</table></div>
+
+<h2 id="s7">7. 候補領域の見取り図（例示・絞り込みなし）</h2>
+<p>8軸が承認されたあとの「案出し」の前に、<b>どんな帯が対象になるかの見取り図</b>だけ置きます。ここに無い領域も対象で、ここにある領域も確定ではありません。○△×は現時点の公開情報からの見立てで、ゲート0の判定ではありません。</p>
+<div class="tbl"><table>
+<tr><th>領域</th><th>A 人件費率</th><th>B 価格比較</th><th>C 追随しにくさ</th><th>E 法人要求</th><th>先行者（観測済み）</th><th>注意</th></tr>
+<tr><td>ホームページ制作（コーポレート・店舗）</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">△</td><td>グリヒト（69,800円〜）・ビジョン（プライム）がAI価格</td><td>大手が既に降りてきている＝窓が短い</td></tr>
+<tr><td>ECサイト構築・移行代行（Shopify／WooCommerce）</td><td class="c">○</td><td class="c">○（平均予算223万円）</td><td class="c">○</td><td class="c">○</td><td>未観測（要調査）</td><td>当社に構築実績あり（SELECT.ARCHIVE）</td></tr>
+<tr><td>LP・バナー・広告クリエイティブ制作</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td>底抜け進行中（デザイン単価下落の報告）</td><td>軸F必須</td></tr>
+<tr><td>SEO記事・コンテンツ制作</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">×</td><td>バクヤスAI（5万記事）ほか多数。底抜け済み</td><td>避ける側の候補</td></tr>
+<tr><td>翻訳・多言語サイト化</td><td class="c">○</td><td class="c">○</td><td class="c">×</td><td class="c">△</td><td>単価下落27%。サイマル等の大手がAIハイブリッド</td><td>避ける側の候補</td></tr>
+<tr><td>記帳・経理代行</td><td class="c">○</td><td class="c">○（顧問税理士は比較サイト常連）</td><td class="c">○</td><td class="c">○</td><td>OKAWA（月12,800円〜）</td><td><b>税理士法の独占業務との線引き【要法務確認】</b></td></tr>
+<tr><td>給与計算・社会保険手続の代行</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td>未観測（要調査）</td><td><b>社労士法の独占業務【要法務確認】</b></td></tr>
+<tr><td>動画制作（企業PR・商品）</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">△</td><td>プルークス（JCOM・1/6）、aimotion（55円/本）</td><td>大手が降りてきている</td></tr>
+<tr><td>広告運用代行（リスティング・SNS）</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td>Myoshin（月10万円固定）</td><td>成果責任を価格に含めやすい（軸F）</td></tr>
+<tr><td>SNS運用代行</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">△</td><td>要調査</td><td>J-04で代理店向け承認フローは同梱で死亡（ソフトの話。運用代行は別）</td></tr>
+<tr><td>カスタマーサポート代行（電話・チャット・メール）</td><td class="c">○（人件費41〜54%）</td><td class="c">○</td><td class="c">△</td><td class="c">○</td><td>Legal AI（月1万円）、ベル24が自動化へ</td><td>当社は自社ECで返信下書き自動化の実績あり</td></tr>
+<tr><td>データ入力・書類のデジタル化・事務BPO</td><td class="c">○</td><td class="c">○</td><td class="c">△</td><td class="c">○</td><td>要調査</td><td>個人情報の取扱い【要法務確認】</td></tr>
+<tr><td>採用代行（求人票作成・スカウト代行・一次選考）</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td>要調査</td><td><b>職業紹介に当たると許可制【要法務確認】</b></td></tr>
+<tr><td>営業代行（インサイドセールス・アポ取り）</td><td class="c">○（派遣・紹介は65.6%）</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td>要調査</td><td>成果報酬型が多い（軸F）</td></tr>
+<tr><td>モール運営代行（Amazon・楽天の商品登録・運用）</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td>要調査</td><td>当社の現業の知見が直接効く。X-01・K-03と隣接</td></tr>
+<tr><td>マニュアル・研修資料・議事録の制作</td><td class="c">○</td><td class="c">△</td><td class="c">△</td><td class="c">△</td><td>要調査</td><td>底抜けしやすい（軸F必須）</td></tr>
+<tr><td>受託システム開発（小規模・業務ツール）</td><td class="c">○（39.6%＋外注18.9%）</td><td class="c">○（発注ナビ9,000社）</td><td class="c">○</td><td class="c">○</td><td>AI受託を掲げる会社多数【要調査】</td><td>納品後の保守責任を価格に含める（軸F）</td></tr>
+</table></div>
+<p class="small">○＝公開情報から当てはまると見られる／△＝条件付き／×＝当てはまらない・既に底抜け。<b>法務欄の【要法務確認】は、その案を選んだ時点で legal-crosscheck スキル（Gemini併用）で確認する</b>ものであり、この段階では断定していません。</p>
+
+<h2 id="s8">8. これまでの探し方との関係</h2>
+<div class="tbl"><table>
+<tr><th style="width:28%">既存の文書・決定</th><th>今回の切り口との関係</th></tr>
+<tr><td>SaaS探索の条件 確定版（2026-08-28・承認済み）</td><td><b>矛盾しない。</b>確定版は「ソフトを主商品にする」探し方で、今回は「サービスを主商品にし、ソフトは自社の道具」。探す帯が違う。確定版を廃止する必要はなく、並行して残せる</td></tr>
+<tr><td>v5「同梱されない形から逆算する」（2026-08-28・<b>未承認</b>）</td><td>v5の3節「AIで作れるは武器ではない」は、<b>ソフトの機能（限界費用ゼロ）の話としては正しく、サービス（人件費で価格が決まる）の話としては当てはまらない</b>。今回の資料はv5を否定するのではなく、v5自身が6節で書いていた「道具＝コスト構造の優位＝同じことを他社より安く回せる」を主役に据えたもの。v5の類型①③は軸Fとして取り込んだ</td></tr>
+<tr><td>X-01 撮影〜発送代行（ゲート1承認済み・D-065）</td><td>今回の切り口の中の1件。X-01は「人の手・場所・責任」（軸F）で通り、価格競争力の本体は「中古を受ける」（軸C③＝ウルロジが構造的に取れない層）。<b>今回の8軸は、X-01がなぜ通ったかを一般化したもの</b>とも言える</td></tr>
+<tr><td>判断軸「資金勝負になる領域は選ばない」（選定軸①）</td><td>3-1節でSaaSを外す根拠に使った。矛盾なし</td></tr>
+<tr><td>「営業ありでOK（営業も雇えばよい）」（2026-09-02 訂正）</td><td>受託・代行は営業が要る。訂正後の方針と整合</td></tr>
+<tr><td>「時間の切り売りはしたくない」「作業が増えれば雇えばよい」</td><td>受託・代行は人が動く。<b>境界が「坂野様ご自身の時間か」であれば整合し、「人件費が乗る事業そのものを避けたい」であれば今回の切り口は成り立たない</b>。v5でも未確認だった論点（11節で確認）</td></tr>
+<tr><td>K-002（案出し段階で収益計算しない）</td><td>8軸に収益・単価・件数を入れていない。整合</td></tr>
+</table></div>
+
+<h2 id="s9">9. この提案への反論（自分で書く）</h2>
+<div class="grid2">
+<div class="box"><b>反論1：受託・代行は「時間の切り売り」そのものではないか</b><br>その通りで、人が動く事業です。ただし坂野様は「作業が増えれば雇う」「稼働の非線形性は重視しない」と述べておられ、境界は「ご自身の時間」にあると読めます。<b>ここは私の解釈で、確認が要ります。</b></div>
+<div class="box"><b>反論2：労働集約型サービス業は儲からない</b><br>統計上、その他の事業サービス業の営業利益率は2.62%、情報サービス業5.82%<sup><a href="#r4">[4]</a></sup>。<b>AI前提で組み直さなければ、同じ薄利になります。</b>切り口が効くのは軸Dで「消える工程」を実際に消せた場合だけです。</div>
+<div class="box"><b>反論3：勝ったあとに底抜けする</b><br>3-2節のとおり事実です。だから軸E・Fを入れました。それでも「底値でも利益が残る形」が書けない領域（SEO記事・翻訳・LP制作）は、入っても儲からない可能性が高い。</div>
+<div class="box"><b>反論4：資本のある大手は降りてくる</b><br>Web制作・動画・CSでは既に降りてきています。<b>「20人以上」ではなく「20〜300人・親会社なし」に相手を絞る</b>必要があります。それでも窓は数年です。</div>
+<div class="box"><b>反論5：AIの削減率は現実には16%前後</b><br>既存企業の実測はそうです。当社が1/3〜1/10を実現できるかは、<b>案ごとに工程を分解して初めて分かる</b>（軸D）。「AIで全部」を前提にした案は、この資料自身が疑うべきものです。</div>
+<div class="box"><b>反論6：結局、X-01と同じ場所に戻ってきた</b><br>半分そうです。X-01は既にこの切り口で通った1件です。今回の資料の価値は「なぜX-01が通ったか」を一般化して、<b>2件目・3件目を同じ理屈で探せるようにした</b>ことにあります。</div>
+</div>
+
+<h2 id="s10">10. 選択肢と推奨</h2>
+<div class="tbl"><table>
+<tr><th style="width:12%">案</th><th style="width:34%">内容</th><th>メリット</th><th>デメリット</th></tr>
+<tr><td><b>案A</b><br><span class="ok">推奨</span></td><td>8軸を新しい切り口として採用し、6節の母集団から<b>絞らずに案を広く出す</b>（30件以上）。坂野様が選んだ案だけゲート0へ</td><td>ご仮説の「効く帯」に探索を向けられる。X-01が通った理屈の再利用。既存の確定版と並行できる</td><td>受託・代行は人が動く事業なので、反論1の境界が「人件費を避けたい」側なら成り立たない</td></tr>
+<tr><td><b>案B</b></td><td>既存の「SaaS探索の条件 確定版」に軸A・Cだけを追加し、SaaS探索を続ける</td><td>変更が小さい</td><td>3-1節のとおりSaaSでは価格優位が効かない。4件が同梱で死んだ構造に手を付けない</td></tr>
+<tr><td><b>案C</b></td><td>新しい探索を始めず、X-01（既にこの切り口で通っている案）に資源を集中する</td><td>いちばん現実的。既にゲート1承認済み</td><td>「新しい柱を探す」という今回のご依頼からは離れる</td></tr>
+<tr><td><b>案D</b></td><td>案Aの8軸を、案出しの前にGeminiクロスレビューにかける</td><td>cross-review スキルの対象（新規事業の判断軸＝重要度高）。追加費用なし・依頼文はClaudeが作る</td><td>1往復ぶんの時間</td></tr>
+</table></div>
+<p><b>Claudeの推奨は「案A＋案D」</b>です。理由：①ご仮説の効く帯が一次情報で特定できたこと ②X-01の通過理由と一致し、社内に実例があること ③8軸は坂野様の「判断軸を厚く」というご要望に直接応えるもので、Gemini（敵対的レビュー）で穴を先に潰しておく価値が高いこと。<b>案Cも真剣に検討に値します</b>（X-01は既に同じ切り口で通っており、2本目を探すより1本目を立ち上げる方が早い可能性があります）。これは坂野様の判断です。</p>
+
+<h2 id="s11">11. 決めていただきたいこと</h2>
+<div class="tbl"><table>
+<tr><th style="width:5%">#</th><th style="width:40%">論点</th><th>選択肢（推奨に★）</th></tr>
+<tr><td class="c">1</td><td>進め方</td><td>★案A＋案D ／ 案A単独 ／ 案B ／ 案C ／ その他</td></tr>
+<tr><td class="c">2</td><td>「時間の切り売りはしたくない」の境界</td><td>㋐ ご自身の時間を使わなければよい（人を雇うのは可）→ 案Aが成り立つ ／ ㋑ 人件費が乗る事業そのものを避けたい → 案Aは成り立たず、この切り口は閉じる</td></tr>
+<tr><td class="c">3</td><td>狙う相手の帯</td><td>★従業員20〜300人・上場親会社なし ／ 20人以上すべて ／ その他</td></tr>
+<tr><td class="c">4</td><td>案出しの範囲</td><td>★7節の見取り図に限らず全業種から（絞らない） ／ 7節の○が多い領域から先に ／ 当社の現業に近い領域（EC構築・モール運営代行・CS代行）から先に</td></tr>
+<tr><td class="c">5</td><td>7節で「避ける側」と書いた領域（SEO記事・翻訳・LP制作）</td><td>★候補から外さず「底抜け済み」の印を付けて残す（ご方針どおり） ／ 外す</td></tr>
+</table></div>
+<div class="note"><b>この資料が防げないこと：</b>ここで分かるのは「机上で分かること」だけです。<b>その客が実際に払うか・その価格で払うか・当社が本当に1/3の工数で回せるか</b>は、案を選んでゲート0を通し、人力で1件やって初めて分かります（ゲート0の「防げないこと」と同じ）。</div>
+<p class="small">記録について：承認前のため <code>DECISIONS.md</code> には記帳していません。承認をいただいた論点から記帳します。横断LOG（<code>C:\dev\_infra\LOG</code>）は本セッションで接続されていないため未記録です。</p>
+
+<h2 id="src">出典一覧</h2>
+<ol class="src">
+<li id="r1">労働契約法 第16条（e-Gov法令検索）https://laws.e-gov.go.jp/law/419AC0000000128</li>
+<li id="r2">JILPT 資料シリーズ（整理解雇の4要件・東洋酸素事件 東京高判昭54.10.29）https://www.jil.go.jp/institute/siryo/2007/documents/029_02.pdf</li>
+<li id="r3">OECD Indicators of Employment Protection（2025年値・日本2.10／OECD平均2.16）https://www.oecd.org/en/data/datasets/oecd-indicators-of-employment-protection.html ／ 日本編 https://www.oecd.org/content/dam/oecd/en/data/datasets/indicators-of-employment-protection/Japan-EPL.pdf</li>
+<li id="r4">中小企業庁「中小企業実態基本調査 令和7年確報（令和6年度決算実績）」産業別・従業者規模別表（e-Stat、2026-06-29公表）https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040470290&amp;fileKind=0 ／ 産業中分類別表（令和6年確報）https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040303383&amp;fileKind=0 ※比率は統計表の金額から当方が算出</li>
+<li id="r5">JISA「2024年版 情報サービス産業基本統計調査」（2025-05）https://www.jisa.or.jp/Portals/0/report/basic2024report.pdf</li>
+<li id="r6">freee ファクトブック（2025年10月・FY2025/6：粗利82.2%・調整後S&amp;M 53.3%）https://corp.freee.co.jp/ir/factbook_ja.pdf ／ 2026年6月期決算短信 https://www.release.tdnet.info/inbs/140120260813519620.pdf</li>
+<li id="r7">Sansan 2026年5月期 通期決算説明資料（2026-07-13）https://data.swcms.net/file/corp-sansan-ir/dam/jcr:e3811c8d-1eeb-4dfb-adf5-d5c2dcc45991/140120260713592190.pdf</li>
+<li id="r8">ラクス 2026年3月期 決算説明資料（2026-05-14）https://www.nikkei.com/markets/ir/irftp/data/tdnr/tdnetg3/20260514/fxd4kc/140120260514532412.pdf</li>
+<li id="r9">総務省「令和3年経済センサス‐活動調査」企業産業・従業者規模別企業等数（従業者20人以上は全企業の9.5%、情報通信業20.1%、サービス業(他)10.6%）https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040067967&amp;fileKind=0</li>
+<li id="r10">パナソニック コネクト プレスリリース（2025年度 生成AIで年間78.8万時間削減＝総労働時間の3.4%、2026-07-29）https://news.panasonic.com/jp/press/jn260729-1</li>
+<li id="r11">パーソル総合研究所「生成AIとはたらき方に関する実態調査」（業務時間平均16.7%削減・実際に減ったのは約4人に1人、2026-02-03）https://prtimes.jp/main/html/rd/p/000000068.000111116.html</li>
+<li id="r12">マクロミル「生成AI活用実態調査」（削減率平均16%、2026-06-12）https://prtimes.jp/main/html/rd/p/000000673.000000624.html</li>
+<li id="r13">東京商工リサーチ「2025年度 上場企業 早期・希望退職募集」（46社・20,781人、2026-04-30）https://www.tsr-net.co.jp/data/detail/1202787_1527.html</li>
+<li id="r14">東京商工リサーチ「生成AI」アンケート（2026-04-27）https://www.tsr-net.co.jp/data/detail/1202766_1527.html</li>
+<li id="r15">東京商工会議所「中小企業のデジタルシフト・DX実態調査」集計結果 詳細版（2025-01-10）https://www.tokyo-cci.or.jp/file.jsp?id=1205203</li>
+<li id="r16">【未確認・民間1社調査 n=118】フォーサイトクリエイション「Web制作会社選定の実態調査」（2025-04）https://hp.f-creation.co.jp/team_strategy/questionnaire/</li>
+<li id="r17">比較ビズ「2022年度版 ホームページ制作の発注案件分析」（PR TIMES、2023-01-30）https://prtimes.jp/main/html/rd/p/000000002.000100813.html ／ ECサイト制作 https://www.mapion.co.jp/news/release/000000004.000100813-all/</li>
+<li id="r18">Web幹事「ホームページ制作の平均費用相場」（846件・平均82.5万円・中央値43.4万円、2024-05-30）https://prtimes.jp/main/html/rd/p/000000034.000016988.html ／ 発注ナビ https://hnavi.co.jp/guide/</li>
+<li id="r19">株式会社ビジョン「AI×人のハイブリッド制作のコスト」（2026-05-11・自社試算）https://homepage296.com/blog/knowledge/ai-human-hybrid-production-cost</li>
+<li id="r20">プルークス「生成AI動画制作プラン」（PR TIMES、2026-09-15）https://prtimes.jp/main/html/rd/p/000000049.000014649.html</li>
+<li id="r21">OKAWA「まるごとAI経理」（PR TIMES、2025-12-02）https://adv.tokyo-np.co.jp/prtimes/article96682/</li>
+<li id="r22">Legal AI「AIコールセンター」（PR TIMES、2025-12-22）https://prtimes.jp/main/html/rd/p/000000014.000091061.html</li>
+<li id="r23">Myoshin「アドサポ10」（PR TIMES、2025-12-18）https://prtimes.jp/main/html/rd/p/000000001.000173211.html</li>
+<li id="r24">グリヒト「9DAYS：AI WEB CREATE」（@Press、2026-09-09）https://www.atpress.ne.jp/news/626175</li>
+<li id="r25">International Bar Association「AI-native law firm…」（Covenant：従来より90%安い、2025-12-11）https://www.ibanet.org/AI-native-law-firm-regulatory-innovation-and-fundamental-restructuring-of-legal-service-delivery</li>
+<li id="r26">Law Society Gazette「SRA approves £2-letter AI law firm」（Garfield.Law、2025-05）https://www.lawgazette.co.uk/news/sra-approves-2-letter-ai-law-firm/5123191.article</li>
+<li id="r27">【ベンダー発信・未確認】Lorikeet「AI vs BPO customer support cost comparison」（2026-04-15）https://www.lorikeetcx.ai/articles/ai-vs-bpo-customer-support-cost-comparison</li>
+<li id="r28">通訳翻訳ジャーナル 翻訳会社44社調査（2025年春号）https://tsuhon.jp/professional/career/trend1/</li>
+<li id="r29">Bloomberry「I analyzed 5M freelancing jobs…」（2024-02-16、2026-01-23更新）https://bloomberry.com/blog/i-analyzed-5m-freelancing-jobs-to-see-what-jobs-are-being-replaced-by-ai/</li>
+<li id="r30">クラウドワークス 2025年9月期 決算説明資料（2025-11-14）https://finance-frontend-pc-dist.west.edge.storage-yahoo.jp/disclosure/20251114/20251114503420.pdf ／ coki（2026-02-18）https://coki.jp/stakeholder/supplier/69003/</li>
+<li id="r31">Better Tomorrow Ventures「Services Won't Become Software」（2026-02-26）https://better-tomorrow-ventures.ghost.io/services-wont-become-software/ ／ 参考：Foundation Capital「The $4.6T Services-as-Software opportunity」（2025-07-03）https://foundationcapital.com/ideas/the-4-6t-services-as-software-opportunity-lessons-from-the-first-year ／ a16z「AI Will Eat Application Software」（2026-03-02）https://a16z.com/good-news-ai-will-eat-application-software/</li>
+<li id="r32">【見出しのみ・本文未確認】日本経済新聞「コールセンターAI主役 ベル24 26年に応対完全自動化 人手5割減」（2025-08-06）https://www.nikkei.com/article/DGKKZO90510600W5A800C2TB2000/ ／ ベルシステム24 告知 https://gai.bell24.co.jp/ja/news/news/20250806/</li>
+<li id="r33">翻訳センター 2026年3月期決算（FISCO、2026-06-23）https://jp.investing.com/news/stock-market-news/article-1579834</li>
+<li id="r34">Amazon公式声明「random price testing」（2000-09-27）https://press.aboutamazon.com/2000/9/amazon-com-issues-statement-regarding-random-price-testing</li>
+<li id="r35">Feinberg, Krishna &amp; Zhang (2002) "Do We Care What Others Get?", Journal of Marketing Research 39(3) https://journals.sagepub.com/doi/abs/10.1509/jmkr.39.3.277.19108 ／ Kahneman, Knetsch &amp; Thaler (1986) "Fairness as a Constraint on Profit Seeking", AER 76(4) https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Justice/Kahneman.pdf</li>
+<li id="r37">Bower &amp; Christensen「Disruptive Technologies: Catching the Wave」HBR 1995 https://hbr.org/1995/01/disruptive-technologies-catching-the-wave ／ Christensen Institute（一貫製鉄所の鉄筋粗利7%の例）https://www.christenseninstitute.org/theory/disruptive-innovation/</li>
+<li id="r38">国土交通省航空局「我が国のLCCの現状と課題」（2013-10-30）https://www.mlit.go.jp/common/001017437.pdf ／ Ryanair FY25 6-K（2025-05-19）https://www.sec.gov/Archives/edgar/data/1038683/000165495425005841/a0994j.htm</li>
+<li id="r39">Morrell (2005) "Airlines within airlines", Journal of Air Transport Management 11(5) https://ideas.repec.org/a/eee/jaitra/v11y2005i5p303-312.html</li>
+<li id="r40">デイトラ「フリーランスへの発注に関する調査」（発注経験者363名、2024年）https://www.daily-trial.co.jp/freelance-order-survey/</li>
+<li id="r41">Google Workspace 公式ブログ（Gemini標準搭載、2025-01-15）https://workspace.google.com/blog/ja/product-announcements/empowering-businesses-with-ai ／ freee「業務委託管理」無料プラン（2025-12-18）https://prtimes.jp/main/html/rd/p/000001967.000006428.html ／ マネーフォワード「1年間実質0円」（2025-02-03）https://prtimes.jp/main/html/rd/p/000001384.000008962.html</li>
+<li id="r42">日本イラストレーション協会「画像生成AIに対する意識調査」（2026-04）https://jilla.or.jp/2026/04/14762 ／ 反証の反証：日本デザイン社 Webデザイナー110名調査（単価「上がった」62.7%、2026-01-14・自社調査）https://prtimes.jp/main/html/rd/p/000000195.000039136.html</li>
+</ol>
+<p class="small">作成：2026-09-15 ／ 合同会社R.Y.S ／ 新規事業探索。状態＝案（未承認・Geminiレビュー前）。この資料は「見るための版」であり、承認後の正本は DECISIONS.md です。</p>
+</main>
+</div>
+</body>
+</html>
